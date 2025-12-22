@@ -49,11 +49,11 @@ const config = {
       }
     },
     colors: {
-      background: "background",
-      text: "primary",
-      ctaBg: "primary",
-      ctaText: "white",
-      border: "primary"
+      background: "primary",
+      text: "white",
+      ctaBg: "amber",
+      ctaText: "primary",
+      border: "white"
     }
   },
 

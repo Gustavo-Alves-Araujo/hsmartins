@@ -76,7 +76,7 @@ class HeaderNavigationComponent extends BaseComponent {
                              class="w-12 h-12 rounded-full border-2 border-${c.border} object-cover group-hover:rotate-12 transition-transform duration-300 shadow-md">
                         <div class="leading-tight">
                             <span class="block font-serif font-bold text-xl text-${c.text} tracking-wide">${this.siteName}</span>
-                            <span class="block text-xs text-gray-500 uppercase tracking-wider">${this.established}</span>
+                            <span class="block text-xs text-${c.text}/70 uppercase tracking-wider">${this.established}</span>
                         </div>
                     </a>
 
