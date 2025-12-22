@@ -3,7 +3,7 @@
  * Footer com informações de contato, redes sociais e mapa
  */
 
-class FooterContactComponent {
+class FooterContactComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para o Footer
      * @param {string} data.title - Título da seção
@@ -23,12 +23,16 @@ class FooterContactComponent {
      * @param {string} data.copyright - Texto de copyright
      * @param {Array} data.tags - Tags/categorias do footer (opcional)
      * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo (padrão: 'brand-cream')
-     * @param {string} data.colors.titleColor - Cor do título (padrão: 'brand-dark')
-     * @param {string} data.colors.iconColor - Cor dos ícones (padrão: 'brand-dark')
-     * @param {string} data.colors.borderColor - Cor das bordas (padrão: 'brand-dark')
+     * @param {string} data.colors.background - Cor de fundo base (ex: 'gray', 'brand-cream')
+     * @param {string} data.colors.titleColor - Cor do título base (ex: 'gray', 'brand-dark')
+     * @param {string} data.colors.textColor - Cor do texto base (ex: 'gray')
+     * @param {string} data.colors.textStrong - Cor do texto forte base (ex: 'gray')
+     * @param {string} data.colors.textMuted - Cor do texto muted base (ex: 'gray')
+     * @param {string} data.colors.iconColor - Cor dos ícones base (ex: 'green', 'brand-dark')
+     * @param {string} data.colors.borderColor - Cor das bordas base (ex: 'gray', 'brand-dark')
      */
     constructor(data) {
+        super();
         this.title = data.title;
         this.address = data.address || {};
         this.contact = data.contact || {};
@@ -36,13 +40,24 @@ class FooterContactComponent {
         this.copyright = data.copyright;
         this.tags = data.tags || [];
 
-        // Colors
+        // Colors com variações automáticas (seguindo padrão do HERO)
+        const bgBase = data.colors?.background || 'brand-cream';
+        const titleBase = data.colors?.titleColor || 'brand-dark';
+        const textBase = data.colors?.textColor || 'gray';
+        const textStrongBase = data.colors?.textStrong || 'gray';
+        const textMutedBase = data.colors?.textMuted || 'gray';
+        const iconBase = data.colors?.iconColor || 'brand-dark';
+        const borderBase = data.colors?.borderColor || 'brand-dark';
+
+        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
         this.colors = {
-            background: 'brand-cream',
-            titleColor: 'brand-dark',
-            iconColor: 'brand-dark',
-            borderColor: 'brand-dark',
-            ...data.colors
+            background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
+            titleColor: this.getColorVariant(titleBase, 900),
+            textColor: this.getColorVariant(textBase, 700),
+            textStrong: this.getColorVariant(textStrongBase, 900),
+            textMuted: this.getColorVariant(textMutedBase, 600),
+            iconColor: this.getColorVariant(iconBase, 600),
+            borderColor: this.getColorVariant(borderBase, 300),
         };
     }
 
@@ -89,13 +104,13 @@ class FooterContactComponent {
                                 ${this.title}
                             </h3>
 
-                            <address class="not-italic text-gray-600 space-y-4 mb-8">
+                            <address class="not-italic text-${c.textColor} space-y-4 mb-8">
                                 <!-- Address -->
                                 ${this.address.street ? `
                                     <div class="flex items-start gap-4">
                                         <i class="fas fa-map-pin mt-1 text-${c.iconColor}"></i>
                                         <div>
-                                            <strong class="block text-gray-900 mb-1">${this.address.label}</strong>
+                                            <strong class="block text-${c.textStrong} mb-1">${this.address.label}</strong>
                                             <span>${this.address.street}</span><br>
                                             <span>${this.address.city}</span><br>
                                             ${this.address.zipCode ? `<span>${this.address.zipCode}</span>` : ''}
@@ -108,7 +123,7 @@ class FooterContactComponent {
                                     <div class="flex items-start gap-4">
                                         <i class="fas fa-phone-alt mt-1 text-${c.iconColor}"></i>
                                         <div>
-                                            <strong class="block text-gray-900 mb-1">${this.contact.label}</strong>
+                                            <strong class="block text-${c.textStrong} mb-1">${this.contact.label}</strong>
                                             <span>${this.contact.phone}</span>
                                         </div>
                                     </div>
@@ -144,7 +159,7 @@ class FooterContactComponent {
                     </div>
 
                     <!-- Bottom Bar -->
-                    <div class="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500 gap-4">
+                    <div class="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-${c.textMuted} gap-4">
                         <p>${this.copyright}</p>
                         ${this.tags.length > 0 ? `
                             <div class="flex flex-wrap justify-center items-center gap-1">

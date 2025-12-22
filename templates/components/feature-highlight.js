@@ -3,7 +3,7 @@
  * Seção split com imagem e lista de features/benefícios
  */
 
-class FeatureHighlightComponent {
+class FeatureHighlightComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para o Feature Highlight
      * @param {string} data.badge - Badge/etiqueta superior (opcional)
@@ -19,14 +19,15 @@ class FeatureHighlightComponent {
      * @param {Object} data.layout - Configurações de layout (opcional)
      * @param {string} data.layout.imagePosition - Posição da imagem: 'left' ou 'right' (padrão: 'left')
      * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo (padrão: 'white')
-     * @param {string} data.colors.titleColor - Cor do título (padrão: 'brand-dark')
-     * @param {string} data.colors.badgeColor - Cor do badge (padrão: 'brand-dark')
-     * @param {string} data.colors.accentColor - Cor de destaque/decoração (padrão: 'brand-gold')
-     * @param {string} data.colors.ctaColor - Cor do CTA (padrão: 'brand-dark')
-     * @param {string} data.colors.ctaHoverColor - Cor do CTA hover (padrão: 'brand-gold')
+     * @param {string} data.colors.background - Cor de fundo base (ex: 'white', 'gray')
+     * @param {string} data.colors.titleColor - Cor do título base (ex: 'gray', 'brand-dark')
+     * @param {string} data.colors.badgeColor - Cor do badge base (ex: 'green', 'brand-dark')
+     * @param {string} data.colors.accentColor - Cor de destaque base (ex: 'orange', 'brand-gold')
+     * @param {string} data.colors.ctaColor - Cor do CTA base (ex: 'green', 'brand-dark')
+     * @param {string} data.colors.ctaHoverColor - Cor do CTA hover base (ex: 'green', 'brand-gold')
      */
     constructor(data) {
+        super();
         this.badge = data.badge || '';
         this.title = data.title;
         this.description = data.description;
@@ -47,15 +48,22 @@ class FeatureHighlightComponent {
             ...data.layout
         };
 
-        // Colors
+        // Colors com variações automáticas (seguindo padrão do HERO)
+        const bgBase = data.colors?.background || 'white';
+        const titleBase = data.colors?.titleColor || 'gray';
+        const badgeBase = data.colors?.badgeColor || 'green';
+        const accentBase = data.colors?.accentColor || 'orange';
+        const ctaBase = data.colors?.ctaColor || 'green';
+        const ctaHoverBase = data.colors?.ctaHoverColor || 'green';
+
+        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
         this.colors = {
-            background: 'white',
-            titleColor: 'brand-dark',
-            badgeColor: 'brand-dark',
-            accentColor: 'brand-gold',
-            ctaColor: 'brand-dark',
-            ctaHoverColor: 'brand-gold',
-            ...data.colors
+            background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
+            titleColor: this.getColorVariant(titleBase, 900),
+            badgeColor: this.getColorVariant(badgeBase, 700),
+            accentColor: this.getColorVariant(accentBase, 500),
+            ctaColor: this.getColorVariant(ctaBase, 600),
+            ctaHoverColor: this.getColorVariant(ctaHoverBase, 700),
         };
     }
 

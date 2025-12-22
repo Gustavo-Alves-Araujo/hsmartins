@@ -3,7 +3,7 @@
  * Grid genérico de cards com imagens, overlay e hover effects
  */
 
-class CardGridComponent {
+class CardGridComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para o Card Grid
      * @param {string} data.title - Título da seção
@@ -18,12 +18,14 @@ class CardGridComponent {
      * @param {string} data.layout.aspectRatio - Proporção dos cards (padrão: '4/5')
      * @param {string} data.layout.gap - Espaçamento entre cards (padrão: '8')
      * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo da seção (padrão: 'brand-cream')
-     * @param {string} data.colors.titleColor - Cor do título (padrão: 'brand-dark')
-     * @param {string} data.colors.cardOverlay - Cor do overlay dos cards (padrão: 'brand-dark')
-     * @param {string} data.colors.accentLine - Cor da linha decorativa (padrão: 'brand-dark')
+     * @param {string} data.colors.background - Cor de fundo base (ex: 'white', 'gray', 'brand-cream')
+     * @param {string} data.colors.titleColor - Cor do título base (ex: 'gray', 'brand-dark')
+     * @param {string} data.colors.subtitleColor - Cor do subtítulo base (ex: 'gray')
+     * @param {string} data.colors.cardOverlay - Cor do overlay base (ex: 'gray', 'brand-dark')
+     * @param {string} data.colors.accentLine - Cor da linha decorativa base (ex: 'green', 'brand-dark')
      */
     constructor(data) {
+        super();
         this.title = data.title;
         this.subtitle = data.subtitle || '';
         this.items = data.items || [];
@@ -36,13 +38,20 @@ class CardGridComponent {
             ...data.layout
         };
 
-        // Colors
+        // Colors com variações automáticas (seguindo padrão do HERO)
+        const bgBase = data.colors?.background || 'brand-cream';
+        const titleBase = data.colors?.titleColor || 'brand-dark';
+        const subtitleBase = data.colors?.subtitleColor || 'gray';
+        const overlayBase = data.colors?.cardOverlay || 'brand-dark';
+        const accentBase = data.colors?.accentLine || 'brand-dark';
+
+        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
         this.colors = {
-            background: 'brand-cream',
-            titleColor: 'brand-dark',
-            cardOverlay: 'brand-dark',
-            accentLine: 'brand-dark',
-            ...data.colors
+            background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
+            titleColor: this.getColorVariant(titleBase, 900),
+            subtitleColor: this.getColorVariant(subtitleBase, 700),
+            cardOverlay: this.getColorVariant(overlayBase, 900),
+            accentLine: this.getColorVariant(accentBase, 600),
         };
     }
 
@@ -91,7 +100,7 @@ class CardGridComponent {
                             ${this.title}
                         </h2>
                         ${this.subtitle ? `
-                            <p class="text-gray-600 text-lg md:text-xl max-w-2xl mx-auto mb-6">
+                            <p class="text-${c.subtitleColor} text-lg md:text-xl max-w-2xl mx-auto mb-6">
                                 ${this.subtitle}
                             </p>
                         ` : ''}

@@ -3,27 +3,32 @@
  * Barra de informações genérica com ícones e textos customizáveis
  */
 
-class InfoBarComponent {
+class InfoBarComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para a Info Bar
      * @param {Array} data.items - Array de itens a serem exibidos
      * @param {string} data.items[].icon - Classe do ícone (ex: 'fas fa-motorcycle')
      * @param {string} data.items[].text - Texto do item
      * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo (padrão: 'brand-dark')
-     * @param {string} data.colors.text - Cor do texto (padrão: 'white')
-     * @param {string} data.colors.accent - Cor dos ícones (padrão: 'brand-gold')
+     * @param {string} data.colors.background - Cor de fundo base (ex: 'green', 'brand-dark')
+     * @param {string} data.colors.text - Cor do texto base (ex: 'white')
+     * @param {string} data.colors.accent - Cor dos ícones base (ex: 'orange', 'brand-gold')
      */
     constructor(data) {
+        super();
         // Items genéricos
         this.items = data.items || [];
 
-        // Colors
+        // Colors com variações automáticas (seguindo padrão do HERO)
+        const bgBase = data.colors?.background || 'brand-dark';
+        const accentBase = data.colors?.accent || 'brand-gold';
+        const textBase = data.colors?.text || 'white';
+
+        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
         this.colors = {
-            background: 'brand-dark',
-            text: 'white',
-            accent: 'brand-gold',
-            ...data.colors
+            background: this.getColorVariant(bgBase, 700),  // Fundo escuro
+            text: textBase,                                   // Texto (geralmente white)
+            accent: this.getColorVariant(accentBase, 400),   // Accent médio
         };
     }
 

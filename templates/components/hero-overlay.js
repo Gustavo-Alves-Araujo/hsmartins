@@ -3,7 +3,7 @@
  * Componente de seção Hero simplificado
  */
 
-class HeroComponent {
+class HeroComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para o Hero
      * @param {string} data.badge - Texto do badge superior
@@ -16,11 +16,12 @@ class HeroComponent {
      * @param {string} data.backgroundAlt - Texto alternativo da imagem
      * @param {string} data.whatsappNumber - Número do WhatsApp (formato: 5511999999999) - usado como fallback
      * @param {Object} data.colors - Cores do tema (opcional)
-     * @param {string} data.colors.primary - Nome base da cor primária (ex: 'purple', 'blue', 'brand-dark')
-     * @param {string} data.colors.accent - Nome base da cor de destaque (ex: 'amber', 'gold', 'brand-gold')
-     * @param {string} data.colors.text - Nome base da cor de texto (ex: 'slate', 'gray', 'white')
+     * @param {string} data.colors.primary - Nome base da cor primária (ex: 'purple', 'green', 'brand-dark')
+     * @param {string} data.colors.accent - Nome base da cor de destaque (ex: 'orange', 'amber', 'brand-gold')
+     * @param {string} data.colors.text - Nome base da cor de texto (ex: 'white', 'slate', 'gray')
      */
     constructor(data) {
+        super();
         this.badge = data.badge;
         this.title = data.title;
         this.titleHighlight = data.titleHighlight;
@@ -58,21 +59,6 @@ class HeroComponent {
             ctaSecondaryText: this.getColorVariant(textBase, 100),   // Botão secundário texto
             ctaSecondaryHover: this.getColorVariant(primaryBase, 800) // Botão secundário hover
         };
-    }
-
-    /**
-     * Helper para aplicar variação de cor automaticamente
-     * @param {string} colorBase - Nome base da cor (ex: 'purple', 'brand-dark')
-     * @param {number} variant - Variação desejada (50-900)
-     * @returns {string} Cor com variação aplicada (ex: 'purple-900')
-     */
-    getColorVariant(colorBase, variant) {
-        // Se já tem uma variação ou é uma cor especial (white, black), retorna como está
-        if (colorBase.includes('-') || colorBase === 'white' || colorBase === 'black') {
-            return colorBase;
-        }
-        // Adiciona a variação
-        return `${colorBase}-${variant}`;
     }
 
     /**

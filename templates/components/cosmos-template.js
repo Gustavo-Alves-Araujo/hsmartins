@@ -128,6 +128,7 @@
             const body = document.body;
 
             console.log('🚀 Inicializando componentes...');
+            // O component-registry carrega o BaseComponent automaticamente quando necessário
             await window.componentRegistry.initFromConfig(window.config, body);
             console.log('✅ Componentes inicializados');
         }

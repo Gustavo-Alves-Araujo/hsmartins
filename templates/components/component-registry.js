@@ -56,6 +56,29 @@
         }
 
         /**
+         * Carrega o BaseComponent se ainda não foi carregado
+         */
+        async ensureBaseComponent() {
+            if (typeof BaseComponent !== 'undefined') {
+                return true;
+            }
+
+            return new Promise((resolve) => {
+                const baseScript = document.createElement('script');
+                baseScript.src = `${this.componentsPath}base-component.js`;
+                baseScript.onload = () => {
+                    console.log('✅ Base Component carregado');
+                    resolve(true);
+                };
+                baseScript.onerror = () => {
+                    console.warn('⚠️ Base Component não encontrado, componentes podem não funcionar corretamente');
+                    resolve(false);
+                };
+                document.head.appendChild(baseScript);
+            });
+        }
+
+        /**
          * Carrega dinamicamente o script de um componente
          */
         async loadComponent(type) {
@@ -66,6 +89,9 @@
             if (this.loadedScripts.has(type)) {
                 return this.components[type] !== undefined;
             }
+
+            // Garante que BaseComponent está carregado antes de carregar outros componentes
+            await this.ensureBaseComponent();
 
             const scriptPath = `${this.componentsPath}${type}.js`;
 

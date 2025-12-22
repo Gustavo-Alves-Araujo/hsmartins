@@ -3,7 +3,7 @@
  * Banner centralizado de call-to-action com botões customizáveis
  */
 
-class CtaBannerComponent {
+class CtaBannerComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para o CTA Banner
      * @param {string} data.title - Título principal
@@ -13,24 +13,28 @@ class CtaBannerComponent {
      * @param {string} data.buttons[].icon - Classe do ícone (opcional)
      * @param {string} data.buttons[].href - Link do botão
      * @param {string} data.buttons[].target - Target do link (opcional)
-     * @param {string} data.buttons[].bgColor - Cor de fundo do botão (ex: 'green-500')
-     * @param {string} data.buttons[].hoverColor - Cor de hover (ex: 'green-600')
+     * @param {string} data.buttons[].bgColor - Cor de fundo do botão base (ex: 'green', 'orange')
+     * @param {string} data.buttons[].hoverColor - Cor de hover base (ex: 'green', 'orange')
      * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo (padrão: 'brand-dark')
-     * @param {string} data.colors.textColor - Cor do texto (padrão: 'white')
+     * @param {string} data.colors.background - Cor de fundo base (ex: 'green', 'brand-dark')
+     * @param {string} data.colors.textColor - Cor do texto base (ex: 'white')
      * @param {string} data.backgroundPattern - URL do padrão de fundo (opcional)
      */
     constructor(data) {
+        super();
         this.title = data.title;
         this.subtitle = data.subtitle;
         this.buttons = data.buttons || [];
         this.backgroundPattern = data.backgroundPattern || '';
 
-        // Colors
+        // Colors com variações automáticas (seguindo padrão do HERO)
+        const bgBase = data.colors?.background || 'brand-dark';
+        const textBase = data.colors?.textColor || 'white';
+
+        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
         this.colors = {
-            background: 'brand-dark',
-            textColor: 'white',
-            ...data.colors
+            background: this.getColorVariant(bgBase, 700),  // Fundo escuro
+            textColor: textBase,                             // Texto (geralmente white)
         };
     }
 
@@ -43,8 +47,12 @@ class CtaBannerComponent {
         const tag = button.href ? 'a' : 'button';
         const hrefAttr = button.href ? `href="${button.href}"` : '';
         const targetAttr = button.target ? `target="${button.target}"` : '';
-        const bgColor = button.bgColor || 'blue-600';
-        const hoverColor = button.hoverColor || 'blue-700';
+
+        // Aplica variações automáticas para as cores dos botões
+        const bgBase = button.bgColor || 'blue';
+        const hoverBase = button.hoverColor || bgBase;
+        const bgColor = this.getColorVariant(bgBase, 600);
+        const hoverColor = this.getColorVariant(hoverBase, 700);
 
         return `
             <${tag} ${hrefAttr} ${targetAttr}
