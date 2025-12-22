@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="scroll-smooth">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MindPark | Apoio Psicológico Online</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide-react@latest/dist/lucide.umd.js"></script>
+
+  <!-- Google Fonts: Inter (Corpo) + Lora (Títulos) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Lora:wght@600;700&display=swap"
+    rel="stylesheet">
+
+  <!-- Animate on Scroll (AOS) Library -->
+  <!-- <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet"> -->
+
+  <style>
+    /* Base fonts */
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      font-family: 'Lora', serif;
+    }
+
+    /* Custom Tailwind colors based on inspiration */
+    .bg-page {
+      background-color: #fcfaf8;
+    }
+
+    .bg-sidebar {
+      background-color: #c0dedd;
+    }
+
+    .text-accent {
+      color: #00695c;
+    }
+
+    .bg-accent {
+      background-color: #26a69a;
+    }
+
+    /* Darker green for hover */
+    .hover\:bg-accent-dark:hover {
+      background-color: #004d40;
+    }
+
+    .ring-accent {
+      --tw-ring-color: #26a69a;
+    }
+
+    .border-accent {
+      --tw-border-color: #26a69a;
+    }
+
+    /* FAQ Accordion Styling */
+    .faq-answer {
+      transition: max-height 0.3s ease-out, opacity 0.2s ease-out;
+      overflow: hidden;
+      max-height: 0;
+      opacity: 0;
+    }
+
+    .faq-item.open .faq-answer {
+      max-height: 300px;
+      /* Adjust as needed */
+      opacity: 1;
+    }
+
+    .faq-item.open .icon-rotate {
+      transform: rotate(180deg);
+    }
+
+    .icon-rotate {
+      transition: transform 0.3s ease;
+    }
+
+    /* Subtle Pulse Animation for CTAs */
+    @keyframes pulse-slow {
+      50% {
+        opacity: .85;
+        transform: scale(1.02);
+      }
+    }
+
+    .animate-pulse-slow {
+      animation: pulse-slow 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    /* Vertical Timeline for "Process" */
+    .timeline-item {
+      position: relative;
+      padding-bottom: 2.5rem;
+      padding-left: 3.5rem;
+      /* Space for line and dot */
+    }
+
+    .timeline-item:not(:last-child)::before {
+      content: '';
+      position: absolute;
+      left: 19px;
+      /* Centered on the 40px (w-10) dot */
+      top: 40px;
+      /* Start below the dot */
+      bottom: 0;
+      width: 2px;
+      background-color: #c0dedd;
+      /* bg-sidebar */
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 40px;
+      /* w-10 */
+      height: 40px;
+      /* h-10 */
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 9999px;
+      /* rounded-full */
+      background-color: #c0dedd;
+      /* bg-sidebar */
+      font-weight: bold;
+      color: #00695c;
+      /* text-accent */
+      font-size: 1.125rem;
+      /* text-lg */
+      border: 4px solid #fcfaf8;
+      /* bg-page */
+    }
+  </style>
+</head>
+
+<body class="bg-page text-gray-800 antialiased overflow-x-hidden">
+
+  <!-- Header / Navigation -->
+  <header class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md shadow-sm">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-20">
+        <!-- Logo -->
+        <a href="#" class="flex-shrink-0 flex items-center gap-2">
+          <span class="w-8 h-8 bg-sidebar rounded-full flex items-center justify-center">
+            <i data-lucide="brain-circuit" class="w-5 h-5 text-accent"></i>
+          </span>
+          <span class="font-bold text-2xl text-gray-900" style="font-family: 'Lora', serif;">MindPark</span>
+        </a>
+
+        <!-- Desktop Nav -->
+        <div class="hidden md:flex md:items-center md:space-x-8">
+          <a href="#services"
+            class="font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300">Serviços</a>
+          <a href="#about"
+            class="font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300">Sobre</a>
+          <a href="#faq"
+            class="font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300">Perguntas</a>
+          <a href="#contact"
+            class="font-medium text-gray-600 hover:text-gray-900 transition-colors duration-300">Contato</a>
+        </div>
+
+        <!-- CTA Button -->
+        <div class="flex items-center">
+          <a href="#contact"
+            class="hidden md:inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-base font-medium rounded-lg text-white bg-accent hover:bg-accent-dark transition-all duration-300 shadow-sm hover:shadow-md">
+            Agendar Sessão
+          </a>
+          <!-- Mobile Menu Button -->
+          <button id="mobile-menu-btn"
+            class="md:hidden ml-4 p-2 rounded-md text-gray-600 hover:text-gray-900 hover:bg-gray-100">
+            <span class="sr-only">Abrir menu principal</span>
+            <i data-lucide="menu" class="w-6 h-6"></i>
+          </button>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white shadow-lg">
+      <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+        <a href="#services"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Serviços</a>
+        <a href="#about"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Sobre</a>
+        <a href="#faq"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Perguntas</a>
+        <a href="#contact"
+          class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-gray-50">Contato</a>
+      </div>
+      <a href="#contact"
+        class="block w-full px-5 py-3 text-center font-medium text-white bg-accent hover:bg-accent-dark">
+        Agendar Sessão
+      </a>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="max-w-7xl mx-auto p-4 sm:px-6 lg:px-8 mt-8 md:mt-12">
+
+    <!-- Hero Section -->
+    <section id="home" class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <!-- Hero Text -->
+      <div class="text-center lg:text-left">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 leading-tight">
+          Mude sua vida <span class="text-accent">comigo.</span>
+        </h1>
+        <p class="mt-6 text-lg md:text-xl text-gray-600 max-w-lg mx-auto lg:mx-0">
+          Apoio psicológico empático, confidencial e conveniente. Estou aqui para ajudá-lo a navegar pelos desafios da
+          vida no conforto da sua casa.
+        </p>
+        <div class="mt-10 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+          <a href="#contact"
+            class="inline-flex items-center justify-center px-8 py-4 border border-transparent text-lg font-medium rounded-lg text-white bg-accent hover:bg-accent-dark transition-all duration-300 shadow-lg hover:shadow-xl animate-pulse-slow">
+            Marcar Consulta
+          </a>
+        </div>
+        <!-- Trust Signals -->
+        <div class="mt-8 flex items-center justify-center lg:justify-start gap-4">
+          <div class="flex -space-x-2 overflow-hidden">
+            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
+              src="https://placehold.co/100x100/FFC107/333?text=A" alt="Cliente A">
+            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
+              src="https://placehold.co/100x100/9C27B0/FFF?text=B" alt="Cliente B">
+            <img class="inline-block h-10 w-10 rounded-full ring-2 ring-white object-cover"
+              src="https://placehold.co/100x100/4CAF50/FFF?text=C" alt="Cliente C">
+          </div>
+          <div class="text-left">
+            <p class="font-semibold text-gray-900">+1300 Clientes Satisfeitos</p>
+            <p class="text-sm text-gray-500">Veja o que eles dizem</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Hero Image (Video Call Mock) -->
+      <div class="bg-gray-800 rounded-2xl shadow-2xl p-3 md:p-5 relative aspect-video lg:aspect-auto lg:h-[500px]">
+        <img src="https://placehold.co/800x600/B2DFDB/37474F?text=Dra.+Isabell"
+          alt="Dra. Isabell em uma chamada de vídeo" class="rounded-xl w-full h-full object-cover">
+        <!-- Video Call Controls -->
+        <div
+          class="absolute bottom-4 left-1/2 -translate-x-1/2 bg-black/50 backdrop-blur-sm rounded-full p-3 flex items-center gap-4">
+          <button class="p-3 bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors">
+            <i data-lucide="mic" class="w-5 h-5"></i>
+          </button>
+          <button class="p-3 bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors">
+            <i data-lucide="video" class="w-5 h-5"></i>
+          </button>
+          <button class="p-3 bg-red-600 rounded-full text-white hover:bg-red-700 transition-colors">
+            <i data-lucide="phone-off" class="w-5 h-5"></i>
+          </button>
+          <button class="p-3 bg-white/20 rounded-full text-white hover:bg-white/30 transition-colors">
+            <i data-lucide="more-horizontal" class="w-5 h-5"></i>
+          </button>
+        </div>
+        <div
+          class="absolute top-4 right-4 bg-black/50 text-white text-sm px-3 py-1 rounded-full flex items-center gap-1.5">
+          <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+          REC
+        </div>
+      </div>
+    </section>
+
+    <!-- Main Content Grid -->
+    <div class="mt-16 md:mt-24 grid grid-cols-1 lg:grid-cols-3 lg:gap-12">
+
+      <!-- Left Column: Services, Process, FAQ -->
+      <div class="lg:col-span-2 space-y-16 md:space-y-24">
+
+        <!-- Services Section -->
+        <section id="services">
+          <div>
+            <span class="text-sm font-semibold uppercase text-accent tracking-wider">Serviços</span>
+            <h2 class="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+              Com o que posso te ajudar?
+            </h2>
+          </div>
+
+          <!-- Service Pills -->
+          <div class="mt-8 flex flex-wrap gap-3">
+            <span
+              class="inline-block bg-white border border-gray-200 shadow-sm rounded-full px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 hover:shadow-md hover:scale-105 hover:bg-white">Conflito
+              familiar</span>
+            <span
+              class="inline-block bg-white border border-gray-200 shadow-sm rounded-full px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 hover:shadow-md hover:scale-105 hover:bg-white">Trauma</span>
+            <span
+              class="inline-block bg-white border border-gray-200 shadow-sm rounded-full px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 hover:shadow-md hover:scale-105 hover:bg-white">Ansiedade</span>
+            <span class"inline-block bg-white border border-gray-200 shadow-sm rounded-full px-4 py-2 text-base
+              font-medium text-gray-700 transition-all duration-300 hover:shadow-md hover:scale-105
+              hover:bg-white">Estresse</span>
+            <span
+              class="inline-block bg-white border border-gray-200 shadow-sm rounded-full px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 hover:shadow-md hover:scale-105 hover:bg-white">Relacionamento</span>
+            <span
+              class="inline-block bg-white border border-gray-200 shadow-sm rounded-full px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 hover:shadow-md hover:scale-105 hover:bg-white">Depressão</span>
+            <span
+              class="inline-block bg-white border border-gray-200 shadow-sm rounded-full px-4 py-2 text-base font-medium text-gray-700 transition-all duration-300 hover:shadow-md hover:scale-105 hover:bg-white">Vícios</span>
+          </div>
+
+          <!-- Service Cards -->
+          <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Card 1: Individual -->
+            <div
+              class="bg-white rounded-xl shadow-lg p-6 flex gap-6 transition-all duration-300 hover:shadow-xl hover:scale-[1.03]">
+              <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-sidebar flex items-center justify-center">
+                <i data-lucide="user" class="w-6 h-6 text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900">Terapia Individual</h3>
+                <p class="mt-2 text-gray-600">Um espaço confidencial individual para explorar seus desafios e promover o
+                  crescimento pessoal.</p>
+              </div>
+            </div>
+            <!-- Card 2: Couples -->
+            <div
+              class="bg-white rounded-xl shadow-lg p-6 flex gap-6 transition-all duration-300 hover:shadow-xl hover:scale-[1.03]">
+              <div class="flex-shrink-0 w-12 h-12 rounded-lg bg-sidebar flex items-center justify-center">
+                <i data-lucide="users" class="w-6 h-6 text-accent"></i>
+              </div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900">Terapia de Casal</h3>
+                <p class="mt-2 text-gray-600">Melhore a comunicação e aprofunde sua conexão com seu parceiro em sessões
+                  guiadas.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Online Session Process -->
+        <section id="process">
+          <div>
+            <span class="text-sm font-semibold uppercase text-accent tracking-wider">Como funciona</span>
+            <h2 class="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+              Seu Processo de Sessão Online
+            </h2>
+            <p class="mt-4 text-lg text-gray-600">
+              Começar é simples, seguro e pensado para sua conveniência.
+            </p>
+          </div>
+          <ul class="mt-12 relative">
+            <li class="timeline-item">
+              <div class="timeline-dot">1</div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900">Agende sua Consulta</h3>
+                <p class="mt-1 text-gray-600">Escolha um horário conveniente através do formulário de contato.
+                  Confirmaremos sua sessão por e-mail.</p>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="timeline-dot">2</div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900">Prepare Seu Espaço</h3>
+                <p class="mt-1 text-gray-600">Encontre um local tranquilo, privado e confortável onde você não seja
+                  interrompido. Garanta uma conexão de internet estável.</p>
+              </div>
+            </li>
+            <li class="timeline-item">
+              <div class="timeline-dot">3</div>
+              <div>
+                <h3 class="text-xl font-semibold text-gray-900">Conecte-se com Segurança</h3>
+                <p class="mt-1 text-gray-600">Você receberá um link seguro para nossa sessão de vídeo. Não é necessário
+                  baixar nada - basta clicar e conectar.</p>
+              </div>
+            </li>
+          </ul>
+        </section>
+
+        <!-- Testimonials -->
+        <section id="trust">
+          <div>
+            <span class="text-sm font-semibold uppercase text-accent tracking-wider">Depoimentos</span>
+            <h2 class="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+              O Que Meus Clientes Dizem
+            </h2>
+          </div>
+          <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div
+              class="bg-white rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-xl hover:scale-[1.03]">
+              <i data-lucide="quote" class="w-8 h-8 text-sidebar"></i>
+              <blockquote class="mt-4 text-gray-600 italic">
+                "Trabalhar com a Dra. Isabell mudou minha vida. Eu me senti ouvido, compreendido e ganhei ferramentas
+                que uso todos os dias."
+              </blockquote>
+              <footer class="mt-6">
+                <p class="font-semibold text-gray-900">- Alex J.</p>
+                <p class="text-sm text-gray-500">Cliente de Sessão Individual</p>
+              </footer>
+            </div>
+            <div
+              class="bg-white rounded-xl shadow-lg p-8 transition-all duration-300 hover:shadow-xl hover:scale-[1.03]">
+              <i data-lucide="quote" class="w-8 h-8 text-sidebar"></i>
+              <blockquote class="mt-4 text-gray-600 italic">
+                "Meu parceiro e eu estávamos travados. A terapia nos ajudou a encontrar o caminho de volta um para o
+                outro. Somos muito gratos pela orientação."
+              </blockquote>
+              <footer class="mt-6">
+                <p class="font-semibold text-gray-900">- M. & T. Silva</p>
+                <p class="text-sm text-gray-500">Clientes de Terapia de Casal</p>
+              </footer>
+            </div>
+          </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section id="faq">
+          <span class="text-sm font-semibold uppercase text-accent tracking-wider">Perguntas Frequentes</span>
+          <h2 class="mt-2 text-3xl md:text-4xl font-bold text-gray-900">
+            Dúvidas Comuns
+          </h2>
+          <div class="mt-8 max-w-3xl space-y-4">
+            <!-- FAQ Item 1 -->
+            <div
+              class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-300 hover:border-accent">
+              <button class="faq-toggle w-full flex justify-between items-center text-left p-5 md:p-6">
+                <span class="text-lg font-medium text-gray-900">Quanto tempo dura uma sessão típica?</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 icon-rotate"></i>
+              </button>
+              <div class="faq-answer px-5 md:px-6 pb-5">
+                <p class="text-gray-600">
+                  Sessões individuais padrão duram 50 minutos. Sessões de casal geralmente duram 60 ou 90 minutos,
+                  dependendo de suas necessidades.
+                </p>
+              </div>
+            </div>
+            <!-- FAQ Item 2 -->
+            <div
+              class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-300 hover:border-accent">
+              <button class="faq-toggle w-full flex justify-between items-center text-left p-5 md:p-6">
+                <span class="text-lg font-medium text-gray-900">A terapia online é confidencial?</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 icon-rotate"></i>
+              </button>
+              <div class="faq-answer px-5 md:px-6 pb-5">
+                <p class="text-gray-600">
+                  Absolutamente. Eu uso uma plataforma segura e compatível com as normas de privacidade (LGPD/HIPAA)
+                  para todas as sessões de vídeo. Sua privacidade e confidencialidade são minhas maiores prioridades.
+                </p>
+              </div>
+            </div>
+            <!-- FAQ Item 3 -->
+            <div
+              class="faq-item bg-white rounded-lg shadow-sm border border-gray-200 transition-all duration-300 hover:border-accent">
+              <button class="faq-toggle w-full flex justify-between items-center text-left p-5 md:p-6">
+                <span class="text-lg font-medium text-gray-900">Você aceita plano de saúde ou oferece reembolso?</span>
+                <i data-lucide="chevron-down" class="w-5 h-5 text-gray-500 icon-rotate"></i>
+              </button>
+              <div class="faq-answer px-5 md:px-6 pb-5">
+                <p class="text-gray-600">
+                  Eu trabalho com atendimentos particulares. Embora eu não fature diretamente para planos de saúde,
+                  posso fornecer um recibo detalhado (fatura) que você pode enviar ao seu plano para solicitar um
+                  possível reembolso (modalidade "out-of-network").
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- Right Column: About, Contact Form -->
+      <div class="lg:col-span-1 lg:sticky lg:top-28 h-fit">
+        <div class="bg-sidebar rounded-2xl shadow-lg p-6 md:p-8 space-y-10">
+
+          <!-- About Section -->
+          <section id="about">
+            <span class="text-sm font-semibold uppercase text-accent tracking-wider">Sobre Mim</span>
+            <h3 class="mt-2 text-2xl font-bold text-gray-900">
+              Prazer em conhecer – aqui está minha história!
+            </h3>
+            <img src="https://placehold.co/400x400/E0F2F1/37474F?text=Dra.+Isabell" alt="Retrato da Dra. Isabell"
+              class="w-32 h-32 rounded-full mx-auto my-6 object-cover shadow-md border-4 border-white">
+            <p class="text-gray-700">
+              Como psicóloga licenciada, ofereço um espaço compassivo e confidencial onde podemos explorar os desafios
+              que você está enfrentando. Meu objetivo é ajudá-lo a navegar pelas dificuldades e encontrar mudanças
+              significativas em sua vida.
+            </p>
+
+            <h4 class="mt-8 text-xl font-semibold text-gray-900">Minha Formação</h4>
+            <ul class="mt-4 space-y-3 text-gray-700">
+              <li class="flex items-center gap-3">
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-accent flex-shrink-0"></i>
+                <span>Psicóloga Clínica Licenciada (CRP 00/0000)</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-accent flex-shrink-0"></i>
+                <span>Mestrado em Psicologia</span>
+              </li>
+              <li class="flex items-center gap-3">
+                <i data-lucide="graduation-cap" class="w-5 h-5 text-accent flex-shrink-0"></i>
+                <span>Bacharelado em Psicologia</span>
+              </li>
+            </ul>
+            <!-- Trust Badges -->
+            <div class="mt-6 flex justify-center gap-4">
+              <div class="w-16 h-16 bg-white/70 rounded-full flex items-center justify-center animate-pulse-slow"
+                title="Psicóloga Licenciada">
+                <i data-lucide="award" class="w-8 h-8 text-accent"></i>
+              </div>
+              <div class="w-16 h-16 bg-white/70 rounded-full flex items-center justify-center animate-pulse-slow"
+                title="Compatível com LGPD/HIPAA">
+                <i data-lucide="shield-check" class="w-8 h-8 text-accent"></i>
+              </div>
+            </div>
+          </section>
+
+          <!-- Contact Form -->
+          <section id="contact">
+            <h3 class="text-2xl font-bold text-gray-900">
+              Envie-me uma mensagem
+            </h3>
+            <p class="mt-2 text-gray-700">
+              Retornarei em até um dia útil.
+            </p>
+
+            <!-- Form Result Message -->
+            <div id="form-result" class="hidden mt-4">
+              <div class="bg-white rounded-lg p-6 text-center">
+                <i data-lucide="check-circle" class="w-16 h-16 text-green-500 mx-auto"></i>
+                <h4 class="mt-4 text-xl font-semibold text-gray-900">Mensagem Enviada!</h4>
+                <p class="mt-2 text-gray-700">Obrigado por entrar em contato. Em breve falarei com você.</p>
+              </div>
+            </div>
+
+            <!-- Fake Form -->
+            <form id="contact-form" class="mt-6 space-y-4">
+              <div>
+                <label for="name" class="sr-only">Seu Nome</label>
+                <input type="text" name="name" id="name" required
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm transition-colors focus:border-accent focus:ring-2 focus:ring-accent"
+                  placeholder="Seu Nome">
+              </div>
+              <div>
+                <label for="email" class="sr-only">Seu Email</label>
+                <input type="email" name="email" id="email" required
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm transition-colors focus:border-accent focus:ring-2 focus:ring-accent"
+                  placeholder="Seu Email">
+              </div>
+              <div>
+                <label for="message" class="sr-only">Sua Mensagem</label>
+                <textarea name="message" id="message" rows="4" required
+                  class="w-full px-4 py-3 rounded-lg border border-gray-300 shadow-sm transition-colors focus:border-accent focus:ring-2 focus:ring-accent"
+                  placeholder="Sua Mensagem (ex: melhor horário, tipo de sessão)"></textarea>
+              </div>
+              <div>
+                <button type="submit" id="form-submit-btn"
+                  class="w-full inline-flex items-center justify-center px-6 py-3.5 border border-transparent text-base font-medium rounded-lg text-white bg-accent hover:bg-accent-dark transition-all duration-300 shadow-lg hover:shadow-xl">
+                  <span id="submit-text">Enviar Mensagem</span>
+                  <span id="submit-loading" class="hidden">
+                    <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg"
+                      fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                      <path class="opacity-75" fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                      </path>
+                    </svg>
+                    Enviando...
+                  </span>
+                </button>
+              </div>
+            </form>
+
+            <!-- Alternative Contact -->
+            <div class="mt-6 text-center">
+              <p class="text-sm text-gray-700">Ou conecte-se por outras plataformas</p>
+              <div class="mt-3 flex justify-center gap-4">
+                <a href="https://wa.me/5511999998888" target="_blank"
+                  class="w-12 h-12 bg-white/70 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+                  title="WhatsApp">
+                  <i data-lucide="message-circle" class="w-6 h-6 text-accent"></i>
+                </a>
+                <a href="#" target="_blank"
+                  class="w-12 h-12 bg-white/70 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+                  title="LinkedIn">
+                  <i data-lucide="linkedin" class="w-6 h-6 text-accent"></i>
+                </a>
+                <a href="#" target="_blank"
+                  class="w-12 h-12 bg-white/70 rounded-full flex items-center justify-center transition-transform hover:scale-110"
+                  title="Instagram">
+                  <i data-lucide="instagram" class="w-6 h-6 text-accent"></i>
+                </a>
+              </div>
+            </div>
+
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-gray-400 mt-16 md:mt-24">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- Brand -->
+        <div>
+          <a href="#" class="flex-shrink-0 flex items-center gap-2">
+            <span class="w-8 h-8 bg-sidebar rounded-full flex items-center justify-center">
+              <i data-lucide="brain-circuit" class="w-5 h-5 text-accent"></i>
+            </span>
+            <span class="font-bold text-2xl text-white" style="font-family: 'Lora', serif;">MindPark</span>
+          </a>
+          <p class="mt-4 text-sm">
+            Seu parceiro em bem-estar mental.
+          </p>
+        </div>
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Links Rápidos</h3>
+          <ul class="mt-4 space-y-2">
+            <li><a href="#services" class="text-base hover:text-white transition-colors">Serviços</a></li>
+            <li><a href="#about" class="text-base hover:text-white transition-colors">Sobre Mim</a></li>
+            <li><a href="#faq" class="text-base hover:text-white transition-colors">Perguntas</a></li>
+            <li><a href="#contact" class="text-base hover:text-white transition-colors">Agendar Agora</a></li>
+          </ul>
+        </div>
+        <!-- Legal -->
+        <div>
+          <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Jurídico</h3>
+          <ul class="mt-4 space-y-2">
+            <li><a href="#" class="text-base hover:text-white transition-colors">Política de Privacidade</a></li>
+            <li><a href="#" class="text-base hover:text-white transition-colors">Termos de Serviço</a></li>
+            <li><a href="#" class="text-base hover:text-white transition-colors">Credenciais</a></li>
+          </ul>
+        </div>
+        <!-- Social -->
+        <div>
+          <h3 class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Conecte-se</h3>
+          <div class="mt-4 flex gap-4">
+            <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors">
+              <i data-lucide="linkedin" class="w-5 h-5 text-gray-300"></i>
+            </a>
+            <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors">
+              <i data-lucide="twitter" class="w-5 h-5 text-gray-300"></i>
+            </a>
+            <a href="#" class="p-2 bg-gray-700 rounded-full hover:bg-gray-600 transition-colors">
+              <i data-lucide="instagram" class="w-5 h-5 text-gray-300"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="mt-8 border-t border-gray-700 pt-8 text-center">
+        <p class="text-sm">&copy; 2025 Dra. Isabell Placeholder. Todos os direitos reservados.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- AOS JS -->
+  <!-- <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script> -->
+
+  <script>
+    // Initialize Lucide Icons
+    lucide.createIcons();
+
+    // Initialize AOS
+    /*
+    AOS.init({
+        duration: 800, // Duração da animação
+        once: true, // Animar apenas uma vez
+        offset: 50 // Iniciar animação um pouco antes de chegar no elemento
+    });
+    */
+
+    // --- Mobile Menu Toggle ---
+    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+
+    mobileMenuBtn.addEventListener('click', () => {
+      mobileMenu.classList.toggle('hidden');
+    });
+
+    // Close mobile menu when a link is clicked
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.add('hidden');
+      });
+    });
+
+    // --- FAQ Accordion ---
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+      const toggle = item.querySelector('.faq-toggle');
+      toggle.addEventListener('click', () => {
+        // Close other open items
+        faqItems.forEach(otherItem => {
+          if (otherItem !== item && otherItem.classList.contains('open')) {
+            otherItem.classList.remove('open');
+          }
+        });
+        // Toggle current item
+        item.classList.toggle('open');
+      });
+    });
+
+    // --- Fake Form Submission ---
+    const contactForm = document.getElementById('contact-form');
+    const formResult = document.getElementById('form-result');
+    const submitBtn = document.getElementById('form-submit-btn');
+    const submitText = document.getElementById('submit-text');
+    const submitLoading = document.getElementById('submit-loading');
+
+    contactForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Show loading state
+      submitText.classList.add('hidden');
+      submitLoading.classList.remove('hidden');
+      submitBtn.disabled = true;
+
+      // Simulate API call
+      setTimeout(() => {
+        // Hide form, show success message
+        contactForm.classList.add('hidden');
+        formResult.classList.remove('hidden');
+
+        // (Optional) Scroll to the top of the form area
+        const formSection = document.getElementById('contact');
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      }, 1500); // 1.5 second delay
+    });
+  </script>
+
+</body>
+
+</html>

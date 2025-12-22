@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title"></title>
+
+    <script src="config.js"></script>
+
+    <script src="../flor-da-tiburcio/components/hero.js"></script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: config.theme.colors.primary,
+                            light: config.theme.colors.primaryLight,
+                            cream: config.theme.colors.background,
+                            gold: config.theme.colors.accent
+                        }
+                    },
+                    fontFamily: {
+                        serif: [config.theme.fonts.primary.replace(/"/g, '\\"')],
+                        sans: [config.theme.fonts.secondary.replace(/"/g, '\\"')],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body id="app-body" class="bg-brand-cream text-gray-800 font-sans antialiased overflow-x-hidden">
+
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-brand-cream/90 backdrop-blur-md shadow-sm border-b border-brand-dark/10" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center gap-3 group">
+                <img id="nav-logo" class="w-12 h-12 rounded-full border-2 border-brand-dark object-cover group-hover:rotate-12 transition-transform duration-300 shadow-md">
+                <div class="leading-tight">
+                    <span id="nav-site-name" class="block font-serif font-bold text-xl text-brand-dark tracking-wide"></span>
+                    <span id="nav-established" class="block text-xs text-gray-500 uppercase tracking-wider"></span>
+                </div>
+            </a>
+
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#about" id="nav-link-about" class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
+                <a href="#services" id="nav-link-services" class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
+                <a href="#location" id="nav-link-location" class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
+                <a id="nav-btn-order" target="_blank" class="px-6 py-2 bg-brand-dark text-white text-sm font-medium rounded-full hover:bg-brand-light transition-all transform hover:-translate-y-0.5 shadow-lg flex items-center gap-2">
+                    <i class="fab fa-whatsapp"></i> <span id="nav-btn-order-text"></span>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-brand-dark text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-brand-cream border-b border-brand-dark/10 shadow-lg md:hidden p-6 flex flex-col gap-4">
+            <a href="#about" id="mobile-link-about" class="block text-lg font-serif text-brand-dark"></a>
+            <a href="#services" id="mobile-link-services" class="block text-lg font-serif text-brand-dark"></a>
+            <a href="#location" id="mobile-link-location" class="block text-lg font-serif text-brand-dark"></a>
+            <a id="mobile-btn-order" class="block text-center w-full py-3 bg-brand-dark text-white rounded-lg"></a>
+        </div>
+    </nav>
+
+    <div id="hero-component"></div>
+
+    <div class="bg-brand-dark text-white py-4 relative z-30">
+        <div class="container mx-auto px-6 flex flex-wrap justify-center md:justify-between items-center gap-4 text-sm opacity-90">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-motorcycle text-brand-gold"></i>
+                <span id="info-delivery"></span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="fas fa-map-marker-alt text-brand-gold"></i>
+                <span id="info-address"></span>
+            </div>
+            <div class="flex items-center gap-2">
+                <i class="far fa-clock text-brand-gold"></i>
+                <span id="info-hours"></span>
+            </div>
+        </div>
+    </div>
+
+    <section id="services" class="py-24 bg-brand-cream">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 id="services-title" class="font-serif text-4xl text-brand-dark mb-4"></h2>
+                <div class="w-24 h-1 bg-brand-dark mx-auto opacity-20"></div>
+            </div>
+
+            <div id="services-grid" class="grid md:grid-cols-3 gap-8">
+            </div>
+        </div>
+    </section>
+
+
+    <script>
+        AOS.init({
+            duration: config.theme.animations.aos.duration,
+            once: config.theme.animations.aos.once,
+            offset: config.theme.animations.aos.offset
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Page title
+            document.getElementById('page-title').textContent = config.site.title;
+
+            // Navigation
+            const navLogo = document.getElementById('nav-logo');
+            navLogo.src = config.site.logoUrl;
+            navLogo.alt = config.site.logoAlt;
+            navLogo.onerror = function() { this.src = config.site.logoFallback; };
+            document.getElementById('nav-site-name').textContent = config.site.name;
+            document.getElementById('nav-established').textContent = config.site.established;
+            document.getElementById('nav-link-about').textContent = config.navigation.about;
+            document.getElementById('nav-link-services').textContent = config.navigation.services;
+            document.getElementById('nav-link-location').textContent = config.navigation.location;
+            document.getElementById('nav-btn-order').href = `https://wa.me/${config.contact.whatsapp}`;
+            document.getElementById('nav-btn-order-text').textContent = config.navigation.orderNow;
+
+            // Mobile menu
+            document.getElementById('mobile-link-about').textContent = config.navigation.about;
+            document.getElementById('mobile-link-services').textContent = config.navigation.services;
+            document.getElementById('mobile-link-location').textContent = config.navigation.location;
+            const mobileBtn = document.getElementById('mobile-btn-order');
+            mobileBtn.href = `https://wa.me/${config.contact.whatsapp}`;
+            mobileBtn.textContent = config.navigation.makeOrder;
+
+            // Hero section - usando componente
+            HeroComponent.createFromConfig(config, 'hero-component');
+
+            // Info bar
+            document.getElementById('info-delivery').textContent = config.infoBar.delivery;
+            document.getElementById('info-address').textContent = config.infoBar.address;
+            document.getElementById('info-hours').textContent = config.infoBar.hours;
+
+            // Services section
+            document.getElementById('services-title').textContent = config.services.title;
+            const servicesGrid = document.getElementById('services-grid');
+            config.services.items.forEach((service, index) => {
+                const serviceDiv = document.createElement('div');
+                serviceDiv.className = 'group relative overflow-hidden rounded-2xl aspect-[4/5] cursor-pointer';
+                serviceDiv.setAttribute('data-aos', 'fade-up');
+                serviceDiv.setAttribute('data-aos-delay', index * 100);
+                serviceDiv.innerHTML = `
+                    <img src="${service.image}" alt="${service.alt}" class="w-full h-full object-cover img-zoom">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/90 to-transparent flex flex-col justify-end p-8">
+                        <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            <h3 class="text-2xl font-serif text-white mb-2">${service.name}</h3>
+                            <p class="text-white/80 text-sm opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-100">
+                                ${service.description}
+                            </p>
+                        </div>
+                    </div>
+                `;
+                servicesGrid.appendChild(serviceDiv);
+            });
+
+            // Featured section
+            document.getElementById('featured-badge').textContent = config.featured.badge;
+            document.getElementById('featured-title').textContent = config.featured.title;
+            document.getElementById('featured-description').textContent = config.featured.description;
+            const featuredImg = document.getElementById('featured-image');
+            featuredImg.src = config.featured.image;
+            featuredImg.alt = config.featured.imageAlt;
+
+            const featuredFeatures = document.getElementById('featured-features');
+            config.featured.features.forEach(feature => {
+                const li = document.createElement('li');
+                li.className = 'flex items-center gap-3';
+                li.innerHTML = `
+                    <span class="w-8 h-8 rounded-full bg-brand-gold/20 flex items-center justify-center text-brand-dark"><i class="fas fa-check text-xs"></i></span>
+                    <span class="text-gray-700 font-medium">${feature}</span>
+                `;
+                featuredFeatures.appendChild(li);
+            });
+
+            const featuredCta = document.getElementById('featured-cta');
+            featuredCta.href = `https://wa.me/${config.contact.whatsapp}`;
+            featuredCta.textContent = config.featured.cta;
+
+            // CTA section
+            document.getElementById('cta-title').textContent = config.cta.title;
+            document.getElementById('cta-subtitle').textContent = config.cta.subtitle;
+            document.getElementById('cta-whatsapp').href = `https://wa.me/${config.contact.whatsapp}`;
+            document.getElementById('cta-whatsapp-text').textContent = config.cta.whatsappButton;
+            document.getElementById('cta-ifood-text').textContent = config.cta.ifoodButton;
+
+            // Footer section
+            document.getElementById('footer-title').textContent = config.footer.title;
+            document.getElementById('footer-address-label').textContent = config.footer.addressLabel;
+            document.getElementById('footer-street').textContent = config.address.street;
+            document.getElementById('footer-city').textContent = `${config.address.neighborhood}, ${config.address.city} - ${config.address.state}`;
+            document.getElementById('footer-zipcode').textContent = `CEP: ${config.address.zipCode}`;
+            document.getElementById('footer-contact-label').textContent = config.footer.contactLabel;
+            document.getElementById('footer-phone').textContent = config.contact.phone;
+            document.getElementById('footer-instagram').href = config.contact.instagram;
+
+            // Map
+            const mapLink = document.getElementById('footer-map-link');
+            mapLink.href = `https://maps.google.com/?q=${config.address.googleMapsQuery}`;
+            const mapIframe = document.getElementById('footer-map-iframe');
+            mapIframe.src = `https://maps.google.com/maps?q=${encodeURIComponent(config.address.street + ', ' + config.address.city)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
+
+            // Copyright
+            document.getElementById('footer-copyright').textContent = config.footer.copyright;
+
+            // Categories
+            const categoriesDiv = document.getElementById('footer-categories');
+            config.footer.categories.forEach((category, index) => {
+                if (index > 0) {
+                    categoriesDiv.innerHTML += ' &bull; ';
+                }
+                const span = document.createElement('span');
+                span.className = 'mx-2';
+                span.textContent = category;
+                categoriesDiv.appendChild(span);
+            });
+        });
+    </script>
+</body>
+</html>
