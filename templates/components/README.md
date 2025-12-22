@@ -87,12 +87,12 @@ Menu de navegação responsivo com logo e links.
 - `logoAlt`: Texto alternativo do logo
 - `siteName`: Nome do site
 - `established`: Texto de estabelecimento (ex: "Est. 2020")
-- `whatsappNumber`: Número do WhatsApp para o botão
-- `links`: Objeto com textos dos links
-  - `about`: Texto do link "Sobre"
-  - `services`: Texto do link "Serviços"
-  - `location`: Texto do link "Localização"
-  - `orderNow`: Texto do botão "Fazer Pedido"
+- `whatsappNumber`: Número do WhatsApp (usado como fallback)
+- `links`: Objeto com links do menu
+  - `about`: { text: string, href: string }
+  - `services`: { text: string, href: string }
+  - `location`: { text: string, href: string }
+  - `cta`: { text: string, href: string, target?: string }
 
 **Exemplo no config.js:**
 ```javascript
@@ -103,11 +103,33 @@ Menu de navegação responsivo com logo e links.
     established: "Est. 2020",
     whatsappNumber: "5511999999999",
     links: {
-        about: "Sobre",
-        services: "Serviços",
-        location: "Localização",
-        orderNow: "Fazer Pedido"
+        about: {
+            text: "Sobre Nós",
+            href: "#about"
+        },
+        services: {
+            text: "Nossos Serviços",
+            href: "#services"
+        },
+        location: {
+            text: "Onde Estamos",
+            href: "#location"
+        },
+        cta: {
+            text: "Fazer Pedido",
+            href: "https://wa.me/5511999999999",
+            target: "_blank"
+        }
     }
+}
+```
+
+**Nota:** Os links aceitam formato simples (string) para retrocompatibilidade:
+```javascript
+links: {
+    about: "Sobre",  // Usa href padrão: #about
+    services: "Serviços",  // Usa href padrão: #services
+    // ...
 }
 ```
 
@@ -124,25 +146,56 @@ Hero com imagem de fundo e overlay escuro customizável.
 - `title`: Título principal
 - `titleHighlight`: Parte destacada do título (em itálico)
 - `subtitle`: Subtítulo/descrição
-- `ctaPrimary`: Texto do botão primário
-- `ctaSecondary`: Texto do botão secundário
+- `ctaPrimary`: Botão primário (objeto ou string)
+  - Como objeto: { text: string, href: string, target?: string }
+  - Como string: usa WhatsApp como link padrão
+- `ctaSecondary`: Botão secundário (objeto ou string)
+  - Como objeto: { text: string, href: string }
+  - Como string: usa #services como link padrão
 - `backgroundImage`: URL da imagem de fundo
 - `backgroundAlt`: Texto alternativo da imagem
-- `whatsappNumber`: Número do WhatsApp (formato: 5511999999999)
+- `whatsappNumber`: Número do WhatsApp (usado como fallback se CTA for string)
 - `colors`: Objeto com cores personalizadas
   - `primary`: Cor primária (ex: 'brand-dark', 'purple')
   - `accent`: Cor de destaque (ex: 'brand-gold', 'amber')
   - `text`: Cor do texto (ex: 'white', 'slate')
 
-**Exemplo no config.js:**
+**Exemplo no config.js (formato completo):**
 ```javascript
 'hero-overlay': {
     badge: "Desde 2020",
     title: "Bem-vindo",
     titleHighlight: "ao futuro",
     subtitle: "Descrição...",
-    ctaPrimary: "Fazer Pedido",
-    ctaSecondary: "Explorar",
+    ctaPrimary: {
+        text: "Fazer Pedido",
+        href: "https://wa.me/5511999999999",
+        target: "_blank"
+    },
+    ctaSecondary: {
+        text: "Explorar Produtos",
+        href: "#products"
+    },
+    backgroundImage: "https://...",
+    backgroundAlt: "Imagem",
+    whatsappNumber: "5511999999999",
+    colors: {
+        primary: 'brand-dark',
+        accent: 'brand-gold',
+        text: 'white'
+    }
+}
+```
+
+**Exemplo no config.js (formato simplificado - retrocompatível):**
+```javascript
+'hero-overlay': {
+    badge: "Desde 2020",
+    title: "Bem-vindo",
+    titleHighlight: "ao futuro",
+    subtitle: "Descrição...",
+    ctaPrimary: "Fazer Pedido",  // String - usa WhatsApp automaticamente
+    ctaSecondary: "Explorar",    // String - usa #services automaticamente
     backgroundImage: "https://...",
     backgroundAlt: "Imagem",
     whatsappNumber: "5511999999999",

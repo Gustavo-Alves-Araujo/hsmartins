@@ -28,10 +28,23 @@ const config = {
     established: "Itaim Paulista",
     whatsappNumber: "5511937304737",
     links: {
-      about: "Sobre",
-      services: "Produtos",
-      location: "Localização",
-      orderNow: "Peça Agora"
+      about: {
+        text: "Sobre",
+        href: "#about"
+      },
+      services: {
+        text: "Produtos",
+        href: "#services"
+      },
+      location: {
+        text: "Localização",
+        href: "#location"
+      },
+      cta: {
+        text: "Peça Agora",
+        href: "https://wa.me/5511937304737",
+        target: "_blank"
+      }
     }
   },
 
@@ -40,8 +53,15 @@ const config = {
     title: "Sabor que cria",
     titleHighlight: "memórias.",
     subtitle: "Padaria, confeitaria e pizzaria. A tradição do pão quentinho e da pizza artesanal, entregue na sua porta.",
-    ctaPrimary: "Fazer Pedido",
-    ctaSecondary: "Explorar Cardápio",
+    ctaPrimary: {
+      text: "Fazer Pedido",
+      href: "https://wa.me/5511937304737",
+      target: "_blank"
+    },
+    ctaSecondary: {
+      text: "Explorar Cardápio",
+      href: "#services"
+    },
     backgroundImage: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop",
     backgroundAlt: "Pão Fresco",
     whatsappNumber: "5511937304737",
@@ -49,6 +69,28 @@ const config = {
       primary: 'brand-dark',
       accent: 'brand-gold',
       text: 'white'
+    }
+  },
+
+  'info-bar': {
+    items: [
+      {
+        icon: "fas fa-motorcycle",
+        text: "Entrega Rápida em 30min"
+      },
+      {
+        icon: "fas fa-map-marker-alt",
+        text: "Rua Tibúrcio de Sousa, 1351 - Itaim Paulista"
+      },
+      {
+        icon: "far fa-clock",
+        text: "Seg-Sáb: 6h-20h | Dom: 6h-14h"
+      }
+    ],
+    colors: {
+      background: "brand-dark",
+      text: "white",
+      accent: "brand-gold"
     }
   },
 

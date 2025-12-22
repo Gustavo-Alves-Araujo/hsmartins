@@ -12,10 +12,10 @@ class HeaderNavigationComponent {
      * @param {string} data.established - Texto de estabelecimento (Ex: "Est. 2020")
      * @param {string} data.whatsappNumber - Número do WhatsApp para o botão
      * @param {Object} data.links - Links do menu
-     * @param {string} data.links.about - Texto do link "Sobre"
-     * @param {string} data.links.services - Texto do link "Serviços"
-     * @param {string} data.links.location - Texto do link "Localização"
-     * @param {string} data.links.orderNow - Texto do botão "Fazer Pedido"
+     * @param {Object} data.links.about - Link "Sobre" { text: string, href: string }
+     * @param {Object} data.links.services - Link "Serviços" { text: string, href: string }
+     * @param {Object} data.links.location - Link "Localização" { text: string, href: string }
+     * @param {Object} data.links.cta - Botão CTA { text: string, href: string }
      */
     constructor(data) {
         this.logoUrl = data.logoUrl;
@@ -23,7 +23,19 @@ class HeaderNavigationComponent {
         this.siteName = data.siteName;
         this.established = data.established;
         this.whatsappNumber = data.whatsappNumber;
-        this.links = data.links || {};
+
+        // Links com valores padrão
+        this.links = {
+            about: { text: 'Sobre', href: '#about', ...data.links?.about },
+            services: { text: 'Serviços', href: '#services', ...data.links?.services },
+            location: { text: 'Localização', href: '#location', ...data.links?.location },
+            cta: {
+                text: 'Fazer Pedido',
+                href: `https://wa.me/${data.whatsappNumber}`,
+                target: '_blank',
+                ...data.links?.cta
+            }
+        };
     }
 
     /**
@@ -45,13 +57,13 @@ class HeaderNavigationComponent {
                     </a>
 
                     <div class="hidden md:flex items-center gap-8">
-                        <a href="#about" class="text-sm font-medium hover:text-brand-dark transition-colors">${this.links.about || 'Sobre'}</a>
-                        <a href="#services" class="text-sm font-medium hover:text-brand-dark transition-colors">${this.links.services || 'Serviços'}</a>
-                        <a href="#location" class="text-sm font-medium hover:text-brand-dark transition-colors">${this.links.location || 'Localização'}</a>
-                        <a href="https://wa.me/${this.whatsappNumber}"
-                           target="_blank"
+                        <a href="${this.links.about.href}" class="text-sm font-medium hover:text-brand-dark transition-colors">${this.links.about.text}</a>
+                        <a href="${this.links.services.href}" class="text-sm font-medium hover:text-brand-dark transition-colors">${this.links.services.text}</a>
+                        <a href="${this.links.location.href}" class="text-sm font-medium hover:text-brand-dark transition-colors">${this.links.location.text}</a>
+                        <a href="${this.links.cta.href}"
+                           ${this.links.cta.target ? `target="${this.links.cta.target}"` : ''}
                            class="px-6 py-2 bg-brand-dark text-white text-sm font-medium rounded-full hover:bg-brand-light transition-all transform hover:-translate-y-0.5 shadow-lg flex items-center gap-2">
-                            <i class="fab fa-whatsapp"></i> ${this.links.orderNow || 'Fazer Pedido'}
+                            <i class="fab fa-whatsapp"></i> ${this.links.cta.text}
                         </a>
                     </div>
 
@@ -63,13 +75,13 @@ class HeaderNavigationComponent {
 
                 <!-- Mobile Menu -->
                 <div class="mobile-menu hidden absolute top-full left-0 w-full bg-brand-cream border-b border-brand-dark/10 shadow-lg md:hidden p-6 flex flex-col gap-4">
-                    <a href="#about" class="block text-lg font-serif text-brand-dark">${this.links.about || 'Sobre'}</a>
-                    <a href="#services" class="block text-lg font-serif text-brand-dark">${this.links.services || 'Serviços'}</a>
-                    <a href="#location" class="block text-lg font-serif text-brand-dark">${this.links.location || 'Localização'}</a>
-                    <a href="https://wa.me/${this.whatsappNumber}"
-                       target="_blank"
+                    <a href="${this.links.about.href}" class="block text-lg font-serif text-brand-dark">${this.links.about.text}</a>
+                    <a href="${this.links.services.href}" class="block text-lg font-serif text-brand-dark">${this.links.services.text}</a>
+                    <a href="${this.links.location.href}" class="block text-lg font-serif text-brand-dark">${this.links.location.text}</a>
+                    <a href="${this.links.cta.href}"
+                       ${this.links.cta.target ? `target="${this.links.cta.target}"` : ''}
                        class="block text-center w-full py-3 bg-brand-dark text-white rounded-lg">
-                        <i class="fab fa-whatsapp"></i> ${this.links.orderNow || 'Fazer Pedido'}
+                        <i class="fab fa-whatsapp"></i> ${this.links.cta.text}
                     </a>
                 </div>
             </nav>

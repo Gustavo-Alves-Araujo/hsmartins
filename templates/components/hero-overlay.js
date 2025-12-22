@@ -10,11 +10,11 @@ class HeroComponent {
      * @param {string} data.title - Título principal
      * @param {string} data.titleHighlight - Parte destacada do título
      * @param {string} data.subtitle - Subtítulo/descrição
-     * @param {string} data.ctaPrimary - Texto do botão primário
-     * @param {string} data.ctaSecondary - Texto do botão secundário
+     * @param {Object} data.ctaPrimary - Botão primário { text: string, href: string, target?: string }
+     * @param {Object} data.ctaSecondary - Botão secundário { text: string, href: string }
      * @param {string} data.backgroundImage - URL da imagem de fundo
      * @param {string} data.backgroundAlt - Texto alternativo da imagem
-     * @param {string} data.whatsappNumber - Número do WhatsApp (formato: 5511999999999)
+     * @param {string} data.whatsappNumber - Número do WhatsApp (formato: 5511999999999) - usado como fallback
      * @param {Object} data.colors - Cores do tema (opcional)
      * @param {string} data.colors.primary - Nome base da cor primária (ex: 'purple', 'blue', 'brand-dark')
      * @param {string} data.colors.accent - Nome base da cor de destaque (ex: 'amber', 'gold', 'brand-gold')
@@ -25,8 +25,16 @@ class HeroComponent {
         this.title = data.title;
         this.titleHighlight = data.titleHighlight;
         this.subtitle = data.subtitle;
-        this.ctaPrimary = data.ctaPrimary;
-        this.ctaSecondary = data.ctaSecondary;
+
+        // CTAs com suporte a objeto { text, href, target }
+        this.ctaPrimary = typeof data.ctaPrimary === 'string'
+            ? { text: data.ctaPrimary, href: `https://wa.me/${data.whatsappNumber}`, target: '_blank' }
+            : { text: 'Fazer Pedido', href: `https://wa.me/${data.whatsappNumber}`, target: '_blank', ...data.ctaPrimary };
+
+        this.ctaSecondary = typeof data.ctaSecondary === 'string'
+            ? { text: data.ctaSecondary, href: '#services' }
+            : { text: 'Explorar', href: '#services', ...data.ctaSecondary };
+
         this.backgroundImage = data.backgroundImage;
         this.backgroundAlt = data.backgroundAlt;
         this.whatsappNumber = data.whatsappNumber;
@@ -98,14 +106,14 @@ class HeroComponent {
                     </p>
 
                     <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up">
-                        <a href="https://wa.me/${this.whatsappNumber}"
-                           target="_blank"
+                        <a href="${this.ctaPrimary.href}"
+                           ${this.ctaPrimary.target ? `target="${this.ctaPrimary.target}"` : ''}
                            class="px-8 py-4 bg-${c.ctaPrimaryBg} text-${c.ctaPrimaryText} font-bold rounded-full hover:bg-${c.ctaPrimaryHover} transition-all shadow-xl flex items-center justify-center gap-2">
-                            <i class="fab fa-whatsapp text-xl"></i> ${this.ctaPrimary}
+                            <i class="fab fa-whatsapp text-xl"></i> ${this.ctaPrimary.text}
                         </a>
-                        <a href="#services"
+                        <a href="${this.ctaSecondary.href}"
                            class="px-8 py-4 border border-${c.ctaSecondaryBorder} text-${c.ctaSecondaryText} font-medium rounded-full hover:bg-${c.ctaSecondaryHover} hover:bg-opacity-50 transition-all" style="border-opacity: 0.3; backdrop-filter: blur(4px);">
-                            ${this.ctaSecondary}
+                            ${this.ctaSecondary.text}
                         </a>
                     </div>
                 </div>
