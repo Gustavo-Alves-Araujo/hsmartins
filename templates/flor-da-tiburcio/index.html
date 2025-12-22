@@ -232,7 +232,17 @@
             mobileBtn.textContent = config.navigation.makeOrder;
 
             // Hero section - usando componente
-            HeroComponent.createFromConfig(config, 'hero-component');
+            HeroComponent.create({
+                badge: config.hero.badge,
+                title: config.hero.title,
+                titleHighlight: config.hero.titleHighlight,
+                subtitle: config.hero.subtitle,
+                ctaPrimary: config.hero.ctaPrimary,
+                ctaSecondary: config.hero.ctaSecondary,
+                backgroundImage: config.hero.backgroundImage,
+                backgroundAlt: config.hero.backgroundAlt,
+                whatsappNumber: config.contact.whatsapp
+            }, 'hero-component');
 
             // Info bar
             document.getElementById('info-delivery').textContent = config.infoBar.delivery;

@@ -37,29 +37,12 @@
   </script>
 </head>
 
-<body id="app-body" class="bg-brand-cream text-gray-800 font-sans antialiased overflow-x-hidden">
+<body id="app-body" class="">
+  <div id="hero-component"></div>
+
   <script>
-    AOS.init({
-      duration: config.theme.animations.aos.duration,
-      once: config.theme.animations.aos.once,
-      offset: config.theme.animations.aos.offset
-    });
-
-    document.addEventListener('DOMContentLoaded', function () {
-      HeroComponent.createFromConfig(config, 'hero-component');
-
-      const servicesGrid = document.getElementById('app-body');
-      config.services.items.forEach((service, index) => {
-        const serviceDiv = document.createElement('div');
-        serviceDiv.setAttribute('data-aos', 'fade-up');
-        servicesGrid.appendChild(serviceDiv);
-      });
-    });
+    HeroComponent.createFromConfig(config, 'hero-component');
   </script>
-
-  <div id="hero-component">
-  </div>
-
 </body>
 
 </html>
