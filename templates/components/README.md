@@ -2,7 +2,7 @@
 
 ## 🎯 O que é?
 
-Um sistema que **detecta, carrega e monta componentes automaticamente** baseado no `config.js`. 
+Um sistema que **detecta, carrega e monta componentes automaticamente** baseado no `config.js`.
 
 **Zero configuração manual. Zero imports. 100% automático.**
 
@@ -19,7 +19,7 @@ const config = {
     // ========== COMPONENTES ==========
     // Qualquer chave com hífen é detectada como componente!
     // Eles são montados na ordem que aparecem aqui
-    
+
     'hero-overlay': {
         badge: "Seu badge",
         title: "Seu título",
@@ -76,9 +76,48 @@ O registry:
 
 ## 🎨 Componentes Disponíveis
 
+### header-navigation
+
+Menu de navegação responsivo com logo e links.
+
+**Arquivo:** `header-navigation.js`
+
+**Props:**
+- `logoUrl`: URL do logo
+- `logoAlt`: Texto alternativo do logo
+- `siteName`: Nome do site
+- `established`: Texto de estabelecimento (ex: "Est. 2020")
+- `whatsappNumber`: Número do WhatsApp para o botão
+- `links`: Objeto com textos dos links
+  - `about`: Texto do link "Sobre"
+  - `services`: Texto do link "Serviços"
+  - `location`: Texto do link "Localização"
+  - `orderNow`: Texto do botão "Fazer Pedido"
+
+**Exemplo no config.js:**
+```javascript
+'header-navigation': {
+    logoUrl: "https://...",
+    logoAlt: "Logo",
+    siteName: "Minha Empresa",
+    established: "Est. 2020",
+    whatsappNumber: "5511999999999",
+    links: {
+        about: "Sobre",
+        services: "Serviços",
+        location: "Localização",
+        orderNow: "Fazer Pedido"
+    }
+}
+```
+
+---
+
 ### hero-overlay
 
 Hero com imagem de fundo e overlay escuro customizável.
+
+**Arquivo:** `hero-overlay.js`
 
 **Props:**
 - `badge`: Texto do badge superior
@@ -94,6 +133,28 @@ Hero com imagem de fundo e overlay escuro customizável.
   - `primary`: Cor primária (ex: 'brand-dark', 'purple')
   - `accent`: Cor de destaque (ex: 'brand-gold', 'amber')
   - `text`: Cor do texto (ex: 'white', 'slate')
+
+**Exemplo no config.js:**
+```javascript
+'hero-overlay': {
+    badge: "Desde 2020",
+    title: "Bem-vindo",
+    titleHighlight: "ao futuro",
+    subtitle: "Descrição...",
+    ctaPrimary: "Fazer Pedido",
+    ctaSecondary: "Explorar",
+    backgroundImage: "https://...",
+    backgroundAlt: "Imagem",
+    whatsappNumber: "5511999999999",
+    colors: {
+        primary: 'brand-dark',
+        accent: 'brand-gold',
+        text: 'white'
+    }
+}
+```
+
+---
 
 ## 🔧 API do Component Registry
 

@@ -21,6 +21,20 @@ const config = {
     }
   },
 
+  'header-navigation': {
+    logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRUt3aoT0TztOymfkQd7fzYBOjmjUbn8_q9Q&s",
+    logoAlt: "Logo Flor da Tibúrcio",
+    siteName: "Flor da Tibúrcio",
+    established: "Itaim Paulista",
+    whatsappNumber: "5511937304737",
+    links: {
+      about: "Sobre",
+      services: "Produtos",
+      location: "Localização",
+      orderNow: "Peça Agora"
+    }
+  },
+
   'hero-overlay': {
     badge: "Desde o coração do Itaim Paulista",
     title: "Sabor que cria",
