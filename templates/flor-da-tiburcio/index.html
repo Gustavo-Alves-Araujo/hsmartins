@@ -241,7 +241,36 @@
                 ctaSecondary: config.hero.ctaSecondary,
                 backgroundImage: config.hero.backgroundImage,
                 backgroundAlt: config.hero.backgroundAlt,
-                whatsappNumber: config.contact.whatsapp
+                whatsappNumber: config.contact.whatsapp,
+                styles: {
+                    overlay: {
+                        bg: 'bg-purple-900',
+                        opacity: 'opacity-80'
+                    },
+                    badge: {
+                        border: 'border-red-400',
+                        text: 'text-red-400'
+                    },
+                    title: {
+                        text: 'text-red-100'
+                    },
+                    titleHighlight: {
+                        text: 'text-red-300'
+                    },
+                    subtitle: {
+                        text: 'text-red-200'
+                    },
+                    ctaPrimary: {
+                        bg: 'bg-amber-400',
+                        text: 'text-purple-900',
+                        hover: 'hover:bg-amber-300'
+                    },
+                    ctaSecondary: {
+                        border: 'border-red-900',
+                        text: 'text-amber-100',
+                        hover: 'hover:bg-purple-800'
+                    }
+                }
             }, 'hero-component');
 
             // Info bar

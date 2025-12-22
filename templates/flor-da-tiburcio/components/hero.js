@@ -15,6 +15,7 @@ class HeroComponent {
      * @param {string} data.backgroundImage - URL da imagem de fundo
      * @param {string} data.backgroundAlt - Texto alternativo da imagem
      * @param {string} data.whatsappNumber - Número do WhatsApp (formato: 5511999999999)
+     * @param {Object} data.styles - Configurações de estilo (opcional)
      */
     constructor(data) {
         this.badge = data.badge;
@@ -26,6 +27,35 @@ class HeroComponent {
         this.backgroundImage = data.backgroundImage;
         this.backgroundAlt = data.backgroundAlt;
         this.whatsappNumber = data.whatsappNumber;
+        this.styles = {
+            overlay: {
+                bg: data.styles?.overlay?.bg || 'bg-brand-dark',
+                opacity: data.styles?.overlay?.opacity || 'opacity-90'
+            },
+            badge: {
+                border: data.styles?.badge?.border || 'border-brand-gold',
+                text: data.styles?.badge?.text || 'text-brand-gold'
+            },
+            title: {
+                text: data.styles?.title?.text || 'text-white'
+            },
+            titleHighlight: {
+                text: data.styles?.titleHighlight?.text || 'text-brand-gold'
+            },
+            subtitle: {
+                text: data.styles?.subtitle?.text || 'text-white'
+            },
+            ctaPrimary: {
+                bg: data.styles?.ctaPrimary?.bg || 'bg-brand-gold',
+                text: data.styles?.ctaPrimary?.text || 'text-brand-dark',
+                hover: data.styles?.ctaPrimary?.hover || 'hover:bg-white'
+            },
+            ctaSecondary: {
+                border: data.styles?.ctaSecondary?.border || 'border-white',
+                text: data.styles?.ctaSecondary?.text || 'text-white',
+                hover: data.styles?.ctaSecondary?.hover || 'hover:bg-white'
+            }
+        };
     }
 
     /**
@@ -33,37 +63,39 @@ class HeroComponent {
      * @returns {string} HTML string do componente
      */
     render() {
+        const s = this.styles;
+
         return `
             <header class="relative pt-32 lg:pt-48 pb-20 lg:pb-32 overflow-hidden" style="min-height: 100vh;">
                 <div class="absolute inset-0" style="z-index: 0;">
-                    <div class="absolute inset-0 bg-brand-dark opacity-90" style="mix-blend-mode: multiply; z-index: 10;"></div>
+                    <div class="absolute inset-0 ${s.overlay.bg} ${s.overlay.opacity}" style="mix-blend-mode: multiply; z-index: 10;"></div>
                     <img src="${this.backgroundImage}"
                          alt="${this.backgroundAlt}"
                          class="w-full h-full object-cover">
                 </div>
 
                 <div class="container mx-auto px-6 relative text-center" style="z-index: 20;">
-                    <span class="inline-block py-1 px-3 border border-brand-gold rounded-full text-brand-gold text-xs uppercase mb-6" style="letter-spacing: 0.2em;" data-aos="fade-down">
+                    <span class="inline-block py-1 px-3 border ${s.badge.border} rounded-full ${s.badge.text} text-xs uppercase mb-6" style="letter-spacing: 0.2em;" data-aos="fade-down">
                         ${this.badge}
                     </span>
 
-                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white font-medium leading-tight mb-8" data-aos="fade-up">
+                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl ${s.title.text} font-medium leading-tight mb-8" data-aos="fade-up">
                         ${this.title} <br>
-                        <span class="italic text-brand-gold">${this.titleHighlight}</span>
+                        <span class="italic ${s.titleHighlight.text}">${this.titleHighlight}</span>
                     </h1>
 
-                    <p class="text-white max-w-xl mx-auto text-lg mb-10 font-light" style="opacity: 0.8;" data-aos="fade-up">
+                    <p class="${s.subtitle.text} max-w-xl mx-auto text-lg mb-10 font-light" style="opacity: 0.8;" data-aos="fade-up">
                         ${this.subtitle}
                     </p>
 
                     <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up">
                         <a href="https://wa.me/${this.whatsappNumber}"
                            target="_blank"
-                           class="px-8 py-4 bg-brand-gold text-brand-dark font-bold rounded-full hover:bg-white transition-all shadow-xl flex items-center justify-center gap-2">
+                           class="px-8 py-4 ${s.ctaPrimary.bg} ${s.ctaPrimary.text} font-bold rounded-full ${s.ctaPrimary.hover} transition-all shadow-xl flex items-center justify-center gap-2">
                             <i class="fab fa-whatsapp text-xl"></i> ${this.ctaPrimary}
                         </a>
                         <a href="#services"
-                           class="px-8 py-4 border border-white text-white font-medium rounded-full hover:bg-white transition-all" style="border-opacity: 0.3; backdrop-filter: blur(4px);">
+                           class="px-8 py-4 border ${s.ctaSecondary.border} ${s.ctaSecondary.text} font-medium rounded-full ${s.ctaSecondary.hover} transition-all" style="border-opacity: 0.3; backdrop-filter: blur(4px);">
                             ${this.ctaSecondary}
                         </a>
                     </div>
