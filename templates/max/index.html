@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Max Vet - Hospital Veterinário 24h</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Poppins:wght@400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        /* --- VARIÁVEIS E RESET --- */
+        :root {
+            --primary: #A6DF78;
+            /* Cor solicitada */
+            --primary-dark: #7cb352;
+            /* Versão mais escura para hover/texto */
+            --secondary: #2c3e50;
+            --text-body: #555;
+            --light-bg: #f9fdf7;
+            --white: #ffffff;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --radius: 20px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            color: var(--text-body);
+            background-color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            font-family: 'Poppins', sans-serif;
+            color: var(--secondary);
+            font-weight: 700;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+            transition: 0.3s;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: var(--secondary);
+            box-shadow: 0 4px 15px rgba(166, 223, 120, 0.4);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            border: 2px solid var(--secondary);
+            color: var(--secondary);
+            background: transparent;
+        }
+
+        .btn-outline:hover {
+            background: var(--secondary);
+            color: white;
+        }
+
+        /* --- HEADER & NAV --- */
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+            padding: 15px 0;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 60px;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.95rem;
+        }
+
+        .nav-link:hover {
+            color: var(--primary-dark);
+        }
+
+        .nav-btn-client {
+            background-color: var(--secondary);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        .nav-btn-client:hover {
+            background-color: var(--primary);
+            color: var(--secondary);
+        }
+
+        .hamburger {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding-top: 140px;
+            padding-bottom: 80px;
+            background: linear-gradient(135deg, #f0f9eb 0%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Blob decorativo */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -10%;
+            right: -5%;
+            width: 600px;
+            height: 600px;
+            background: var(--primary);
+            opacity: 0.15;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            z-index: 0;
+            animation: blob 10s infinite alternate;
+        }
+
+        @keyframes blob {
+            0% {
+                border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            }
+
+            100% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-text {
+            flex: 1;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+            max-width: 90%;
+        }
+
+        .hero-img {
+            flex: 1;
+            position: relative;
+        }
+
+        .hero-img img {
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 5px solid white;
+        }
+
+        /* --- CARDS SERVIÇOS RÁPIDOS --- */
+        .quick-services {
+            margin-top: -60px;
+            position: relative;
+            z-index: 10;
+            margin-bottom: 80px;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.3s;
+            border-bottom: 5px solid var(--primary);
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--primary-dark);
+            margin-bottom: 20px;
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        /* --- ABOUT --- */
+        .about {
+            padding: 80px 0;
+            background-color: var(--white);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .about-img {
+            flex: 1;
+        }
+
+        .about-img img {
+            border-radius: var(--radius) 0 var(--radius) 0;
+            box-shadow: -10px 10px 0 var(--primary);
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .section-tag {
+            color: var(--primary-dark);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .about-text h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .about-list {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .about-list li {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .about-list li i {
+            color: var(--primary-dark);
+            margin-right: 10px;
+        }
+
+        /* --- PLANOS --- */
+        .plans {
+            padding: 80px 0;
+            background-color: var(--primary);
+            /* Cor principal de fundo */
+            color: var(--secondary);
+            text-align: center;
+            border-radius: 0;
+            position: relative;
+        }
+
+        .plans h2 {
+            color: var(--secondary);
+            margin-bottom: 15px;
+        }
+
+        .plans-container {
+            background: rgba(255, 255, 255, 0.4);
+            padding: 50px;
+            border-radius: var(--radius);
+            backdrop-filter: blur(5px);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- CLINICA GERAL / DETALHES --- */
+        .clinical {
+            padding: 100px 0;
+        }
+
+        .clinical-content {
+            display: flex;
+            flex-direction: row-reverse;
+            align-items: center;
+            gap: 50px;
+        }
+
+        /* --- UNIDADES --- */
+        .units {
+            padding: 80px 0;
+            background: var(--light-bg);
+            text-align: center;
+        }
+
+        .units h2 {
+            margin-bottom: 40px;
+        }
+
+        .stats-grid {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            color: var(--primary-dark);
+        }
+
+        .stat-item p {
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        /* --- NEWSLETTER --- */
+        .newsletter {
+            padding: 60px 0;
+            background: var(--secondary);
+            color: white;
+            text-align: center;
+        }
+
+        .newsletter h2 {
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .newsletter-form {
+            max-width: 500px;
+            margin: 20px auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .newsletter-form input {
+            flex: 1;
+            padding: 15px;
+            border-radius: 50px;
+            border: none;
+            outline: none;
+        }
+
+        .check-terms {
+            font-size: 0.8rem;
+            margin-top: 15px;
+            color: #ccc;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: #1a252f;
+            color: #ecf0f1;
+            padding: 70px 0 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-col h4 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .social-links a {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .social-links a:hover {
+            color: var(--primary);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #34495e;
+            padding-top: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #95a5a6;
+        }
+
+        /* --- FLOATING BUTTON --- */
+        .float-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background-color: #25D366;
+            /* WhatsApp Green */
+            color: white;
+            padding: 15px 25px;
+            border-radius: 50px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            z-index: 999;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        .float-btn:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: white;
+                flex-direction: column;
+                padding: 20px;
+                box-shadow: 0 10px 10px rgba(0, 0, 0, 0.05);
+                display: none;
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .hamburger {
+                display: block;
+            }
+
+            .hero-content,
+            .about-content,
+            .clinical-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-img img {
+                margin-top: 20px;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .about-list {
+                grid-template-columns: 1fr;
+                text-align: left;
+                padding-left: 20px;
+            }
+        }
+
+        /* --- HERO SECTION REFORMULADO --- */
+        .hero {
+            padding-top: 160px;
+            /* Mais espaço no topo */
+            padding-bottom: 100px;
+            background: linear-gradient(180deg, #f7fbf5 0%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            min-height: 90vh;
+            /* Ocupa quase toda a tela inicial */
+        }
+
+        /* Bolhas de fundo decorativas */
+        .hero-blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: 0;
+            opacity: 0.6;
+            animation: floatBlob 10s infinite alternate;
+        }
+
+        .blob-1 {
+            top: -10%;
+            right: -5%;
+            width: 500px;
+            height: 500px;
+            background: var(--primary);
+        }
+
+        .blob-2 {
+            bottom: 10%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: #d4f0bc;
+            animation-delay: -5s;
+        }
+
+        @keyframes floatBlob {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+
+            100% {
+                transform: translate(20px, 40px) scale(1.1);
+            }
+        }
+
+        .hero-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 60px;
+            position: relative;
+            z-index: 2;
+            width: 100%;
+        }
+
+        /* Texto Hero */
+        .hero-text {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-tag {
+            display: inline-block;
+            background: #eef9e3;
+            color: var(--secondary);
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            border: 1px solid var(--primary);
+        }
+
+        .hero-text h1 {
+            font-size: 3.8rem;
+            /* Fonte maior */
+            line-height: 1.1;
+            margin-bottom: 25px;
+            color: var(--secondary);
+        }
+
+        .highlight-text {
+            color: var(--primary-dark);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Sublinhado criativo */
+        .highlight-text::after {
+            content: '';
+            position: absolute;
+            bottom: 5px;
+            left: 0;
+            width: 100%;
+            height: 15px;
+            background-color: var(--primary);
+            opacity: 0.3;
+            z-index: -1;
+            border-radius: 10px;
+        }
+
+        .hero-text p {
+            font-size: 1.15rem;
+            margin-bottom: 35px;
+            color: #666;
+            max-width: 90%;
+        }
+
+        /* Botões com sombra colorida */
+        .btn-hero {
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 25px rgba(166, 223, 120, 0.5);
+        }
+
+        .btn-hero:hover {
+            box-shadow: 0 15px 35px rgba(166, 223, 120, 0.7);
+            transform: translateY(-3px);
+        }
+
+        /* Área da Imagem */
+        .hero-img-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Imagem com formato orgânico e animação */
+        .hero-main-img {
+            width: 100%;
+            max-width: 550px;
+            height: 500px;
+            object-fit: cover;
+            border-radius: 46% 54% 66% 34% / 58% 68% 32% 42%;
+            /* Formato Blob */
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.1);
+            animation: morphing 8s ease-in-out infinite;
+            border: 5px solid rgba(255, 255, 255, 0.8);
+        }
+
+        /* Badge flutuante sobre a imagem */
+        .floating-badge {
+            position: absolute;
+            bottom: 60px;
+            left: 40px;
+            background: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            animation: floatBadge 4s ease-in-out infinite;
+            border-left: 5px solid var(--primary);
+        }
+
+        .badge-icon {
+            width: 50px;
+            height: 50px;
+            background: #f0f9eb;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-dark);
+            font-size: 1.5rem;
+        }
+
+        .badge-text h4 {
+            margin: 0;
+            font-size: 1rem;
+            color: var(--secondary);
+        }
+
+        .badge-text span {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        /* Animações */
+        @keyframes morphing {
+            0% {
+                border-radius: 46% 54% 66% 34% / 58% 68% 32% 42%;
+            }
+
+            50% {
+                border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            }
+
+            100% {
+                border-radius: 46% 54% 66% 34% / 58% 68% 32% 42%;
+            }
+        }
+
+        @keyframes floatBadge {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Ajuste Responsivo para o novo Hero */
+        @media (max-width: 992px) {
+            .hero {
+                padding-top: 120px;
+                min-height: auto;
+            }
+
+            .hero-content {
+                flex-direction: column-reverse;
+                /* Imagem em cima no mobile pode ser melhor, ou deixe normal */
+                text-align: center;
+                gap: 40px;
+            }
+
+            .hero-text h1 {
+                font-size: 2.8rem;
+            }
+
+            .hero-text p {
+                margin: 0 auto 30px;
+            }
+
+            .hero-img-wrapper {
+                width: 100%;
+            }
+
+            .hero-main-img {
+                height: 400px;
+                width: 100%;
+            }
+
+            .floating-badge {
+                left: 50%;
+                transform: translateX(-50%);
+                bottom: 20px;
+                width: max-content;
+                animation: none;
+                /* Desativa float no mobile para não atrapalhar */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <a href="#" class="logo">
+                <img src="https://maxvethospital.com.br/wp-content/webp-express/webp-images/uploads/2024/06/Logo-Site.png.webp"
+                    alt="Max Vet Logo">
+            </a>
+            <div class="hamburger" onclick="toggleMenu()">
+                <i class="fas fa-bars"></i>
+            </div>
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#especialidades" class="nav-link">Especialidades</a></li>
+                    <li><a href="#equipe" class="nav-link">Equipe</a></li>
+                    <li><a href="#unidades" class="nav-link">Unidades</a></li>
+                    <li><a href="#blog" class="nav-link">Blog</a></li>
+                    <li><a href="#planos" class="nav-link">Planos</a></li>
+                    <li><a href="#contato" class="nav-link">Contato</a></li>
+                    <li><a href="#" class="nav-btn-client">Área do cliente</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-blob blob-1"></div>
+        <div class="hero-blob blob-2"></div>
+
+        <div class="container hero-content">
+            <div class="hero-text">
+                <span class="hero-tag"><i class="fas fa-heart"></i> Cuidado com Excelência</span>
+                <h1>Seu pet merece um tratamento <span class="highlight-text">Extraordinário</span></h1>
+                <p>Atendimento veterinário 24 horas com tecnologia de ponta e uma equipe apaixonada pelo que faz. A
+                    saúde do seu melhor amigo em primeiro lugar.</p>
+
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    <a href="#contato" class="btn btn-primary btn-hero">Agendar Consulta</a>
+                    <a href="#planos" class="btn btn-outline" style="padding: 15px 30px;">Ver Planos</a>
+                </div>
+
+                <div style="margin-top: 30px; display: flex; align-items: center; gap: 10px;">
+                    <div style="display: flex;">
+                        <i class="fas fa-star" style="color: #f1c40f;"></i>
+                        <i class="fas fa-star" style="color: #f1c40f;"></i>
+                        <i class="fas fa-star" style="color: #f1c40f;"></i>
+                        <i class="fas fa-star" style="color: #f1c40f;"></i>
+                        <i class="fas fa-star" style="color: #f1c40f;"></i>
+                    </div>
+                    <span style="font-size: 0.9rem; font-weight: 600; color: #777;">+ de 5.000 pets atendidos</span>
+                </div>
+            </div>
+
+            <div class="hero-img-wrapper">
+                <img src="https://images.unsplash.com/photo-1516467508483-a7212febe31a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
+                    alt="Cachorro feliz e saudável" class="hero-main-img">
+
+                <div class="floating-badge">
+                    <div class="badge-icon">
+                        <i class="fas fa-ambulance"></i>
+                    </div>
+                    <div class="badge-text">
+                        <h4>Emergência 24h</h4>
+                        <span>Equipe pronta para atender</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="quick-services">
+        <div class="container">
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-stethoscope"></i></div>
+                    <h3>Consulta</h3>
+                    <p>Agende um check-up hoje mesmo para seu pet, a prevenção é o melhor remédio.</p>
+                    <a href="#" class="btn btn-primary">Agendar</a>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-shower"></i></div>
+                    <h3>Banho e Tosa</h3>
+                    <p>Mais higiene para seu pet e mais comodidade para você. Pelo macio, brilhante e cheiroso é
+                        garantia de saúde.</p>
+                    <a href="#" class="btn btn-primary">Agendar</a>
+                </div>
+                <div class="card">
+                    <div class="card-icon"><i class="fas fa-hotel"></i></div>
+                    <h3>Hotel Pet</h3>
+                    <p>Viaje tranquilo sabendo que seu pet está seguro, confortável e sendo bem cuidado em nosso hotel.
+                    </p>
+                    <a href="#" class="btn btn-primary">Saiba Mais</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="equipe" class="about">
+        <div class="container about-content">
+            <div class="about-img">
+                <img src="https://images.unsplash.com/photo-1629909613654-28e377c37b09?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                    alt="Estrutura Hospitalar">
+            </div>
+            <div class="about-text">
+                <span class="section-tag">A Max Vet</span>
+                <h2>Hospital Veterinário 24Horas</h2>
+                <p>Fundado em 2005, Max Vet Hospital Veterinário é um dos mais conceituados hospitais da região, com
+                    aprimoramento constante e excelência nos serviços.</p>
+                <p>Oferecemos o mais completo serviço de atendimento para cães, gatos e silvestres.</p>
+
+                <ul class="about-list">
+                    <li><i class="fas fa-check-circle"></i> Clínica Geral 24h</li>
+                    <li><i class="fas fa-check-circle"></i> Cirurgias e Internações</li>
+                    <li><i class="fas fa-check-circle"></i> RX e Ultra-som</li>
+                    <li><i class="fas fa-check-circle"></i> Laboratório Próprio</li>
+                    <li><i class="fas fa-check-circle"></i> Oftalmologia e Odontologia</li>
+                    <li><i class="fas fa-check-circle"></i> Pet Shop Completo</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="planos" class="plans">
+        <div class="container">
+            <div class="plans-container">
+                <h2>Saúde Garantida</h2>
+                <h3>O Plano de saúde completo para seu Pet.</h3>
+                <p>Garanta a tranquilidade que sua família merece com nossos planos exclusivos.</p>
+                <br>
+                <a href="#" class="btn btn-secondary" style="background: var(--secondary); color: white;">Conhecer
+                    Planos</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="especialidades" class="clinical">
+        <div class="container clinical-content">
+            <div class="about-img">
+                <img src="https://images.unsplash.com/photo-1576201836163-4975841e71cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
+                    alt="Veterinário Examinando Gato">
+            </div>
+            <div class="about-text">
+                <span class="section-tag">Especialidades</span>
+                <h2>Clínica Geral</h2>
+                <h4>Cuidados especializados para cães, gatos e animais silvestres!</h4>
+                <p>Nossa equipe experiente é altamente qualificada em medicina veterinária. Do básico ao complexo,
+                    proporcionamos serviços completos, incluindo emergências.</p>
+                <p style="margin-top: 15px;">Nossos veterinários clínicos gerais são os primeiros a avaliar os
+                    pacientes, determinando o tratamento adequado ou encaminhamento para especialistas, garantindo um
+                    atendimento confiável e seguro.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="unidades" class="units">
+        <div class="container">
+            <h2>O melhor tratamento para seu pet</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>3</h3>
+                    <p>Unidades Completas</p>
+                </div>
+                <div class="stat-item">
+                    <h3>15+</h3>
+                    <p>Anos de Experiência</p>
+                </div>
+                <div class="stat-item">
+                    <h3>24h</h3>
+                    <p>Atendimento</p>
+                </div>
+            </div>
+            <p style="margin-top: 30px; max-width: 600px; margin-left: auto; margin-right: auto;">
+                Com uma estrutura completa, equipe qualificada e com mais de 15 anos de atuação no mercado, estamos
+                preparados para garantir o melhor tratamento para seu pet.
+            </p>
+        </div>
+    </section>
+
+    <section class="newsletter">
+        <div class="container">
+            <h2>Fique por dentro de todas as novidades!</h2>
+            <form class="newsletter-form" onsubmit="event.preventDefault(); alert('Obrigado por se inscrever!');">
+                <input type="email" placeholder="Seu melhor e-mail" required>
+                <button type="submit" class="btn btn-primary">Inscrever</button>
+            </form>
+            <p class="check-terms">
+                <input type="checkbox" checked disabled> Eu aceito receber os contatos com novidades, promoções e
+                atualizações da MaxVet Hospital Veterinário.
+            </p>
+        </div>
+    </section>
+
+    <footer id="contato">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h4>Menu</h4>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#equipe">Equipe</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#planos">Planos</a></li>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Área do Cliente</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Especialidades</h4>
+                    <ul>
+                        <li><a href="#">Tratamentos</a></li>
+                        <li><a href="#">Exames laboratoriais</a></li>
+                        <li><a href="#">Exames por imagens</a></li>
+                        <li><a href="#">Cirurgias</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Fale conosco</h4>
+                    <ul>
+                        <li><a href="#unidades">Unidades</a></li>
+                        <li><a href="#">Política de privacidade</a></li>
+                        <li><a href="#">Termos e Condições</a></li>
+                        <li style="margin-top: 15px; font-weight: bold; font-size: 1.1rem; color: var(--primary);">(11)
+                            2567-3012</li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>MaxVet Hospital Veterinário © 2024 – CNPJ: 13.273.241/0001-56 – Todos os direitos reservados.</p>
+                <p style="font-size: 0.8rem; margin-top: 5px;">Desenvolvido por WolfWideWeb</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="float-btn">
+        <i class="fab fa-whatsapp" style="font-size: 1.5rem;"></i>
+        <span>Central 24h</span>
+    </a>
+
+    <script>
+        // Função para Menu Mobile
+        function toggleMenu() {
+            const menu = document.getElementById('navMenu');
+            menu.classList.toggle('active');
+        }
+
+        // Fechar menu ao clicar em link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                const menu = document.getElementById('navMenu');
+                if (menu.classList.contains('active')) {
+                    menu.classList.remove('active');
+                }
+            });
+        });
+
+        // Efeito simples de Scroll na Navbar
+        window.addEventListener('scroll', function () {
+            const header = document.querySelector('header');
+            if (window.scrollY > 50) {
+                header.style.padding = '10px 0';
+            } else {
+                header.style.padding = '15px 0';
+            }
+        });
+    </script>
+</body>
+
+</html>
