@@ -184,7 +184,7 @@ const config = {
         hoverColor: "orange"
       }
     ],
-    backgroundPattern: "https://www.transparenttextures.com/patterns/paw-print.png",
+    backgroundPattern: "https://www.transparenttextures.com/patterns/circles.png",
     colors: {
       background: "green",
       textColor: "white"
