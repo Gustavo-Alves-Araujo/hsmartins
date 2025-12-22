@@ -4,49 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title id="page-title"></title>
+  <title>Carregando...</title>
 
   <script src="config.js"></script>
 
-  <script src="../components/component-registry.js"></script>
-
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-  <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+  <script src="../components/component-registry.js"></script>
 
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              dark: config.theme.colors.primary,
-              light: config.theme.colors.primaryLight,
-              cream: config.theme.colors.background,
-              gold: config.theme.colors.accent
-            }
-          },
-          fontFamily: {
-            serif: [config.theme.fonts.primary.replace(/"/g, '\\"')],
-            sans: [config.theme.fonts.secondary.replace(/"/g, '\\"')],
-          }
-        }
-      }
-    }
-  </script>
+  <script src="../components/cosmos-template.js"></script>
 </head>
 
-<body id="app-body" class="">
-
-  <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-      document.getElementById('page-title').textContent = config.site.title;
-
-      await componentRegistry.initFromConfig(config, document.getElementById('app-body'));
-    });
-  </script>
+<body class="antialiased">
 </body>
 
 </html>

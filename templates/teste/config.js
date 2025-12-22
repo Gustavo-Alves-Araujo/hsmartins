@@ -232,3 +232,5 @@ const config = {
     logoFallback: "https://placehold.co/100x100/48191B/FFFFFF?text=FT",
   },
 };
+
+window.config = config;
