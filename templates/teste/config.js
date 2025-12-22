@@ -94,6 +94,42 @@ const config = {
     }
   },
 
+  'card-grid': {
+    title: "Nossos Produtos",
+    subtitle: "Do forno para sua mesa, com amor e tradição",
+    items: [
+      {
+        image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800",
+        title: "Pães Artesanais",
+        description: "Variedade de pães fresquinhos assados todos os dias com ingredientes selecionados",
+        alt: "Pães Artesanais Frescos"
+      },
+      {
+        image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800",
+        title: "Doces e Bolos",
+        description: "Bolos decorados e doces caseiros irresistíveis para todas as ocasiões",
+        alt: "Bolos e Doces Deliciosos"
+      },
+      {
+        image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800",
+        title: "Pizzas Artesanais",
+        description: "Massa fresca e ingredientes selecionados com carinho, sabor único",
+        alt: "Pizzas Artesanais Deliciosas"
+      }
+    ],
+    layout: {
+      columns: 3,
+      aspectRatio: "4/5",
+      gap: "8"
+    },
+    colors: {
+      background: "brand-cream",
+      titleColor: "brand-dark",
+      cardOverlay: "brand-dark",
+      accentLine: "brand-dark"
+    }
+  },
+
   site: {
     title: "Padaria Flor da Tibúrcio",
     name: "Flor da Tibúrcio",
