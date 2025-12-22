@@ -108,6 +108,63 @@ class BaseComponent {
     }
 
     /**
+     * Obtém o valor hexadecimal real da cor do tema
+     * @param {string} themeKey - Chave do tema ('primary', 'secondary', 'tertiary', 'accent', 'background')
+     * @returns {string|null} Valor hexadecimal (ex: '#16A34A') ou null
+     */
+    getThemeColorHex(themeKey) {
+        const theme = this.getGlobalTheme();
+        if (!theme || !theme.colors) {
+            return null;
+        }
+
+        const colorValue = theme.colors[themeKey];
+        if (!colorValue) {
+            return null;
+        }
+
+        // Se é hexadecimal, retorna direto
+        if (typeof colorValue === 'string' && colorValue.startsWith('#')) {
+            return colorValue;
+        }
+
+        // Se é um objeto com propriedades (ex: text.dark), tenta obter o hex
+        if (typeof colorValue === 'object' && colorValue !== null) {
+            // Tenta obter de propriedades comuns
+            if (colorValue.hex) return colorValue.hex;
+            if (colorValue.value) return colorValue.value;
+        }
+
+        return null;
+    }
+
+    /**
+     * Resolve uma cor hexadecimal: usa override se fornecido, senão infere do tema
+     * @param {string} override - Cor hexadecimal fornecida no override (pode ser null/undefined)
+     * @param {string} themeKey - Chave do tema para inferir ('primary', 'secondary', 'tertiary', 'accent', 'background')
+     * @param {string} fallback - Fallback hexadecimal caso não encontre no tema (ex: '#16A34A')
+     * @returns {string} Cor hexadecimal resolvida
+     */
+    resolveColorHex(override, themeKey, fallback) {
+        // Se há override, usa ele
+        if (override !== null && override !== undefined) {
+            // Se é hexadecimal, retorna direto
+            if (typeof override === 'string' && override.startsWith('#')) {
+                return override;
+            }
+        }
+
+        // Tenta obter do tema
+        const themeHex = this.getThemeColorHex(themeKey);
+        if (themeHex) {
+            return themeHex;
+        }
+
+        // Usa fallback
+        return fallback;
+    }
+
+    /**
      * Resolve uma cor específica: usa override se fornecido, senão infere do tema
      * @param {string} override - Cor fornecida no override (pode ser null/undefined)
      * @param {string} themeKey - Chave do tema para inferir ('primary', 'secondary', 'tertiary', 'accent')
@@ -168,6 +225,121 @@ class BaseComponent {
         }
 
         return resolved;
+    }
+
+    /**
+     * Escurece uma cor hexadecimal
+     * @param {string} hex - Cor hexadecimal
+     * @param {number} amount - Quantidade (0-1)
+     * @returns {string} Cor escurecida
+     */
+    darkenColor(hex, amount) {
+        const num = parseInt(hex.replace('#', ''), 16);
+        const r = Math.max(0, Math.floor((num >> 16) * (1 - amount)));
+        const g = Math.max(0, Math.floor(((num >> 8) & 0x00FF) * (1 - amount)));
+        const b = Math.max(0, Math.floor((num & 0x0000FF) * (1 - amount)));
+        return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+    }
+
+    /**
+     * Clareia uma cor hexadecimal
+     * @param {string} hex - Cor hexadecimal
+     * @param {number} amount - Quantidade (0-1)
+     * @returns {string} Cor clareada
+     */
+    lightenColor(hex, amount) {
+        const num = parseInt(hex.replace('#', ''), 16);
+        const r = Math.min(255, Math.floor((num >> 16) + (255 - (num >> 16)) * amount));
+        const g = Math.min(255, Math.floor(((num >> 8) & 0x00FF) + (255 - ((num >> 8) & 0x00FF)) * amount));
+        const b = Math.min(255, Math.floor((num & 0x0000FF) + (255 - (num & 0x0000FF)) * amount));
+        return '#' + ((r << 16) | (g << 8) | b).toString(16).padStart(6, '0');
+    }
+
+    /**
+     * Converte hexadecimal para rgba
+     * @param {string} hex - Cor hexadecimal
+     * @param {number} alpha - Opacidade (0-1)
+     * @returns {string} rgba string
+     */
+    hexToRgba(hex, alpha) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    /**
+     * Converte hexadecimal para RGB
+     * @param {string} hex - Cor hexadecimal
+     * @returns {Array} [r, g, b]
+     */
+    hexToRgb(hex) {
+        const r = parseInt(hex.slice(1, 3), 16);
+        const g = parseInt(hex.slice(3, 5), 16);
+        const b = parseInt(hex.slice(5, 7), 16);
+        return [r, g, b];
+    }
+
+    /**
+     * Calcula a luminosidade relativa de uma cor (0-1)
+     * @param {string} hex - Cor hexadecimal
+     * @returns {number} Luminosidade (0 = preto, 1 = branco)
+     */
+    getLuminance(hex) {
+        const rgb = this.hexToRgb(hex);
+        const [r, g, b] = rgb.map(val => {
+            val = val / 255;
+            return val <= 0.03928 ? val / 12.92 : Math.pow((val + 0.055) / 1.055, 2.4);
+        });
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    /**
+     * Calcula o ratio de contraste entre duas cores (WCAG)
+     * @param {string} color1 - Cor hexadecimal
+     * @param {string} color2 - Cor hexadecimal
+     * @returns {number} Ratio de contraste
+     */
+    getContrastRatio(color1, color2) {
+        const lum1 = this.getLuminance(color1);
+        const lum2 = this.getLuminance(color2);
+        const lighter = Math.max(lum1, lum2);
+        const darker = Math.min(lum1, lum2);
+        return (lighter + 0.05) / (darker + 0.05);
+    }
+
+    /**
+     * Verifica se há contraste suficiente (WCAG AA mínimo 4.5:1)
+     * @param {string} textColor - Cor do texto
+     * @param {string} backgroundColor - Cor de fundo
+     * @param {number} minRatio - Ratio mínimo (padrão: 4.5 para WCAG AA)
+     * @returns {boolean}
+     */
+    hasEnoughContrast(textColor, backgroundColor, minRatio = 4.5) {
+        return this.getContrastRatio(textColor, backgroundColor) >= minRatio;
+    }
+
+    /**
+     * Obtém a melhor cor de texto (branco ou preto) para um fundo dado
+     * @param {string} backgroundColor - Cor de fundo hexadecimal
+     * @param {number} minRatio - Ratio mínimo de contraste (padrão: 4.5)
+     * @returns {string} '#FFFFFF' ou '#000000'
+     */
+    getBestTextColor(backgroundColor, minRatio = 4.5) {
+        const whiteContrast = this.getContrastRatio('#FFFFFF', backgroundColor);
+        const blackContrast = this.getContrastRatio('#000000', backgroundColor);
+
+        // Se ambas têm contraste suficiente, escolhe a com maior contraste
+        if (whiteContrast >= minRatio && blackContrast >= minRatio) {
+            return whiteContrast > blackContrast ? '#FFFFFF' : '#000000';
+        }
+
+        // Se apenas uma tem contraste suficiente, usa ela
+        if (whiteContrast >= minRatio) return '#FFFFFF';
+        if (blackContrast >= minRatio) return '#000000';
+
+        // Se nenhuma tem contraste suficiente, usa a com maior contraste disponível
+        return whiteContrast > blackContrast ? '#FFFFFF' : '#000000';
     }
 }
 

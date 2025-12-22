@@ -3,7 +3,7 @@
  * Seção hero com imagem, texto destacado, badge flutuante e avaliação com estrelas
  */
 
-class HeroImageBadgeComponent {
+class HeroImageBadgeComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
      * @param {string} data.tag - Texto do badge/tag superior
@@ -16,8 +16,13 @@ class HeroImageBadgeComponent {
      * @param {string} data.imageUrl - URL da imagem
      * @param {string} data.imageAlt - Texto alternativo da imagem
      * @param {Object} data.badge - Badge flutuante { icon: string, title: string, text: string }
+     * @param {Object} data.colors - Cores customizáveis (opcional)
+     * @param {string} data.colors.primary - Cor primária hexadecimal (ex: '#16A34A')
+     * @param {string} data.colors.secondary - Cor secundária hexadecimal (ex: '#2c3e50')
+     * @param {string} data.colors.accent - Cor de destaque hexadecimal (ex: '#F97316')
      */
     constructor(data) {
+        super();
         this.tag = data.tag || '';
         this.tagIcon = data.tagIcon || '';
         this.title = data.title || '';
@@ -28,12 +33,131 @@ class HeroImageBadgeComponent {
         this.imageUrl = data.imageUrl || '';
         this.imageAlt = data.imageAlt || '';
         this.badge = data.badge || null;
+
+        // Resolve cores do tema (override > tema > fallback)
+        this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#16A34A');
+        this.secondaryHex = this.resolveColorHex(data.colors?.secondary, 'secondary', '#2c3e50');
+        this.accentHex = this.resolveColorHex(data.colors?.accent, 'accent', '#F97316');
+
+        // Calcula variações das cores primárias
+        this.primaryDarkHex = this.darkenColor(this.primaryHex, 0.15);
+        this.primaryLightHex = this.lightenColor(this.primaryHex, 0.85);
     }
+
+
+    /**
+     * Injeta estilos base compartilhados (apenas uma vez)
+     */
+    injectBaseStyles() {
+        if (document.getElementById('base-styles-global')) return;
+
+        const style = document.createElement('style');
+        style.id = 'base-styles-global';
+        style.textContent = `
+            :root {
+                --primary: ${this.primaryHex};
+                --primary-dark: ${this.primaryDarkHex};
+                --primary-light: ${this.primaryLightHex};
+                --secondary: ${this.secondaryHex};
+                --text-body: #555;
+                --light-bg: #f9fdf7;
+                --white: #ffffff;
+                --shadow: 0 10px 30px rgba(0,0,0,0.08);
+                --radius: 20px;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+            html {
+                scroll-behavior: smooth;
+            }
+            body {
+                font-family: 'Nunito', sans-serif;
+                color: var(--text-body);
+                background-color: var(--white);
+                line-height: 1.6;
+                overflow-x: hidden;
+            }
+            h1, h2, h3, h4 {
+                font-family: 'Poppins', sans-serif;
+                color: var(--secondary);
+                font-weight: 700;
+            }
+            a {
+                text-decoration: none;
+                color: inherit;
+                transition: 0.3s;
+            }
+            ul {
+                list-style: none;
+            }
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+            .container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 20px;
+            }
+            .btn {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 12px 30px;
+                border-radius: 50px;
+                font-weight: 700;
+                cursor: pointer;
+                border: none;
+                transition: all 0.3s ease;
+                text-align: center;
+                gap: 10px;
+            }
+            .btn-primary {
+                background-color: var(--primary);
+                color: white;
+                box-shadow: 0 4px 15px ${this.hexToRgba(this.primaryHex, 0.4)};
+            }
+            .btn-primary:hover {
+                background-color: var(--primary-dark);
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 8px 20px ${this.hexToRgba(this.primaryHex, 0.6)};
+            }
+            .btn-outline {
+                border: 2px solid var(--secondary);
+                color: var(--secondary);
+                background: transparent;
+            }
+            .btn-outline:hover {
+                background: var(--secondary);
+                color: white;
+            }
+            .btn-secondary {
+                background: var(--secondary);
+                color: white;
+            }
+            .btn-hero {
+                padding: 15px 40px;
+                font-size: 1.1rem;
+                box-shadow: 0 10px 25px ${this.hexToRgba(this.primaryHex, 0.5)};
+            }
+            .btn-hero:hover {
+                box-shadow: 0 15px 35px ${this.hexToRgba(this.primaryHex, 0.7)};
+                transform: translateY(-3px);
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
 
     /**
      * Injeta estilos no head se ainda não foram injetados
      */
     injectStyles() {
+        this.injectBaseStyles();
         if (document.getElementById('hero-image-badge-styles')) return;
 
         const style = document.createElement('style');
@@ -42,7 +166,7 @@ class HeroImageBadgeComponent {
             .hero {
                 padding-top: 80px;
                 padding-bottom: 100px;
-                background: linear-gradient(180deg, #f7fbf5 0%, #ffffff 100%);
+                background: linear-gradient(180deg, ${this.hexToRgba(this.primaryHex, 0.05)} 0%, #ffffff 100%);
                 position: relative;
                 overflow: hidden;
                 display: flex;
@@ -118,8 +242,7 @@ class HeroImageBadgeComponent {
                 left: 0;
                 width: 100%;
                 height: 15px;
-                background-color: var(--primary);
-                opacity: 0.3;
+                background-color: ${this.hexToRgba(this.primaryHex, 0.3)};
                 z-index: -1;
                 border-radius: 10px;
             }
