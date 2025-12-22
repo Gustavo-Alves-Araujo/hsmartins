@@ -130,6 +130,64 @@ const config = {
     }
   },
 
+  'feature-highlight': {
+    badge: "Destaque do Dia",
+    title: "Pizza Margherita Especial",
+    description: "Nossa receita mais tradicional, preparada com massa fresca, molho de tomate caseiro e ingredientes importados diretamente da Itália.",
+    features: [
+      "Massa fermentada por 48 horas",
+      "Queijo mussarela buffalo importado",
+      "Tomates San Marzano frescos",
+      "Manjericão orgânico",
+      "Azeite extra virgem siciliano"
+    ],
+    image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800",
+    imageAlt: "Pizza Margherita Artesanal",
+    cta: {
+      text: "Peça Agora →",
+      href: "https://wa.me/5511937304737",
+      target: "_blank"
+    },
+    layout: {
+      imagePosition: "left"
+    },
+    colors: {
+      background: "white",
+      titleColor: "brand-dark",
+      badgeColor: "brand-dark",
+      accentColor: "brand-gold",
+      ctaColor: "brand-dark",
+      ctaHoverColor: "brand-gold"
+    }
+  },
+
+  'cta-banner': {
+    title: "Faça seu pedido agora!",
+    subtitle: "Receba quentinho na sua casa. Entrega rápida ou retire na loja.",
+    buttons: [
+      {
+        text: "Pedir no WhatsApp",
+        icon: "fab fa-whatsapp",
+        href: "https://wa.me/5511937304737",
+        target: "_blank",
+        bgColor: "green-500",
+        hoverColor: "green-600"
+      },
+      {
+        text: "Pedir no iFood",
+        icon: "fas fa-utensils",
+        href: "#",
+        bgColor: "red-600",
+        hoverColor: "red-700"
+      }
+    ],
+    backgroundPattern: "https://www.transparenttextures.com/patterns/food.png",
+    colors: {
+      background: "brand-dark",
+      textColor: "white"
+    }
+  },
+
   site: {
     title: "Padaria Flor da Tibúrcio",
     name: "Flor da Tibúrcio",
