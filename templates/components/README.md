@@ -330,6 +330,113 @@ components: [
 ]
 ```
 
+## 🎨 Sistema de Inferência de Cores
+
+Todos os componentes agora **inferem automaticamente** as cores do tema global quando não há override específico.
+
+### Como Funciona
+
+1. **Defina as cores no tema global:**
+```javascript
+theme: {
+  colors: {
+    primary: '#16A34A',    // Cor principal
+    secondary: '#22C55E',   // Cor secundária (opcional)
+    tertiary: '#10B981',   // Cor terciária (opcional)
+    accent: '#F97316',      // Cor de destaque
+    background: '#F9FAFB'  // Cor de fundo
+  }
+}
+```
+
+2. **Os componentes inferem automaticamente:**
+```javascript
+'hero-overlay': {
+  // Se colors não for especificado, usa primary do tema para overlay
+  // Se colors.accent não for especificado, usa accent do tema
+  // E assim por diante...
+}
+```
+
+3. **Override quando necessário:**
+```javascript
+'hero-overlay': {
+  colors: {
+    primary: 'green',  // Override: usa 'green' ao invés do primary do tema
+    accent: 'orange'  // Override: usa 'orange' ao invés do accent do tema
+  }
+}
+```
+
+### Mapeamento de Cores por Componente
+
+Cada componente tem um mapeamento padrão de quais cores do tema usar:
+
+- **hero-overlay**: `primary` → overlay, `accent` → badges/botões
+- **info-bar**: `primary` → background, `accent` → ícones
+- **card-grid**: `primary` → títulos/overlay, `accent` → linha decorativa
+- **feature-highlight**: `primary` → títulos/badges, `accent` → destaques
+- **cta-banner**: `primary` → background, botões podem usar `primary`, `secondary`, `tertiary` ou `accent`
+- **footer-contact**: `primary` → títulos/ícones, `background` → fundo
+- **header-navigation**: `primary` → texto/botões, `background` → fundo
+
+### Exemplo Completo
+
+```javascript
+const config = {
+  theme: {
+    colors: {
+      primary: '#16A34A',    // Verde
+      secondary: '#22C55E',  // Verde claro
+      tertiary: '#10B981',  // Verde médio
+      accent: '#F97316',     // Laranja
+      background: '#F9FAFB' // Cinza claro
+    }
+  },
+
+  'hero-overlay': {
+    // Sem colors → infere primary e accent do tema
+    badge: "Bem-vindo",
+    title: "Título",
+    // ...
+  },
+
+  'info-bar': {
+    // Sem colors → infere primary (background), accent (ícones) do tema
+    items: [...]
+  },
+
+  'cta-banner': {
+    buttons: [
+      { text: "Botão 1", bgColor: "primary" },    // Usa primary do tema
+      { text: "Botão 2", bgColor: "accent" },      // Usa accent do tema
+      { text: "Botão 3", bgColor: "green" }       // Override: usa 'green' direto
+    ]
+  }
+}
+```
+
+### Novos Componentes
+
+Ao criar novos componentes, eles **automaticamente** herdam a capacidade de inferir cores:
+
+```javascript
+class MeuComponente extends BaseComponent {
+  constructor(data) {
+    super();
+
+    // Resolve cores: override > tema > fallback
+    const bgBase = this.resolveColor(data.colors?.background, 'primary', 'brand-dark');
+    const textBase = this.resolveColor(data.colors?.text, null, 'white');
+
+    this.colors = {
+      background: this.getColorVariant(bgBase, 700),
+      text: textBase
+    };
+  }
+}
+```
+
 ## ✨ Vantagens
 
 ✅ **Menos código repetitivo** - Configure uma vez no config.js
@@ -338,6 +445,7 @@ components: [
 ✅ **Escalável** - Fácil adicionar novos componentes
 ✅ **Type-safe** - Validação automática de tipos e props
 ✅ **Debug facilitado** - Logs automáticos de erros e sucessos
+✅ **Inferência inteligente** - Cores do tema aplicadas automaticamente
 
 ## 📝 Exemplo Completo
 

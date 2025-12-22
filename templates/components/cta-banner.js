@@ -1,6 +1,7 @@
 /**
  * CTA Banner Component
  * Banner centralizado de call-to-action com botões customizáveis
+ * Design Aprimorado: Modern UI com Ambient Light e Glassmorphism leve
  */
 
 class CtaBannerComponent extends BaseComponent {
@@ -31,10 +32,10 @@ class CtaBannerComponent extends BaseComponent {
         const bgBase = data.colors?.background || 'brand-dark';
         const textBase = data.colors?.textColor || 'white';
 
-        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
+        // Aplica variações automáticas conforme o contexto
         this.colors = {
-            background: this.getColorVariant(bgBase, 700),  // Fundo escuro
-            textColor: textBase,                             // Texto (geralmente white)
+            background: this.getColorVariant(bgBase, 700),
+            textColor: textBase,
         };
     }
 
@@ -48,17 +49,24 @@ class CtaBannerComponent extends BaseComponent {
         const hrefAttr = button.href ? `href="${button.href}"` : '';
         const targetAttr = button.target ? `target="${button.target}"` : '';
 
-        // Aplica variações automáticas para as cores dos botões
+        // Cores
         const bgBase = button.bgColor || 'blue';
         const hoverBase = button.hoverColor || bgBase;
         const bgColor = this.getColorVariant(bgBase, 600);
-        const hoverColor = this.getColorVariant(hoverBase, 700);
+        const hoverColor = this.getColorVariant(hoverBase, 500); // Usei 500 para ficar mais brilhante no hover
 
         return `
             <${tag} ${hrefAttr} ${targetAttr}
-                class="px-8 py-4 bg-${bgColor} text-white font-bold rounded-full hover:bg-${hoverColor} transition-all shadow-lg flex items-center justify-center gap-2 transform hover:scale-105">
-                ${button.icon ? `<i class="${button.icon} text-xl"></i>` : ''}
-                <span>${button.text}</span>
+                class="group relative px-8 py-4 bg-${bgColor} text-white font-bold rounded-full
+                       transition-all duration-300 ease-out
+                       hover:bg-${hoverColor} hover:-translate-y-1 hover:shadow-2xl hover:shadow-${bgColor}/50
+                       focus:outline-none focus:ring-4 focus:ring-${bgColor}/30
+                       flex items-center justify-center gap-3 overflow-hidden">
+
+                <div class="absolute inset-0 w-full h-full bg-white/20 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out skew-x-12"></div>
+
+                ${button.icon ? `<i class="${button.icon} text-xl transition-transform group-hover:scale-110"></i>` : ''}
+                <span class="relative z-10 tracking-wide">${button.text}</span>
             </${tag}>
         `;
     }
@@ -70,27 +78,38 @@ class CtaBannerComponent extends BaseComponent {
     render() {
         const c = this.colors;
         const buttonsHtml = this.buttons.map(btn => this.renderButton(btn)).join('');
+
+        // Background pattern com blending melhorado
         const backgroundStyle = this.backgroundPattern
-            ? `background-image: url('${this.backgroundPattern}');`
+            ? `background-image: url('${this.backgroundPattern}'); background-blend-mode: overlay;`
             : '';
 
         return `
-            <section class="py-16 md:py-20 bg-${c.background} text-${c.textColor} text-center relative overflow-hidden">
+            <section class="relative py-20 md:py-28 bg-${c.background} text-${c.textColor} overflow-hidden isolate">
+
                 ${this.backgroundPattern ? `
-                    <div class="absolute inset-0 opacity-10" style="${backgroundStyle}"></div>
+                    <div class="absolute inset-0 opacity-10 bg-center bg-repeat" style="${backgroundStyle}"></div>
                 ` : ''}
 
+                <div class="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-96 h-96 bg-white opacity-10 blur-3xl rounded-full pointer-events-none mix-blend-soft-light"></div>
+                <div class="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-[30rem] h-[30rem] bg-white opacity-5 blur-3xl rounded-full pointer-events-none mix-blend-overlay"></div>
+
+                <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/10 pointer-events-none"></div>
+
                 <div class="container mx-auto px-6 relative z-10">
-                    <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl mb-6 font-medium">
-                        ${this.title}
-                    </h2>
+                    <div class="max-w-4xl mx-auto text-center flex flex-col items-center">
 
-                    <p class="text-${c.textColor}/70 text-lg md:text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
-                        ${this.subtitle}
-                    </p>
+                        <h2 class="font-serif text-4xl md:text-5xl lg:text-6xl mb-6 font-medium tracking-tight drop-shadow-sm leading-tight">
+                            ${this.title}
+                        </h2>
 
-                    <div class="flex flex-col sm:flex-row justify-center items-center gap-4 flex-wrap">
-                        ${buttonsHtml}
+                        <p class="text-${c.textColor} text-lg md:text-xl lg:text-2xl mb-12 max-w-2xl mx-auto leading-relaxed opacity-90 font-light">
+                            ${this.subtitle}
+                        </p>
+
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-5 w-full sm:w-auto">
+                            ${buttonsHtml}
+                        </div>
                     </div>
                 </div>
             </section>
@@ -125,4 +144,3 @@ class CtaBannerComponent extends BaseComponent {
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('cta-banner', CtaBannerComponent);
 }
-

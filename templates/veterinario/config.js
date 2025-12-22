@@ -1,8 +1,10 @@
 const config = {
   theme: {
     colors: {
-      primary: '#16A34A',        // brand-green (verde veterinário)
-      primaryLight: '#22C55E',   // brand-light-green
+      primary: '#16A34A',        // brand-green (verde veterinário) - Cor principal
+      secondary: '#22C55E',      // brand-light-green - Cor secundária (opcional)
+      tertiary: '#10B981',        // Cor terciária (opcional)
+      primaryLight: '#22C55E',   // brand-light-green (mantido para compatibilidade)
       background: '#F9FAFB',     // brand-light (fundo claro)
       accent: '#F97316',         // brand-orange (destaque quente)
       text: {
@@ -67,7 +69,7 @@ const config = {
     whatsappNumber: "5511988887777",
     colors: {
       primary: 'green',      // Verde escuro para overlay
-      accent: 'orange',      // Laranja para destaques
+      accent: 'green',      // Laranja para destaques
       text: 'white'              // Texto branco
     }
   },

@@ -38,14 +38,14 @@ class CardGridComponent extends BaseComponent {
             ...data.layout
         };
 
-        // Colors com variações automáticas (seguindo padrão do HERO)
-        const bgBase = data.colors?.background || 'brand-cream';
-        const titleBase = data.colors?.titleColor || 'brand-dark';
-        const subtitleBase = data.colors?.subtitleColor || 'gray';
-        const overlayBase = data.colors?.cardOverlay || 'brand-dark';
-        const accentBase = data.colors?.accentLine || 'brand-dark';
+        // Resolve cores base (override > tema > fallback)
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'brand-cream');
+        const titleBase = this.resolveColor(data.colors?.titleColor, 'primary', 'brand-dark');
+        const subtitleBase = this.resolveColor(data.colors?.subtitleColor, null, 'gray');
+        const overlayBase = this.resolveColor(data.colors?.cardOverlay, 'primary', 'brand-dark');
+        const accentBase = this.resolveColor(data.colors?.accentLine, 'accent', 'brand-dark');
 
-        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
+        // Aplica variações automáticas conforme o contexto
         this.colors = {
             background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
             titleColor: this.getColorVariant(titleBase, 900),

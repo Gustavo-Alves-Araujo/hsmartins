@@ -48,15 +48,15 @@ class FeatureHighlightComponent extends BaseComponent {
             ...data.layout
         };
 
-        // Colors com variações automáticas (seguindo padrão do HERO)
-        const bgBase = data.colors?.background || 'white';
-        const titleBase = data.colors?.titleColor || 'gray';
-        const badgeBase = data.colors?.badgeColor || 'green';
-        const accentBase = data.colors?.accentColor || 'orange';
-        const ctaBase = data.colors?.ctaColor || 'green';
-        const ctaHoverBase = data.colors?.ctaHoverColor || 'green';
+        // Resolve cores base (override > tema > fallback)
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
+        const titleBase = this.resolveColor(data.colors?.titleColor, 'primary', 'gray');
+        const badgeBase = this.resolveColor(data.colors?.badgeColor, 'primary', 'green');
+        const accentBase = this.resolveColor(data.colors?.accentColor, 'accent', 'orange');
+        const ctaBase = this.resolveColor(data.colors?.ctaColor, 'primary', 'green');
+        const ctaHoverBase = this.resolveColor(data.colors?.ctaHoverColor, 'primary', 'green');
 
-        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
+        // Aplica variações automáticas conforme o contexto
         this.colors = {
             background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
             titleColor: this.getColorVariant(titleBase, 900),

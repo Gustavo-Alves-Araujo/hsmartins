@@ -44,12 +44,12 @@ class HeaderNavigationComponent extends BaseComponent {
             }
         };
 
-        // Colors com variações automáticas (seguindo padrão do HERO)
-        const bgBase = data.colors?.background || 'brand-cream';
-        const textBase = data.colors?.text || 'brand-dark';
-        const ctaBgBase = data.colors?.ctaBg || 'brand-dark';
-        const ctaTextBase = data.colors?.ctaText || 'white';
-        const borderBase = data.colors?.border || 'brand-dark';
+        // Resolve cores base (override > tema > fallback)
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'brand-cream');
+        const textBase = this.resolveColor(data.colors?.text, 'primary', 'brand-dark');
+        const ctaBgBase = this.resolveColor(data.colors?.ctaBg, 'primary', 'brand-dark');
+        const ctaTextBase = this.resolveColor(data.colors?.ctaText, null, 'white');
+        const borderBase = this.resolveColor(data.colors?.border, 'primary', 'brand-dark');
 
         // Aplica variações automáticas conforme o contexto
         this.colors = {

@@ -19,12 +19,12 @@ class InfoBarComponent extends BaseComponent {
         // Items genéricos
         this.items = data.items || [];
 
-        // Colors com variações automáticas (seguindo padrão do HERO)
-        const bgBase = data.colors?.background || 'brand-dark';
-        const accentBase = data.colors?.accent || 'brand-gold';
-        const textBase = data.colors?.text || 'white';
+        // Resolve cores base (override > tema > fallback)
+        const bgBase = this.resolveColor(data.colors?.background, 'primary', 'brand-dark');
+        const accentBase = this.resolveColor(data.colors?.accent, 'accent', 'brand-gold');
+        const textBase = this.resolveColor(data.colors?.text, null, 'white');
 
-        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
+        // Aplica variações automáticas conforme o contexto
         this.colors = {
             background: this.getColorVariant(bgBase, 700),  // Fundo escuro
             text: textBase,                                   // Texto (geralmente white)

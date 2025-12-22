@@ -40,16 +40,16 @@ class FooterContactComponent extends BaseComponent {
         this.copyright = data.copyright;
         this.tags = data.tags || [];
 
-        // Colors com variações automáticas (seguindo padrão do HERO)
-        const bgBase = data.colors?.background || 'brand-cream';
-        const titleBase = data.colors?.titleColor || 'brand-dark';
-        const textBase = data.colors?.textColor || 'gray';
-        const textStrongBase = data.colors?.textStrong || 'gray';
-        const textMutedBase = data.colors?.textMuted || 'gray';
-        const iconBase = data.colors?.iconColor || 'brand-dark';
-        const borderBase = data.colors?.borderColor || 'brand-dark';
+        // Resolve cores base (override > tema > fallback)
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'brand-cream');
+        const titleBase = this.resolveColor(data.colors?.titleColor, 'primary', 'brand-dark');
+        const textBase = this.resolveColor(data.colors?.textColor, null, 'gray');
+        const textStrongBase = this.resolveColor(data.colors?.textStrong, 'primary', 'gray');
+        const textMutedBase = this.resolveColor(data.colors?.textMuted, null, 'gray');
+        const iconBase = this.resolveColor(data.colors?.iconColor, 'primary', 'brand-dark');
+        const borderBase = this.resolveColor(data.colors?.borderColor, null, 'brand-dark');
 
-        // Aplica variações automáticas conforme o contexto (NÃO sobrescreve com ...data.colors)
+        // Aplica variações automáticas conforme o contexto
         this.colors = {
             background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
             titleColor: this.getColorVariant(titleBase, 900),
