@@ -1,16 +1,16 @@
 const config = {
   theme: {
     colors: {
-      primary: '#7C3AED',        // brand-purple (cor principal - roxo)
-      secondary: '#A78BFA',      // brand-light-purple - Cor secundária (mais claro)
-      tertiary: '#8B5CF6',       // Cor terciária (roxinho complementar)
-      primaryLight: '#DDD6FE',   // Tons ainda mais claros para botões/hover
-      background: '#F5F3FF',     // brand-light (fundo claro lilás)
-      accent: '#F472B6',         // rosa-accent (rosa quente para destaque)
+      primary: '#16A34A',        // brand-green (verde veterinário) - Cor principal
+      secondary: '#22C55E',      // brand-light-green - Cor secundária (opcional)
+      tertiary: '#10B981',        // Cor terciária (opcional)
+      primaryLight: '#22C55E',   // brand-light-green (mantido para compatibilidade)
+      background: '#F9FAFB',     // brand-light (fundo claro)
+      accent: '#F97316',         // brand-orange (destaque quente)
       text: {
-        dark: '#1E1B4B',     // Azul roxo bem escuro para títulos
-        medium: '#6D28D9',   // Roxo médio para textos
-        light: '#A78BFA',    // Roxo claro
+        dark: '#1F2937',       // gray-800 - Contraste: 14:1 ✓
+        medium: '#4B5563',     // gray-600 - Contraste: 7:1 ✓
+        light: '#6B7280',      // gray-500 - Contraste: 5:1 ✓
         white: '#FFFFFF'
       }
     },
