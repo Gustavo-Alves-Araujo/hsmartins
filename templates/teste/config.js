@@ -188,6 +188,41 @@ const config = {
     }
   },
 
+  'footer-contact': {
+    title: "Visite Nossa Loja",
+    address: {
+      label: "Endereço",
+      street: "Rua Tibúrcio de Sousa, 1351",
+      city: "Itaim Paulista, São Paulo - SP",
+      zipCode: "CEP: 08140-000",
+      mapQuery: "Rua Tibúrcio de Sousa, 1351, São Paulo"
+    },
+    contact: {
+      label: "Contato",
+      phone: "(11) 93730-4737"
+    },
+    socialLinks: [
+      {
+        icon: "fab fa-instagram",
+        href: "https://instagram.com/flordatiburciopadaria",
+        label: "Instagram"
+      },
+      {
+        icon: "fab fa-facebook-f",
+        href: "#",
+        label: "Facebook"
+      }
+    ],
+    copyright: "© 2024 Flor da Tibúrcio. Todos os direitos reservados.",
+    tags: ["Padaria", "Confeitaria", "Pizzaria", "Delivery"],
+    colors: {
+      background: "brand-cream",
+      titleColor: "brand-dark",
+      iconColor: "brand-dark",
+      borderColor: "brand-dark"
+    }
+  },
+
   site: {
     title: "Padaria Flor da Tibúrcio",
     name: "Flor da Tibúrcio",

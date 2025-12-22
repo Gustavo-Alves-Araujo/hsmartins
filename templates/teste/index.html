@@ -8,7 +8,6 @@
 
   <script src="config.js"></script>
 
-  <!-- Component Registry (carrega componentes automaticamente!) -->
   <script src="../components/component-registry.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -40,15 +39,11 @@
 </head>
 
 <body id="app-body" class="">
-  <!-- Os componentes serão montados aqui automaticamente na ordem do config -->
 
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
-      // Page title
       document.getElementById('page-title').textContent = config.site.title;
 
-      // Detecta, carrega e monta componentes automaticamente!
-      // Monta no body (ou especifique um container: componentRegistry.initFromConfig(config, document.getElementById('app')))
       await componentRegistry.initFromConfig(config, document.getElementById('app-body'));
     });
   </script>
