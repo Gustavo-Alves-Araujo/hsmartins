@@ -40,15 +40,16 @@
 </head>
 
 <body id="app-body" class="">
-  <div id="hero-component"></div>
+  <!-- Os componentes serão montados aqui automaticamente na ordem do config -->
 
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
       // Page title
       document.getElementById('page-title').textContent = config.site.title;
 
-      // Inicializa componentes (carrega e monta automaticamente!)
-      await componentRegistry.initFromConfig(config);
+      // Detecta, carrega e monta componentes automaticamente!
+      // Monta no body (ou especifique um container: componentRegistry.initFromConfig(config, document.getElementById('app')))
+      await componentRegistry.initFromConfig(config, document.getElementById('app-body'));
     });
   </script>
 </body>

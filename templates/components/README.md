@@ -1,71 +1,78 @@
-# Component Registry - Sistema de Registro de Componentes
+# Component Registry - Sistema Automático de Componentes
 
 ## 🎯 O que é?
 
-Um sistema que **carrega e inicializa componentes automaticamente** através do `config.js`. Você não precisa importar os componentes manualmente no HTML!
+Um sistema que **detecta, carrega e monta componentes automaticamente** baseado no `config.js`. 
+
+**Zero configuração manual. Zero imports. 100% automático.**
 
 ## 📦 Como usar
 
-### 1. No `index.html` - apenas isso:
+### 1. No `config.js` - Componentes na raiz:
+
+```javascript
+const config = {
+    // Configurações normais
+    theme: { ... },
+    site: { ... },
+
+    // ========== COMPONENTES ==========
+    // Qualquer chave com hífen é detectada como componente!
+    // Eles são montados na ordem que aparecem aqui
+    
+    'hero-overlay': {
+        badge: "Seu badge",
+        title: "Seu título",
+        titleHighlight: "destaque",
+        subtitle: "Descrição...",
+        ctaPrimary: "Botão 1",
+        ctaSecondary: "Botão 2",
+        backgroundImage: "https://...",
+        backgroundAlt: "Alt text",
+        whatsappNumber: "5511999999999",
+        colors: {
+            primary: 'brand-dark',
+            accent: 'brand-gold',
+            text: 'white'
+        }
+    },
+
+    'outro-componente': {
+        prop1: "valor1",
+        prop2: "valor2"
+    }
+};
+```
+
+### 2. No `index.html` - Apenas isso:
 
 ```html
 <head>
-  <!-- Config -->
   <script src="config.js"></script>
-
-  <!-- Component Registry (ele carrega os componentes automaticamente!) -->
   <script src="../components/component-registry.js"></script>
 </head>
 
-<body>
-  <!-- Elementos onde os componentes serão montados -->
-  <div id="hero-component"></div>
+<body id="app">
+  <!-- Componentes montam aqui automaticamente -->
 
   <script>
     document.addEventListener('DOMContentLoaded', async function () {
-      // Carrega e monta TODOS os componentes automaticamente
-      await componentRegistry.initFromConfig(config);
+      // Detecta, carrega e monta tudo automaticamente!
+      await componentRegistry.initFromConfig(config, document.getElementById('app'));
     });
   </script>
 </body>
 ```
 
-### 2. No `config.js`:
+## ✨ Magia Automática!
 
-```javascript
-const config = {
-    // ... outras configurações
+O registry:
+1. 🔍 **Detecta** componentes no config (chaves com hífen como `'hero-overlay'`)
+2. 📥 **Carrega** os arquivos automaticamente (`../components/hero-overlay.js`)
+3. 🎨 **Monta** na ordem que aparecem no config
+4. 🎯 **Cria** os elementos target automaticamente
 
-    components: [
-        {
-            type: 'hero-overlay',           // Nome do componente
-            target: 'hero-component',       // ID do elemento onde será montado
-            props: {                        // Propriedades do componente
-                badge: "Seu badge",
-                title: "Seu título",
-                titleHighlight: "destaque",
-                // ... outras props
-                colors: {
-                    primary: 'brand-dark',
-                    accent: 'brand-gold',
-                    text: 'white'
-                }
-            }
-        }
-        // Adicione mais componentes aqui
-    ]
-};
-```
-
-## ✨ Magia!
-
-O registry automaticamente:
-1. 🔍 Lê o `config.components`
-2. 📥 Carrega os arquivos necessários (`../components/hero-overlay.js`)
-3. ⏳ Aguarda o componente se auto-registrar
-4. 🎨 Monta o componente no DOM
-
-**Você não precisa importar nenhum componente manualmente!**
+**Você não faz NADA manualmente!**
 
 ## 🎨 Componentes Disponíveis
 

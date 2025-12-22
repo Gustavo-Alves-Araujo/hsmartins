@@ -1,12 +1,13 @@
 /**
  * Component Registry - Sistema Automático de Componentes
  *
- * Uso no config.js:
- * components: [
- *   { type: 'hero-overlay', target: 'hero-component', props: {...} }
- * ]
+ * Uso no config.js (componentes na raiz):
+ * const config = {
+ *   'hero-overlay': { badge: '...', title: '...' },
+ *   'outro-componente': { prop1: '...', prop2: '...' }
+ * }
  *
- * O registry carrega automaticamente os arquivos dos componentes!
+ * O script detecta, carrega e monta automaticamente na ordem!
  */
 
 (function() {
@@ -17,6 +18,7 @@
             this.components = {};
             this.loadedScripts = new Set();
             this.componentsPath = '../components/';
+            this.mountedComponents = [];
         }
 
         /**
@@ -28,15 +30,39 @@
         }
 
         /**
+         * Verifica se uma chave do config é um componente
+         * (se tem hífen no nome, provavelmente é um componente)
+         */
+        isComponentKey(key, config) {
+            return key.includes('-') && !key.startsWith('_') && typeof config[key] === 'object';
+        }
+
+        /**
+         * Detecta todos os componentes no config
+         */
+        detectComponents(config) {
+            const components = [];
+
+            for (const key in config) {
+                if (this.isComponentKey(key, config)) {
+                    components.push({
+                        type: key,
+                        props: config[key]
+                    });
+                }
+            }
+
+            return components;
+        }
+
+        /**
          * Carrega dinamicamente o script de um componente
          */
         async loadComponent(type) {
-            // Se já está registrado, não precisa carregar
             if (this.components[type]) {
                 return true;
             }
 
-            // Se já tentou carregar este script, não tenta novamente
             if (this.loadedScripts.has(type)) {
                 return this.components[type] !== undefined;
             }
@@ -44,7 +70,7 @@
             const scriptPath = `${this.componentsPath}${type}.js`;
 
             return new Promise((resolve, reject) => {
-                console.log(`⏳ Carregando componente '${type}'...`);
+                console.log(`⏳ Carregando '${type}'...`);
 
                 const script = document.createElement('script');
                 script.src = scriptPath;
@@ -52,13 +78,12 @@
                 script.onload = () => {
                     this.loadedScripts.add(type);
 
-                    // Aguarda um momento para o componente se auto-registrar
                     setTimeout(() => {
                         if (this.components[type]) {
-                            console.log(`✅ Componente '${type}' carregado`);
+                            console.log(`✅ '${type}' carregado`);
                             resolve(true);
                         } else {
-                            console.error(`❌ Componente '${type}' não se auto-registrou`);
+                            console.error(`❌ '${type}' não se auto-registrou`);
                             resolve(false);
                         }
                     }, 10);
@@ -75,7 +100,7 @@
         }
 
         /**
-         * Carrega múltiplos componentes em paralelo
+         * Carrega múltiplos componentes
          */
         async loadComponents(types) {
             const uniqueTypes = [...new Set(types)];
@@ -91,69 +116,99 @@
         }
 
         /**
-         * Obtém um componente registrado
+         * Cria automaticamente um elemento target e monta o componente
          */
-        getComponent(type) {
-            return this.components[type] || null;
-        }
-
-        /**
-         * Cria e monta um componente
-         */
-        create(config) {
-            const { type, target, props } = config;
-
-            if (!type || !target) {
-                console.error('❌ Erro: type e target são obrigatórios', config);
-                return null;
-            }
-
-            const Component = this.getComponent(type);
+        mount(type, props, container = null) {
+            const Component = this.components[type];
 
             if (!Component) {
-                console.error(`❌ Componente '${type}' não encontrado.`);
-                console.log('Componentes disponíveis:', Object.keys(this.components));
+                console.error(`❌ Componente '${type}' não encontrado`);
                 return null;
             }
 
             try {
-                const instance = Component.create(props || {}, target);
-                console.log(`✅ '${type}' montado em '#${target}'`);
+                // Cria um ID único para este componente
+                const targetId = `component-${type}-${this.mountedComponents.length}`;
+
+                // Cria o elemento target
+                const targetElement = document.createElement('div');
+                targetElement.id = targetId;
+
+                // Adiciona ao container (ou body)
+                const mountPoint = container || document.body;
+                mountPoint.appendChild(targetElement);
+
+                // Monta o componente
+                const instance = Component.create(props || {}, targetId);
+
+                this.mountedComponents.push({
+                    type,
+                    targetId,
+                    instance,
+                    element: targetElement
+                });
+
+                console.log(`✅ '${type}' montado em '#${targetId}'`);
                 return instance;
             } catch (error) {
-                console.error(`❌ Erro ao criar '${type}':`, error);
+                console.error(`❌ Erro ao montar '${type}':`, error);
                 return null;
             }
         }
 
         /**
-         * Inicializa todos os componentes do config
-         * Carrega automaticamente os arquivos necessários!
+         * Inicializa automaticamente detectando componentes no config
          */
-        async initFromConfig(config) {
-            if (!config?.components) {
-                console.warn('⚠️ config.components não encontrado');
+        async initFromConfig(config, container = null) {
+            if (!config) {
+                console.error('❌ Config não fornecido');
                 return;
             }
 
-            console.log(`🚀 Inicializando ${config.components.length} componente(s)...`);
+            console.log('🔍 Detectando componentes no config...');
 
-            // Extrai os tipos únicos de componentes necessários
-            const types = config.components.map(c => c.type);
+            // Detecta componentes automaticamente
+            const componentsData = this.detectComponents(config);
+
+            if (componentsData.length === 0) {
+                console.warn('⚠️ Nenhum componente detectado no config');
+                return;
+            }
+
+            console.log(`🚀 ${componentsData.length} componente(s) detectado(s):`, componentsData.map(c => c.type));
 
             // Carrega todos os componentes necessários
+            const types = componentsData.map(c => c.type);
             await this.loadComponents(types);
 
-            // Monta os componentes
-            console.log(`📦 Montando componentes...`);
-            config.components.forEach(componentConfig => this.create(componentConfig));
+            // Monta os componentes na ordem que aparecem no config
+            console.log('📦 Montando componentes...');
+            for (const { type, props } of componentsData) {
+                this.mount(type, props, container);
+            }
+
+            console.log('🎉 Todos os componentes montados!');
         }
 
         /**
-         * Lista componentes disponíveis
+         * Define o caminho dos componentes (opcional)
+         */
+        setComponentsPath(path) {
+            this.componentsPath = path;
+        }
+
+        /**
+         * Lista componentes carregados
          */
         list() {
             return Object.keys(this.components);
+        }
+
+        /**
+         * Obtém componentes montados
+         */
+        getMounted() {
+            return this.mountedComponents;
         }
     }
 
