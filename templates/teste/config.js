@@ -44,6 +44,32 @@ const config = {
         }
     },
 
+    // ========== COMPONENTES ==========
+    // Lista de componentes a serem renderizados automaticamente
+    components: [
+        {
+            type: 'hero-overlay',           // Nome do componente registrado
+            target: 'hero-component',       // ID do elemento onde será montado
+            props: {                        // Props do componente
+                badge: "Desde o coração do Itaim Paulista",
+                title: "Sabor que cria",
+                titleHighlight: "memórias.",
+                subtitle: "Padaria, confeitaria e pizzaria. A tradição do pão quentinho e da pizza artesanal, entregue na sua porta.",
+                ctaPrimary: "Fazer Pedido",
+                ctaSecondary: "Explorar Cardápio",
+                backgroundImage: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop",
+                backgroundAlt: "Pão Fresco",
+                whatsappNumber: "5511937304737",  // Será preenchido automaticamente se não informado
+                colors: {
+                    primary: 'brand-dark',
+                    accent: 'brand-gold',
+                    text: 'white'
+                }
+            }
+        }
+        // Adicione mais componentes aqui conforme necessário
+    ],
+
     // ========== SITE ==========
     site: {
         title: "Padaria Flor da Tibúrcio",

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,7 +8,7 @@
 
     <script src="config.js"></script>
 
-    <script src="components/hero.js"></script>
+    <script src="../components/hero-overlay.js"></script>
 
     <script src="https://cdn.tailwindcss.com"></script>
 
@@ -35,35 +36,45 @@
         }
     </script>
 </head>
+
 <body id="app-body" class="bg-brand-cream text-gray-800 font-sans antialiased overflow-x-hidden">
 
-    <nav class="fixed w-full z-50 transition-all duration-300 bg-brand-cream/90 backdrop-blur-md shadow-sm border-b border-brand-dark/10" id="navbar">
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-brand-cream/90 backdrop-blur-md shadow-sm border-b border-brand-dark/10"
+        id="navbar">
         <div class="container mx-auto px-6 py-4 flex justify-between items-center">
             <a href="#" class="flex items-center gap-3 group">
-                <img id="nav-logo" class="w-12 h-12 rounded-full border-2 border-brand-dark object-cover group-hover:rotate-12 transition-transform duration-300 shadow-md">
+                <img id="nav-logo"
+                    class="w-12 h-12 rounded-full border-2 border-brand-dark object-cover group-hover:rotate-12 transition-transform duration-300 shadow-md">
                 <div class="leading-tight">
-                    <span id="nav-site-name" class="block font-serif font-bold text-xl text-brand-dark tracking-wide"></span>
+                    <span id="nav-site-name"
+                        class="block font-serif font-bold text-xl text-brand-dark tracking-wide"></span>
                     <span id="nav-established" class="block text-xs text-gray-500 uppercase tracking-wider"></span>
                 </div>
             </a>
 
             <div class="hidden md:flex items-center gap-8">
-                <a href="#about" id="nav-link-about" class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
-                <a href="#services" id="nav-link-services" class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
-                <a href="#location" id="nav-link-location" class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
-                <a id="nav-btn-order" target="_blank" class="px-6 py-2 bg-brand-dark text-white text-sm font-medium rounded-full hover:bg-brand-light transition-all transform hover:-translate-y-0.5 shadow-lg flex items-center gap-2">
+                <a href="#about" id="nav-link-about"
+                    class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
+                <a href="#services" id="nav-link-services"
+                    class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
+                <a href="#location" id="nav-link-location"
+                    class="text-sm font-medium hover:text-brand-dark transition-colors"></a>
+                <a id="nav-btn-order" target="_blank"
+                    class="px-6 py-2 bg-brand-dark text-white text-sm font-medium rounded-full hover:bg-brand-light transition-all transform hover:-translate-y-0.5 shadow-lg flex items-center gap-2">
                     <i class="fab fa-whatsapp"></i> <span id="nav-btn-order-text"></span>
                 </a>
             </div>
 
             <!-- Mobile Menu Button -->
-            <button class="md:hidden text-brand-dark text-2xl" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+            <button class="md:hidden text-brand-dark text-2xl"
+                onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
 
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden absolute top-full left-0 w-full bg-brand-cream border-b border-brand-dark/10 shadow-lg md:hidden p-6 flex flex-col gap-4">
+        <div id="mobile-menu"
+            class="hidden absolute top-full left-0 w-full bg-brand-cream border-b border-brand-dark/10 shadow-lg md:hidden p-6 flex flex-col gap-4">
             <a href="#about" id="mobile-link-about" class="block text-lg font-serif text-brand-dark"></a>
             <a href="#services" id="mobile-link-services" class="block text-lg font-serif text-brand-dark"></a>
             <a href="#location" id="mobile-link-location" class="block text-lg font-serif text-brand-dark"></a>
@@ -74,7 +85,8 @@
     <div id="hero-component"></div>
 
     <div class="bg-brand-dark text-white py-4 relative z-30">
-        <div class="container mx-auto px-6 flex flex-wrap justify-center md:justify-between items-center gap-4 text-sm opacity-90">
+        <div
+            class="container mx-auto px-6 flex flex-wrap justify-center md:justify-between items-center gap-4 text-sm opacity-90">
             <div class="flex items-center gap-2">
                 <i class="fas fa-motorcycle text-brand-gold"></i>
                 <span id="info-delivery"></span>
@@ -111,29 +123,34 @@
                 </div>
             </div>
             <div class="md:w-1/2" data-aos="fade-left">
-                <span id="featured-badge" class="text-brand-dark font-bold uppercase tracking-widest text-sm mb-2 block"></span>
+                <span id="featured-badge"
+                    class="text-brand-dark font-bold uppercase tracking-widest text-sm mb-2 block"></span>
                 <h2 id="featured-title" class="font-serif text-4xl md:text-5xl text-brand-dark mb-6 leading-tight"></h2>
                 <p id="featured-description" class="text-gray-600 mb-8 leading-relaxed"></p>
 
                 <ul id="featured-features" class="space-y-4 mb-8">
                 </ul>
 
-                <a id="featured-cta" class="inline-block border-b-2 border-brand-dark text-brand-dark font-serif text-xl pb-1 hover:text-brand-gold hover:border-brand-gold transition-colors">
+                <a id="featured-cta"
+                    class="inline-block border-b-2 border-brand-dark text-brand-dark font-serif text-xl pb-1 hover:text-brand-gold hover:border-brand-gold transition-colors">
                 </a>
             </div>
         </div>
     </section>
 
     <section class="py-20 bg-brand-dark text-white text-center relative overflow-hidden">
-        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/food.png')]"></div>
+        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/food.png')]">
+        </div>
         <div class="container mx-auto px-6 relative z-10">
             <h2 id="cta-title" class="font-serif text-3xl md:text-5xl mb-6"></h2>
             <p id="cta-subtitle" class="text-white/70 text-lg mb-10 max-w-2xl mx-auto"></p>
             <div class="flex flex-col sm:flex-row justify-center gap-4">
-                <a id="cta-whatsapp" class="px-8 py-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all shadow-lg flex items-center justify-center gap-2 transform hover:scale-105">
+                <a id="cta-whatsapp"
+                    class="px-8 py-4 bg-green-500 text-white font-bold rounded-full hover:bg-green-600 transition-all shadow-lg flex items-center justify-center gap-2 transform hover:scale-105">
                     <i class="fab fa-whatsapp text-xl"></i> <span id="cta-whatsapp-text"></span>
                 </a>
-                <button class="px-8 py-4 bg-red-600 text-white font-bold rounded-full hover:bg-red-700 transition-all shadow-lg flex items-center justify-center gap-2 transform hover:scale-105 cursor-default">
+                <button
+                    class="px-8 py-4 bg-red-600 text-white font-bold rounded-full hover:bg-red-700 transition-all shadow-lg flex items-center justify-center gap-2 transform hover:scale-105 cursor-default">
                     <i class="fas fa-utensils"></i> <span id="cta-ifood-text"></span>
                 </button>
             </div>
@@ -165,31 +182,31 @@
                     </address>
 
                     <div class="flex gap-4">
-                        <a id="footer-instagram" class="w-12 h-12 rounded-full border border-brand-dark text-brand-dark flex items-center justify-center hover:bg-brand-dark hover:text-white transition-all">
+                        <a id="footer-instagram"
+                            class="w-12 h-12 rounded-full border border-brand-dark text-brand-dark flex items-center justify-center hover:bg-brand-dark hover:text-white transition-all">
                             <i class="fab fa-instagram text-xl"></i>
                         </a>
-                        <a href="#" class="w-12 h-12 rounded-full border border-brand-dark text-brand-dark flex items-center justify-center hover:bg-brand-dark hover:text-white transition-all">
+                        <a href="#"
+                            class="w-12 h-12 rounded-full border border-brand-dark text-brand-dark flex items-center justify-center hover:bg-brand-dark hover:text-white transition-all">
                             <i class="fab fa-facebook-f text-xl"></i>
                         </a>
                     </div>
                 </div>
 
-                <a id="footer-map-link" target="_blank" class="block h-80 w-full bg-gray-200 rounded-2xl overflow-hidden relative group shadow-inner">
-                     <iframe
-                        id="footer-map-iframe"
-                        width="100%"
-                        height="100%"
-                        frameborder="0"
-                        scrolling="no"
-                        marginheight="0"
-                        marginwidth="0"
+                <a id="footer-map-link" target="_blank"
+                    class="block h-80 w-full bg-gray-200 rounded-2xl overflow-hidden relative group shadow-inner">
+                    <iframe id="footer-map-iframe" width="100%" height="100%" frameborder="0" scrolling="no"
+                        marginheight="0" marginwidth="0"
                         class="grayscale group-hover:grayscale-0 transition-all duration-500">
                     </iframe>
-                    <div class="absolute inset-0 bg-brand-dark/10 group-hover:bg-transparent transition-colors pointer-events-none"></div>
+                    <div
+                        class="absolute inset-0 bg-brand-dark/10 group-hover:bg-transparent transition-colors pointer-events-none">
+                    </div>
                 </a>
             </div>
 
-            <div class="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+            <div
+                class="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
                 <p id="footer-copyright"></p>
                 <div id="footer-categories" class="mt-2 md:mt-0">
                 </div>
@@ -206,7 +223,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Page title
             document.getElementById('page-title').textContent = config.site.title;
 
@@ -214,7 +231,7 @@
             const navLogo = document.getElementById('nav-logo');
             navLogo.src = config.site.logoUrl;
             navLogo.alt = config.site.logoAlt;
-            navLogo.onerror = function() { this.src = config.site.logoFallback; };
+            navLogo.onerror = function () { this.src = config.site.logoFallback; };
             document.getElementById('nav-site-name').textContent = config.site.name;
             document.getElementById('nav-established').textContent = config.site.established;
             document.getElementById('nav-link-about').textContent = config.navigation.about;
@@ -242,34 +259,10 @@
                 backgroundImage: config.hero.backgroundImage,
                 backgroundAlt: config.hero.backgroundAlt,
                 whatsappNumber: config.contact.whatsapp,
-                styles: {
-                    overlay: {
-                        bg: 'bg-brand-dark',
-                        opacity: 'opacity-90'
-                    },
-                    badge: {
-                        border: 'border-brand-gold',
-                        text: 'text-brand-gold'
-                    },
-                    title: {
-                        text: 'text-white'
-                    },
-                    titleHighlight: {
-                        text: 'text-brand-gold'
-                    },
-                    subtitle: {
-                        text: 'text-white'
-                    },
-                    ctaPrimary: {
-                        bg: 'bg-brand-gold',
-                        text: 'text-brand-dark',
-                        hover: 'hover:bg-white'
-                    },
-                    ctaSecondary: {
-                        border: 'border-white',
-                        text: 'text-white',
-                        hover: 'hover:bg-white'
-                    }
+                colors: {
+                    primary: 'purple',
+                    accent: 'red',
+                    text: 'slate'
                 }
             }, 'hero-component');
 
@@ -363,4 +356,5 @@
         });
     </script>
 </body>
+
 </html>

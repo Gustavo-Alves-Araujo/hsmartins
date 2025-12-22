@@ -8,10 +8,12 @@
 
   <script src="config.js"></script>
 
-  <script src="../flor-da-tiburcio/components/hero.js"></script>
+  <!-- Component Registry (carrega componentes automaticamente!) -->
+  <script src="../components/component-registry.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
   <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
@@ -41,7 +43,13 @@
   <div id="hero-component"></div>
 
   <script>
-    HeroComponent.createFromConfig(config, 'hero-component');
+    document.addEventListener('DOMContentLoaded', async function () {
+      // Page title
+      document.getElementById('page-title').textContent = config.site.title;
+
+      // Inicializa componentes (carrega e monta automaticamente!)
+      await componentRegistry.initFromConfig(config);
+    });
   </script>
 </body>
 
