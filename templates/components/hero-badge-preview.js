@@ -27,6 +27,40 @@ class HeroBadgePreviewComponent extends BaseComponent {
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');
         this.secondaryHex = this.resolveColorHex(data.colors?.secondary, 'secondary', '#EC4899');
         this.accentHex = this.resolveColorHex(data.colors?.accent, 'accent', '#F97316');
+
+        // Detecta se o tema é claro (background claro)
+        const backgroundHex = this.resolveColorHex(null, 'background', '#0f0f13');
+        this.isLightTheme = this.isLightColor(backgroundHex);
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+            this.textWhite = theme.colors.text.white || '#FFFFFF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+            this.textWhite = '#FFFFFF';
+        }
+    }
+
+    /**
+     * Verifica se uma cor é clara (para detectar tema claro)
+     * @param {string} hex - Cor hexadecimal
+     * @returns {boolean} true se a cor for clara
+     */
+    isLightColor(hex) {
+        if (!hex || !hex.startsWith('#')) return false;
+        const color = hex.substring(1);
+        const r = parseInt(color.substring(0, 2), 16);
+        const g = parseInt(color.substring(2, 4), 16);
+        const b = parseInt(color.substring(4, 6), 16);
+        // Calcula luminância relativa
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.5;
     }
 
     /**
@@ -34,6 +68,31 @@ class HeroBadgePreviewComponent extends BaseComponent {
      */
     injectStyles() {
         if (document.getElementById('hero-badge-preview-styles')) return;
+
+        // Cores adaptativas baseadas no tema claro/escuro
+        const badgeBg = this.isLightTheme
+            ? this.hexToRgba(this.textDark, 0.05)
+            : this.hexToRgba('#FFFFFF', 0.05);
+        const badgeBorder = this.isLightTheme
+            ? this.hexToRgba(this.textDark, 0.1)
+            : this.hexToRgba('#FFFFFF', 0.1);
+        const titleColor = this.isLightTheme ? this.textDark : this.textWhite;
+        const descriptionColor = this.isLightTheme ? this.textMedium : '#9CA3AF';
+        const buttonPrimaryBg = this.isLightTheme ? this.primaryHex : '#FFFFFF';
+        const buttonPrimaryColor = this.isLightTheme ? this.textWhite : '#000000';
+        const buttonPrimaryHover = this.isLightTheme
+            ? this.darkenColor(this.primaryHex, 0.1)
+            : '#F3F4F6';
+        const buttonSecondaryBg = this.isLightTheme
+            ? this.hexToRgba(this.textDark, 0.05)
+            : this.hexToRgba('#FFFFFF', 0.05);
+        const buttonSecondaryBorder = this.isLightTheme
+            ? this.hexToRgba(this.textDark, 0.2)
+            : this.hexToRgba('#FFFFFF', 0.1);
+        const buttonSecondaryColor = this.isLightTheme ? this.textDark : '#FFFFFF';
+        const buttonSecondaryHover = this.isLightTheme
+            ? this.hexToRgba(this.textDark, 0.1)
+            : this.hexToRgba('#FFFFFF', 0.1);
 
         const style = document.createElement('style');
         style.id = 'hero-badge-preview-styles';
@@ -50,8 +109,8 @@ class HeroBadgePreviewComponent extends BaseComponent {
                 display: inline-flex;
                 align-items: center;
                 gap: 8px;
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.1)};
+                background: ${badgeBg};
+                border: 1px solid ${badgeBorder};
                 border-radius: 9999px;
                 padding: 6px 16px;
                 margin-bottom: 32px;
@@ -77,6 +136,7 @@ class HeroBadgePreviewComponent extends BaseComponent {
                 margin-bottom: 24px;
                 letter-spacing: -0.025em;
                 text-align: center;
+                color: ${titleColor};
             }
             .hero-title br {
                 display: none;
@@ -93,7 +153,7 @@ class HeroBadgePreviewComponent extends BaseComponent {
                 background-clip: text;
             }
             .hero-description {
-                color: #9CA3AF;
+                color: ${descriptionColor};
                 font-size: 1.125rem;
                 max-width: 42rem;
                 margin: 0 auto 40px;
@@ -103,44 +163,45 @@ class HeroBadgePreviewComponent extends BaseComponent {
                 display: flex;
                 flex-direction: column;
                 align-items: center;
+                justify-content: center;
                 gap: 16px;
-                margin-bottom: 80px;
-            }
-            .hero-button-primary {
+                margin: 0 auto 80px;
                 width: 100%;
+            }
+            .hero-button-primary,
+            .hero-button-secondary {
+                width: 100%;
+                max-width: 100%;
                 padding: 16px 32px;
-                background: #FFFFFF;
-                color: #000000;
                 border-radius: 9999px;
                 font-weight: 700;
                 font-size: 1.125rem;
                 transition: all 0.3s;
-                box-shadow: 0 0 30px ${this.hexToRgba('#FFFFFF', 0.2)};
-                display: flex;
+                display: inline-flex;
                 align-items: center;
                 justify-content: center;
                 gap: 8px;
+                text-align: center;
+                text-decoration: none;
+                border: none;
+                cursor: pointer;
+            }
+            .hero-button-primary {
+                background: ${buttonPrimaryBg};
+                color: ${buttonPrimaryColor};
+                box-shadow: 0 0 30px ${this.hexToRgba(this.primaryHex, 0.2)};
             }
             .hero-button-primary:hover {
-                background: #F3F4F6;
+                background: ${buttonPrimaryHover};
             }
             .hero-button-secondary {
-                width: 100%;
-                padding: 16px 32px;
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.1)};
-                color: #FFFFFF;
-                border-radius: 9999px;
-                font-weight: 700;
-                font-size: 1.125rem;
-                transition: all 0.3s;
+                background: ${buttonSecondaryBg};
+                border: 1px solid ${buttonSecondaryBorder};
+                color: ${buttonSecondaryColor};
                 backdrop-filter: blur(12px);
-                display: flex;
-                align-items: center;
-                justify-content: center;
             }
             .hero-button-secondary:hover {
-                background: ${this.hexToRgba('#FFFFFF', 0.1)};
+                background: ${buttonSecondaryHover};
             }
             .hero-preview {
                 position: relative;
@@ -157,9 +218,9 @@ class HeroBadgePreviewComponent extends BaseComponent {
             }
             .hero-preview-card {
                 position: relative;
-                background: ${this.hexToRgba('#1a1a24', 0.8)};
+                background: ${this.isLightTheme ? this.hexToRgba('#FFFFFF', 0.9) : this.hexToRgba('#1a1a24', 0.8)};
                 backdrop-filter: blur(24px);
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.1)};
+                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.1)};
                 border-radius: 1rem;
                 padding: 16px;
                 box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
@@ -170,16 +231,26 @@ class HeroBadgePreviewComponent extends BaseComponent {
                 gap: 24px;
             }
             .hero-preview-grid-item {
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.03) : this.hexToRgba('#FFFFFF', 0.05)};
                 border-radius: 0.75rem;
                 padding: 20px;
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.05)};
+                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.05) : this.hexToRgba('#FFFFFF', 0.05)};
             }
             @media (min-width: 768px) {
                 .hero-badge-preview { padding-top: 192px; padding-bottom: 128px; }
                 .hero-title { font-size: 4.5rem; }
-                .hero-buttons { flex-direction: row; }
-                .hero-button-primary, .hero-button-secondary { width: auto; }
+                .hero-buttons {
+                    flex-direction: row;
+                    justify-content: center;
+                    align-items: center;
+                    gap: 24px;
+                }
+                .hero-button-primary,
+                .hero-button-secondary {
+                    width: auto;
+                    min-width: auto;
+                    flex-shrink: 0;
+                }
                 .hero-preview-card { padding: 32px; }
                 .hero-preview-grid { grid-template-columns: 1fr 2fr; }
             }
@@ -229,7 +300,6 @@ class HeroBadgePreviewComponent extends BaseComponent {
                 <div class="hero-buttons">
                     ${buttonsHtml}
                 </div>
-                ${previewHtml}
             </section>
         `;
     }
