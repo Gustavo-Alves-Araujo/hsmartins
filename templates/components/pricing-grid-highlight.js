@@ -22,7 +22,21 @@ class PricingGridHighlightComponent extends BaseComponent {
         // Resolve cores do tema
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');
         this.secondaryHex = this.resolveColorHex(data.colors?.secondary, 'secondary', '#EC4899');
-        this.textColor = this.getBestTextColor(this.resolveColorHex(data.colors?.background, 'background', '#0f0f13'), 4.5);
+        const backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
+        this.isLightTheme = this.isLightColor(backgroundHex);
+        this.textColor = this.getBestTextColor(backgroundHex, 4.5);
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+        }
     }
 
     /**
@@ -50,7 +64,7 @@ class PricingGridHighlightComponent extends BaseComponent {
                 color: ${this.textColor};
             }
             .pricing-subtitle {
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
             }
             .pricing-grid {
                 display: grid;
@@ -62,14 +76,14 @@ class PricingGridHighlightComponent extends BaseComponent {
             .pricing-card {
                 padding: 32px;
                 border-radius: 1.5rem;
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.hexToRgba('#FFFFFF', 0.05)};
+                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.05)};
                 display: flex;
                 flex-direction: column;
                 backdrop-filter: blur(4px);
             }
             .pricing-card-highlighted {
-                background: ${this.hexToRgba('#1e1e2d', 0.8)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.08) : this.hexToRgba('#1e1e2d', 0.8)};
                 border-color: ${this.hexToRgba(this.primaryHex, 0.5)};
                 box-shadow: 0 0 40px ${this.hexToRgba(this.primaryHex, 0.15)};
                 transform: translateY(-16px);
@@ -101,11 +115,11 @@ class PricingGridHighlightComponent extends BaseComponent {
             }
             .pricing-card-period {
                 font-size: 1.125rem;
-                color: #6B7280;
+                color: ${this.isLightTheme ? this.textMedium : '#6B7280'};
                 font-weight: 400;
             }
             .pricing-card-description {
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 font-size: 0.875rem;
                 margin-bottom: 32px;
             }
@@ -135,21 +149,21 @@ class PricingGridHighlightComponent extends BaseComponent {
                 transition: all 0.3s;
             }
             .pricing-button-outline {
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.2)};
+                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.2) : this.hexToRgba('#FFFFFF', 0.2)};
                 color: ${this.textColor};
                 background: transparent;
             }
             .pricing-button-outline:hover {
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.05) : this.hexToRgba('#FFFFFF', 0.05)};
             }
             .pricing-button-primary {
-                background: #FFFFFF;
-                color: #000000;
+                background: ${this.isLightTheme ? this.primaryHex : '#FFFFFF'};
+                color: ${this.isLightTheme ? this.getBestTextColor(this.primaryHex) : '#000000'};
                 font-weight: 700;
                 box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             }
             .pricing-button-primary:hover {
-                background: #F3F4F6;
+                background: ${this.isLightTheme ? this.darkenColor(this.primaryHex, 0.1) : '#F3F4F6'};
             }
             @media (min-width: 768px) {
                 .pricing-title { font-size: 3rem; }
@@ -169,12 +183,12 @@ class PricingGridHighlightComponent extends BaseComponent {
         const plansHtml = this.plans.map(plan => {
             const isHighlighted = plan.highlighted || false;
             const cardClass = isHighlighted ? 'pricing-card pricing-card-highlighted' : 'pricing-card';
-            const badgeHtml = plan.badge && isHighlighted ? `<div class="pricing-badge">${plan.badge}</div>` : '';
-            const nameColor = isHighlighted ? this.textColor : '#D1D5DB';
+            const badgeHtml = plan.badge && isHighlighted ? `<div class="pricing-badge" style="color: ${this.getBestTextColor(this.primaryHex)};">${plan.badge}</div>` : '';
+            const nameColor = isHighlighted ? this.textColor : (this.isLightTheme ? this.textDark : '#D1D5DB');
 
             const featuresHtml = plan.features.map(feature => `
-                <li class="pricing-feature">
-                    <i data-lucide="check-circle" class="pricing-feature-icon" style="color: ${isHighlighted ? this.primaryHex : '#6B7280'};"></i>
+                <li class="pricing-feature" style="color: ${this.isLightTheme ? this.textDark : this.textColor};">
+                    <i data-lucide="check-circle" class="pricing-feature-icon" style="color: ${isHighlighted ? this.primaryHex : (this.isLightTheme ? this.textMedium : '#6B7280')};"></i>
                     ${feature}
                 </li>
             `).join('');

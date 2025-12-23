@@ -21,8 +21,21 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
 
         // Resolve cores do tema
         this.backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0a0a0e');
+        this.isLightTheme = this.isLightColor(this.backgroundHex);
         this.textColor = this.getBestTextColor(this.backgroundHex, 4.5);
-        this.borderColor = this.resolveColorHex(data.colors?.border, null, '#FFFFFF');
+        this.borderColor = this.isLightTheme ? this.resolveColorHex(data.colors?.border, null, '#1F2937') : this.resolveColorHex(data.colors?.border, null, '#FFFFFF');
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+        }
     }
 
     /**
@@ -36,12 +49,12 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
         style.textContent = `
             .footer-dark {
                 border-top: 1px solid ${this.hexToRgba(this.borderColor, 0.1)};
-                background: ${this.backgroundHex};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.backgroundHex};
                 padding-top: 64px;
                 padding-bottom: 32px;
                 position: relative;
                 z-index: 10;
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 font-size: 0.875rem;
             }
             .footer-grid {
@@ -70,12 +83,12 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
                 gap: 8px;
             }
             .footer-link {
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 transition: color 0.3s;
                 cursor: pointer;
             }
             .footer-link:hover {
-                color: ${this.textColor};
+                color: ${this.isLightTheme ? this.textDark : this.textColor};
             }
             .footer-bottom {
                 text-align: center;

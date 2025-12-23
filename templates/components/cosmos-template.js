@@ -101,6 +101,37 @@
         }
 
         /**
+         * Aplica background, cores e fontes do tema automaticamente
+         */
+        applyTheme() {
+            if (!window.config || !window.config.theme) {
+                return;
+            }
+
+            // Aplica cores e background
+            if (window.config.theme.colors) {
+                const bgColor = window.config.theme.colors.background || '#0f0f13';
+                const textColor = window.config.theme.colors.text?.dark || '#1F2937';
+                const isLight = bgColor === '#FFFFFF' || bgColor.toLowerCase() === '#ffffff' || bgColor.toLowerCase() === 'white';
+
+                if (document.body) {
+                    document.body.style.backgroundColor = bgColor;
+                    document.body.style.color = isLight ? textColor : '#FFFFFF';
+                }
+            }
+
+            // Aplica fontes
+            if (window.config.theme.fonts) {
+                // Aplica fonte primária ao body
+                if (window.config.theme.fonts.primary && document.body) {
+                    document.body.style.fontFamily = window.config.theme.fonts.primary;
+                }
+            }
+
+            console.log('✅ Tema aplicado');
+        }
+
+        /**
          * Define o título da página
          */
         setPageTitle() {
@@ -144,22 +175,25 @@
 
             console.log('🎨 Cosmos Template - Inicializando...');
 
-            // 1. Injeta CSS
+            // 1. Aplica tema (background, cores e fontes)
+            this.applyTheme();
+
+            // 2. Injeta CSS
             this.injectCSS();
 
-            // 2. Injeta Google Fonts
+            // 3. Injeta Google Fonts
             this.injectGoogleFonts();
 
-            // 3. Configura Tailwind
+            // 4. Configura Tailwind
             this.configureTailwind();
 
-            // 4. Define título da página
+            // 5. Define título da página
             this.setPageTitle();
 
-            // 5. Injeta e aguarda scripts
+            // 6. Injeta e aguarda scripts
             await this.injectScripts();
 
-            // 6. Inicializa AOS
+            // 7. Inicializa AOS
             if (typeof AOS !== 'undefined') {
                 AOS.init({
                     duration: 800,
@@ -169,7 +203,7 @@
                 console.log('✅ AOS inicializado');
             }
 
-            // 7. Inicializa componentes
+            // 8. Inicializa componentes
             await this.initializeComponents();
 
             this.initialized = true;

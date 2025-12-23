@@ -16,8 +16,23 @@ class SocialProofLogosComponent extends BaseComponent {
         this.logos = data.logos || [];
 
         // Resolve cores do tema
-        this.textColor = this.resolveColorHex(data.colors?.text, null, '#6B7280');
-        this.borderColor = this.resolveColorHex(data.colors?.border, null, '#FFFFFF');
+        const backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
+        this.isLightTheme = this.isLightColor(backgroundHex);
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+        }
+
+        this.textColor = this.isLightTheme ? this.textMedium : '#6B7280';
+        this.borderColor = this.isLightTheme ? this.textDark : '#FFFFFF';
     }
 
     /**
@@ -30,9 +45,9 @@ class SocialProofLogosComponent extends BaseComponent {
         style.id = 'social-proof-logos-styles';
         style.textContent = `
             .social-proof {
-                border-top: 1px solid ${this.hexToRgba(this.borderColor, 0.05)};
-                border-bottom: 1px solid ${this.hexToRgba(this.borderColor, 0.05)};
-                background: ${this.hexToRgba('#000000', 0.2)};
+                border-top: 1px solid ${this.hexToRgba(this.borderColor, 0.1)};
+                border-bottom: 1px solid ${this.hexToRgba(this.borderColor, 0.1)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.hexToRgba('#000000', 0.2)};
                 backdrop-filter: blur(4px);
                 padding: 40px 0;
                 position: relative;
@@ -69,7 +84,10 @@ class SocialProofLogosComponent extends BaseComponent {
             .social-proof-logo-icon {
                 width: 24px;
                 height: 24px;
-                background: #FFFFFF;
+                background: ${this.isLightTheme ? this.textLight : '#FFFFFF'};
+            }
+            .social-proof-logo span {
+                color: ${this.isLightTheme ? this.textDark : '#FFFFFF'};
             }
             @media (min-width: 768px) {
                 .social-proof-logos { gap: 64px; }

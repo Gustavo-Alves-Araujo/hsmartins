@@ -213,6 +213,12 @@
                 this.mount(type, props, container);
             }
 
+            // Inicializa ícones Lucide após todos os componentes serem montados
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+                console.log('✅ Ícones Lucide inicializados');
+            }
+
             console.log('🎉 Todos os componentes montados!');
         }
 

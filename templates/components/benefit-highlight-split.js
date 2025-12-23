@@ -26,7 +26,21 @@ class BenefitHighlightSplitComponent extends BaseComponent {
         // Resolve cores do tema
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');
         this.secondaryHex = this.resolveColorHex(data.colors?.secondary, 'secondary', '#3B82F6');
-        this.textColor = this.getBestTextColor(this.resolveColorHex(data.colors?.background, 'background', '#0f0f13'), 4.5);
+        const backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
+        this.isLightTheme = this.isLightColor(backgroundHex);
+        this.textColor = this.getBestTextColor(backgroundHex, 4.5);
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+        }
     }
 
     /**
@@ -42,7 +56,7 @@ class BenefitHighlightSplitComponent extends BaseComponent {
                 padding: 96px 0;
                 position: relative;
                 z-index: 10;
-                background: linear-gradient(to bottom, transparent, ${this.hexToRgba('#000000', 0.3)});
+                background: ${this.isLightTheme ? 'transparent' : `linear-gradient(to bottom, transparent, ${this.hexToRgba('#000000', 0.3)})`};
             }
             .benefit-highlight-content {
                 display: flex;
@@ -66,8 +80,8 @@ class BenefitHighlightSplitComponent extends BaseComponent {
             }
             .benefit-visual-card {
                 position: relative;
-                background: #1a1a24;
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.1)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.05) : '#1a1a24'};
+                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.1)};
                 border-radius: 1rem;
                 padding: 32px;
                 height: 400px;
@@ -97,7 +111,7 @@ class BenefitHighlightSplitComponent extends BaseComponent {
                 color: ${this.textColor};
             }
             .benefit-description {
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 font-size: 1.125rem;
                 margin-bottom: 32px;
             }
@@ -109,7 +123,7 @@ class BenefitHighlightSplitComponent extends BaseComponent {
             .benefit-item {
                 display: flex;
                 align-items: center;
-                color: #D1D5DB;
+                color: ${this.isLightTheme ? this.textDark : '#D1D5DB'};
             }
             .benefit-item-icon {
                 width: 24px;

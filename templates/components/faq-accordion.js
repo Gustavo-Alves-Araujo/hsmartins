@@ -17,7 +17,21 @@ class FaqAccordionComponent extends BaseComponent {
 
         // Resolve cores do tema
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');
-        this.textColor = this.getBestTextColor(this.resolveColorHex(data.colors?.background, 'background', '#0f0f13'), 4.5);
+        const backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
+        this.isLightTheme = this.isLightColor(backgroundHex);
+        this.textColor = this.getBestTextColor(backgroundHex, 4.5);
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+        }
     }
 
     /**
@@ -49,8 +63,8 @@ class FaqAccordionComponent extends BaseComponent {
                 margin: 0 auto;
             }
             .faq-item {
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.hexToRgba('#FFFFFF', 0.05)};
+                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.05)};
                 border-radius: 0.75rem;
                 overflow: hidden;
                 backdrop-filter: blur(4px);
@@ -70,7 +84,7 @@ class FaqAccordionComponent extends BaseComponent {
                 transition: background 0.3s;
             }
             .faq-button:hover {
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.05) : this.hexToRgba('#FFFFFF', 0.05)};
             }
             .faq-icon {
                 width: 20px;
@@ -89,7 +103,7 @@ class FaqAccordionComponent extends BaseComponent {
                 padding: 0 20px 20px;
             }
             .faq-answer {
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 padding-bottom: 20px;
             }
             .faq-item.active .faq-icon {

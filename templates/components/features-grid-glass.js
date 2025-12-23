@@ -21,7 +21,21 @@ class FeaturesGridGlassComponent extends BaseComponent {
 
         // Resolve cores do tema
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');
-        this.textColor = this.getBestTextColor(this.resolveColorHex(data.colors?.background, 'background', '#0f0f13'), 4.5);
+        const backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
+        this.isLightTheme = this.isLightColor(backgroundHex);
+        this.textColor = this.getBestTextColor(backgroundHex, 4.5);
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+        }
     }
 
     /**
@@ -49,7 +63,7 @@ class FeaturesGridGlassComponent extends BaseComponent {
                 color: ${this.textColor};
             }
             .features-grid-subtitle {
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 max-width: 42rem;
                 margin: 0 auto;
             }
@@ -61,26 +75,26 @@ class FeaturesGridGlassComponent extends BaseComponent {
             .feature-card {
                 padding: 32px;
                 border-radius: 1rem;
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
-                border: 1px solid ${this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.hexToRgba('#FFFFFF', 0.05)};
+                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.05)};
                 transition: all 0.3s;
                 backdrop-filter: blur(12px);
             }
             .feature-card:hover {
-                background: ${this.hexToRgba('#FFFFFF', 0.1)};
-                border-color: ${this.hexToRgba('#FFFFFF', 0.2)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.05) : this.hexToRgba('#FFFFFF', 0.1)};
+                border-color: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.2) : this.hexToRgba('#FFFFFF', 0.2)};
                 transform: translateY(-8px);
             }
             .feature-icon-wrapper {
                 margin-bottom: 24px;
                 padding: 12px;
-                background: ${this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.03) : this.hexToRgba('#FFFFFF', 0.05)};
                 border-radius: 8px;
                 width: fit-content;
                 transition: background 0.3s;
             }
             .feature-card:hover .feature-icon-wrapper {
-                background: ${this.hexToRgba('#FFFFFF', 0.1)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.08) : this.hexToRgba('#FFFFFF', 0.1)};
             }
             .feature-icon {
                 width: 32px;
@@ -93,7 +107,7 @@ class FeaturesGridGlassComponent extends BaseComponent {
                 color: ${this.textColor};
             }
             .feature-description {
-                color: #9CA3AF;
+                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 line-height: 1.75;
             }
             @media (min-width: 768px) {

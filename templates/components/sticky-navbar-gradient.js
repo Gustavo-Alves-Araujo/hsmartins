@@ -21,6 +21,39 @@ class StickyNavbarGradientComponent extends BaseComponent {
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');
         this.secondaryHex = this.resolveColorHex(data.colors?.secondary, 'secondary', '#EC4899');
         this.backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
+
+        // Detecta se o tema é claro (background claro)
+        this.isLightTheme = this.isLightColor(this.backgroundHex);
+
+        // Resolve cores de texto do tema
+        const theme = this.getGlobalTheme();
+        if (theme && theme.colors && theme.colors.text) {
+            this.textDark = theme.colors.text.dark || '#1F2937';
+            this.textMedium = theme.colors.text.medium || '#4B5563';
+            this.textLight = theme.colors.text.light || '#9CA3AF';
+            this.textWhite = theme.colors.text.white || '#FFFFFF';
+        } else {
+            this.textDark = '#1F2937';
+            this.textMedium = '#4B5563';
+            this.textLight = '#9CA3AF';
+            this.textWhite = '#FFFFFF';
+        }
+    }
+
+    /**
+     * Verifica se uma cor é clara (para detectar tema claro)
+     * @param {string} hex - Cor hexadecimal
+     * @returns {boolean} true se a cor for clara
+     */
+    isLightColor(hex) {
+        if (!hex || !hex.startsWith('#')) return false;
+        const color = hex.substring(1);
+        const r = parseInt(color.substring(0, 2), 16);
+        const g = parseInt(color.substring(2, 4), 16);
+        const b = parseInt(color.substring(4, 6), 16);
+        // Calcula luminância relativa
+        const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+        return luminance > 0.5;
     }
 
     /**
@@ -42,10 +75,10 @@ class StickyNavbarGradientComponent extends BaseComponent {
                 padding: 24px 0;
             }
             .sticky-navbar.scrolled {
-                background: ${this.hexToRgba(this.backgroundHex, 0.8)};
+                background: ${this.isLightTheme ? this.hexToRgba(this.backgroundHex, 0.95) : this.hexToRgba(this.backgroundHex, 0.8)};
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
-                border-bottom-color: ${this.hexToRgba('#FFFFFF', 0.1)};
+                border-bottom-color: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.1)};
                 padding: 16px 0;
             }
             .navbar-logo {
@@ -61,30 +94,30 @@ class StickyNavbarGradientComponent extends BaseComponent {
                 display: none;
             }
             .navbar-menu-item {
-                color: #D1D5DB;
+                color: ${this.isLightTheme ? this.textMedium : '#D1D5DB'};
                 font-size: 0.875rem;
                 font-weight: 500;
                 transition: color 0.3s;
             }
             .navbar-menu-item:hover {
-                color: #FFFFFF;
+                color: ${this.isLightTheme ? this.textDark : '#FFFFFF'};
             }
             .navbar-cta {
-                background: #FFFFFF;
-                color: #000000;
+                background: ${this.primaryHex};
+                color: ${this.getBestTextColor(this.primaryHex)};
                 padding: 8px 20px;
                 border-radius: 9999px;
                 font-weight: 700;
                 transition: all 0.3s;
-                box-shadow: 0 0 20px ${this.hexToRgba('#FFFFFF', 0.3)};
+                box-shadow: 0 0 20px ${this.hexToRgba(this.primaryHex, 0.3)};
             }
             .navbar-cta:hover {
-                background: #F3F4F6;
+                background: ${this.darkenColor(this.primaryHex, 0.1)};
                 transform: scale(1.05);
             }
             .navbar-mobile-toggle {
                 display: block;
-                color: #FFFFFF;
+                color: ${this.isLightTheme ? this.textDark : '#FFFFFF'};
             }
             .navbar-mobile-menu {
                 display: none;
@@ -92,8 +125,8 @@ class StickyNavbarGradientComponent extends BaseComponent {
                 top: 100%;
                 left: 0;
                 width: 100%;
-                background: #16161d;
-                border-bottom: 1px solid ${this.hexToRgba('#FFFFFF', 0.1)};
+                background: ${this.isLightTheme ? this.backgroundHex : '#16161d'};
+                border-bottom: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.1)};
                 padding: 24px;
                 flex-direction: column;
                 gap: 16px;
@@ -104,7 +137,7 @@ class StickyNavbarGradientComponent extends BaseComponent {
             }
             .navbar-mobile-link {
                 text-align: left;
-                color: #D1D5DB;
+                color: ${this.isLightTheme ? this.textMedium : '#D1D5DB'};
                 padding: 8px 0;
             }
             .navbar-mobile-cta {
