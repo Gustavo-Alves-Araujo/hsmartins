@@ -76,14 +76,14 @@ class PricingGridHighlightComponent extends BaseComponent {
             .pricing-card {
                 padding: 32px;
                 border-radius: 1.5rem;
-                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.hexToRgba('#FFFFFF', 0.05)};
+                background: ${this.isLightTheme ? '#FFFFFF' : this.hexToRgba('#FFFFFF', 0.05)};
                 border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.05)};
                 display: flex;
                 flex-direction: column;
                 backdrop-filter: blur(4px);
             }
             .pricing-card-highlighted {
-                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.08) : this.hexToRgba('#1e1e2d', 0.8)};
+                background: ${this.isLightTheme ? '#FFFFFF' : this.hexToRgba('#1e1e2d', 0.8)};
                 border-color: ${this.hexToRgba(this.primaryHex, 0.5)};
                 box-shadow: 0 0 40px ${this.hexToRgba(this.primaryHex, 0.15)};
                 transform: translateY(-16px);
