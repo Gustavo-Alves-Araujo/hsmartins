@@ -9,7 +9,9 @@
  * - Dependency Inversion: Componentes dependem da abstração (tema global)
  */
 
-class BaseComponent {
+// Previne redeclaração da classe
+if (typeof BaseComponent === 'undefined') {
+    class BaseComponent {
     /**
      * Helper para aplicar variação de cor automaticamente
      * @param {string} colorBase - Nome base da cor (ex: 'purple', 'green', 'brand-dark')
@@ -17,6 +19,10 @@ class BaseComponent {
      * @returns {string} Cor com variação aplicada (ex: 'purple-900', 'green-700')
      */
     getColorVariant(colorBase, variant) {
+        // Se é um valor hex, retorna como está (não aplica variação)
+        if (colorBase && typeof colorBase === 'string' && colorBase.startsWith('#')) {
+            return colorBase;
+        }
         // Se já tem uma variação ou é uma cor especial (white, black), retorna como está
         if (colorBase.includes('-') || colorBase === 'white' || colorBase === 'black') {
             return colorBase;
@@ -357,10 +363,14 @@ class BaseComponent {
         const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
         return luminance > 0.5;
     }
-}
+    }
 
-// Exporta a classe base
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = BaseComponent;
+    // Torna a classe disponível globalmente
+    window.BaseComponent = BaseComponent;
+
+    // Exporta a classe base para módulos
+    if (typeof module !== 'undefined' && module.exports) {
+        module.exports = BaseComponent;
+    }
 }
 

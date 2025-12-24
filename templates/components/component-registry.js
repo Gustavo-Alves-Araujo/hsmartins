@@ -63,6 +63,29 @@
                 return true;
             }
 
+            // Verifica se o script já está sendo carregado ou já foi adicionado ao DOM
+            const existingScript = document.querySelector(`script[src="${this.componentsPath}base-component.js"]`);
+            if (existingScript) {
+                // Script já existe, aguarda ele carregar
+                return new Promise((resolve) => {
+                    if (typeof BaseComponent !== 'undefined') {
+                        resolve(true);
+                        return;
+                    }
+                    const checkInterval = setInterval(() => {
+                        if (typeof BaseComponent !== 'undefined') {
+                            clearInterval(checkInterval);
+                            resolve(true);
+                        }
+                    }, 50);
+                    // Timeout após 5 segundos
+                    setTimeout(() => {
+                        clearInterval(checkInterval);
+                        resolve(false);
+                    }, 5000);
+                });
+            }
+
             return new Promise((resolve) => {
                 const baseScript = document.createElement('script');
                 baseScript.src = `${this.componentsPath}base-component.js`;

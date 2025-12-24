@@ -57,31 +57,55 @@
                 return;
             }
 
-            // Cria script de configuração do Tailwind
-            const tailwindConfig = document.createElement('script');
-            tailwindConfig.textContent = `
-                tailwind.config = {
-                    theme: {
-                        extend: {
-                            colors: {
-                                brand: {
-                                    dark: '${window.config.theme.colors.primary}',
-                                    light: '${window.config.theme.colors.primaryLight}',
-                                    cream: '${window.config.theme.colors.background}',
-                                    gold: '${window.config.theme.colors.accent}'
+            // Verifica se há script do Tailwind CDN na página
+            const tailwindScript = document.querySelector('script[src*="tailwindcss"]');
+            if (!tailwindScript) {
+                console.warn('⚠️ Tailwind CSS não encontrado na página. A configuração será pulada.');
+                return;
+            }
+
+            // Verifica se Tailwind está disponível (com timeout)
+            let attempts = 0;
+            const maxAttempts = 50; // 5 segundos máximo
+
+            const checkTailwind = () => {
+                attempts++;
+
+                if (typeof tailwind !== 'undefined') {
+                    // Cria script de configuração do Tailwind
+                    const tailwindConfig = document.createElement('script');
+                    tailwindConfig.textContent = `
+                        tailwind.config = {
+                            theme: {
+                                extend: {
+                                    colors: {
+                                        brand: {
+                                            dark: '${window.config.theme.colors.primary}',
+                                            light: '${window.config.theme.colors.primaryLight}',
+                                            cream: '${window.config.theme.colors.background}',
+                                            gold: '${window.config.theme.colors.accent}'
+                                        }
+                                    },
+                                    fontFamily: {
+                                        serif: [${JSON.stringify(window.config.theme.fonts.primary)}],
+                                        sans: [${JSON.stringify(window.config.theme.fonts.secondary)}]
+                                    }
                                 }
-                            },
-                            fontFamily: {
-                                serif: [${JSON.stringify(window.config.theme.fonts.primary)}],
-                                sans: [${JSON.stringify(window.config.theme.fonts.secondary)}]
                             }
                         }
-                    }
+                    `;
+                    document.head.appendChild(tailwindConfig);
+                    console.log('✅ Tailwind configurado');
+                } else if (attempts < maxAttempts) {
+                    // Tenta novamente após um pequeno delay
+                    setTimeout(checkTailwind, 100);
+                } else {
+                    console.warn('⚠️ Tailwind CSS não carregou a tempo. A configuração será pulada.');
                 }
-            `;
-            document.head.appendChild(tailwindConfig);
+            };
 
-            console.log('✅ Tailwind configurado');
+            // Inicia a verificação
+            checkTailwind();
         }
 
         /**

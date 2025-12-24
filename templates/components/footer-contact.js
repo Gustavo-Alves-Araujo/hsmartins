@@ -40,24 +40,24 @@ class FooterContactComponent extends BaseComponent {
         this.copyright = data.copyright;
         this.tags = data.tags || [];
 
-        // Resolve cores base (override > tema > fallback)
-        const bgBase = this.resolveColor(data.colors?.background, 'background', 'brand-cream');
-        const titleBase = this.resolveColor(data.colors?.titleColor, 'primary', 'brand-dark');
-        const textBase = this.resolveColor(data.colors?.textColor, null, 'gray');
-        const textStrongBase = this.resolveColor(data.colors?.textStrong, 'primary', 'gray');
-        const textMutedBase = this.resolveColor(data.colors?.textMuted, null, 'gray');
-        const iconBase = this.resolveColor(data.colors?.iconColor, 'primary', 'brand-dark');
-        const borderBase = this.resolveColor(data.colors?.borderColor, null, 'brand-dark');
+        // Resolve cores hexadecimais para usar em estilos inline
+        const bgHex = this.resolveColorHex(data.colors?.background, 'background', '#FFFFFF');
+        const titleHex = this.resolveColorHex(data.colors?.titleColor, 'primary', '#1F2937');
+        const textHex = this.resolveColorHex(data.colors?.textColor, null, '#4B5563');
+        const textStrongHex = this.resolveColorHex(data.colors?.textStrong, 'primary', '#1F2937');
+        const textMutedHex = this.resolveColorHex(data.colors?.textMuted, null, '#6B7280');
+        const iconHex = this.resolveColorHex(data.colors?.iconColor, 'primary', '#DC2626');
+        const borderHex = this.resolveColorHex(data.colors?.borderColor, null, '#D1D5DB');
 
-        // Aplica variações automáticas conforme o contexto
+        // Armazena cores hexadecimais para usar em estilos inline
         this.colors = {
-            background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
-            titleColor: this.getColorVariant(titleBase, 900),
-            textColor: this.getColorVariant(textBase, 700),
-            textStrong: this.getColorVariant(textStrongBase, 900),
-            textMuted: this.getColorVariant(textMutedBase, 600),
-            iconColor: this.getColorVariant(iconBase, 600),
-            borderColor: this.getColorVariant(borderBase, 300),
+            background: bgHex,
+            titleColor: titleHex,
+            textColor: textHex,
+            textStrong: textStrongHex,
+            textMuted: textMutedHex,
+            iconColor: iconHex,
+            borderColor: borderHex,
         };
     }
 
@@ -73,7 +73,10 @@ class FooterContactComponent extends BaseComponent {
             <a href="${link.href}"
                target="_blank"
                aria-label="${link.label}"
-               class="w-12 h-12 rounded-full border border-${c.borderColor} text-${c.iconColor} flex items-center justify-center hover:bg-${c.iconColor} hover:text-white transition-all">
+               style="width: 3rem; height: 3rem; border: 1px solid ${c.borderColor}; color: ${c.iconColor};"
+               class="rounded-full flex items-center justify-center transition-all hover:opacity-80"
+               onmouseover="this.style.backgroundColor='${c.iconColor}'; this.style.color='white';"
+               onmouseout="this.style.backgroundColor='transparent'; this.style.color='${c.iconColor}';">
                 <i class="${link.icon} text-xl"></i>
             </a>
         `;
@@ -95,22 +98,22 @@ class FooterContactComponent extends BaseComponent {
         const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(this.address.mapQuery || this.address.street)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
         return `
-            <footer id="location" class="bg-${c.background} border-t border-${c.borderColor}/10 pt-16 md:pt-20 pb-10">
+            <footer id="location" style="background-color: ${c.background}; border-top: 1px solid ${this.hexToRgba(c.borderColor, 0.1)};" class="pt-16 md:pt-20 pb-10">
                 <div class="container mx-auto px-6">
-                    <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                    <div class="grid md:grid-cols-2 gap-12 items-start mb-16">
                         <!-- Contact Info -->
                         <div>
-                            <h3 class="font-serif text-2xl md:text-3xl text-${c.titleColor} mb-6 font-medium">
+                            <h3 style="color: ${c.titleColor};" class="font-serif text-2xl md:text-3xl mb-6 font-medium">
                                 ${this.title}
                             </h3>
 
-                            <address class="not-italic text-${c.textColor} space-y-4 mb-8">
+                            <address style="color: ${c.textColor};" class="not-italic space-y-4 mb-8">
                                 <!-- Address -->
                                 ${this.address.street ? `
                                     <div class="flex items-start gap-4">
-                                        <i class="fas fa-map-pin mt-1 text-${c.iconColor}"></i>
+                                        <i style="color: ${c.iconColor};" class="fas fa-map-pin mt-1"></i>
                                         <div>
-                                            <strong class="block text-${c.textStrong} mb-1">${this.address.label}</strong>
+                                            <strong style="color: ${c.textStrong};" class="block mb-1">${this.address.label}</strong>
                                             <span>${this.address.street}</span><br>
                                             <span>${this.address.city}</span><br>
                                             ${this.address.zipCode ? `<span>${this.address.zipCode}</span>` : ''}
@@ -121,9 +124,9 @@ class FooterContactComponent extends BaseComponent {
                                 <!-- Contact -->
                                 ${this.contact.phone ? `
                                     <div class="flex items-start gap-4">
-                                        <i class="fas fa-phone-alt mt-1 text-${c.iconColor}"></i>
+                                        <i style="color: ${c.iconColor};" class="fas fa-phone-alt mt-1"></i>
                                         <div>
-                                            <strong class="block text-${c.textStrong} mb-1">${this.contact.label}</strong>
+                                            <strong style="color: ${c.textStrong};" class="block mb-1">${this.contact.label}</strong>
                                             <span>${this.contact.phone}</span>
                                         </div>
                                     </div>
@@ -151,15 +154,20 @@ class FooterContactComponent extends BaseComponent {
                                     scrolling="no"
                                     marginheight="0"
                                     marginwidth="0"
-                                    class="grayscale group-hover:grayscale-0 transition-all duration-500">
+                                    style="filter: grayscale(100%); transition: filter 0.5s;"
+                                    onmouseover="this.style.filter='grayscale(0%)';"
+                                    onmouseout="this.style.filter='grayscale(100%)';">
                                 </iframe>
-                                <div class="absolute inset-0 bg-${c.iconColor}/10 group-hover:bg-transparent transition-colors pointer-events-none"></div>
+                                <div style="background-color: ${this.hexToRgba(c.iconColor, 0.1)}; transition: background-color 0.3s;"
+                                     class="absolute inset-0 pointer-events-none"
+                                     onmouseover="this.style.backgroundColor='transparent';"
+                                     onmouseout="this.style.backgroundColor='${this.hexToRgba(c.iconColor, 0.1)}';"></div>
                             </a>
                         ` : ''}
                     </div>
 
                     <!-- Bottom Bar -->
-                    <div class="border-t border-gray-300 pt-8 flex flex-col md:flex-row justify-between items-center text-sm text-${c.textMuted} gap-4">
+                    <div style="border-top: 1px solid ${c.borderColor}; color: ${c.textMuted};" class="pt-8 flex flex-col md:flex-row justify-between items-center text-sm gap-4">
                         <p>${this.copyright}</p>
                         ${this.tags.length > 0 ? `
                             <div class="flex flex-wrap justify-center items-center gap-1">

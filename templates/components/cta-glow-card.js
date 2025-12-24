@@ -164,3 +164,4 @@ if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('cta-glow-card', CtaGlowCardComponent);
 }
 
+

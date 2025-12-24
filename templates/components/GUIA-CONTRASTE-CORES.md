@@ -405,3 +405,4 @@ Se a resposta for NÃO → Contraste insuficiente!
 
 **OBRIGATÓRIO**: Consultar este guia antes de criar QUALQUER configuração de cores.
 
+
