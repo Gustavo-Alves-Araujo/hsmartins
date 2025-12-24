@@ -57,6 +57,11 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
                 color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
                 font-size: 0.875rem;
             }
+            .footer-dark-ecommerce {
+                background-color: #111111;
+                padding-top: 64px;
+                padding-bottom: 32px;
+            }
             .footer-grid {
                 display: grid;
                 grid-template-columns: repeat(2, 1fr);
@@ -66,7 +71,9 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
             .footer-logo {
                 color: ${this.textColor};
                 font-weight: 700;
-                font-size: 1.25rem;
+                font-size: 1.5rem;
+                font-family: 'Space Grotesk', sans-serif;
+                letter-spacing: -0.02em;
                 margin-bottom: 16px;
             }
             .footer-description {
@@ -111,14 +118,17 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
         this.injectStyles();
 
         const columnsHtml = this.columns.map(column => {
-            const linksHtml = column.links.map(link => `
-                <li><a href="${link.href}" class="footer-link">${link.text}</a></li>
-            `).join('');
+            const linksHtml = column.links.map(link => {
+                const linkClass = link.text === 'Outlet' ? 'hover:text-white transition-colors text-red-400' : 'hover:text-white transition-colors';
+                return `
+                    <li><a href="${link.href}" class="text-gray-400 text-sm ${linkClass}">${link.text}</a></li>
+                `;
+            }).join('');
 
             return `
                 <div>
-                    <h4 class="footer-column-title">${column.title}</h4>
-                    <ul class="footer-links">
+                    <h4 class="font-bold uppercase text-sm mb-6 tracking-wider text-white">${column.title}</h4>
+                    <ul class="space-y-3">
                         ${linksHtml}
                     </ul>
                 </div>
@@ -126,16 +136,18 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
         }).join('');
 
         return `
-            <footer class="footer-dark container mx-auto px-6">
-                <div class="footer-grid">
-                    <div>
-                        <div class="footer-logo">${this.logoText}</div>
-                        <p class="footer-description">${this.description}</p>
+            <footer class="bg-brand-black text-white pt-16 pb-8" style="background-color: #111111;">
+                <div class="container mx-auto px-4">
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                        <div>
+                            <h3 class="text-2xl font-display font-bold tracking-tighter uppercase mb-6">${this.logoText}</h3>
+                            <p class="text-gray-400 text-sm mb-6">${this.description}</p>
+                        </div>
+                        ${columnsHtml}
                     </div>
-                    ${columnsHtml}
-                </div>
-                <div class="footer-bottom">
-                    ${this.copyright}
+                    <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <p class="text-gray-500 text-xs">${this.copyright}</p>
+                    </div>
                 </div>
             </footer>
         `;

@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KICKS.BR | O Melhor do Streetwear</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        'brand-black': '#111111',
+                        'brand-gray': '#F5F5F5',
+                        'accent': '#00F0FF', // Cyber Blue accent
+                    },
+                    animation: {
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                    },
+                    keyframes: {
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Hide scrollbar for clean horizontal scroll */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Custom image hover zoom */
+        .img-zoom-container {
+            overflow: hidden;
+        }
+        .img-zoom {
+            transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        .group:hover .img-zoom {
+            transform: scale(1.05);
+        }
+
+        /* Cart Badge Animation */
+        @keyframes pop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .animate-pop {
+            animation: pop 0.2s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-white text-brand-black font-sans antialiased selection:bg-black selection:text-white">
+
+    <!-- Top Bar (Marquee) -->
+    <div class="bg-black text-white text-xs font-bold py-2 overflow-hidden whitespace-nowrap">
+        <div class="inline-flex gap-8 animate-marquee">
+            <span>FRETE GRÁTIS PARA TODO O BRASIL ACIMA DE R$ 299</span>
+            <span>•</span>
+            <span>PARCELAMENTO EM ATÉ 10X SEM JUROS</span>
+            <span>•</span>
+            <span>5% DE DESCONTO NO PIX</span>
+            <span>•</span>
+            <span>ENVIOS EM ATÉ 24H ÚTEIS</span>
+            <span>•</span>
+            <span>FRETE GRÁTIS PARA TODO O BRASIL ACIMA DE R$ 299</span>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div class="container mx-auto px-4 h-20 flex items-center justify-between">
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="lg:hidden p-2 hover:bg-gray-100 rounded-full">
+                <i data-lucide="menu" class="w-6 h-6"></i>
+            </button>
+
+            <!-- Logo -->
+            <a href="#" class="text-2xl font-display font-bold tracking-tighter uppercase flex items-center gap-1">
+                KICKS<span class="text-xs bg-black text-white px-1 py-0.5 rounded-sm">BR</span>
+            </a>
+
+            <!-- Desktop Links -->
+            <div class="hidden lg:flex items-center gap-8 font-medium text-sm">
+                <a href="#lancamentos" class="hover:underline underline-offset-4 decoration-2">Lançamentos</a>
+                <a href="#masculino" class="hover:underline underline-offset-4 decoration-2">Masculino</a>
+                <a href="#feminino" class="hover:underline underline-offset-4 decoration-2">Feminino</a>
+                <a href="#sale" class="text-red-600 hover:text-red-700 font-bold">SALE</a>
+            </div>
+
+            <!-- Icons -->
+            <div class="flex items-center gap-2">
+                <button class="p-2 hover:bg-gray-100 rounded-full transition-colors hidden sm:block">
+                    <i data-lucide="search" class="w-5 h-5"></i>
+                </button>
+                <button class="p-2 hover:bg-gray-100 rounded-full transition-colors hidden sm:block">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </button>
+                <button id="cart-btn" class="p-2 hover:bg-gray-100 rounded-full transition-colors relative group">
+                    <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    <span id="cart-count" class="absolute top-0 right-0 bg-black text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full opacity-0 transition-opacity">0</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div id="mobile-menu" class="fixed inset-0 z-40 bg-black/50 hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-white w-4/5 h-full max-w-sm p-6 transform -translate-x-full transition-transform duration-300" id="mobile-menu-panel">
+            <div class="flex justify-between items-center mb-8">
+                <span class="font-display font-bold text-xl">MENU</span>
+                <button id="close-mobile-menu" class="p-2 hover:bg-gray-100 rounded-full"><i data-lucide="x" class="w-6 h-6"></i></button>
+            </div>
+            <div class="flex flex-col gap-4 text-lg font-medium">
+                <a href="#" class="border-b pb-2">Lançamentos</a>
+                <a href="#" class="border-b pb-2">Masculino</a>
+                <a href="#" class="border-b pb-2">Feminino</a>
+                <a href="#" class="border-b pb-2 text-red-600">Ofertas</a>
+                <a href="#" class="pt-4 text-sm text-gray-500">Minha Conta</a>
+                <a href="#" class="text-sm text-gray-500">Rastrear Pedido</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="relative bg-brand-gray overflow-hidden">
+        <div class="container mx-auto px-4 py-16 lg:py-24 flex flex-col-reverse lg:flex-row items-center">
+
+            <!-- Text Content -->
+            <div class="lg:w-1/2 z-10 text-center lg:text-left mt-10 lg:mt-0 animate-slide-up">
+                <span class="text-sm font-bold tracking-widest text-gray-500 uppercase mb-4 block">Nova Coleção 2025</span>
+                <h1 class="text-5xl lg:text-7xl font-display font-bold leading-[0.9] mb-6">
+                    URBAN <br> <span class="text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-500">LEGENDS</span>
+                </h1>
+                <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto lg:mx-0">
+                    Descubra os modelos mais exclusivos que definem a cultura urbana. Conforto, estilo e autenticidade em cada passo.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="#lancamentos" class="bg-black text-white px-8 py-4 font-bold uppercase tracking-wider hover:bg-gray-900 transition-all hover:scale-105 shadow-xl">
+                        Ver Coleção
+                    </a>
+                    <a href="#" class="px-8 py-4 font-bold uppercase tracking-wider border border-black hover:bg-black hover:text-white transition-all">
+                        Ver Lookbook
+                    </a>
+                </div>
+            </div>
+
+            <!-- Hero Image -->
+            <div class="lg:w-1/2 relative flex justify-center items-center">
+                <!-- Abstract BG shape -->
+                <div class="absolute w-[300px] h-[300px] lg:w-[500px] lg:h-[500px] bg-gray-300 rounded-full blur-[80px] opacity-60 animate-pulse"></div>
+                <!-- Sneaker Image (SVG Placeholder for reusability, ideally a transparent PNG) -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.5" class="w-full max-w-md drop-shadow-2xl transform -rotate-12 hover:rotate-0 transition-transform duration-700 cursor-pointer text-gray-800">
+                    <path d="M21.5 14.5c.8-2.2-1.5-4.8-1.5-4.8s-2.5-3.2-6.5-2.8c0 0-1.8-1.5-3-1.5s-4.5.8-5.8 2c-1.2 1.2-2.8 2-4 2-1 0-1 2.5.5 3 1.2.5 2.2.8 2.2.8s-1.2 1.5.2 2.8c1.5 1.2 4.2 1.5 6.2 1.5h6.5c1.2 0 3-1.2 3.8-3h-2.5"/>
+                    <path d="M4 14.2s1.5-1.5 2.5 0c1 1.5 3 1.5 3.5.5"/>
+                    <path d="M9.5 7.5c1.8-1.5 3.2-1.2 3.2-1.2"/>
+                    <circle cx="15" cy="19" r="2" class="fill-gray-200"/>
+                    <circle cx="8" cy="19" r="2" class="fill-gray-200"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brands / Social Proof -->
+    <section class="border-y border-gray-200 py-8 bg-white">
+        <div class="container mx-auto px-4">
+            <p class="text-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">Marcas Parceiras</p>
+            <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                <span class="text-xl font-display font-bold">NIKE</span>
+                <span class="text-xl font-display font-bold">ADIDAS</span>
+                <span class="text-xl font-display font-bold">PUMA</span>
+                <span class="text-xl font-display font-bold">NEW BALANCE</span>
+                <span class="text-xl font-display font-bold">VANS</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Products Section -->
+    <section id="lancamentos" class="py-20 container mx-auto px-4">
+        <div class="flex justify-between items-end mb-10">
+            <div>
+                <h2 class="text-3xl md:text-4xl font-display font-bold uppercase">Drops da Semana</h2>
+                <p class="text-gray-500 mt-2">Os modelos mais hypados chegaram.</p>
+            </div>
+            <a href="#" class="hidden md:flex items-center font-bold text-sm border-b border-black pb-1 hover:text-gray-600">VER TODOS <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i></a>
+        </div>
+
+        <!-- Product Grid -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8" id="product-grid">
+            <!-- Products will be injected via JS -->
+        </div>
+
+        <div class="mt-10 text-center md:hidden">
+            <a href="#" class="inline-block border border-black px-6 py-3 font-bold text-sm uppercase">Ver Todos os Produtos</a>
+        </div>
+    </section>
+
+    <!-- Promo Banner -->
+    <section class="py-10 px-4">
+        <div class="container mx-auto bg-black text-white rounded-2xl overflow-hidden relative">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="p-10 md:w-1/2 z-10">
+                    <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-1 uppercase mb-4 inline-block">Oferta Relâmpago</span>
+                    <h3 class="text-3xl md:text-5xl font-display font-bold mb-4 uppercase">Urban Runner V2</h3>
+                    <p class="text-gray-400 mb-6">O tênis mais confortável do mercado com tecnologia de amortecimento responsivo. Design aerodinâmico para a selva de pedra.</p>
+                    <div class="flex items-center gap-4">
+                        <span class="text-2xl font-bold text-yellow-400">R$ 499,90</span>
+                        <span class="text-sm text-gray-500 line-through">R$ 899,90</span>
+                    </div>
+                    <button class="mt-6 bg-white text-black px-8 py-3 font-bold uppercase hover:bg-gray-200 transition-colors">
+                        Comprar Agora
+                    </button>
+                </div>
+                <div class="md:w-1/2 relative h-64 md:h-96 w-full bg-gray-900 flex items-center justify-center overflow-hidden">
+                    <div class="absolute w-full h-full bg-[url('https://images.unsplash.com/photo-1552346154-21d32810aba3?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center opacity-40"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits (Brazil Specific) -->
+    <section class="py-16 border-b border-gray-100">
+        <div class="container mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="flex flex-col items-center text-center p-6 border border-gray-100 rounded-lg hover:shadow-lg transition-shadow">
+                <div class="bg-gray-50 p-4 rounded-full mb-4">
+                    <i data-lucide="credit-card" class="w-8 h-8 text-black"></i>
+                </div>
+                <h4 class="font-bold text-lg mb-2">Parcelamento Facilitado</h4>
+                <p class="text-gray-500 text-sm">Em até 12x no cartão de crédito ou 4x sem juros.</p>
+            </div>
+            <div class="flex flex-col items-center text-center p-6 border border-gray-100 rounded-lg hover:shadow-lg transition-shadow">
+                <div class="bg-gray-50 p-4 rounded-full mb-4">
+                    <i data-lucide="zap" class="w-8 h-8 text-black"></i>
+                </div>
+                <h4 class="font-bold text-lg mb-2">Desconto no PIX</h4>
+                <p class="text-gray-500 text-sm">Ganhe 5% de desconto pagando via PIX com aprovação imediata.</p>
+            </div>
+            <div class="flex flex-col items-center text-center p-6 border border-gray-100 rounded-lg hover:shadow-lg transition-shadow">
+                <div class="bg-gray-50 p-4 rounded-full mb-4">
+                    <i data-lucide="truck" class="w-8 h-8 text-black"></i>
+                </div>
+                <h4 class="font-bold text-lg mb-2">Entrega Expressa</h4>
+                <p class="text-gray-500 text-sm">Frete Grátis para Sul e Sudeste em compras acima de R$ 299.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-brand-black text-white pt-16 pb-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+                <!-- Brand -->
+                <div>
+                    <h3 class="text-2xl font-display font-bold tracking-tighter uppercase mb-6">KICKS.BR</h3>
+                    <p class="text-gray-400 text-sm mb-6">
+                        A maior loja de streetwear do Brasil. Trazendo o lifestyle urbano para seus pés desde 2018.
+                    </p>
+                    <div class="flex gap-4">
+                        <i data-lucide="instagram" class="w-5 h-5 text-gray-400 hover:text-white cursor-pointer"></i>
+                        <i data-lucide="twitter" class="w-5 h-5 text-gray-400 hover:text-white cursor-pointer"></i>
+                        <i data-lucide="facebook" class="w-5 h-5 text-gray-400 hover:text-white cursor-pointer"></i>
+                    </div>
+                </div>
+
+                <!-- Links 1 -->
+                <div>
+                    <h4 class="font-bold uppercase text-sm mb-6 tracking-wider">Comprar</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Lançamentos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Masculino</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Feminino</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Acessórios</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors text-red-400">Outlet</a></li>
+                    </ul>
+                </div>
+
+                <!-- Links 2 -->
+                <div>
+                    <h4 class="font-bold uppercase text-sm mb-6 tracking-wider">Ajuda</h4>
+                    <ul class="space-y-3 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-white transition-colors">Trocas e Devoluções</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Política de Frete</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Guia de Tamanhos</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Fale Conosco</a></li>
+                        <li><a href="#" class="hover:text-white transition-colors">Status do Pedido</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div>
+                    <h4 class="font-bold uppercase text-sm mb-6 tracking-wider">Newsletter</h4>
+                    <p class="text-gray-400 text-sm mb-4">Receba novidades e cupons exclusivos.</p>
+                    <div class="flex">
+                        <input type="email" placeholder="Seu e-mail" class="bg-gray-900 border-none text-white px-4 py-2 w-full text-sm focus:ring-1 focus:ring-white">
+                        <button class="bg-white text-black px-4 font-bold uppercase text-xs hover:bg-gray-200">OK</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-gray-500 text-xs">© 2024 Kicks.br Ltda. CNPJ 00.000.000/0001-00. Todos os direitos reservados.</p>
+
+                <!-- Payment Methods (Visual Mockup) -->
+                <div class="flex items-center gap-3 opacity-70">
+                    <div class="h-6 w-10 bg-gray-700 rounded flex items-center justify-center text-[8px] font-bold">PIX</div>
+                    <div class="h-6 w-10 bg-gray-700 rounded flex items-center justify-center text-[8px] font-bold">VISA</div>
+                    <div class="h-6 w-10 bg-gray-700 rounded flex items-center justify-center text-[8px] font-bold">MC</div>
+                    <div class="h-6 w-10 bg-gray-700 rounded flex items-center justify-center text-[8px] font-bold">AMEX</div>
+                    <div class="h-6 w-10 bg-gray-700 rounded flex items-center justify-center text-[8px] font-bold">ELO</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Shopping Cart Sidebar -->
+    <div id="cart-sidebar" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center bg-gray-50">
+            <h2 class="text-xl font-display font-bold">Seu Carrinho (<span id="cart-total-items">0</span>)</h2>
+            <button id="close-cart" class="p-2 hover:bg-gray-200 rounded-full"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
+
+        <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-6">
+            <!-- Empty State -->
+            <div class="h-full flex flex-col items-center justify-center text-center opacity-50">
+                <i data-lucide="shopping-bag" class="w-16 h-16 mb-4 text-gray-300"></i>
+                <p>Seu carrinho está vazio.</p>
+                <button onclick="document.getElementById('cart-sidebar').classList.add('translate-x-full')" class="mt-4 underline text-sm">Continuar Comprando</button>
+            </div>
+        </div>
+
+        <div class="p-6 border-t bg-gray-50">
+            <div class="flex justify-between mb-2 text-sm">
+                <span>Subtotal</span>
+                <span id="cart-subtotal">R$ 0,00</span>
+            </div>
+            <div class="flex justify-between mb-4 text-sm text-green-600">
+                <span>Desconto PIX (5%)</span>
+                <span id="cart-discount">- R$ 0,00</span>
+            </div>
+            <div class="flex justify-between mb-6 text-xl font-bold">
+                <span>Total</span>
+                <span id="cart-total">R$ 0,00</span>
+            </div>
+            <button class="w-full bg-black text-white py-4 font-bold uppercase hover:bg-gray-800 transition-colors mb-2">
+                Finalizar Compra
+            </button>
+            <p class="text-[10px] text-center text-gray-400">Calcularemos o frete na próxima etapa.</p>
+        </div>
+    </div>
+
+    <!-- Overlay for Cart -->
+    <div id="cart-overlay" class="fixed inset-0 z-40 bg-black/50 hidden opacity-0 transition-opacity duration-300"></div>
+
+    <!-- Notification Toast -->
+    <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-3 rounded-full shadow-2xl z-50 transform translate-y-20 transition-transform duration-300 flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-4 h-4 text-green-400"></i>
+        <span class="text-sm font-medium">Produto adicionado ao carrinho!</span>
+    </div>
+
+    <script>
+        // --- DATA: Products ---
+        // You can easily replace these images and texts for any other niche.
+        const products = [
+            {
+                id: 1,
+                name: "Nike Air Jordan 1 High",
+                price: 1299.90,
+                image: "https://images.unsplash.com/photo-1552346154-21d32810aba3?auto=format&fit=crop&q=80&w=600",
+                badge: "NOVO"
+            },
+            {
+                id: 2,
+                name: "Adidas Yeezy Boost 350",
+                price: 1599.90,
+                image: "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?auto=format&fit=crop&q=80&w=600",
+                badge: "HOT"
+            },
+            {
+                id: 3,
+                name: "New Balance 550 White",
+                price: 899.90,
+                image: "https://images.unsplash.com/photo-1539185441755-769473a23570?auto=format&fit=crop&q=80&w=600",
+                badge: null
+            },
+            {
+                id: 4,
+                name: "Nike Dunk Low Retro",
+                price: 799.90,
+                image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?auto=format&fit=crop&q=80&w=600",
+                badge: "RESTOCK"
+            }
+        ];
+
+        // --- RENDER: Product Grid ---
+        const productGrid = document.getElementById('product-grid');
+
+        products.forEach(product => {
+            const card = document.createElement('div');
+            card.className = "group cursor-pointer";
+            card.innerHTML = `
+                <div class="relative bg-gray-100 mb-4 overflow-hidden rounded-lg img-zoom-container h-[300px] flex items-center justify-center">
+                    ${product.badge ? `<span class="absolute top-3 left-3 bg-black text-white text-[10px] font-bold px-2 py-1 z-10">${product.badge}</span>` : ''}
+                    <img src="${product.image}" alt="${product.name}" class="img-zoom w-full h-full object-cover">
+
+                    <button onclick="addToCart(${product.id})" class="absolute bottom-4 right-4 bg-white p-3 rounded-full shadow-lg translate-y-16 group-hover:translate-y-0 transition-transform duration-300 hover:bg-black hover:text-white">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <div>
+                    <h3 class="font-bold text-lg leading-tight mb-1 group-hover:underline">${product.name}</h3>
+                    <p class="text-gray-500 text-sm mb-2">Casual / Lifestyle</p>
+                    <div class="flex items-center justify-between">
+                        <span class="font-bold">R$ ${product.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                        <span class="text-xs text-gray-400">10x de R$ ${(product.price / 10).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                    </div>
+                </div>
+            `;
+            productGrid.appendChild(card);
+        });
+
+        // --- STATE: Cart ---
+        let cart = [];
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            cart.push(product);
+            updateCartUI();
+            showToast();
+
+            // Open cart logic
+            const sidebar = document.getElementById('cart-sidebar');
+            const overlay = document.getElementById('cart-overlay');
+            sidebar.classList.remove('translate-x-full');
+            overlay.classList.remove('hidden');
+            setTimeout(() => overlay.classList.remove('opacity-0'), 10);
+        }
+
+        function updateCartUI() {
+            // Update badge
+            const countEl = document.getElementById('cart-count');
+            countEl.innerText = cart.length;
+            countEl.classList.remove('opacity-0');
+            countEl.parentElement.classList.add('animate-pop');
+            setTimeout(() => countEl.parentElement.classList.remove('animate-pop'), 200);
+
+            // Update sidebar content
+            const itemsContainer = document.getElementById('cart-items');
+            const totalItemsEl = document.getElementById('cart-total-items');
+            totalItemsEl.innerText = cart.length;
+
+            if (cart.length === 0) {
+                itemsContainer.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-center opacity-50">
+                        <i data-lucide="shopping-bag" class="w-16 h-16 mb-4 text-gray-300"></i>
+                        <p>Seu carrinho está vazio.</p>
+                    </div>`;
+            } else {
+                itemsContainer.innerHTML = cart.map(item => `
+                    <div class="flex gap-4">
+                        <img src="${item.image}" class="w-20 h-20 object-cover rounded bg-gray-100">
+                        <div class="flex-1">
+                            <h4 class="font-bold text-sm">${item.name}</h4>
+                            <p class="text-xs text-gray-500 mb-2">Tamanho: 42 (Exemplo)</p>
+                            <div class="flex justify-between items-center">
+                                <span class="font-bold text-sm">R$ ${item.price.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}</span>
+                                <button class="text-xs text-red-500 hover:underline">Remover</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // Update totals
+            const total = cart.reduce((sum, item) => sum + item.price, 0);
+            document.getElementById('cart-subtotal').innerText = `R$ ${total.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            document.getElementById('cart-discount').innerText = `- R$ ${(total * 0.05).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+            document.getElementById('cart-total').innerText = `R$ ${(total * 0.95).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}`;
+
+            // Re-init lucide icons for new elements
+            lucide.createIcons();
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.remove('translate-y-20');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20');
+            }, 3000);
+        }
+
+        // --- INTERACTION: Cart Sidebar ---
+        const cartBtn = document.getElementById('cart-btn');
+        const closeCartBtn = document.getElementById('close-cart');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const cartOverlay = document.getElementById('cart-overlay');
+
+        function toggleCart() {
+            const isClosed = cartSidebar.classList.contains('translate-x-full');
+            if (isClosed) {
+                cartSidebar.classList.remove('translate-x-full');
+                cartOverlay.classList.remove('hidden');
+                setTimeout(() => cartOverlay.classList.remove('opacity-0'), 10);
+            } else {
+                cartSidebar.classList.add('translate-x-full');
+                cartOverlay.classList.add('opacity-0');
+                setTimeout(() => cartOverlay.classList.add('hidden'), 300);
+            }
+        }
+
+        cartBtn.addEventListener('click', toggleCart);
+        closeCartBtn.addEventListener('click', toggleCart);
+        cartOverlay.addEventListener('click', toggleCart);
+
+        // --- INTERACTION: Mobile Menu ---
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const closeMenuBtn = document.getElementById('close-mobile-menu');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileMenuPanel = document.getElementById('mobile-menu-panel');
+
+        function toggleMenu() {
+            const isHidden = mobileMenu.classList.contains('hidden');
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                setTimeout(() => {
+                    mobileMenu.classList.remove('opacity-0');
+                    mobileMenuPanel.classList.remove('-translate-x-full');
+                }, 10);
+            } else {
+                mobileMenu.classList.add('opacity-0');
+                mobileMenuPanel.classList.add('-translate-x-full');
+                setTimeout(() => mobileMenu.classList.add('hidden'), 300);
+            }
+        }
+
+        menuBtn.addEventListener('click', toggleMenu);
+        closeMenuBtn.addEventListener('click', toggleMenu);
+
+        // --- INIT ---
+        lucide.createIcons();
+    </script>
+</body>
+</html>

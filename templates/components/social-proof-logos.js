@@ -101,6 +101,28 @@ class SocialProofLogosComponent extends BaseComponent {
      * @returns {string} HTML string
      */
     render() {
+        // Se os logos são apenas nomes (sem ícones), renderiza estilo simples como no HTML original
+        const hasIcons = this.logos.some(logo => logo.icon);
+
+        if (!hasIcons) {
+            // Estilo simples para marcas (como no HTML original)
+            const logosHtml = this.logos.map(logo => `
+                <span class="text-xl font-display font-bold">${logo.name}</span>
+            `).join('');
+
+            return `
+                <section class="border-y border-gray-200 py-8 bg-white">
+                    <div class="container mx-auto px-4">
+                        <p class="text-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">${this.title}</p>
+                        <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                            ${logosHtml}
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // Estilo original com ícones (para outros casos)
         this.injectStyles();
 
         const logosHtml = this.logos.map(logo => {

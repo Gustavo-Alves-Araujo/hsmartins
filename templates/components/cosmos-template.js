@@ -81,14 +81,34 @@
                                     colors: {
                                         brand: {
                                             dark: '${window.config.theme.colors.primary}',
-                                            light: '${window.config.theme.colors.primaryLight}',
+                                            light: '${window.config.theme.colors.primaryLight || window.config.theme.colors.secondary}',
                                             cream: '${window.config.theme.colors.background}',
-                                            gold: '${window.config.theme.colors.accent}'
-                                        }
+                                            gold: '${window.config.theme.colors.accent}',
+                                            black: '#111111',
+                                            gray: '#F5F5F5'
+                                        },
+                                        'brand-black': '#111111',
+                                        'brand-gray': '#F5F5F5',
+                                        accent: '${window.config.theme.colors.accent || '#00F0FF'}'
                                     },
                                     fontFamily: {
                                         serif: [${JSON.stringify(window.config.theme.fonts.primary)}],
-                                        sans: [${JSON.stringify(window.config.theme.fonts.secondary)}]
+                                        sans: [${JSON.stringify(window.config.theme.fonts.secondary)}],
+                                        display: [${JSON.stringify(window.config.theme.fonts.secondary || window.config.theme.fonts.primary)}]
+                                    },
+                                    animation: {
+                                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                                        'fade-in': 'fadeIn 0.3s ease-out forwards',
+                                    },
+                                    keyframes: {
+                                        slideUp: {
+                                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                                        },
+                                        fadeIn: {
+                                            '0%': { opacity: '0' },
+                                            '100%': { opacity: '1' },
+                                        }
                                     }
                                 }
                             }
