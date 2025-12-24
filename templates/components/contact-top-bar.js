@@ -1,16 +1,45 @@
 /**
  * Contact Top Bar Component
- * Barra superior com informações de contato e redes sociais
+ * @component
+ * @category navigation
+ * @tags contact,social,header,top-bar,info
+ * @niches personal-trainer,clinics,professional-services,local-business
+ * @requires infoItems,socialLinks
+ * @optional colors
+ * @compatible sticky-header-navigation,header-navigation
+ * @incompatible hero-overlay
+ * @style compact
+ * @theme adapts
+ *
+ * Barra superior com informações de contato e redes sociais.
+ * Ideal para sites que precisam destacar informações de contato no topo da página.
+ *
+ * @example
+ * // Configuração básica
+ * 'contact-top-bar': {
+ *   infoItems: [
+ *     { icon: "fas fa-phone-alt", text: "(11) 98765-4321" },
+ *     { icon: "fas fa-map-marker-alt", text: "São Paulo - SP" }
+ *   ],
+ *   socialLinks: [
+ *     { icon: "fab fa-instagram", href: "https://instagram.com" }
+ *   ]
+ * }
+ *
+ * @see {@link https://github.com/your-repo/components#contact-top-bar|Documentação completa}
  */
-
 class ContactTopBarComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
-     * @param {Array} data.infoItems - Array de itens de informação { icon: string, text: string }
-     * @param {Array} data.socialLinks - Array de links sociais { icon: string, href: string }
-     * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo hexadecimal (ex: '#2c3e50')
-     * @param {string} data.colors.primary - Cor primária hexadecimal (ex: '#16A34A')
+     * @param {Array<Object>} data.infoItems - Array de itens de informação
+     * @param {string} data.infoItems[].icon - Classe do ícone Font Awesome (ex: "fas fa-phone-alt")
+     * @param {string} data.infoItems[].text - Texto do item
+     * @param {Array<Object>} data.socialLinks - Array de links sociais
+     * @param {string} data.socialLinks[].icon - Classe do ícone Font Awesome (ex: "fab fa-instagram")
+     * @param {string} data.socialLinks[].href - URL do link social
+     * @param {Object} [data.colors] - Cores customizáveis (opcional)
+     * @param {string} [data.colors.background] - Cor de fundo hexadecimal (ex: '#2c3e50')
+     * @param {string} [data.colors.primary] - Cor primária hexadecimal (ex: '#16A34A')
      */
     constructor(data) {
         super();

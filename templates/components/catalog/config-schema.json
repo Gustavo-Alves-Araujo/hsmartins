@@ -1,0 +1,262 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Cosmos LP Generator Config Schema",
+  "description": "Schema de validação para arquivos config.js",
+  "type": "object",
+  "required": ["theme", "site"],
+  "properties": {
+    "theme": {
+      "type": "object",
+      "required": ["colors", "fonts"],
+      "properties": {
+        "colors": {
+          "type": "object",
+          "required": ["primary", "background"],
+          "properties": {
+            "primary": {
+              "type": "string",
+              "description": "Cor primária (hexadecimal ou nome Tailwind)",
+              "pattern": "^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$|^[a-z-]+$"
+            },
+            "secondary": {
+              "type": "string",
+              "description": "Cor secundária"
+            },
+            "tertiary": {
+              "type": "string",
+              "description": "Cor terciária"
+            },
+            "accent": {
+              "type": "string",
+              "description": "Cor de destaque"
+            },
+            "background": {
+              "type": "string",
+              "description": "Cor de fundo"
+            },
+            "text": {
+              "type": "object",
+              "properties": {
+                "dark": { "type": "string" },
+                "medium": { "type": "string" },
+                "light": { "type": "string" },
+                "white": { "type": "string" }
+              }
+            }
+          }
+        },
+        "fonts": {
+          "type": "object",
+          "required": ["primary", "secondary"],
+          "properties": {
+            "primary": { "type": "string" },
+            "secondary": { "type": "string" },
+            "urls": {
+              "type": "object",
+              "properties": {
+                "google": { "type": "string", "format": "uri" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "site": {
+      "type": "object",
+      "required": ["title", "name"],
+      "properties": {
+        "title": { "type": "string" },
+        "name": { "type": "string" },
+        "established": { "type": "string" },
+        "logoAlt": { "type": "string" },
+        "logoUrl": { "type": "string", "format": "uri" },
+        "logoFallback": { "type": "string", "format": "uri" }
+      }
+    },
+    "contact-top-bar": {
+      "type": "object",
+      "required": ["infoItems", "socialLinks"],
+      "properties": {
+        "infoItems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "text"],
+            "properties": {
+              "icon": { "type": "string" },
+              "text": { "type": "string" }
+            }
+          }
+        },
+        "socialLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "href"],
+            "properties": {
+              "icon": { "type": "string" },
+              "href": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "colors": {
+          "type": "object",
+          "properties": {
+            "background": { "type": "string" },
+            "primary": { "type": "string" }
+          }
+        }
+      }
+    },
+    "hero-image-badge": {
+      "type": "object",
+      "required": ["title", "titleHighlight", "description", "imageUrl"],
+      "properties": {
+        "tag": { "type": "string" },
+        "tagIcon": { "type": "string" },
+        "title": { "type": "string" },
+        "titleHighlight": { "type": "string" },
+        "description": { "type": "string" },
+        "buttons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "text": { "type": "string" },
+              "href": { "type": "string" },
+              "class": { "type": "string" },
+              "icon": { "type": "string" }
+            }
+          }
+        },
+        "rating": {
+          "type": "object",
+          "properties": {
+            "stars": { "type": "number", "minimum": 1, "maximum": 5 },
+            "text": { "type": "string" }
+          }
+        },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "imageAlt": { "type": "string" },
+        "badge": {
+          "type": "object",
+          "properties": {
+            "icon": { "type": "string" },
+            "title": { "type": "string" },
+            "text": { "type": "string" }
+          }
+        }
+      }
+    },
+    "info-bar": {
+      "type": "object",
+      "required": ["items"],
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "text"],
+            "properties": {
+              "icon": { "type": "string" },
+              "text": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "pricing-grid-highlight": {
+      "type": "object",
+      "required": ["title", "plans"],
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "subtitle": { "type": "string" },
+        "plans": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "price", "features"],
+            "properties": {
+              "name": { "type": "string" },
+              "price": { "type": "string" },
+              "period": { "type": "string" },
+              "description": { "type": "string" },
+              "features": { "type": "array", "items": { "type": "string" } },
+              "button": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "href": { "type": "string" }
+                }
+              },
+              "highlighted": { "type": "boolean" },
+              "badge": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "footer-contact": {
+      "type": "object",
+      "required": ["address", "contact"],
+      "properties": {
+        "title": { "type": "string" },
+        "address": {
+          "type": "object",
+          "required": ["street", "city"],
+          "properties": {
+            "label": { "type": "string" },
+            "street": { "type": "string" },
+            "city": { "type": "string" },
+            "zipCode": { "type": "string" },
+            "mapQuery": { "type": "string" }
+          }
+        },
+        "contact": {
+          "type": "object",
+          "required": ["phone"],
+          "properties": {
+            "label": { "type": "string" },
+            "phone": { "type": "string" }
+          }
+        },
+        "socialLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "href"],
+            "properties": {
+              "icon": { "type": "string" },
+              "href": { "type": "string", "format": "uri" },
+              "label": { "type": "string" }
+            }
+          }
+        },
+        "copyright": { "type": "string" },
+        "tags": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "whatsapp-float-button": {
+      "type": "object",
+      "required": ["href"],
+      "properties": {
+        "icon": { "type": "string" },
+        "text": { "type": "string" },
+        "href": { "type": "string", "format": "uri" },
+        "color": { "type": "string" }
+      }
+    }
+  },
+  "additionalProperties": true,
+  "patternProperties": {
+    "^[a-z-]+$": {
+      "type": "object",
+      "description": "Componentes dinâmicos (chaves com hífen são componentes)"
+    }
+  }
+}
+

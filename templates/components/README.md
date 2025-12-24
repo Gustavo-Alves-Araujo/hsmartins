@@ -1,499 +1,303 @@
-# Component Registry - Sistema Automático de Componentes
+# 🚀 Cosmos LP Generator - Sistema de Componentes
 
-## 🎯 O que é?
+Sistema modular e automatizado para criação de landing pages usando componentes reutilizáveis.
 
-Um sistema que **detecta, carrega e monta componentes automaticamente** baseado no `config.js`.
+## 📋 Índice
 
-**Zero configuração manual. Zero imports. 100% automático.**
+- [Visão Geral](#visão-geral)
+- [Estrutura do Projeto](#estrutura-do-projeto)
+- [Como Usar](#como-usar)
+- [Componentes Disponíveis](#componentes-disponíveis)
+- [Sistema de Recomendações](#sistema-de-recomendações)
+- [Exemplos](#exemplos)
+- [Documentação](#documentação)
 
-## 📦 Como usar
+## 🎯 Visão Geral
 
-### 1. No `config.js` - Componentes na raiz:
+O Cosmos LP Generator é um sistema que permite criar landing pages completas através de um arquivo `config.js`. Os componentes são detectados, carregados e montados automaticamente na ordem especificada.
 
-```javascript
-const config = {
-    // Configurações normais
-    theme: { ... },
-    site: { ... },
+### ✨ Características Principais
 
-    // ========== COMPONENTES ==========
-    // Qualquer chave com hífen é detectada como componente!
-    // Eles são montados na ordem que aparecem aqui
+- ✅ **Zero configuração manual** - Componentes detectados automaticamente
+- ✅ **100% automático** - Carregamento e montagem automáticos
+- ✅ **Reutilizável** - Mesmos componentes em múltiplos templates
+- ✅ **Escalável** - Fácil adicionar novos componentes
+- ✅ **Inteligente** - Sistema de recomendações baseado em contexto
+- ✅ **Validado** - Schema de validação para configs
+- ✅ **Documentado** - Metadata estruturada para IAs
 
-    'hero-overlay': {
-        badge: "Seu badge",
-        title: "Seu título",
-        titleHighlight: "destaque",
-        subtitle: "Descrição...",
-        ctaPrimary: "Botão 1",
-        ctaSecondary: "Botão 2",
-        backgroundImage: "https://...",
-        backgroundAlt: "Alt text",
-        whatsappNumber: "5511999999999",
-        colors: {
-            primary: 'brand-dark',
-            accent: 'brand-gold',
-            text: 'white'
-        }
-    },
+## 📁 Estrutura do Projeto
 
-    'outro-componente': {
-        prop1: "valor1",
-        prop2: "valor2"
-    }
-};
+```
+templates/
+├── components/
+│   ├── catalog/                    # Sistema de catálogo e recomendações
+│   │   ├── components-catalog.json # Metadata de todos os componentes
+│   │   ├── config-schema.json      # Schema de validação JSON
+│   │   └── component-recommender.js # Sistema de recomendações
+│   ├── examples/                   # Exemplos de config por nicho
+│   │   ├── personal-trainer-config.js
+│   │   ├── clinic-config.js
+│   │   ├── saas-config.js
+│   │   ├── restaurant-config.js
+│   │   └── ecommerce-config.js
+│   ├── docs/                       # Documentação
+│   │   ├── COMPONENTES-DISPONIVEIS.md
+│   │   ├── COMO-CRIAR-COMPONENTE.md
+│   │   └── GUIA-CONTRASTE-CORES.md
+│   ├── [componentes].js           # Componentes individuais
+│   ├── base-component.js          # Classe base
+│   ├── component-registry.js      # Sistema de registro
+│   ├── cosmos-template.js          # Inicializador
+│   └── README.md                   # Este arquivo
+└── [templates]/                    # Templates de sites
+    └── [nome-template]/
+        ├── config.js
+        └── index.html
 ```
 
-### 2. No `index.html` - Apenas isso:
+## 🚀 Como Usar
 
-```html
-<head>
-  <script src="config.js"></script>
-  <script src="../components/component-registry.js"></script>
-</head>
+### 1. Criar um Template
 
-<body id="app">
-  <!-- Componentes montam aqui automaticamente -->
-
-  <script>
-    document.addEventListener('DOMContentLoaded', async function () {
-      // Detecta, carrega e monta tudo automaticamente!
-      await componentRegistry.initFromConfig(config, document.getElementById('app'));
-    });
-  </script>
-</body>
-```
-
-## ✨ Magia Automática!
-
-O registry:
-1. 🔍 **Detecta** componentes no config (chaves com hífen como `'hero-overlay'`)
-2. 📥 **Carrega** os arquivos automaticamente (`../components/hero-overlay.js`)
-3. 🎨 **Monta** na ordem que aparecem no config
-4. 🎯 **Cria** os elementos target automaticamente
-
-**Você não faz NADA manualmente!**
-
-## 🎨 Componentes Disponíveis
-
-### header-navigation
-
-Menu de navegação responsivo com logo e links.
-
-**Arquivo:** `header-navigation.js`
-
-**Props:**
-- `logoUrl`: URL do logo
-- `logoAlt`: Texto alternativo do logo
-- `siteName`: Nome do site
-- `established`: Texto de estabelecimento (ex: "Est. 2020")
-- `whatsappNumber`: Número do WhatsApp (usado como fallback)
-- `links`: Objeto com links do menu
-  - `about`: { text: string, href: string }
-  - `services`: { text: string, href: string }
-  - `location`: { text: string, href: string }
-  - `cta`: { text: string, href: string, target?: string }
-
-**Exemplo no config.js:**
-```javascript
-'header-navigation': {
-    logoUrl: "https://...",
-    logoAlt: "Logo",
-    siteName: "Minha Empresa",
-    established: "Est. 2020",
-    whatsappNumber: "5511999999999",
-    links: {
-        about: {
-            text: "Sobre Nós",
-            href: "#about"
-        },
-        services: {
-            text: "Nossos Serviços",
-            href: "#services"
-        },
-        location: {
-            text: "Onde Estamos",
-            href: "#location"
-        },
-        cta: {
-            text: "Fazer Pedido",
-            href: "https://wa.me/5511999999999",
-            target: "_blank"
-        }
-    }
-}
-```
-
-**Nota:** Os links aceitam formato simples (string) para retrocompatibilidade:
-```javascript
-links: {
-    about: "Sobre",  // Usa href padrão: #about
-    services: "Serviços",  // Usa href padrão: #services
-    // ...
-}
-```
-
----
-
-### hero-overlay
-
-Hero com imagem de fundo e overlay escuro customizável.
-
-**Arquivo:** `hero-overlay.js`
-
-**Props:**
-- `badge`: Texto do badge superior
-- `title`: Título principal
-- `titleHighlight`: Parte destacada do título (em itálico)
-- `subtitle`: Subtítulo/descrição
-- `ctaPrimary`: Botão primário (objeto ou string)
-  - Como objeto: { text: string, href: string, target?: string }
-  - Como string: usa WhatsApp como link padrão
-- `ctaSecondary`: Botão secundário (objeto ou string)
-  - Como objeto: { text: string, href: string }
-  - Como string: usa #services como link padrão
-- `backgroundImage`: URL da imagem de fundo
-- `backgroundAlt`: Texto alternativo da imagem
-- `whatsappNumber`: Número do WhatsApp (usado como fallback se CTA for string)
-- `colors`: Objeto com cores personalizadas
-  - `primary`: Cor primária (ex: 'brand-dark', 'purple')
-  - `accent`: Cor de destaque (ex: 'brand-gold', 'amber')
-  - `text`: Cor do texto (ex: 'white', 'slate')
-
-**Exemplo no config.js (formato completo):**
-```javascript
-'hero-overlay': {
-    badge: "Desde 2020",
-    title: "Bem-vindo",
-    titleHighlight: "ao futuro",
-    subtitle: "Descrição...",
-    ctaPrimary: {
-        text: "Fazer Pedido",
-        href: "https://wa.me/5511999999999",
-        target: "_blank"
-    },
-    ctaSecondary: {
-        text: "Explorar Produtos",
-        href: "#products"
-    },
-    backgroundImage: "https://...",
-    backgroundAlt: "Imagem",
-    whatsappNumber: "5511999999999",
-    colors: {
-        primary: 'brand-dark',
-        accent: 'brand-gold',
-        text: 'white'
-    }
-}
-```
-
-**Exemplo no config.js (formato simplificado - retrocompatível):**
-```javascript
-'hero-overlay': {
-    badge: "Desde 2020",
-    title: "Bem-vindo",
-    titleHighlight: "ao futuro",
-    subtitle: "Descrição...",
-    ctaPrimary: "Fazer Pedido",  // String - usa WhatsApp automaticamente
-    ctaSecondary: "Explorar",    // String - usa #services automaticamente
-    backgroundImage: "https://...",
-    backgroundAlt: "Imagem",
-    whatsappNumber: "5511999999999",
-    colors: {
-        primary: 'brand-dark',
-        accent: 'brand-gold',
-        text: 'white'
-    }
-}
-```
-
----
-
-## 🔧 API do Component Registry
-
-### Métodos Disponíveis
-
-#### `componentRegistry.create(config)`
-Cria um componente individual:
-```javascript
-componentRegistry.create({
-    type: 'hero-overlay',
-    target: 'hero-component',
-    props: { /* ... */ }
-});
-```
-
-#### `componentRegistry.createMany(componentsArray)`
-Cria múltiplos componentes:
-```javascript
-componentRegistry.createMany([
-    { type: 'hero-overlay', target: 'hero', props: {} },
-    { type: 'outro', target: 'outro', props: {} }
-]);
-```
-
-#### `componentRegistry.initFromConfig(config)`
-Inicializa componentes a partir do config.js (recomendado):
-```javascript
-componentRegistry.initFromConfig(config);
-```
-
-#### `componentRegistry.getInstance(target)`
-Obtém a instância de um componente montado:
-```javascript
-const heroInstance = componentRegistry.getInstance('hero-component');
-```
-
-#### `componentRegistry.listAvailable()`
-Lista todos os componentes disponíveis:
-```javascript
-const available = componentRegistry.listAvailable();
-// ['hero-overlay', 'outro-componente']
-```
-
-#### `componentRegistry.destroy(target)`
-Remove um componente do DOM:
-```javascript
-componentRegistry.destroy('hero-component');
-```
-
-#### `componentRegistry.register(type, ComponentClass, path)`
-Registra um novo tipo de componente:
-```javascript
-componentRegistry.register('meu-componente', MeuComponente, '../components/meu-componente.js');
-```
-
-## 🆕 Como adicionar novos componentes
-
-### 1. Crie o arquivo do componente
-
-Exemplo: `templates/components/meu-componente.js`
-
-```javascript
-class MeuComponente {
-    constructor(data) {
-        this.titulo = data.titulo;
-        // ... outras props
-    }
-
-    render() {
-        return `
-            <div>
-                <h1>${this.titulo}</h1>
-            </div>
-        `;
-    }
-
-    mount(targetId) {
-        const target = document.getElementById(targetId);
-        if (target) {
-            target.innerHTML = this.render();
-        }
-    }
-
-    static create(data, targetId) {
-        const component = new MeuComponente(data);
-        component.mount(targetId);
-        return component;
-    }
-}
-```
-
-### 2. Registre no Component Registry
-
-Edite `component-registry.js`:
-
-```javascript
-this.componentMap = {
-    'hero-overlay': {
-        class: HeroComponent,
-        path: '../components/hero-overlay.js'
-    },
-    'meu-componente': {  // Adicione aqui
-        class: MeuComponente,
-        path: '../components/meu-componente.js'
-    }
-};
-```
-
-### 3. Use no config.js
-
-```javascript
-components: [
-    {
-        type: 'meu-componente',
-        target: 'meu-target',
-        props: {
-            titulo: 'Meu Título'
-        }
-    }
-]
-```
-
-## 🎨 Sistema de Inferência de Cores
-
-Todos os componentes agora **inferem automaticamente** as cores do tema global quando não há override específico.
-
-### Como Funciona
-
-1. **Defina as cores no tema global:**
-```javascript
-theme: {
-  colors: {
-    primary: '#16A34A',    // Cor principal
-    secondary: '#22C55E',   // Cor secundária (opcional)
-    tertiary: '#10B981',   // Cor terciária (opcional)
-    accent: '#F97316',      // Cor de destaque
-    background: '#F9FAFB'  // Cor de fundo
-  }
-}
-```
-
-2. **Os componentes inferem automaticamente:**
-```javascript
-'hero-overlay': {
-  // Se colors não for especificado, usa primary do tema para overlay
-  // Se colors.accent não for especificado, usa accent do tema
-  // E assim por diante...
-}
-```
-
-3. **Override quando necessário:**
-```javascript
-'hero-overlay': {
-  colors: {
-    primary: 'green',  // Override: usa 'green' ao invés do primary do tema
-    accent: 'orange'  // Override: usa 'orange' ao invés do accent do tema
-  }
-}
-```
-
-### Mapeamento de Cores por Componente
-
-Cada componente tem um mapeamento padrão de quais cores do tema usar:
-
-- **hero-overlay**: `primary` → overlay, `accent` → badges/botões
-- **info-bar**: `primary` → background, `accent` → ícones
-- **card-grid**: `primary` → títulos/overlay, `accent` → linha decorativa
-- **feature-highlight**: `primary` → títulos/badges, `accent` → destaques
-- **cta-banner**: `primary` → background, botões podem usar `primary`, `secondary`, `tertiary` ou `accent`
-- **footer-contact**: `primary` → títulos/ícones, `background` → fundo
-- **header-navigation**: `primary` → texto/botões, `background` → fundo
-
-### Exemplo Completo
+Crie uma pasta para seu template e adicione um `config.js`:
 
 ```javascript
 const config = {
   theme: {
     colors: {
-      primary: '#16A34A',    // Verde
-      secondary: '#22C55E',  // Verde claro
-      tertiary: '#10B981',  // Verde médio
-      accent: '#F97316',     // Laranja
-      background: '#F9FAFB' // Cinza claro
+      primary: '#16A34A',
+      background: '#FFFFFF',
+      // ...
+    },
+    fonts: {
+      primary: '"Poppins", sans-serif',
+      // ...
     }
   },
 
-  'hero-overlay': {
-    // Sem colors → infere primary e accent do tema
-    badge: "Bem-vindo",
-    title: "Título",
+  // Componentes (qualquer chave com hífen é detectada automaticamente)
+  'contact-top-bar': {
+    infoItems: [
+      { icon: "fas fa-phone-alt", text: "(11) 98765-4321" }
+    ],
+    socialLinks: [
+      { icon: "fab fa-instagram", href: "https://instagram.com" }
+    ]
+  },
+
+  'hero-image-badge': {
+    title: "Seu Título",
+    titleHighlight: "Destaque",
     // ...
   },
 
-  'info-bar': {
-    // Sem colors → infere primary (background), accent (ícones) do tema
-    items: [...]
-  },
-
-  'cta-banner': {
-    buttons: [
-      { text: "Botão 1", bgColor: "primary" },    // Usa primary do tema
-      { text: "Botão 2", bgColor: "accent" },      // Usa accent do tema
-      { text: "Botão 3", bgColor: "green" }       // Override: usa 'green' direto
-    ]
+  site: {
+    title: "Meu Site",
+    name: "Meu Site",
+    // ...
   }
-}
-```
-
-### Novos Componentes
-
-Ao criar novos componentes, eles **automaticamente** herdam a capacidade de inferir cores:
-
-```javascript
-class MeuComponente extends BaseComponent {
-  constructor(data) {
-    super();
-
-    // Resolve cores: override > tema > fallback
-    const bgBase = this.resolveColor(data.colors?.background, 'primary', 'brand-dark');
-    const textBase = this.resolveColor(data.colors?.text, null, 'white');
-
-    this.colors = {
-      background: this.getColorVariant(bgBase, 700),
-      text: textBase
-    };
-  }
-}
-```
-
-## ✨ Vantagens
-
-✅ **Menos código repetitivo** - Configure uma vez no config.js
-✅ **Centralizado** - Todas as configurações em um só lugar
-✅ **Reutilizável** - Mesmo componente em múltiplos templates
-✅ **Escalável** - Fácil adicionar novos componentes
-✅ **Type-safe** - Validação automática de tipos e props
-✅ **Debug facilitado** - Logs automáticos de erros e sucessos
-✅ **Inferência inteligente** - Cores do tema aplicadas automaticamente
-
-## 📝 Exemplo Completo
-
-```javascript
-// config.js
-const config = {
-    components: [
-        {
-            type: 'hero-overlay',
-            target: 'hero',
-            props: {
-                title: "Bem-vindo",
-                titleHighlight: "ao futuro",
-                // ... outras props
-            }
-        }
-    ]
 };
+
+window.config = config;
 ```
+
+### 2. Criar o HTML
+
+Crie um `index.html` simples:
 
 ```html
-<!-- index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 <head>
-    <script src="config.js"></script>
-    <script src="../components/hero-overlay.js"></script>
-    <script src="../components/component-registry.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/templates/components/component-registry.js"></script>
+  <script src="/templates/components/cosmos-template.js"></script>
 </head>
-<body>
-    <div id="hero"></div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            componentRegistry.initFromConfig(config);
-        });
-    </script>
+<body class="antialiased">
+  <!-- Componentes montam aqui automaticamente -->
 </body>
 </html>
 ```
 
-## 🐛 Debug
+### 3. Pronto!
 
-O Component Registry exibe logs no console:
+Os componentes serão detectados, carregados e montados automaticamente na ordem que aparecem no `config.js`.
 
-- ✅ `Componente 'hero-overlay' criado e montado em '#hero-component'`
-- ❌ `Erro: componente 'xyz' não encontrado no registry`
-- ⚠️ `Nenhum componente encontrado em config.components`
+## 📦 Componentes Disponíveis
 
-Abra o console do navegador (F12) para ver os logs.
+Temos **30+ componentes** organizados por categoria:
 
+### 🧭 Navegação
+- `contact-top-bar` - Barra superior com contato
+- `sticky-header-navigation` - Header fixo profissional
+- `sticky-navbar-gradient` - Navbar moderna com gradiente
+- `header-navigation` - Header simples e limpo
+
+### 🎯 Hero
+- `hero-image-badge` - Hero com imagem e badge
+- `hero-overlay` - Hero cinematográfico com overlay
+- `hero-badge-preview` - Hero moderno com preview
+
+### 📊 Informação
+- `info-bar` - Barra de informações genérica
+- `achievements-numbers-grid` - Grid de estatísticas
+- `social-proof-logos` - Logos de clientes/parceiros
+
+### 🎨 Features e Serviços
+- `quick-service-cards` - Cards de serviços
+- `features-grid-glass` - Grid de features com glassmorphism
+- `benefit-highlight-split` - Destaque de benefícios
+- `feature-highlight` - Destaque de feature
+
+### 📝 Conteúdo
+- `about-image-features` - Seção sobre com imagem
+- `about-image-features-clinical` - Versão para clínicas
+- `card-grid` - Grid genérico de cards
+
+### 💰 Preços
+- `pricing-grid-highlight` - Grid de planos com destaque
+- `plans-callout-box` - Caixa de destaque de plano
+
+### 📧 Formulários e Contato
+- `email-signup-form` - Formulário de email
+- `footer-contact` - Footer com contato completo
+- `footer-multi-column-dark` - Footer multi-coluna escuro
+- `footer-multi-column-links` - Footer multi-coluna com links
+
+### 🎯 CTA
+- `cta-banner` - Banner de call-to-action
+- `cta-glow-card` - Card CTA com glow
+
+### 🎨 Visual
+- `ambient-background-effects` - Efeitos de fundo ambientais
+
+### 📱 Integração
+- `whatsapp-float-button` - Botão flutuante WhatsApp
+- `faq-accordion` - FAQ com accordion
+
+**📖 Ver documentação completa:** [`docs/COMPONENTES-DISPONIVEIS.md`](./docs/COMPONENTES-DISPONIVEIS.md)
+
+## 🤖 Sistema de Recomendações
+
+O sistema de recomendações ajuda a escolher os componentes ideais para seu nicho:
+
+```javascript
+// Carregar o recommender
+const recommender = new ComponentRecommender();
+
+// Recomendar para um nicho
+const recommendations = recommender.recommendForNiche('personal-trainer', {
+  hasPricing: true,
+  hasContact: true
+});
+
+// Verificar compatibilidade
+const compatibility = recommender.checkCompatibility(recommendations);
+
+// Gerar config completo
+const { config, metadata } = recommender.generateConfig('personal-trainer', {
+  hasPricing: true
+}, {
+  siteName: "Meu Personal Trainer",
+  phone: "(11) 99999-9999"
+});
+```
+
+**📖 Ver mais:** [`catalog/component-recommender.js`](./catalog/component-recommender.js)
+
+## 📚 Exemplos
+
+Temos exemplos completos de config para diferentes nichos:
+
+- **Personal Trainer:** [`examples/personal-trainer-config.js`](./examples/personal-trainer-config.js)
+- **Clínica:** [`examples/clinic-config.js`](./examples/clinic-config.js)
+- **SaaS:** [`examples/saas-config.js`](./examples/saas-config.js)
+- **Restaurante:** [`examples/restaurant-config.js`](./examples/restaurant-config.js)
+- **E-commerce:** [`examples/ecommerce-config.js`](./examples/ecommerce-config.js)
+
+## 📖 Documentação
+
+### Documentação Principal
+
+- **[Componentes Disponíveis](./docs/COMPONENTES-DISPONIVEIS.md)** - Lista completa de componentes
+- **[Como Criar Componente](./docs/COMO-CRIAR-COMPONENTE.md)** - Guia para criar novos componentes
+- **[Guia de Contraste de Cores](./docs/GUIA-CONTRASTE-CORES.md)** - Guia de acessibilidade
+
+### Catálogo e Metadata
+
+- **[Components Catalog](./catalog/components-catalog.json)** - Catálogo completo com metadata
+- **[Config Schema](./catalog/config-schema.json)** - Schema de validação JSON
+
+## 🎨 Sistema de Tema
+
+Todos os componentes inferem automaticamente as cores do tema global:
+
+```javascript
+theme: {
+  colors: {
+    primary: '#16A34A',    // Usado automaticamente pelos componentes
+    secondary: '#22C55E',
+    accent: '#F97316',
+    background: '#FFFFFF'
+  }
+}
+```
+
+Componentes podem ter override de cores quando necessário:
+
+```javascript
+'hero-overlay': {
+  // ...
+  colors: {
+    primary: 'green',  // Override: usa 'green' ao invés do primary do tema
+    accent: 'orange'
+  }
+}
+```
+
+## 🔧 Adicionar Novos Componentes
+
+1. Crie o arquivo do componente em `components/[nome-do-componente].js`
+2. Siga o padrão da classe base (veja [`docs/COMO-CRIAR-COMPONENTE.md`](./docs/COMO-CRIAR-COMPONENTE.md))
+3. Adicione metadata no [`catalog/components-catalog.json`](./catalog/components-catalog.json)
+4. O componente será detectado automaticamente!
+
+## 🎯 Nichos Suportados
+
+- 🏋️ **Personal Trainer / Fitness**
+- 💻 **SaaS / Plataformas**
+- 🏥 **Clínicas / Consultórios**
+- 🍕 **Restaurantes / Delivery**
+- 🛍️ **E-commerce**
+- 🏢 **Corporativo / Profissional**
+
+## 📝 Notas Importantes
+
+- Todos os componentes se adaptam automaticamente ao tema claro/escuro
+- Componentes inferem cores do tema global quando não há override
+- Todos os componentes são responsivos
+- Ícones podem usar Lucide Icons ou Font Awesome
+- Componentes seguem padrões de acessibilidade (WCAG AA)
+
+## 🤝 Contribuindo
+
+Para adicionar novos componentes ou melhorar os existentes:
+
+1. Leia o guia: [`docs/COMO-CRIAR-COMPONENTE.md`](./docs/COMO-CRIAR-COMPONENTE.md)
+2. Mantenha componentes genéricos e reutilizáveis
+3. Adicione metadata completa no catálogo
+4. Atualize a documentação
+
+## 📄 Licença
+
+[Adicione sua licença aqui]
+
+---
+
+**Última atualização:** 2024
+**Total de componentes:** 30+
+**Versão do catálogo:** 1.0.0
