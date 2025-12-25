@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "lastUpdated": "2024",
-  "totalComponents": 30,
+  "totalComponents": 36,
   "components": {
     "contact-top-bar": {
       "id": "contact-top-bar",
@@ -575,17 +575,137 @@
         "bestFor": ["Landing pages modernas", "Produtos digitais", "Backgrounds decorativos"],
         "placement": "background"
       }
+    },
+    "marquee-info-bar": {
+      "id": "marquee-info-bar",
+      "name": "Marquee Info Bar",
+      "description": "Barra superior com texto em scroll horizontal (marquee) para destacar informações importantes",
+      "category": "navigation",
+      "tags": ["marquee", "info", "scroll", "promotion", "announcement"],
+      "niches": ["ecommerce", "stores", "promotions", "any"],
+      "requiredProps": ["items"],
+      "optionalProps": ["colors"],
+      "dependencies": [],
+      "compatibleWith": ["navbar-ecommerce", "sticky-navbar-gradient"],
+      "incompatibleWith": [],
+      "style": "marquee-scroll",
+      "theme": "adapts",
+      "file": "marquee-info-bar.js",
+      "suggestions": {
+        "bestFor": ["E-commerce", "Lojas", "Promoções", "Informações urgentes"],
+        "placement": "top"
+      }
+    },
+    "navbar-ecommerce": {
+      "id": "navbar-ecommerce",
+      "name": "Navbar E-commerce",
+      "description": "Navbar genérica otimizada para e-commerce com logo, menu e ícones de ação (search, account, cart)",
+      "category": "navigation",
+      "tags": ["navbar", "ecommerce", "menu", "shopping", "cart"],
+      "niches": ["ecommerce", "stores", "shopping", "retail"],
+      "requiredProps": ["logoText", "links"],
+      "optionalProps": ["logoUrl", "actions", "sticky", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["marquee-info-bar", "hero-split"],
+      "incompatibleWith": [],
+      "style": "ecommerce",
+      "theme": "adapts",
+      "file": "navbar-ecommerce.js",
+      "suggestions": {
+        "bestFor": ["E-commerce", "Lojas online", "Marketplaces"],
+        "placement": "top"
+      }
+    },
+    "hero-split": {
+      "id": "hero-split",
+      "name": "Hero Split",
+      "description": "Hero section com layout split (texto à esquerda, imagem à direita). Genérico para qualquer tipo de hero",
+      "category": "hero",
+      "tags": ["hero", "split", "layout", "image", "cta"],
+      "niches": ["ecommerce", "products", "services", "any"],
+      "requiredProps": ["title", "imageUrl"],
+      "optionalProps": ["badge", "titleHighlight", "description", "buttons", "reverse", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["navbar-ecommerce", "social-proof-logos"],
+      "incompatibleWith": [],
+      "style": "split-layout",
+      "theme": "adapts",
+      "file": "hero-split.js",
+      "suggestions": {
+        "bestFor": ["E-commerce", "Produtos", "Serviços", "Landing pages"],
+        "placement": "after-header"
+      }
+    },
+    "product-grid-ecommerce": {
+      "id": "product-grid-ecommerce",
+      "name": "Product Grid E-commerce",
+      "description": "Grid de produtos para e-commerce com preço, badge, botão de ação e parcelamento",
+      "category": "content",
+      "tags": ["products", "ecommerce", "grid", "shopping", "price"],
+      "niches": ["ecommerce", "stores", "retail", "marketplace"],
+      "requiredProps": ["products"],
+      "optionalProps": ["title", "subtitle", "linkText", "linkHref", "layout", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["hero-split", "promo-banner-split"],
+      "incompatibleWith": [],
+      "style": "product-grid",
+      "theme": "adapts",
+      "file": "product-grid-ecommerce.js",
+      "suggestions": {
+        "bestFor": ["E-commerce", "Lojas", "Catálogos de produtos"],
+        "placement": "mid-page"
+      }
+    },
+    "promo-banner-split": {
+      "id": "promo-banner-split",
+      "name": "Promo Banner Split",
+      "description": "Banner promocional com layout split (texto + imagem). Genérico para promoções, ofertas, destaque de produtos/serviços",
+      "category": "cta",
+      "tags": ["promo", "banner", "split", "promotion", "offer"],
+      "niches": ["ecommerce", "stores", "promotions", "any"],
+      "requiredProps": ["title", "imageUrl"],
+      "optionalProps": ["badge", "description", "price", "originalPrice", "button", "reverse", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["product-grid-ecommerce", "benefits-grid"],
+      "incompatibleWith": [],
+      "style": "split-promo",
+      "theme": "adapts",
+      "file": "promo-banner-split.js",
+      "suggestions": {
+        "bestFor": ["E-commerce", "Promoções", "Ofertas especiais", "Destaque de produtos"],
+        "placement": "mid-page"
+      }
+    },
+    "benefits-grid": {
+      "id": "benefits-grid",
+      "name": "Benefits Grid",
+      "description": "Grid de benefícios com ícones, títulos e descrições. Genérico para destacar vantagens, benefícios, características",
+      "category": "features",
+      "tags": ["benefits", "grid", "icons", "features", "advantages"],
+      "niches": ["ecommerce", "services", "any"],
+      "requiredProps": ["benefits"],
+      "optionalProps": ["columns", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["promo-banner-split", "product-grid-ecommerce"],
+      "incompatibleWith": [],
+      "style": "grid-icons",
+      "theme": "adapts",
+      "file": "benefits-grid.js",
+      "suggestions": {
+        "bestFor": ["E-commerce", "Serviços", "Destaque de vantagens"],
+        "placement": "mid-to-late-page"
+      }
     }
   },
   "categories": {
-    "navigation": ["contact-top-bar", "sticky-header-navigation", "sticky-navbar-gradient", "header-navigation"],
-    "hero": ["hero-image-badge", "hero-overlay", "hero-badge-preview"],
+    "navigation": ["contact-top-bar", "sticky-header-navigation", "sticky-navbar-gradient", "header-navigation", "marquee-info-bar", "navbar-ecommerce"],
+    "hero": ["hero-image-badge", "hero-overlay", "hero-badge-preview", "hero-split"],
     "information": ["info-bar", "achievements-numbers-grid", "social-proof-logos"],
-    "services": ["quick-service-cards", "features-grid-glass", "benefit-highlight-split", "feature-highlight"],
-    "content": ["about-image-features", "about-image-features-clinical", "card-grid"],
+    "services": ["quick-service-cards", "features-grid-glass", "benefit-highlight-split", "feature-highlight", "benefits-grid"],
+    "content": ["about-image-features", "about-image-features-clinical", "card-grid", "product-grid-ecommerce"],
     "pricing": ["pricing-grid-highlight", "plans-callout-box"],
     "footer": ["footer-contact", "footer-multi-column-dark", "footer-multi-column-links"],
-    "cta": ["cta-banner", "cta-glow-card"],
+    "cta": ["cta-banner", "cta-glow-card", "promo-banner-split"],
     "forms": ["email-signup-form"],
     "support": ["faq-accordion"],
     "integration": ["whatsapp-float-button"],
@@ -609,8 +729,8 @@
       "optional": ["cta-banner", "whatsapp-float-button"]
     },
     "ecommerce": {
-      "recommended": ["sticky-navbar-gradient", "hero-image-badge", "card-grid", "pricing-grid-highlight", "social-proof-logos", "footer-multi-column-dark"],
-      "optional": ["whatsapp-float-button", "faq-accordion"]
+      "recommended": ["marquee-info-bar", "navbar-ecommerce", "hero-split", "social-proof-logos", "product-grid-ecommerce", "promo-banner-split", "benefits-grid", "footer-multi-column-dark"],
+      "optional": ["whatsapp-float-button", "faq-accordion", "pricing-grid-highlight"]
     },
     "corporate": {
       "recommended": ["sticky-header-navigation", "hero-overlay", "about-image-features", "achievements-numbers-grid", "feature-highlight", "footer-multi-column-links"],

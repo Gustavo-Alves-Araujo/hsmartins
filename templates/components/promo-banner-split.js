@@ -70,7 +70,7 @@ class PromoBannerSplitComponent extends BaseComponent {
                                 ${this.title}
                             </h3>
                             ${this.description ? `
-                                <p class="text-gray-400 mb-6">
+                                <p class="text-gray-200 mb-6">
                                     ${this.description}
                                 </p>
                             ` : ''}
