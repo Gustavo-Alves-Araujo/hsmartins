@@ -1,236 +1,206 @@
 const config = {
   theme: {
     colors: {
-      primary: '#48191B',        // brand-dark (cor principal)
-      primaryLight: '#6D2B2E',   // brand-light
-      background: '#F9F7F2',     // brand-cream
-      accent: '#D4AF37',         // brand-gold
+      primary: '#63452c',        // Marrom solicitado
+      primaryLight: '#8B6B4D',   // Tom mais claro
+      background: '#FDFBF7',     // Off-white para limpeza visual
+      accent: '#D4AF37',         // Dourado para detalhes de qualidade
       text: {
-        dark: '#1F2937',       // gray-800
-        medium: '#4B5563',     // gray-600
-        light: '#6B7280',      // gray-500
+        dark: '#1F1510',
+        medium: '#4B3F38',
+        light: '#9CA3AF',
         white: '#FFFFFF'
       }
     },
     fonts: {
-      primary: '"Playfair Display", serif',  // Títulos e elementos editoriais
-      secondary: '"Inter", sans-serif',      // Texto corrido
+      primary: '"Poppins", sans-serif',
+      secondary: '"Inter", sans-serif',
       urls: {
-        google: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap'
+        google: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap'
       }
     }
   },
 
-  'header-navigation': {
-    logoUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRUt3aoT0TztOymfkQd7fzYBOjmjUbn8_q9Q&s",
-    logoAlt: "Logo Flor da Tibúrcio",
-    siteName: "Flor da Tibúrcio",
-    established: "Itaim Paulista",
-    whatsappNumber: "5511937304737",
+  'contact-top-bar': {
+    infoItems: [
+      {
+        icon: "fas fa-phone-alt",
+        text: "(11) 98320-4340"
+      },
+      {
+        icon: "fas fa-map-marker-alt",
+        text: "São Paulo e Região"
+      },
+      {
+        icon: "fas fa-clock",
+        text: "Atendimento Dinâmico: 24h"
+      }
+    ],
+    socialLinks: [
+      {
+        icon: "fab fa-whatsapp",
+        href: "https://wa.me/551198320434"
+      }
+    ]
+  },
+
+  'sticky-header-navigation': {
+    logoUrl: "https://nulttixasqcrugsbpduk.supabase.co/storage/v1/object/public/fotos/1766528165689-jevzh.png",
+    logoAlt: "Vidraceiro Jailson",
+    siteName: "Vidraceiro Jailson",
+    established: "Excelência e Agilidade",
     links: {
-      about: {
-        text: "Sobre",
-        href: "#about"
-      },
-      services: {
-        text: "Produtos",
-        href: "#services"
-      },
-      location: {
-        text: "Localização",
-        href: "#location"
-      },
-      cta: {
-        text: "Peça Agora",
-        href: "https://wa.me/5511937304737",
-        target: "_blank"
-      }
+      about: { text: "Sobre", href: "#sobre" },
+      services: { text: "Serviços", href: "#servicos" },
+      projects: { text: "Galeria", href: "#galeria" },
+      cta: { text: "Orçamento Rápido", href: "https://wa.me/551198320434", target: "_blank" }
     }
   },
 
-  'hero-overlay': {
-    badge: "Desde o coração do Itaim Paulista",
-    title: "Sabor que cria",
-    titleHighlight: "memórias.",
-    subtitle: "Padaria, confeitaria e pizzaria. A tradição do pão quentinho e da pizza artesanal, entregue na sua porta.",
+  'hero-split': {
+    badge: "🚀 Entrega rápida e atendimento dinâmico",
+    title: "Vidraçaria de alta",
+    titleHighlight: "qualidade em São Paulo",
+    description: "Trabalhos sob medida com acabamento impecável. Do box de banheiro ao fechamento de sacadas, Jailson garante a melhor entrega da região.",
     ctaPrimary: {
-      text: "Fazer Pedido",
-      href: "https://wa.me/5511937304737",
-      target: "_blank"
+      text: "Pedir Orçamento",
+      href: "https://wa.me/551198320434"
     },
     ctaSecondary: {
-      text: "Explorar Cardápio",
-      href: "#services"
+      text: "Ver Serviços",
+      href: "#servicos"
     },
-    backgroundImage: "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=2072&auto=format&fit=crop",
-    backgroundAlt: "Pão Fresco",
-    whatsappNumber: "5511937304737",
-    colors: {
-      primary: 'brand-dark',
-      accent: 'brand-gold',
-      text: 'white'
-    }
+    imageUrl: "https://images.unsplash.com/photo-1533090161767-e6ffed986c88?w=800",
+    imageAlt: "Instalação de Vidros"
   },
 
   'info-bar': {
     items: [
-      {
-        icon: "fas fa-motorcycle",
-        text: "Entrega Rápida em 30min"
-      },
-      {
-        icon: "fas fa-map-marker-alt",
-        text: "Rua Tibúrcio de Sousa, 1351 - Itaim Paulista"
-      },
-      {
-        icon: "far fa-clock",
-        text: "Seg-Sáb: 6h-20h | Dom: 6h-14h"
-      }
-    ],
-    colors: {
-      background: "brand-dark",
-      text: "white",
-      accent: "brand-gold"
-    }
+      { icon: "fas fa-bolt", text: "Entrega Recorde" },
+      { icon: "fas fa-shield-alt", text: "Vidros Certificados" },
+      { icon: "fas fa-user-check", text: "Instalação Profissional" },
+      { icon: "fas fa-medal", text: "Garantia de Qualidade" }
+    ]
   },
 
-  'card-grid': {
-    title: "Nossos Produtos",
-    subtitle: "Do forno para sua mesa, com amor e tradição",
-    items: [
+  'quick-service-cards': {
+    id: "servicos",
+    cards: [
       {
-        image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?w=800",
-        title: "Pães Artesanais",
-        description: "Variedade de pães fresquinhos assados todos os dias com ingredientes selecionados",
-        alt: "Pães Artesanais Frescos"
+        icon: "fas fa-shower",
+        title: "Box para Banheiro",
+        description: "Diversos modelos e acabamentos para modernizar seu banheiro com segurança.",
+        buttonText: "Saber Mais",
+        buttonHref: "#contato"
       },
       {
-        image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800",
-        title: "Doces e Bolos",
-        description: "Bolos decorados e doces caseiros irresistíveis para todas as ocasiões",
-        alt: "Bolos e Doces Deliciosos"
+        icon: "fas fa-vector-square",
+        title: "Espelhos Sob Medida",
+        description: "Espelhos decorativos, bisotados e com molduras para todos os ambientes.",
+        buttonText: "Saber Mais",
+        buttonHref: "#contato"
       },
       {
-        image: "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=800",
-        title: "Pizzas Artesanais",
-        description: "Massa fresca e ingredientes selecionados com carinho, sabor único",
-        alt: "Pizzas Artesanais Deliciosas"
+        icon: "fas fa-th-large",
+        title: "Janelas e Portas",
+        description: "Vidros temperados e laminados com isolamento acústico e resistência.",
+        buttonText: "Saber Mais",
+        buttonHref: "#contato"
+      },
+      {
+        icon: "fas fa-tools",
+        title: "Manutenção Geral",
+        description: "Reparos em roldanas, molas de piso e substituição de vidros quebrados.",
+        buttonText: "Saber Mais",
+        buttonHref: "#contato"
       }
-    ],
-    layout: {
-      columns: 3,
-      aspectRatio: "4/5",
-      gap: "8"
-    },
-    colors: {
-      background: "brand-cream",
-      titleColor: "brand-dark",
-      cardOverlay: "brand-dark",
-      accentLine: "brand-dark"
-    }
+    ]
   },
 
-  'feature-highlight': {
-    badge: "Destaque do Dia",
-    title: "Pizza Margherita Especial",
-    description: "Nossa receita mais tradicional, preparada com massa fresca, molho de tomate caseiro e ingredientes importados diretamente da Itália.",
+  'about-image-features': {
+    id: "sobre",
+    tag: "Quem é Jailson",
+    title: "Experiência e Confiança em Vidraçaria",
+    paragraphs: [
+      "Com anos de atuação no mercado, o Vidraceiro Jailson se destaca pelo atendimento dinâmico e pela rapidez na entrega.",
+      "Nosso compromisso é transformar seus projetos em realidade com a segurança que sua família merece e a sofisticação que seu ambiente precisa.",
+      "Atendemos projetos residenciais e comerciais com a mesma dedicação e profissionalismo."
+    ],
     features: [
-      "Massa fermentada por 48 horas",
-      "Queijo mussarela buffalo importado",
-      "Tomates San Marzano frescos",
-      "Manjericão orgânico",
-      "Azeite extra virgem siciliano"
+      { icon: "fas fa-check-circle", text: "Orçamento Gratuito" },
+      { icon: "fas fa-check-circle", text: "Pagamento Facilitado" },
+      { icon: "fas fa-check-circle", text: "Materiais de Primeira" },
+      { icon: "fas fa-check-circle", text: "Limpeza Pós-Obra" }
     ],
-    image: "https://images.unsplash.com/photo-1574071318508-1cdbab80d002?w=800",
-    imageAlt: "Pizza Margherita Artesanal",
-    cta: {
-      text: "Peça Agora →",
-      href: "https://wa.me/5511937304737",
-      target: "_blank"
-    },
-    layout: {
-      imagePosition: "left"
-    },
-    colors: {
-      background: "white",
-      titleColor: "brand-dark",
-      badgeColor: "brand-dark",
-      accentColor: "brand-gold",
-      ctaColor: "brand-dark",
-      ctaHoverColor: "brand-gold"
-    }
+    imageUrl: "https://images.unsplash.com/photo-1516714435131-44d6b64dc38b?w=800",
+    imageAlt: "Vidraceiro Trabalhando"
   },
 
-  'cta-banner': {
-    title: "Faça seu pedido agora!",
-    subtitle: "Receba quentinho na sua casa. Entrega rápida ou retire na loja.",
-    buttons: [
+  'achievements-numbers-grid': {
+    stats: [
+      { icon: "fas fa-smile", value: "500+", label: "Clientes Satisfeitos" },
+      { icon: "fas fa-hammer", value: "1.2k", label: "Instalações Realizadas" },
+      { icon: "fas fa-calendar-check", value: "10", label: "Anos de Experiência" },
+      { icon: "fas fa-city", value: "15", label: "Cidades Atendidas" }
+    ]
+  },
+
+  'faq-accordion': {
+    title: "Dúvidas Frequentes",
+    subtitle: "Confira as principais perguntas sobre nossos serviços",
+    questions: [
       {
-        text: "Pedir no WhatsApp",
-        icon: "fab fa-whatsapp",
-        href: "https://wa.me/5511937304737",
-        target: "_blank",
-        bgColor: "green-500",
-        hoverColor: "green-600"
+        question: "Qual o prazo médio de entrega?",
+        answer: "Dependendo do projeto, conseguimos realizar a entrega e instalação em até 3 a 5 dias úteis para itens padrão."
       },
       {
-        text: "Pedir no iFood",
-        icon: "fas fa-utensils",
-        href: "#",
-        bgColor: "red-600",
-        hoverColor: "red-700"
+        question: "Vocês fazem orçamento no local?",
+        answer: "Sim! Realizamos visitas técnicas para medição e orçamento detalhado sem compromisso em toda região."
+      },
+      {
+        question: "Quais as formas de pagamento?",
+        answer: "Aceitamos cartões de crédito (parcelamos), PIX e transferência bancária."
+      },
+      {
+        question: "Os vidros têm garantia?",
+        answer: "Sim, oferecemos garantia total sobre a instalação e contra defeitos de fabricação dos materiais."
       }
-    ],
-    backgroundPattern: "https://www.transparenttextures.com/patterns/food.png",
-    colors: {
-      background: "brand-dark",
-      textColor: "white"
-    }
+    ]
   },
 
   'footer-contact': {
-    title: "Visite Nossa Loja",
+    title: "Fale com o Jailson",
     address: {
-      label: "Endereço",
-      street: "Rua Tibúrcio de Sousa, 1351",
-      city: "Itaim Paulista, São Paulo - SP",
-      zipCode: "CEP: 08140-000",
-      mapQuery: "Rua Tibúrcio de Sousa, 1351, São Paulo"
+      label: "Área de Atendimento",
+      street: "Atendemos toda Grande São Paulo",
+      city: "São Paulo - SP",
+      zipCode: "Atendimento em Domicílio",
+      mapQuery: "São Paulo"
     },
     contact: {
-      label: "Contato",
-      phone: "(11) 93730-4737"
+      label: "WhatsApp / Telefone",
+      phone: "(11) 98320-4340"
     },
     socialLinks: [
-      {
-        icon: "fab fa-instagram",
-        href: "https://instagram.com/flordatiburciopadaria",
-        label: "Instagram"
-      },
-      {
-        icon: "fab fa-facebook-f",
-        href: "#",
-        label: "Facebook"
-      }
+      { icon: "fab fa-whatsapp", href: "https://wa.me/551198320434", label: "WhatsApp" }
     ],
-    copyright: "© 2024 Flor da Tibúrcio. Todos os direitos reservados.",
-    tags: ["Padaria", "Confeitaria", "Pizzaria", "Delivery"],
-    colors: {
-      background: "brand-cream",
-      titleColor: "brand-dark",
-      iconColor: "brand-dark",
-      borderColor: "brand-dark"
-    }
+    copyright: "© 2024 Vidraceiro Jailson. Todos os direitos reservados.",
+    tags: ["Vidraçaria", "Box de Banheiro", "Espelhos", "Vidro Temperado"]
+  },
+
+  'whatsapp-float-button': {
+    icon: "fab fa-whatsapp",
+    text: "Orçamento Via Zap",
+    href: "https://wa.me/551198320434?text=Olá%20Jailson,%20gostaria%20de%20um%20orçamento!",
+    color: "#25D366"
   },
 
   site: {
-    title: "Padaria Flor da Tibúrcio",
-    name: "Flor da Tibúrcio",
-    established: "Est. Itaim Paulista",
-    logoAlt: "Logo Flor da Tibúrcio",
-    logoUrl: "https://instagram.fcgh10-2.fna.fbcdn.net/v/t51.2885-19/91290522_610703732816103_2400387192292638720_n.jpg?efg=eyJ2ZW5jb2RlX3RhZyI6InByb2ZpbGVfcGljLmRqYW5nby4xMDgwLmMyIn0&_nc_ht=instagram.fcgh10-2.fna.fbcdn.net&_nc_cat=103&_nc_oc=Q6cZ2QEBsobwS0IXDBSvjyAM04Kr7UBtKtf1H0zqs56r1s5W-3uAoz3FlEzZ1qVTG9uy0mLNvi27dbJwVtzFHYzTyo_V&_nc_ohc=gfNr5Rx2g8EQ7kNvwEKSPob&_nc_gid=3G5UEA6EQC2vEKyIp6mJkg&edm=AP4sbd4BAAAA&ccb=7-5&oh=00_Afl6hCHOrZbCnaqscxh0sr7IZwQFZ_GnwPAwzmWGxogVVw&oe=69477C94&_nc_sid=7a9f4b",
-    logoFallback: "https://placehold.co/100x100/48191B/FFFFFF?text=FT",
-  },
+    title: "Vidraceiro Jailson - Vidraçaria em São Paulo | Entrega Rápida",
+    name: "Vidraceiro Jailson",
+    logoAlt: "Logo Vidraceiro Jailson",
+    logoUrl: "https://nulttixasqcrugsbpduk.supabase.co/storage/v1/object/public/fotos/1766528165689-jevzh.png"
+  }
 };
 
 window.config = config;

@@ -100,3 +100,4 @@ components/
 **Versão do Catálogo:** 1.0.0
 **Total de Componentes:** 30+
 
+
