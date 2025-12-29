@@ -43,25 +43,7 @@ cor azul, localizado em São Paulo, telefone 11 98765-4321"
 
 ---
 
-### PASSO 2: Identificar Nicho no Catálogo
-
-Consulte `components-catalog.json` → `nicheTemplates` para mapear:
-
-| Prompt do Usuário | Nicho no Sistema |
-|------------------|------------------|
-| Odontologista, dentista, clínica odonto | `clinics` |
-| Restaurante, delivery, comida | `restaurants` |
-| Personal trainer, fitness, academia | `personal-trainer` |
-| E-commerce, loja, marketplace | `ecommerce` |
-| SaaS, software, plataforma | `saas` |
-| Empresa, corporativo | `corporate` |
-
-**Exemplo:**
-- "odontologista" → `clinics`
-
----
-
-### PASSO 3: Selecionar Componentes Recomendados
+### PASSO 2: Selecionar Componentes Recomendados
 
 Consulte `components-catalog.json` → `nicheTemplates[niche]`:
 
@@ -75,12 +57,10 @@ Consulte `components-catalog.json` → `nicheTemplates[niche]`:
 **⚠️ REGRA CRÍTICA - USE MÚLTIPLOS COMPONENTES:**
 
 1. **Sempre use TODOS os componentes `recommended`** para o nicho
-2. **SEMPRE adicione componentes `optional`** que façam sentido
 3. **EXPLORE OUTROS COMPONENTES DA COLEÇÃO** além dos recommended/optional:
    - Consulte `components-catalog.json` → `components` para ver TODOS os componentes disponíveis
    - Adicione componentes que enriqueçam o template (ex: `achievements-numbers-grid`, `faq-accordion`, `cta-banner`, `info-bar`, `email-signup-form`, etc.)
    - Templates devem ter **NO MÍNIMO 8-10 componentes** para serem completos e ricos
-   - Não se limite apenas aos recommended - seja criativo e use a coleção completa!
 
 **Para nosso exemplo (odontologista):**
 - ✅ `contact-top-bar` (contato no topo)
@@ -88,11 +68,11 @@ Consulte `components-catalog.json` → `nicheTemplates[niche]`:
 - ✅ `hero-overlay` (hero com imagem)
 - ✅ `about-image-features-clinical` (sobre a clínica)
 - ✅ `quick-service-cards` (especialidades)
-- ✅ `footer-contact` (rodapé com contato)
 - ✅ `whatsapp-float-button` (botão WhatsApp)
 - ✅ `achievements-numbers-grid` (números/estatísticas - ADICIONAR!)
 - ✅ `faq-accordion` (perguntas frequentes - ADICIONAR!)
 - ✅ `info-bar` (informações rápidas - ADICIONAR!)
+- ✅ `footer-contact` (rodapé com contato)
 
 ---
 
@@ -430,7 +410,14 @@ const config = {
     imageAlt: "Dr. João Silva"
   },
 
-  'footer-contact': {
+  'whatsapp-float-button': {
+    icon: "fab fa-whatsapp",
+    text: "Agendar Consulta",
+    href: "https://wa.me/5511987654321?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta.",
+    color: "#25D366"
+  },
+
+   'footer-contact': {
     title: "Entre em Contato",
     address: {
       label: "Endereço",
@@ -449,13 +436,6 @@ const config = {
     ],
     copyright: "© 2024 Dr. João Silva. Todos os direitos reservados.",
     tags: ["Odontologia", "Dentista", "Clínica Odontológica"]
-  },
-
-  'whatsapp-float-button': {
-    icon: "fab fa-whatsapp",
-    text: "Agendar Consulta",
-    href: "https://wa.me/5511987654321?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta.",
-    color: "#25D366"
   },
 
   site: {
@@ -512,83 +492,12 @@ theme: {
 
 ---
 
-### Exemplo 3: E-commerce
-
-**Prompt:**
-```
-"Loja online de tênis chamada KICKS.BR,
-cor preta, várias marcas"
-```
-
-**Análise:**
-- Nicho: `ecommerce`
-- Nome: "KICKS.BR"
-- Cor: preta
-- Produtos: tênis, várias marcas
-
-**Componentes Selecionados:**
-- `marquee-info-bar`
-- `navbar-ecommerce`
-- `hero-split`
-- `social-proof-logos` (marcas)
-- `product-grid-ecommerce`
-- `promo-banner-split`
-- `benefits-grid`
-- `footer-multi-column-dark`
-- `whatsapp-float-button`
-
----
-
 ## 🎨 REGRAS DE DESIGN E CONTEÚDO
 
-### Textos Padrão por Nicho
-
-#### Clinics (Clínicas/Odontologia):
-- Hero: "Sua saúde/sorriso merece o melhor."
-- Especialidades: Ortodontia, Implantes, Clareamento, Limpeza
-- Horários padrão: "Seg-Sex: 8h às 18h"
-
-#### Restaurants:
-- Hero: "Sabor autêntico na sua mesa."
-- Categorias: Pratos Principais, Pizzas, Lanches, Sobremesas
-- Horários padrão: "Seg-Dom: 11h às 23h"
-
-#### Personal Trainer:
-- Hero: "Transforme seu corpo com treinamento personalizado"
-- Serviços: Treino Individual, Treino em Dupla, Treino em Casa, Consultoria Nutricional
-- Horários padrão: "Seg-Sex: 6h às 22h"
-
-#### E-commerce:
-- Hero: "Descubra produtos incríveis"
-- Benefícios: Frete Grátis, Parcelamento, Desconto PIX
-- Horários padrão: N/A (24/7)
-
-### Ícones Font Awesome por Contexto
-
-| Contexto | Ícone |
-|----------|-------|
-| Telefone | `fas fa-phone-alt` |
-| Endereço | `fas fa-map-marker-alt` |
-| Horário | `fas fa-clock` |
-| WhatsApp | `fab fa-whatsapp` |
-| Instagram | `fab fa-instagram` |
-| Facebook | `fab fa-facebook-f` |
-| Odontologia | `fas fa-tooth` |
-| Medicina | `fas fa-user-md` |
-| Restaurante | `fas fa-utensils` |
-| Delivery | `fas fa-motorcycle` |
-| Fitness | `fas fa-dumbbell` |
-| Compras | `fas fa-shopping-bag` |
 
 ### Imagens de Placeholder
 
 Use URLs do Unsplash apropriadas para cada nicho:
-
-- **Clinics**: `https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800`
-- **Restaurants**: `https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=1920`
-- **Fitness**: `https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800`
-- **E-commerce**: `https://images.unsplash.com/photo-1552346154-21d32810aba3?w=1200`
-
 ---
 
 ## ⚠️ VALIDAÇÕES E CHECKLIST
@@ -607,18 +516,10 @@ Antes de entregar os arquivos, verifique:
 - [ ] Imagens são URLs válidas (Unsplash ou outras)
 - [ ] **TEMPLATE TEM NO MÍNIMO 8-10 COMPONENTES** (não apenas os recommended!)
 - [ ] **CONTRASTE ADEQUADO EM TODOS OS COMPONENTES:**
-  - Texto claro em fundo escuro: use `text-white` ou `text-gray-100`
   - Texto escuro em fundo claro: use `text-black` ou `text-gray-900`
   - **NUNCA use `text-gray-400` em fundos escuros** - use `text-gray-200` ou `text-white`
   - **NUNCA use cores claras em fundos claros** - garanta contraste mínimo de 4.5:1
-  - Para `marquee-info-bar`: fundo escuro (black/primary-900) + texto branco
-  - Para `promo-banner-split`: descrição deve ser `text-gray-200` ou `text-white` em fundos escuros
 
-### index.html:
-- [ ] Estrutura básica HTML5 correta
-- [ ] Scripts na ordem: config.js → tailwind → lucide → component-registry → cosmos-template
-- [ ] `<body>` vazio (componentes montam automaticamente)
-- [ ] Meta tags corretas
 
 ### Consistência:
 - [ ] Nome do negócio é consistente em todos os lugares
@@ -658,50 +559,3 @@ Antes de entregar os arquivos, verifique:
 7. **URLs devem ser completas**: Sempre `https://` no início
 8. **Telefones brasileiros**: Formato `(XX) XXXXX-XXXX` para display, `55XXXXXXXXXXX` para WhatsApp
 9. **Imagens**: Prefira Unsplash para placeholders, use URLs diretas
-
----
-
-## 🎯 EXEMPLO DE EXECUÇÃO COMPLETA
-
-**Prompt do usuário:**
-```
-"Quero um site para minha clínica odontológica,
-Dr. Maria Santos, em Belo Horizonte,
-telefone 31 99887-6655, cor verde"
-```
-
-**Passo 1 - Análise:**
-- Nicho: `clinics`
-- Nome: "Dr. Maria Santos"
-- Localização: Belo Horizonte
-- Telefone: 31 99887-6655
-- Cor: verde
-
-**Passo 2 - Componentes:**
-Consulta `nicheTemplates.clinics` → componentes recommended
-
-**Passo 3 - Config.js:**
-Gera config.js completo com:
-- Theme com cor verde (`primary: '#10B981'` - green-500)
-- Todos os componentes recommended
-- Informações extraídas do prompt
-
-**Passo 4 - Index.html:**
-Gera index.html padrão (sempre o mesmo)
-
-**Resultado:**
-Dois arquivos prontos para uso: `config.js` e `index.html`
-
----
-
-## 🚀 PRONTO PARA USAR
-
-Com este guia, você está preparado para gerar templates completos e funcionais baseados em prompts simples dos usuários.
-
-**Lembre-se:**
-- Seja consistente
-- Use informações do prompt quando disponíveis
-- Complete com padrões do nicho quando necessário
-- Valide antes de entregar
-- Mantenha tudo em português brasileiro
-
