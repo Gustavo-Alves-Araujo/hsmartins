@@ -28,22 +28,60 @@ class AboutImageFeaturesClinicalComponent {
     }
 
     /**
+     * Obtém o tema global do config
+     * @returns {Object|null} Tema global ou null se não existir
+     */
+    getGlobalTheme() {
+        if (typeof window !== 'undefined' && window.config && window.config.theme) {
+            return window.config.theme;
+        }
+        return null;
+    }
+
+    /**
+     * Obtém uma cor do tema
+     * @param {string} key - Chave da cor ('primary', 'secondary', 'background', 'text.dark', etc)
+     * @param {string} fallback - Cor fallback se não encontrar
+     * @returns {string} Cor hexadecimal ou fallback
+     */
+    getThemeColor(key, fallback = '#000000') {
+        const theme = this.getGlobalTheme();
+        if (!theme || !theme.colors) {
+            return fallback;
+        }
+
+        const keys = key.split('.');
+        let value = theme.colors;
+        for (const k of keys) {
+            if (value && value[k]) {
+                value = value[k];
+            } else {
+                return fallback;
+            }
+        }
+        return value || fallback;
+    }
+
+    /**
      * Injeta estilos base compartilhados (apenas uma vez)
      */
     injectBaseStyles() {
         if (document.getElementById('base-styles-global')) return;
 
+        // Obtém cores do tema
+        const primary = this.getThemeColor('primary', '#16A34A');
+        const secondary = this.getThemeColor('secondary', '#2c3e50');
+        const background = this.getThemeColor('background', '#FFFFFF');
+        const textBody = this.getThemeColor('text.medium', '#4B5563') || this.getThemeColor('text.dark', '#1F2937') || '#555';
+
         const style = document.createElement('style');
         style.id = 'base-styles-global';
         style.textContent = `
             :root {
-                --primary: #16A34A;
-                --primary-dark: #15803d;
-                --primary-light: #dcfce7;
-                --secondary: #2c3e50;
-                --text-body: #555;
-                --light-bg: #f9fdf7;
-                --white: #ffffff;
+                --primary: ${primary};
+                --secondary: ${secondary};
+                --text-body: ${textBody};
+                --white: ${background};
                 --shadow: 0 10px 30px rgba(0,0,0,0.08);
                 --radius: 20px;
             }
@@ -100,13 +138,12 @@ class AboutImageFeaturesClinicalComponent {
             .btn-primary {
                 background-color: var(--primary);
                 color: white;
-                box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
             }
             .btn-primary:hover {
-                background-color: var(--primary-dark);
+                background-color: var(--primary);
                 color: white;
+                opacity: 0.9;
                 transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 163, 74, 0.6);
             }
             .btn-outline {
                 border: 2px solid var(--secondary);
@@ -124,14 +161,30 @@ class AboutImageFeaturesClinicalComponent {
             .btn-hero {
                 padding: 15px 40px;
                 font-size: 1.1rem;
-                box-shadow: 0 10px 25px rgba(22, 163, 74, 0.5);
+                box-shadow: 0 10px 25px rgba(0,0,0,0.15);
             }
             .btn-hero:hover {
-                box-shadow: 0 15px 35px rgba(22, 163, 74, 0.7);
+                box-shadow: 0 15px 35px rgba(0,0,0,0.2);
                 transform: translateY(-3px);
             }
         `;
         document.head.appendChild(style);
+    }
+
+    /**
+     * Obtém uma cor clara baseada na cor primária (para fundos sutis)
+     * @returns {string} Cor hexadecimal clara
+     */
+    getLightBackgroundColor() {
+        const primaryLight = this.getThemeColor('primaryLight');
+
+        // Se existe primaryLight no tema, usa ela
+        if (primaryLight && primaryLight !== '#000000') {
+            return primaryLight;
+        }
+
+        // Caso contrário, usa o background do tema
+        return this.getThemeColor('background', '#FFFFFF');
     }
 
     /**
@@ -142,12 +195,20 @@ class AboutImageFeaturesClinicalComponent {
         this.injectBaseStyles();
         if (document.getElementById('about-image-features-styles')) return;
 
+        // Obtém cores do tema
+        const primary = this.getThemeColor('primary', '#16A34A');
+        const primaryLight = this.getThemeColor('primaryLight');
+        const secondary = this.getThemeColor('secondary', '#2c3e50');
+        const textDark = this.getThemeColor('text.dark', '#1F2937');
+        const background = this.getThemeColor('background', '#FFFFFF');
+        const lightBg = this.getLightBackgroundColor();
+
         const style = document.createElement('style');
         style.id = 'about-image-features-styles';
         style.textContent = `
             .about {
                 padding: 80px 0;
-                background-color: var(--white);
+                background-color: ${background};
             }
             .about-content {
                 display: flex;
@@ -159,13 +220,13 @@ class AboutImageFeaturesClinicalComponent {
             }
             .about-img img {
                 border-radius: var(--radius) 0 var(--radius) 0;
-                box-shadow: -10px 10px 0 var(--primary);
+                box-shadow: -10px 10px 0 ${primary};
             }
             .about-text {
                 flex: 1;
             }
             .section-tag {
-                color: var(--primary-dark);
+                color: ${primary};
                 font-weight: 700;
                 text-transform: uppercase;
                 letter-spacing: 1px;
@@ -175,7 +236,7 @@ class AboutImageFeaturesClinicalComponent {
             .about-text h2 {
                 font-size: 2.5rem;
                 margin-bottom: 20px;
-                color: var(--secondary);
+                color: ${secondary};
             }
             .about-text p {
                 color: var(--text-body);
@@ -190,10 +251,19 @@ class AboutImageFeaturesClinicalComponent {
                 display: flex;
                 align-items: center;
                 font-weight: 600;
+                padding: 12px 16px;
+                border-radius: 8px;
+                background-color: ${lightBg};
+                color: ${textDark};
+            }
+            .about-list li:first-child {
+                background-color: ${primaryLight || lightBg};
+                color: ${textDark};
             }
             .about-list li i {
-                color: var(--primary-dark);
+                color: ${primary};
                 margin-right: 10px;
+                flex-shrink: 0;
             }
             .clinical {
                 padding: 100px 0;

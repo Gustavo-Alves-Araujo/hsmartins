@@ -58,7 +58,7 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
                 font-size: 0.875rem;
             }
             .footer-dark-ecommerce {
-                background-color: #111111;
+                background-color: ${this.backgroundHex};
                 padding-top: 64px;
                 padding-bottom: 32px;
             }
@@ -136,7 +136,7 @@ class FooterMultiColumnDarkComponent extends BaseComponent {
         }).join('');
 
         return `
-            <footer class="bg-brand-black text-white pt-16 pb-8" style="background-color: #111111;">
+            <footer class="bg-brand-black text-white pt-16 pb-8" style="background-color: ${this.backgroundHex};">
                 <div class="container mx-auto px-4">
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
                         <div>

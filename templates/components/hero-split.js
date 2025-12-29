@@ -43,6 +43,9 @@ class HeroSplitComponent extends BaseComponent {
             titleHighlight: highlightBase === 'gray' ? 'gray-500' : this.getColorVariant(highlightBase, 500),
             description: 'gray-600',
         };
+
+        // Obtém hex do background para usar no style inline
+        this.backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#F9FAFB');
     }
 
     /**
@@ -75,7 +78,7 @@ class HeroSplitComponent extends BaseComponent {
         const textAlignment = this.reverse ? 'lg:text-right' : 'lg:text-left';
 
         return `
-            <section class="relative overflow-hidden p-16" style="background-color: #F5F5F5;">
+            <section class="relative overflow-hidden p-16" style="background-color: ${this.backgroundHex};">
                 <div class="container mx-auto px-4 py-16 lg:py-24 flex flex-col-reverse lg:flex-row ${layoutClass} items-center gap-0">
                     <!-- Text Content -->
                     <div class="lg:w-1/2 z-10 text-center ${textAlignment} mt-10 lg:mt-0 animate-slide-up">

@@ -186,6 +186,39 @@
         }
 
         /**
+         * Aguarda o config ser carregado
+         */
+        async waitForConfig() {
+            // Se config já está disponível, retorna
+            if (window.config) {
+                return window.config;
+            }
+
+            // Se há uma Promise de config carregando, aguarda ela
+            if (window.configReady && window.configReady instanceof Promise) {
+                return await window.configReady;
+            }
+
+            // Aguarda até config estar disponível (polling como fallback)
+            return new Promise((resolve) => {
+                const checkConfig = setInterval(() => {
+                    if (window.config) {
+                        clearInterval(checkConfig);
+                        resolve(window.config);
+                    }
+                }, 50);
+
+                // Timeout após 5 segundos
+                setTimeout(() => {
+                    clearInterval(checkConfig);
+                    console.warn('⚠️ Timeout aguardando config.js');
+                    window.config = window.config || {};
+                    resolve(window.config);
+                }, 5000);
+            });
+        }
+
+        /**
          * Inicializa os componentes
          */
         async initializeComponents() {
@@ -193,6 +226,9 @@
                 console.error('❌ Component Registry não encontrado');
                 return;
             }
+
+            // Aguarda o config ser carregado
+            await this.waitForConfig();
 
             if (!window.config) {
                 console.error('❌ config.js não encontrado');
@@ -218,6 +254,9 @@
             }
 
             console.log('🎨 Cosmos Template - Inicializando...');
+
+            // 0. Aguarda config ser carregado
+            await this.waitForConfig();
 
             // 1. Aplica tema (background, cores e fontes)
             this.applyTheme();

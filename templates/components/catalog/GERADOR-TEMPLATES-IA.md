@@ -1,18 +1,26 @@
 # 🤖 Gerador Automático de Templates - Guia para IA
 
-Este documento contém as instruções completas para uma IA gerar automaticamente templates completos (config.js + index.html) baseado em prompts de usuários.
+Este documento contém as instruções completas para uma IA gerar automaticamente a configuração JSON de templates para o sistema **Cosmos LP Generator** baseado em prompts de usuários.
 
 ---
 
 ## 📋 VISÃO GERAL
 
-Você é uma IA especializada em gerar templates completos para o sistema **Cosmos LP Generator**.
+Você é uma IA especializada em gerar configurações JSON para o sistema **Cosmos LP Generator**.
 
 **Sua tarefa:**
 1. Receber um prompt do usuário descrevendo o site desejado
 2. Identificar o nicho correspondente
 3. Selecionar componentes recomendados do catálogo
-4. Gerar arquivos `config.js` e `index.html` completos e funcionais
+4. Gerar um **JSON puro e válido** com a configuração completa que será parseado e atribuído ao objeto `config`
+
+**⚠️ FORMATO DE SAÍDA:**
+- Você deve gerar **APENAS JSON puro** (sem `const config =`, sem `window.config = config;`, sem comentários)
+- O JSON será parseado automaticamente e atribuído ao objeto `config`
+- Use aspas duplas para todas as chaves e strings
+- Escape aspas dentro de strings com `\"`
+- Não inclua vírgulas finais
+- Certifique-se de que o JSON é válido e pode ser parseado sem erros
 
 ---
 
@@ -76,7 +84,7 @@ Consulte `components-catalog.json` → `nicheTemplates[niche]`:
 
 ---
 
-### PASSO 4: Ler Especificações dos Componentes
+### PASSO 3: Ler Especificações dos Componentes
 
 Para cada componente selecionado, consulte `components-catalog.json` → `components[componentId]`:
 
@@ -104,51 +112,55 @@ Para cada componente selecionado, consulte `components-catalog.json` → `compon
 
 ---
 
-### PASSO 5: Gerar config.js
+### PASSO 4: Gerar JSON de Configuração
 
-#### Estrutura Base do config.js:
+#### Estrutura Base do JSON:
 
-```javascript
-const config = {
-  theme: {
-    colors: {
-      primary: '#...',        // Cor principal (extrair do prompt ou usar padrão do nicho)
-      secondary: '#...',      // Cor secundária
-      tertiary: '#...',       // Cor terciária
-      accent: '#...',         // Cor de destaque
-      background: '#FFFFFF',  // Fundo (geralmente branco)
-      text: {
-        dark: '#1F2937',
-        medium: '#4B5563',
-        light: '#9CA3AF',
-        white: '#FFFFFF'
+**⚠️ IMPORTANTE:** Você deve gerar um **JSON puro e válido**, sem comentários JavaScript, sem `const config =`, sem `window.config = config;`. Apenas o objeto JSON que será parseado e atribuído ao objeto `config`.
+
+```json
+{
+  "theme": {
+    "colors": {
+      "primary": "#...",
+      "primaryLight": "#...",
+      "secondary": "#...",
+      "tertiary": "#...",
+      "accent": "#...",
+      "background": "#FFFFFF",
+      "text": {
+        "dark": "#1F2937",
+        "medium": "#4B5563",
+        "light": "#9CA3AF",
+        "white": "#FFFFFF"
       }
     },
-    fonts: {
-      primary: '"Poppins", sans-serif',     // Fonte principal
-      secondary: '"Inter", sans-serif',     // Fonte secundária
-      urls: {
-        google: 'https://fonts.googleapis.com/css2?family=...'
+    "fonts": {
+      "primary": "\"Poppins\", sans-serif",
+      "secondary": "\"Inter\", sans-serif",
+      "urls": {
+        "google": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
       }
     }
   },
-
-  // Componentes (um para cada componente recomendado)
-  'component-id-1': { /* props */ },
-  'component-id-2': { /* props */ },
-  // ...
-
-  site: {
-    title: "Título SEO do Site",
-    name: "Nome do Site",
-    established: "", // Opcional
-    logoAlt: "Logo [Nome]",
-    logoUrl: "" // Opcional
+  "component-id-1": { },
+  "component-id-2": { },
+  "site": {
+    "title": "Título SEO do Site",
+    "name": "Nome do Site",
+    "established": "",
+    "logoAlt": "Logo [Nome]",
+    "logoUrl": ""
   }
-};
-
-window.config = config;
+}
 ```
+
+**Regras para o JSON:**
+- Use aspas duplas para todas as chaves e strings
+- Escape aspas dentro de strings com `\"`
+- Não inclua comentários
+- Não inclua vírgulas finais
+- Certifique-se de que o JSON é válido e pode ser parseado
 
 #### Paleta de Cores por Nicho (quando não especificado):
 
@@ -165,7 +177,7 @@ window.config = config;
 
 ---
 
-### PASSO 6: Preencher Props dos Componentes
+### PASSO 5: Preencher Props dos Componentes
 
 Para cada componente, preencher baseado em:
 1. **Informações extraídas do prompt do usuário**
@@ -179,33 +191,35 @@ Para cada componente, preencher baseado em:
 - Localização: São Paulo
 - Instagram: @drjoaosilva
 
-**Componente gerado:**
-```javascript
-'contact-top-bar': {
-  infoItems: [
-    {
-      icon: "fas fa-phone-alt",
-      text: "(11) 98765-4321"
-    },
-    {
-      icon: "fas fa-map-marker-alt",
-      text: "São Paulo - SP"
-    },
-    {
-      icon: "fas fa-clock",
-      text: "Seg-Sex: 8h às 18h"
-    }
-  ],
-  socialLinks: [
-    {
-      icon: "fab fa-instagram",
-      href: "https://instagram.com/drjoaosilva"
-    },
-    {
-      icon: "fab fa-whatsapp",
-      href: "https://wa.me/5511987654321"
-    }
-  ]
+**Componente gerado (em JSON):**
+```json
+{
+  "contact-top-bar": {
+    "infoItems": [
+      {
+        "icon": "fas fa-phone-alt",
+        "text": "(11) 98765-4321"
+      },
+      {
+        "icon": "fas fa-map-marker-alt",
+        "text": "São Paulo - SP"
+      },
+      {
+        "icon": "fas fa-clock",
+        "text": "Seg-Sex: 8h às 18h"
+      }
+    ],
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com/drjoaosilva"
+      },
+      {
+        "icon": "fab fa-whatsapp",
+        "href": "https://wa.me/5511987654321"
+      }
+    ]
+  }
 }
 ```
 
@@ -214,41 +228,6 @@ Para cada componente, preencher baseado em:
 - **Links**: Sempre URLs completas (https://)
 - **Textos**: Adapte ao contexto brasileiro (horários, formatos de telefone)
 - **Valores padrão**: Se não especificado, use valores genéricos apropriados
-
----
-
-### PASSO 7: Gerar index.html
-
-O `index.html` é sempre o mesmo para todos os templates:
-
-```html
-<!DOCTYPE html>
-<html lang="pt-BR">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <script src="config.js"></script>
-
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
-
-  <script src="/templates/components/component-registry.js"></script>
-
-  <script src="/templates/components/cosmos-template.js"></script>
-</head>
-
-<body class="antialiased">
-  <!-- Componentes serão montados automaticamente aqui -->
-</body>
-
-</html>
-```
-
-**⚠️ IMPORTANTE:** NÃO adicione componentes HTML manualmente. O sistema Cosmos monta automaticamente baseado no `config.js`.
 
 ---
 
@@ -278,176 +257,166 @@ telefone 11 98765-4321, cor azul"
 - `footer-contact`
 - `whatsapp-float-button`
 
-**config.js gerado:**
-```javascript
-const config = {
-  theme: {
-    colors: {
-      primary: '#0A4D68',        // Azul profissional
-      primaryLight: '#088395',   // Teal
-      background: '#F8FAFB',     // Fundo claro
-      accent: '#05BFDB',         // Cyan (destaque)
-      text: {
-        dark: '#1F2937',
-        medium: '#4B5563',
-        light: '#6B7280',
-        white: '#FFFFFF'
+**JSON gerado:**
+```json
+{
+  "theme": {
+    "colors": {
+      "primary": "#0A4D68",
+      "primaryLight": "#088395",
+      "background": "#F8FAFB",
+      "accent": "#05BFDB",
+      "text": {
+        "dark": "#1F2937",
+        "medium": "#4B5563",
+        "light": "#6B7280",
+        "white": "#FFFFFF"
       }
     },
-    fonts: {
-      primary: '"Poppins", sans-serif',
-      secondary: '"Inter", sans-serif',
-      urls: {
-        google: 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap'
+    "fonts": {
+      "primary": "\"Poppins\", sans-serif",
+      "secondary": "\"Inter\", sans-serif",
+      "urls": {
+        "google": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
       }
     }
   },
-
-  'contact-top-bar': {
-    infoItems: [
+  "contact-top-bar": {
+    "infoItems": [
       {
-        icon: "fas fa-phone-alt",
-        text: "(11) 98765-4321"
+        "icon": "fas fa-phone-alt",
+        "text": "(11) 98765-4321"
       },
       {
-        icon: "fas fa-map-marker-alt",
-        text: "São Paulo - SP"
+        "icon": "fas fa-map-marker-alt",
+        "text": "São Paulo - SP"
       },
       {
-        icon: "fas fa-clock",
-        text: "Seg-Sex: 8h às 18h"
+        "icon": "fas fa-clock",
+        "text": "Seg-Sex: 8h às 18h"
       }
     ],
-    socialLinks: [
+    "socialLinks": [
       {
-        icon: "fab fa-instagram",
-        href: "https://instagram.com"
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com"
       }
     ]
   },
-
-  'sticky-header-navigation': {
-    logoUrl: "",
-    logoAlt: "Logo Dr. João Silva",
-    siteName: "Dr. João Silva",
-    established: "CRO 12345",
-    links: {
-      about: { text: "Sobre", href: "#sobre" },
-      services: { text: "Especialidades", href: "#servicos" },
-      location: { text: "Localização", href: "#localizacao" },
-      cta: { text: "Agendar Consulta", href: "https://wa.me/5511987654321", target: "_blank" }
+  "sticky-header-navigation": {
+    "logoUrl": "",
+    "logoAlt": "Logo Dr. João Silva",
+    "siteName": "Dr. João Silva",
+    "established": "CRO 12345",
+    "links": {
+      "about": { "text": "Sobre", "href": "#sobre" },
+      "services": { "text": "Especialidades", "href": "#servicos" },
+      "location": { "text": "Localização", "href": "#localizacao" },
+      "cta": { "text": "Agendar Consulta", "href": "https://wa.me/5511987654321", "target": "_blank" }
     }
   },
-
-  'hero-overlay': {
-    badge: "Cuidando do seu sorriso com excelência",
-    title: "Seu sorriso",
-    titleHighlight: "merece o melhor.",
-    subtitle: "Tratamentos odontológicos modernos com tecnologia de ponta e atendimento humanizado.",
-    ctaPrimary: {
-      text: "Agendar Consulta",
-      href: "https://wa.me/5511987654321",
-      target: "_blank"
+  "hero-overlay": {
+    "badge": "Cuidando do seu sorriso com excelência",
+    "title": "Seu sorriso",
+    "titleHighlight": "merece o melhor.",
+    "subtitle": "Tratamentos odontológicos modernos com tecnologia de ponta e atendimento humanizado.",
+    "ctaPrimary": {
+      "text": "Agendar Consulta",
+      "href": "https://wa.me/5511987654321",
+      "target": "_blank"
     },
-    ctaSecondary: {
-      text: "Nossas Especialidades",
-      href: "#servicos"
+    "ctaSecondary": {
+      "text": "Nossas Especialidades",
+      "href": "#servicos"
     },
-    backgroundImage: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=1920",
-    backgroundAlt: "Consultório Odontológico",
-    whatsappNumber: "5511987654321"
+    "backgroundImage": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=1920",
+    "backgroundAlt": "Consultório Odontológico",
+    "whatsappNumber": "5511987654321"
   },
-
-  'quick-service-cards': {
-    cards: [
+  "quick-service-cards": {
+    "cards": [
       {
-        icon: "fas fa-tooth",
-        title: "Clareamento Dental",
-        description: "Clareamento profissional para um sorriso mais branco e radiante.",
-        buttonText: "Saiba Mais",
-        buttonHref: "#contato"
+        "icon": "fas fa-tooth",
+        "title": "Clareamento Dental",
+        "description": "Clareamento profissional para um sorriso mais branco e radiante.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "#contato"
       },
       {
-        icon: "fas fa-tooth",
-        title: "Implantes Dentários",
-        description: "Soluções em implantes com tecnologia de última geração.",
-        buttonText: "Agendar",
-        buttonHref: "#contato"
+        "icon": "fas fa-tooth",
+        "title": "Implantes Dentários",
+        "description": "Soluções em implantes com tecnologia de última geração.",
+        "buttonText": "Agendar",
+        "buttonHref": "#contato"
       },
       {
-        icon: "fas fa-tooth",
-        title: "Ortodontia",
-        description: "Aparelhos ortodônticos para corrigir o alinhamento dos dentes.",
-        buttonText: "Conhecer",
-        buttonHref: "#contato"
+        "icon": "fas fa-tooth",
+        "title": "Ortodontia",
+        "description": "Aparelhos ortodônticos para corrigir o alinhamento dos dentes.",
+        "buttonText": "Conhecer",
+        "buttonHref": "#contato"
       },
       {
-        icon: "fas fa-tooth",
-        title: "Limpeza Profissional",
-        description: "Limpeza e profilaxia para manter sua saúde bucal em dia.",
-        buttonText: "Agendar",
-        buttonHref: "#contato"
+        "icon": "fas fa-tooth",
+        "title": "Limpeza Profissional",
+        "description": "Limpeza e profilaxia para manter sua saúde bucal em dia.",
+        "buttonText": "Agendar",
+        "buttonHref": "#contato"
       }
     ]
   },
-
-  'about-image-features-clinical': {
-    id: "sobre",
-    tag: "Sobre Nós",
-    title: "Excelência em Odontologia",
-    paragraphs: [
+  "about-image-features-clinical": {
+    "id": "sobre",
+    "tag": "Sobre Nós",
+    "title": "Excelência em Odontologia",
+    "paragraphs": [
       "Dr. João Silva é um profissional altamente qualificado com anos de experiência em odontologia.",
       "Nosso consultório oferece tratamentos modernos com tecnologia de ponta e atendimento humanizado.",
       "Comprometidos com a saúde e bem-estar dos nossos pacientes."
     ],
-    features: [
-      { icon: "fas fa-certificate", text: "CRO Certificado" },
-      { icon: "fas fa-users", text: "Equipe Qualificada" },
-      { icon: "fas fa-hospital", text: "Tecnologia de Ponta" },
-      { icon: "fas fa-heart", text: "Atendimento Humanizado" }
+    "features": [
+      { "icon": "fas fa-certificate", "text": "CRO Certificado" },
+      { "icon": "fas fa-users", "text": "Equipe Qualificada" },
+      { "icon": "fas fa-hospital", "text": "Tecnologia de Ponta" },
+      { "icon": "fas fa-heart", "text": "Atendimento Humanizado" }
     ],
-    imageUrl: "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800",
-    imageAlt: "Dr. João Silva"
+    "imageUrl": "https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=800",
+    "imageAlt": "Dr. João Silva"
   },
-
-  'whatsapp-float-button': {
-    icon: "fab fa-whatsapp",
-    text: "Agendar Consulta",
-    href: "https://wa.me/5511987654321?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta.",
-    color: "#25D366"
+  "whatsapp-float-button": {
+    "icon": "fab fa-whatsapp",
+    "text": "Agendar Consulta",
+    "href": "https://wa.me/5511987654321?text=Olá!%20Gostaria%20de%20agendar%20uma%20consulta.",
+    "color": "#25D366"
   },
-
-   'footer-contact': {
-    title: "Entre em Contato",
-    address: {
-      label: "Endereço",
-      street: "Consultório Odontológico",
-      city: "São Paulo - SP",
-      zipCode: "CEP: 00000-000",
-      mapQuery: "São Paulo"
+  "footer-contact": {
+    "title": "Entre em Contato",
+    "address": {
+      "label": "Endereço",
+      "street": "Consultório Odontológico",
+      "city": "São Paulo - SP",
+      "zipCode": "CEP: 00000-000",
+      "mapQuery": "São Paulo"
     },
-    contact: {
-      label: "Contato",
-      phone: "(11) 98765-4321"
+    "contact": {
+      "label": "Contato",
+      "phone": "(11) 98765-4321"
     },
-    socialLinks: [
-      { icon: "fab fa-instagram", href: "https://instagram.com", label: "Instagram" },
-      { icon: "fab fa-whatsapp", href: "https://wa.me/5511987654321", label: "WhatsApp" }
+    "socialLinks": [
+      { "icon": "fab fa-instagram", "href": "https://instagram.com", "label": "Instagram" },
+      { "icon": "fab fa-whatsapp", "href": "https://wa.me/5511987654321", "label": "WhatsApp" }
     ],
-    copyright: "© 2024 Dr. João Silva. Todos os direitos reservados.",
-    tags: ["Odontologia", "Dentista", "Clínica Odontológica"]
+    "copyright": "© 2024 Dr. João Silva. Todos os direitos reservados.",
+    "tags": ["Odontologia", "Dentista", "Clínica Odontológica"]
   },
-
-  site: {
-    title: "Dr. João Silva - Odontologia | Consultório em São Paulo",
-    name: "Dr. João Silva",
-    established: "CRO 12345",
-    logoAlt: "Logo Dr. João Silva",
-    logoUrl: ""
+  "site": {
+    "title": "Dr. João Silva - Odontologia | Consultório em São Paulo",
+    "name": "Dr. João Silva",
+    "established": "CRO 12345",
+    "logoAlt": "Logo Dr. João Silva",
+    "logoUrl": ""
   }
-};
-
-window.config = config;
+}
 ```
 
 ---
@@ -476,16 +445,17 @@ delivery, telefone 11 3333-4444"
 - `footer-contact`
 - `whatsapp-float-button`
 
-**Tema:**
-```javascript
-theme: {
-  colors: {
-    primary: '#F97316',        // Orange
-    secondary: '#FB923C',
-    tertiary: '#FDBA74',
-    accent: '#F59E0B',         // Amber
-    background: '#FFFFFF',
-    // ...
+**Tema (exemplo em JSON):**
+```json
+{
+  "theme": {
+    "colors": {
+      "primary": "#F97316",
+      "secondary": "#FB923C",
+      "tertiary": "#FDBA74",
+      "accent": "#F59E0B",
+      "background": "#FFFFFF"
+    }
   }
 }
 ```
@@ -502,9 +472,13 @@ Use URLs do Unsplash apropriadas para cada nicho:
 
 ## ⚠️ VALIDAÇÕES E CHECKLIST
 
-Antes de entregar os arquivos, verifique:
+Antes de entregar o JSON, verifique:
 
-### config.js:
+### JSON de Configuração:
+- [ ] **JSON é válido e pode ser parseado** (sem erros de sintaxe)
+- [ ] Todas as chaves estão entre aspas duplas
+- [ ] Strings com aspas internas estão escapadas com `\"`
+- [ ] Não há vírgulas finais em arrays/objetos
 - [ ] Todas as `requiredProps` de cada componente estão preenchidas
 - [ ] `theme.colors.primary` está definido (extraído do prompt ou padrão)
 - [ ] `theme.fonts` tem `primary`, `secondary` e `urls.google`
@@ -550,12 +524,15 @@ Antes de entregar os arquivos, verifique:
 
 ## 📝 NOTAS IMPORTANTES
 
-1. **Nunca invente componentes**: Só use componentes que existem no `components-catalog.json`
-2. **Sempre use componentes recommended**: Esses são os ideais para cada nicho
-3. **⚠️ USE MÚLTIPLOS COMPONENTES**: Templates devem ter 8-10+ componentes. Explore a coleção completa!
-4. **⚠️ CONTRASTE É OBRIGATÓRIO**: Sempre garanta contraste adequado (mínimo 4.5:1) em todos os componentes
-5. **Mantenha textos em português brasileiro**: Todo conteúdo deve estar em pt-BR
-6. **Use Font Awesome para ícones**: `fas fa-*` para sólidos, `fab fa-*` para brands
-7. **URLs devem ser completas**: Sempre `https://` no início
-8. **Telefones brasileiros**: Formato `(XX) XXXXX-XXXX` para display, `55XXXXXXXXXXX` para WhatsApp
-9. **Imagens**: Prefira Unsplash para placeholders, use URLs diretas
+1. **Gere apenas JSON puro**: Não inclua `const config =`, `window.config = config;`, ou comentários JavaScript
+2. **JSON válido é obrigatório**: O JSON deve ser parseável sem erros. Use aspas duplas, escape correto, sem vírgulas finais
+3. **Nunca invente componentes**: Só use componentes que existem no `components-catalog.json`
+4. **Sempre use componentes recommended**: Esses são os ideais para cada nicho
+5. **⚠️ USE MÚLTIPLOS COMPONENTES**: Templates devem ter 8-10+ componentes. Explore a coleção completa!
+6. **⚠️ CONTRASTE É OBRIGATÓRIO**: Sempre garanta contraste adequado (mínimo 4.5:1) em todos os componentes
+7. **Mantenha textos em português brasileiro**: Todo conteúdo deve estar em pt-BR
+8. **Use Font Awesome para ícones**: `fas fa-*` para sólidos, `fab fa-*` para brands
+9. **URLs devem ser completas**: Sempre `https://` no início
+10. **Telefones brasileiros**: Formato `(XX) XXXXX-XXXX` para display, `55XXXXXXXXXXX` para WhatsApp
+11. **Imagens**: Prefira Unsplash para placeholders, use URLs diretas
+12. **Escape de strings**: Strings com aspas devem usar `\"` (ex: `"\"Poppins\", sans-serif"`)
