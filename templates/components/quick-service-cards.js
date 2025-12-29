@@ -1,197 +1,79 @@
 /**
  * Quick Service Cards Component
- * Grid de cards de serviços rápidos com ícones, títulos e botões de ação
+ * Grid de cards de serviços rápidos com design "Modern Clean"
+ * Foco em: Espaçamento orgânico, sombras suaves e CTAs funcionais.
  */
 
-class QuickServiceCardsComponent {
+class QuickServiceCardsComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
-     * @param {Array} data.cards - Array de cards { icon: string, title: string, description: string, buttonText: string, buttonHref: string }
+     * @param {Array} data.cards - Array de cards { icon: string, title: string, description: string, buttonText: string, buttonHref: string, badge: string }
+     * @param {Object} data.colors - Cores customizáveis (opcional)
+     * @param {string} data.colors.primary - Cor primária do tema (ex: '#16A34A')
+     * @param {string} data.colors.text - Cor do texto principal
      */
     constructor(data) {
+        super();
         this.cards = data.cards || [];
+
+        // Resolve cores dinâmicas (sempre usando o resolvedor do tema)
+        this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#16A34A');
+        this.textHex = this.resolveColorHex(data.colors?.text, 'secondary', '#1e293b');
+
+        // Variações para profundidade
+        this.primaryLightHex = this.hexToRgba(this.primaryHex, 0.08);
+        this.primaryDarkHex = this.darkenColor(this.primaryHex, 0.1);
     }
 
     /**
-     * Injeta estilos base compartilhados (apenas uma vez)
+     * Renderiza um card individual seguindo as regras de "Modern Clean"
      */
-    injectBaseStyles() {
-        if (document.getElementById('base-styles-global')) return;
+    renderCard(card) {
+        return `
+            <div class="group relative bg-white p-8 md:p-10 rounded-[2.5rem] transition-all duration-500 hover:-translate-y-3 border border-slate-100/50"
+                 style="box-shadow: 0 30px 60px -12px rgba(0,0,0,0.05), 0 18px 36px -18px rgba(0,0,0,0.05);">
 
-        const style = document.createElement('style');
-        style.id = 'base-styles-global';
-        style.textContent = `
-            :root {
-                --primary: #16A34A;
-                --primary-dark: #15803d;
-                --primary-light: #dcfce7;
-                --secondary: #2c3e50;
-                --text-body: #555;
-                --light-bg: #f9fdf7;
-                --white: #ffffff;
-                --shadow: 0 10px 30px rgba(0,0,0,0.08);
-                --radius: 20px;
-            }
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            html {
-                scroll-behavior: smooth;
-            }
-            body {
-                font-family: 'Nunito', sans-serif;
-                color: var(--text-body);
-                background-color: var(--white);
-                line-height: 1.6;
-                overflow-x: hidden;
-            }
-            h1, h2, h3, h4 {
-                font-family: 'Poppins', sans-serif;
-                color: var(--secondary);
-                font-weight: 700;
-            }
-            a {
-                text-decoration: none;
-                color: inherit;
-                transition: 0.3s;
-            }
-            ul {
-                list-style: none;
-            }
-            img {
-                max-width: 100%;
-                height: auto;
-            }
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 20px;
-            }
-            .btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                padding: 12px 30px;
-                border-radius: 50px;
-                font-weight: 700;
-                cursor: pointer;
-                border: none;
-                transition: all 0.3s ease;
-                text-align: center;
-                gap: 10px;
-            }
-            .btn-primary {
-                background-color: var(--primary);
-                color: white;
-                box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
-            }
-            .btn-primary:hover {
-                background-color: var(--primary-dark);
-                color: white;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 163, 74, 0.6);
-            }
-            .btn-outline {
-                border: 2px solid var(--secondary);
-                color: var(--secondary);
-                background: transparent;
-            }
-            .btn-outline:hover {
-                background: var(--secondary);
-                color: white;
-            }
-            .btn-secondary {
-                background: var(--secondary);
-                color: white;
-            }
-            .btn-hero {
-                padding: 15px 40px;
-                font-size: 1.1rem;
-                box-shadow: 0 10px 25px rgba(22, 163, 74, 0.5);
-            }
-            .btn-hero:hover {
-                box-shadow: 0 15px 35px rgba(22, 163, 74, 0.7);
-                transform: translateY(-3px);
-            }
+                ${card.badge ? `
+                    <span class="absolute top-6 right-8 py-1 px-3 rounded-full text-[10px] font-bold uppercase tracking-widest border"
+                          style="color: ${this.primaryHex}; background-color: ${this.primaryLightHex}; border-color: ${this.hexToRgba(this.primaryHex, 0.2)};">
+                        ${card.badge}
+                    </span>
+                ` : ''}
+
+                <div class="w-16 h-16 rounded-2xl flex items-center justify-center mb-8 transition-transform group-hover:scale-110 duration-500"
+                     style="background-color: ${this.primaryLightHex}; color: ${this.primaryHex};">
+                    <i class="${card.icon} text-2xl"></i>
+                </div>
+
+                <h3 class="text-xl font-bold mb-4 tracking-tight" style="color: ${this.textHex};">
+                    ${card.title}
+                </h3>
+
+                <p class="text-slate-500 text-sm leading-relaxed mb-8 font-medium">
+                    ${card.description}
+                </p>
+
+                <a href="${card.buttonHref || '#'}"
+                   class="inline-flex items-center gap-2 font-bold text-sm transition-all duration-300 group/btn"
+                   style="color: ${this.primaryHex};">
+                    ${card.buttonText || 'Saiba Mais'}
+                    <i class="fas fa-arrow-right text-xs transition-transform group-hover/btn:translate-x-1"></i>
+                    <div class="h-0.5 w-0 group-hover/btn:w-full transition-all duration-300 rounded-full" style="background-color: ${this.primaryHex}; margin-top: -2px;"></div>
+                </a>
+            </div>
         `;
-        document.head.appendChild(style);
     }
 
     /**
-     * Injeta estilos no head se ainda não foram injetados
-     */
-    injectStyles() {
-        this.injectBaseStyles();
-        if (document.getElementById('quick-service-cards-styles')) return;
-
-        const style = document.createElement('style');
-        style.id = 'quick-service-cards-styles';
-        style.textContent = `
-            .quick-services {
-                margin-top: -60px;
-                position: relative;
-                z-index: 10;
-                margin-bottom: 80px;
-            }
-            .cards-grid {
-                display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 30px;
-            }
-            .card {
-                background: white;
-                padding: 40px 30px;
-                border-radius: var(--radius);
-                box-shadow: var(--shadow);
-                text-align: center;
-                transition: transform 0.3s;
-                border-bottom: 5px solid var(--primary);
-            }
-            .card:hover {
-                transform: translateY(-10px);
-            }
-            .card-icon {
-                font-size: 2.5rem;
-                color: var(--primary-dark);
-                margin-bottom: 20px;
-            }
-            .card h3 {
-                margin-bottom: 15px;
-                font-size: 1.4rem;
-                color: var(--secondary);
-            }
-            .card p {
-                font-size: 0.95rem;
-                margin-bottom: 25px;
-                color: var(--text-body);
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /**
-     * Renderiza o HTML do componente
-     * @returns {string} HTML string
+     * Renderiza o container principal
      */
     render() {
-        this.injectStyles();
-        const cardsHtml = this.cards
-            .map(card => `
-                <div class="card">
-                    <div class="card-icon"><i class="${card.icon}"></i></div>
-                    <h3>${card.title}</h3>
-                    <p>${card.description}</p>
-                    <a href="${card.buttonHref || '#'}" class="btn btn-primary">${card.buttonText || 'Saiba Mais'}</a>
-                </div>
-            `)
-            .join('');
+        const cardsHtml = this.cards.map(card => this.renderCard(card)).join('');
 
         return `
-            <section class="quick-services">
-                <div class="container">
-                    <div class="cards-grid">
+            <section class="relative z-20 -mt-16 pb-20 px-6">
+                <div class="max-w-7xl mx-auto">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         ${cardsHtml}
                     </div>
                 </div>
@@ -200,23 +82,15 @@ class QuickServiceCardsComponent {
     }
 
     /**
-     * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde será montado
+     * Monta o componente
      */
     mount(targetId) {
         const target = document.getElementById(targetId);
         if (target) {
-            this.injectStyles();
             target.innerHTML = this.render();
         }
     }
 
-    /**
-     * Método estático para criar e montar
-     * @param {Object} data - Dados do componente
-     * @param {string} targetId - ID do elemento
-     * @returns {QuickServiceCardsComponent} Instância do componente
-     */
     static create(data, targetId) {
         const component = new QuickServiceCardsComponent(data);
         component.mount(targetId);
@@ -224,8 +98,6 @@ class QuickServiceCardsComponent {
     }
 }
 
-// Auto-registra no Component Registry
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('quick-service-cards', QuickServiceCardsComponent);
 }
-

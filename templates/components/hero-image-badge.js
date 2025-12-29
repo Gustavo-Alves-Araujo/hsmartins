@@ -160,12 +160,12 @@ class HeroImageBadgeComponent extends BaseComponent {
         this.injectBaseStyles();
         if (document.getElementById('hero-image-badge-styles')) return;
 
-        const style = document.createElement('style');
+        const style = document.createElement('style')
         style.id = 'hero-image-badge-styles';
         style.textContent = `
             .hero {
-                padding-top: 80px;
-                padding-bottom: 100px;
+                padding-top: 130px;
+                padding-bottom: 40px;
                 background: linear-gradient(180deg, ${this.hexToRgba(this.primaryHex, 0.05)} 0%, #ffffff 100%);
                 position: relative;
                 overflow: hidden;
@@ -210,8 +210,8 @@ class HeroImageBadgeComponent extends BaseComponent {
                 width: 100%;
             }
             .hero-text {
-                flex: 1;
-                max-width: 600px;
+                flex: 1.2;
+                max-width: 750px;
             }
             .hero-tag {
                 display: inline-block;

@@ -1,337 +1,193 @@
 /**
- * Sticky Header Navigation Component
- * Header fixo sticky com logo, menu de navegação responsivo e botão CTA
+ * Sticky Header Navigation Component - Refatorado
+ * Estilo: Modern Clean / Glassmorphism com CTA em Gradiente
  */
 
-class StickyHeaderNavigationComponent {
+class StickyHeaderNavigationComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
-     * @param {string} data.logoUrl - URL do logo
-     * @param {string} data.logoAlt - Texto alternativo do logo
-     * @param {Array} data.menuItems - Array de itens do menu { text: string, href: string, active: boolean }
-     * @param {Object} data.clientButton - Botão área do cliente { text: string, href: string, icon: string }
      */
     constructor(data) {
+        super();
         this.logoUrl = data.logoUrl || '';
         this.logoAlt = data.logoAlt || '';
-        this.menuItems = data.menuItems || [];
-        this.clientButton = data.clientButton || null;
+        this.siteName = data.siteName || '';
+        this.established = data.established || '';
+
+        // Processamento de links/menuItems (Mantendo sua lógica original)
+        if (data.links && typeof data.links === 'object' && !Array.isArray(data.links)) {
+            this.menuItems = [];
+            for (const key in data.links) {
+                if (key !== 'cta' && data.links[key] && typeof data.links[key] === 'object') {
+                    this.menuItems.push({
+                        text: data.links[key].text || key,
+                        href: data.links[key].href || '#',
+                        active: data.links[key].active || false
+                    });
+                }
+            }
+            if (data.links.cta) {
+                this.clientButton = {
+                    text: data.links.cta.text || 'Contato',
+                    href: data.links.cta.href || '#',
+                    icon: data.links.cta.icon || 'fab fa-whatsapp',
+                    target: data.links.cta.target || null
+                };
+            } else {
+                this.clientButton = data.clientButton || null;
+            }
+        } else {
+            this.menuItems = data.menuItems || [];
+            this.clientButton = data.clientButton || null;
+        }
+
+        // Resolução de Cores para o Gradiente
+        this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#16A34A');
+        this.primaryDarkHex = this.darkenColor(this.primaryHex, 0.2);
     }
 
     /**
-     * Injeta estilos base compartilhados (apenas uma vez)
-     */
-    injectBaseStyles() {
-        if (document.getElementById('base-styles-global')) return;
-
-        const style = document.createElement('style');
-        style.id = 'base-styles-global';
-        style.textContent = `
-            :root {
-                --primary: #16A34A;
-                --primary-dark: #15803d;
-                --primary-light: #dcfce7;
-                --secondary: #2c3e50;
-                --text-body: #555;
-                --light-bg: #f9fdf7;
-                --white: #ffffff;
-                --shadow: 0 10px 30px rgba(0,0,0,0.08);
-                --radius: 20px;
-            }
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-            }
-            html {
-                scroll-behavior: smooth;
-            }
-            body {
-                font-family: 'Nunito', sans-serif;
-                color: var(--text-body);
-                background-color: var(--white);
-                line-height: 1.6;
-                overflow-x: hidden;
-            }
-            h1, h2, h3, h4 {
-                font-family: 'Poppins', sans-serif;
-                color: var(--secondary);
-                font-weight: 700;
-            }
-            a {
-                text-decoration: none;
-                color: inherit;
-                transition: 0.3s;
-            }
-            ul {
-                list-style: none;
-            }
-            img {
-                max-width: 100%;
-                height: auto;
-            }
-            .container {
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 20px;
-            }
-            .btn {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                padding: 12px 30px;
-                border-radius: 50px;
-                font-weight: 700;
-                cursor: pointer;
-                border: none;
-                transition: all 0.3s ease;
-                text-align: center;
-                gap: 10px;
-            }
-            .btn-primary {
-                background-color: var(--primary);
-                color: white;
-                box-shadow: 0 4px 15px rgba(22, 163, 74, 0.4);
-            }
-            .btn-primary:hover {
-                background-color: var(--primary-dark);
-                color: white;
-                transform: translateY(-2px);
-                box-shadow: 0 8px 20px rgba(22, 163, 74, 0.6);
-            }
-            .btn-outline {
-                border: 2px solid var(--secondary);
-                color: var(--secondary);
-                background: transparent;
-            }
-            .btn-outline:hover {
-                background: var(--secondary);
-                color: white;
-            }
-            .btn-secondary {
-                background: var(--secondary);
-                color: white;
-            }
-            .btn-hero {
-                padding: 15px 40px;
-                font-size: 1.1rem;
-                box-shadow: 0 10px 25px rgba(22, 163, 74, 0.5);
-            }
-            .btn-hero:hover {
-                box-shadow: 0 15px 35px rgba(22, 163, 74, 0.7);
-                transform: translateY(-3px);
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /**
-     * Injeta estilos no head se ainda não foram injetados
+     * Injeta estilos necessários para estados dinâmicos e animações de menu
      */
     injectStyles() {
-        this.injectBaseStyles();
-        if (document.getElementById('sticky-header-navigation-styles')) return;
+        if (document.getElementById('sticky-header-runtime-styles')) return;
 
         const style = document.createElement('style');
-        style.id = 'sticky-header-navigation-styles';
+        style.id = 'sticky-header-runtime-styles';
         style.textContent = `
-            header {
-                position: sticky;
-                top: 0;
-                width: 100%;
-                z-index: 1000;
-                background: rgba(255, 255, 255, 0.85);
+            #main-header.scrolled {
+                background-color: rgba(255, 255, 255, 0.8);
                 backdrop-filter: blur(12px);
                 -webkit-backdrop-filter: blur(12px);
-                border-bottom: 1px solid rgba(255,255,255,0.3);
-                box-shadow: 0 4px 30px rgba(0,0,0,0.03);
-                transition: padding 0.3s;
+                box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
+                padding-top: 0.5rem;
+                padding-bottom: 0.5rem;
             }
-            .nav-container {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 10px 20px;
+            #navMenu.mobile-active {
+                opacity: 1;
+                transform: translateY(0);
+                pointer-events: auto;
             }
-            .logo img {
-                height: 55px;
-                transition: transform 0.3s;
-            }
-            .logo:hover img {
-                transform: scale(1.05);
-            }
-            .nav-menu {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
-            .nav-link {
-                font-weight: 600;
-                color: var(--secondary);
-                font-size: 0.95rem;
-                padding: 10px 18px;
-                border-radius: 30px;
-                transition: all 0.3s ease;
-            }
-            .nav-link:hover {
-                color: var(--secondary);
-                background-color: var(--primary-light);
-            }
-            .nav-link.active {
-                color: var(--secondary);
-                background-color: var(--primary-light);
-                font-weight: 700;
-            }
-            .header-btn {
-                margin-left: 15px;
-                background: var(--secondary);
-                color: white;
-                padding: 10px 25px;
-                border-radius: 50px;
-                font-size: 0.9rem;
-                font-weight: 600;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                box-shadow: 0 4px 10px rgba(44, 62, 80, 0.2);
-            }
-            .header-btn:hover {
-                background: var(--primary);
-                color: white;
-                transform: translateY(-2px);
-            }
-            .hamburger {
-                display: none;
-                font-size: 1.5rem;
-                cursor: pointer;
-                color: var(--secondary);
-                padding: 10px;
-            }
-            @media (max-width: 992px) {
-                .hamburger { display: block; }
-                .nav-menu {
-                    position: absolute;
-                    top: 100%;
-                    left: 0;
-                    width: 100%;
-                    background: white;
-                    flex-direction: column;
-                    align-items: flex-start;
-                    padding: 20px;
-                    box-shadow: 0 10px 15px rgba(0,0,0,0.05);
-                    opacity: 0;
-                    visibility: hidden;
-                    transform: translateY(-20px);
-                    transition: all 0.3s ease;
-                }
-                .nav-menu.active {
-                    opacity: 1;
-                    visibility: visible;
-                    transform: translateY(0);
-                }
-                .nav-link { width: 100%; }
-                .header-btn { margin: 10px 0 0; width: 100%; justify-content: center; }
+            .nav-link-active::after {
+                content: '';
+                position: absolute;
+                bottom: -4px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 12px;
+                height: 4px;
+                background-color: ${this.primaryHex};
+                border-radius: 10px;
             }
         `;
         document.head.appendChild(style);
     }
 
-    /**
-     * Renderiza o HTML do componente
-     * @returns {string} HTML string
-     */
     render() {
         this.injectStyles();
+
         const menuItemsHtml = this.menuItems
-            .map(item => {
-                const activeClass = item.active ? 'active' : '';
-                return `<li><a href="${item.href}" class="nav-link ${activeClass}">${item.text}</a></li>`;
-            })
+            .map(item => `
+                <li class="relative">
+                    <a href="${item.href}"
+                       class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all ${item.active ? 'nav-link-active' : ''}">
+                        ${item.text}
+                    </a>
+                </li>
+            `)
             .join('');
 
         const clientButtonHtml = this.clientButton ? `
-            <li>
-                <a href="${this.clientButton.href}" class="header-btn">
-                    ${this.clientButton.icon ? `<i class="${this.clientButton.icon}"></i> ` : ''}
-                    ${this.clientButton.text}
-                </a>
-            </li>
+            <a href="${this.clientButton.href}"
+               ${this.clientButton.target ? `target="${this.clientButton.target}"` : ''}
+               class="flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg transition-all hover:scale-105 active:scale-95"
+               style="background: linear-gradient(135deg, ${this.primaryHex} 0%, ${this.primaryDarkHex} 100%);">
+                ${this.clientButton.icon ? `<i class="${this.clientButton.icon}"></i> ` : ''}
+                ${this.clientButton.text}
+            </a>
         ` : '';
 
         return `
-            <header id="main-header">
-                <div class="container">
-                    <div class="nav-container">
-                        <a href="#" class="logo">
-                            <img src="${this.logoUrl}" alt="${this.logoAlt}">
+            <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-4">
+                <div class="container mx-auto px-6">
+                    <nav class="flex items-center justify-between bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 shadow-sm">
+                        <a href="#" class="flex items-center gap-3 group transition-transform hover:scale-105">
+                            <img src="${this.logoUrl}" alt="${this.logoAlt}" class="h-10 md:h-12 w-auto object-contain">
+                            ${this.siteName ? `<span class="hidden md:block font-black text-slate-800 tracking-tight">${this.siteName}</span>` : ''}
                         </a>
 
-                        <div class="hamburger" onclick="toggleMenu()">
-                            <i class="fas fa-bars"></i>
+                        <ul class="hidden lg:flex items-center gap-2">
+                            ${menuItemsHtml}
+                        </ul>
+
+                        <div class="hidden lg:block">
+                            ${clientButtonHtml}
                         </div>
 
-                        <nav>
-                            <ul class="nav-menu" id="navMenu">
-                                ${menuItemsHtml}
-                                ${clientButtonHtml}
-                            </ul>
-                        </nav>
-                    </div>
+                        <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+                            <i class="fas fa-bars"></i>
+                        </button>
+                    </nav>
+                </div>
+
+                <div id="navMenu" class="absolute top-full left-0 w-full px-6 py-4 opacity-0 -translate-y-4 pointer-events-none transition-all duration-300 lg:hidden">
+                    <ul class="bg-white/95 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+                        ${this.menuItems.map(item => `
+                            <li>
+                                <a href="${item.href}" class="block text-base font-bold text-slate-700 hover:text-green-600 transition-colors">
+                                    ${item.text}
+                                </a>
+                            </li>
+                        `).join('')}
+                        <li class="pt-2 border-t border-slate-50">
+                            ${clientButtonHtml.replace('px-6 py-2.5', 'w-full justify-center py-3')}
+                        </li>
+                    </ul>
                 </div>
             </header>
         `;
     }
 
-    /**
-     * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde será montado
-     */
     mount(targetId) {
         const target = document.getElementById(targetId);
         if (target) {
-            this.injectStyles();
             target.innerHTML = this.render();
             this.attachEventListeners();
         }
     }
 
-    /**
-     * Adiciona event listeners
-     */
     attachEventListeners() {
-        // Fechar menu ao clicar em link
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                const menu = document.getElementById('navMenu');
-                if (menu && menu.classList.contains('active')) {
-                    menu.classList.remove('active');
-                }
+        const header = document.getElementById('main-header');
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.getElementById('navMenu');
 
-                // Atualiza link ativo
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
+        // Toggle Mobile Menu
+        if (mobileBtn && navMenu) {
+            mobileBtn.addEventListener('click', () => {
+                navMenu.classList.toggle('mobile-active');
+                const icon = mobileBtn.querySelector('i');
+                icon.classList.toggle('fa-bars');
+                icon.classList.toggle('fa-times');
             });
+        }
+
+        // Scroll Effects
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
 
-        // Efeito de Scroll na Navbar
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('main-header');
-            if (header) {
-                if (window.scrollY > 50) {
-                    header.style.boxShadow = '0 10px 30px rgba(0,0,0,0.08)';
-                } else {
-                    header.style.boxShadow = '0 4px 30px rgba(0,0,0,0.03)';
-                }
-            }
+        // Fechar ao clicar em link (mobile)
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('mobile-active');
+            });
         });
     }
 
-    /**
-     * Método estático para criar e montar
-     * @param {Object} data - Dados do componente
-     * @param {string} targetId - ID do elemento
-     * @returns {StickyHeaderNavigationComponent} Instância do componente
-     */
     static create(data, targetId) {
         const component = new StickyHeaderNavigationComponent(data);
         component.mount(targetId);
@@ -339,18 +195,7 @@ class StickyHeaderNavigationComponent {
     }
 }
 
-// Função global para toggle menu (mantida para compatibilidade)
-if (typeof window !== 'undefined') {
-    window.toggleMenu = function() {
-        const menu = document.getElementById('navMenu');
-        if (menu) {
-            menu.classList.toggle('active');
-        }
-    };
-}
-
-// Auto-registra no Component Registry
+// Auto-registra no sistema
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('sticky-header-navigation', StickyHeaderNavigationComponent);
 }
-

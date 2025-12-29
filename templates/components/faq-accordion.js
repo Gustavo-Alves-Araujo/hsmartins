@@ -1,6 +1,6 @@
 /**
- * FAQ Accordion Component
- * Seção de perguntas frequentes com accordion
+ * FAQ Accordion Component - Refatorado e Corrigido
+ * Estilo: Modern Clean Compacto com Glassmorphism e Blobs
  */
 
 class FaqAccordionComponent extends BaseComponent {
@@ -13,203 +13,142 @@ class FaqAccordionComponent extends BaseComponent {
     constructor(data) {
         super();
         this.title = data.title || 'Perguntas Frequentes';
-        // Aceita tanto 'items' quanto 'questions' para compatibilidade
         this.items = data.items || data.questions || [];
 
-        // Resolve cores do tema
-        this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');
-        const backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
-        this.isLightTheme = this.isLightColor(backgroundHex);
-        this.textColor = this.getBestTextColor(backgroundHex, 4.5);
-
-        // Resolve cores de texto do tema
-        const theme = this.getGlobalTheme();
-        if (theme && theme.colors && theme.colors.text) {
-            this.textDark = theme.colors.text.dark || '#1F2937';
-            this.textMedium = theme.colors.text.medium || '#4B5563';
-            this.textLight = theme.colors.text.light || '#9CA3AF';
-        } else {
-            this.textDark = '#1F2937';
-            this.textMedium = '#4B5563';
-            this.textLight = '#9CA3AF';
-        }
+        // RESOLUÇÃO DE CORES (Usando métodos do BaseComponent)
+        this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#16A34A');
+        this.primaryLightRgba = this.hexToRgba(this.primaryHex, 0.1);
+        this.primaryMediumRgba = this.hexToRgba(this.primaryHex, 0.2);
     }
 
     /**
-     * Injeta estilos no head se ainda não foram injetados
+     * Injeta estilos específicos para animação de abertura (max-height)
+     * que o Tailwind não consegue gerenciar dinamicamente sem o JIT quebrar.
      */
     injectStyles() {
-        if (document.getElementById('faq-accordion-styles')) return;
+        if (document.getElementById('faq-accordion-runtime-styles')) return;
 
         const style = document.createElement('style');
-        style.id = 'faq-accordion-styles';
+        style.id = 'faq-accordion-runtime-styles';
         style.textContent = `
-            .faq-section {
-                padding: 80px 0;
-                position: relative;
-                z-index: 10;
-            }
-            .faq-title {
-                font-size: 1.875rem;
-                font-weight: 700;
-                margin-bottom: 40px;
-                text-align: center;
-                color: ${this.textColor};
-            }
-            .faq-list {
-                display: flex;
-                flex-direction: column;
-                gap: 16px;
-                max-width: 48rem;
-                margin: 0 auto;
-            }
-            .faq-item {
-                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.hexToRgba('#FFFFFF', 0.05)};
-                border: 1px solid ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.1) : this.hexToRgba('#FFFFFF', 0.05)};
-                border-radius: 0.75rem;
-                overflow: hidden;
-                backdrop-filter: blur(4px);
-            }
-            .faq-button {
-                width: 100%;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 20px;
-                text-align: left;
-                font-weight: 500;
-                color: ${this.textColor};
-                background: transparent;
-                border: none;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-            .faq-button:hover {
-                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.05) : this.hexToRgba('#FFFFFF', 0.05)};
-            }
-            .faq-icon {
-                width: 20px;
-                height: 20px;
-                transition: transform 0.3s, color 0.3s;
-                color: ${this.textColor};
-            }
-            .faq-content {
-                transition: max-height 0.3s ease-in-out, padding 0.3s ease-in-out;
+            .faq-content-wrapper {
                 max-height: 0;
-                overflow: hidden;
-                padding: 0 20px;
+                transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+                opacity: 0;
             }
-            .faq-content.active {
-                max-height: 200px;
-                padding: 0 20px 20px;
+            .faq-item.active .faq-content-wrapper {
+                opacity: 1;
             }
-            .faq-answer {
-                color: ${this.isLightTheme ? this.textMedium : '#9CA3AF'};
-                padding-bottom: 20px;
-            }
-            .faq-item.active .faq-icon {
+            .faq-item.active .faq-chevron {
                 transform: rotate(180deg);
-                color: ${this.primaryHex};
+            }
+            .faq-item.active {
+                border-color: ${this.hexToRgba(this.primaryHex, 0.3)};
+                background-color: #ffffff;
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
             }
         `;
         document.head.appendChild(style);
     }
 
     /**
-     * Renderiza o HTML do componente
-     * @returns {string} HTML string
+     * Renderiza o HTML usando classes Tailwind ESTÁTICAS (para o JIT detectar)
      */
     render() {
         this.injectStyles();
 
         const itemsHtml = this.items.map((item, index) => `
-            <div class="faq-item" data-faq-index="${index}">
-                <button class="faq-button">
-                    ${item.question}
-                    <i data-lucide="chevron-down" class="faq-icon"></i>
+            <div
+                class="faq-item group bg-slate-50/50 backdrop-blur-sm border border-slate-100 rounded-2xl overflow-hidden transition-all duration-300"
+                data-aos="fade-up"
+                data-aos-delay="${index * 50}"
+            >
+                <button class="faq-toggle w-full flex items-center justify-between p-5 md:p-6 text-left outline-none">
+                    <span class="text-base md:text-lg font-bold text-slate-800 pr-8 transition-colors group-hover:text-slate-900">
+                        ${item.question}
+                    </span>
+                    <div class="faq-chevron-container flex-shrink-0 w-8 h-8 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400 transition-all duration-300">
+                        <i data-lucide="chevron-down" class="faq-chevron w-4 h-4 transition-transform duration-300"></i>
+                    </div>
                 </button>
-                <div class="faq-content">
-                    <p class="faq-answer">${item.answer}</p>
+
+                <div class="faq-content-wrapper overflow-hidden">
+                    <div class="px-6 pb-6 text-slate-600 leading-relaxed pt-2">
+                        <div class="h-px w-full bg-slate-100 mb-4"></div>
+                        ${item.answer}
+                    </div>
                 </div>
             </div>
         `).join('');
 
         return `
-            <section class="faq-section container mx-auto px-6">
-                <h2 class="faq-title">${this.title}</h2>
-                <div class="faq-list">
-                    ${itemsHtml}
+            <section class="relative py-16 md:py-24 overflow-hidden isolate">
+                <div class="absolute top-1/4 -left-20 w-72 h-72 rounded-full blur-[100px] -z-10 opacity-30" style="background-color: ${this.primaryHex}"></div>
+                <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-slate-200 rounded-full blur-[120px] -z-10 opacity-50"></div>
+
+                <div class="container mx-auto px-6 max-w-3xl relative">
+                    <div class="text-center mb-12" data-aos="fade-up">
+                        <span class="inline-block py-1 px-3 rounded-full text-[10px] font-black uppercase tracking-[0.2em] mb-4"
+                              style="background-color: ${this.primaryLightRgba}; color: ${this.primaryHex}">
+                            FAQ
+                        </span>
+                        <h2 class="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                            ${this.title}
+                        </h2>
+                    </div>
+
+                    <div class="flex flex-col gap-3">
+                        ${itemsHtml}
+                    </div>
                 </div>
             </section>
         `;
     }
 
     /**
-     * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde será montado
+     * Lógica de montagem e eventos
      */
     mount(targetId) {
         const target = document.getElementById(targetId);
-        if (target) {
-            this.injectStyles();
-            target.innerHTML = this.render();
-            this.attachEventListeners();
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
-        }
-    }
+        if (!target) return;
 
-    /**
-     * Adiciona event listeners
-     */
-    attachEventListeners() {
-        const faqButtons = document.querySelectorAll('.faq-button');
+        target.innerHTML = this.render();
 
-        faqButtons.forEach(btn => {
+        const items = target.querySelectorAll('.faq-item');
+        items.forEach(item => {
+            const btn = item.querySelector('.faq-toggle');
+            const content = item.querySelector('.faq-content-wrapper');
+            const chevronContainer = item.querySelector('.faq-chevron-container');
+
             btn.addEventListener('click', () => {
-                const item = btn.closest('.faq-item');
-                const content = btn.nextElementSibling;
-                const icon = btn.querySelector('.faq-icon');
+                const isActive = item.classList.contains('active');
 
-                // Close others
-                document.querySelectorAll('.faq-item').forEach(el => {
-                    if (el !== item) {
-                        el.classList.remove('active');
-                        el.querySelector('.faq-content').classList.remove('active');
-                        const otherIcon = el.querySelector('.faq-icon');
-                        if (otherIcon) {
-                            otherIcon.style.transform = 'rotate(0deg)';
-                            otherIcon.style.color = this.textColor;
-                        }
-                    }
+                // Fecha outros itens (Comportamento exclusivo)
+                items.forEach(other => {
+                    other.classList.remove('active');
+                    other.querySelector('.faq-content-wrapper').style.maxHeight = '0';
+                    const otherChevron = other.querySelector('.faq-chevron-container');
+                    otherChevron.style.backgroundColor = '#ffffff';
+                    otherChevron.style.color = '#94a3b8'; // slate-400
                 });
 
-                // Toggle current
-                item.classList.toggle('active');
-                content.classList.toggle('active');
-
-                if (item.classList.contains('active')) {
-                    if (icon) {
-                        icon.style.transform = 'rotate(180deg)';
-                        icon.style.color = this.primaryHex;
-                    }
-                } else {
-                    if (icon) {
-                        icon.style.transform = 'rotate(0deg)';
-                        icon.style.color = this.textColor;
-                    }
+                // Abre o item atual
+                if (!isActive) {
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + "px";
+                    chevronContainer.style.backgroundColor = this.primaryHex;
+                    chevronContainer.style.color = '#ffffff';
                 }
             });
         });
+
+        // Inicializa ícones e animações
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+        if (typeof AOS !== 'undefined') {
+            setTimeout(() => AOS.refresh(), 100);
+        }
     }
 
-    /**
-     * Método estático para criar e montar
-     * @param {Object} data - Dados do componente
-     * @param {string} targetId - ID do elemento
-     * @returns {FaqAccordionComponent} Instância do componente
-     */
     static create(data, targetId) {
         const component = new FaqAccordionComponent(data);
         component.mount(targetId);
@@ -217,8 +156,7 @@ class FaqAccordionComponent extends BaseComponent {
     }
 }
 
-// Auto-registra no Component Registry
+// Registro no sistema
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('faq-accordion', FaqAccordionComponent);
 }
-

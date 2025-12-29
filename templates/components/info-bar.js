@@ -1,70 +1,86 @@
 /**
- * Info Bar Component
- * Barra de informações genérica com ícones e textos customizáveis
+ * Info Bar Component - Refatorado
+ * Estilo: SaaS Minimalist / Premium Trust Bar
+ * Design: High Contrast com Glassmorphism sutil
  */
 
 class InfoBarComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para a Info Bar
-     * @param {Array} data.items - Array de itens a serem exibidos
-     * @param {string} data.items[].icon - Classe do ícone (ex: 'fas fa-motorcycle')
-     * @param {string} data.items[].text - Texto do item
+     * @param {Array} data.items - Array de itens { icon, text }
      * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo base (ex: 'green', 'brand-dark')
-     * @param {string} data.colors.text - Cor do texto base (ex: 'white')
-     * @param {string} data.colors.accent - Cor dos ícones base (ex: 'orange', 'brand-gold')
      */
     constructor(data) {
         super();
-        // Items genéricos
         this.items = data.items || [];
 
-        // Resolve cores base (override > tema > fallback)
-        const bgBase = this.resolveColor(data.colors?.background, 'primary', 'brand-dark');
-        const accentBase = this.resolveColor(data.colors?.accent, 'accent', 'brand-gold');
-        const textBase = this.resolveColor(data.colors?.text, null, 'white');
-
-        // Aplica variações automáticas conforme o contexto
-        this.colors = {
-            background: this.getColorVariant(bgBase, 700),  // Fundo escuro
-            text: textBase,                                   // Texto (geralmente white)
-            accent: this.getColorVariant(accentBase, 400),   // Accent médio
-        };
+        // RESOLUÇÃO DE CORES (Via BaseComponent)
+        // Mantemos a lógica de cores primárias para elementos de destaque
+        this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#16A34A');
     }
 
     /**
-     * Renderiza um item individual
-     * @param {Object} item - Dados do item
-     * @returns {string} HTML do item
+     * Injeta estilos específicos para efeitos que o Tailwind CDN JIT pode não captar
      */
-    renderItem(item) {
-        const c = this.colors;
+    injectStyles() {
+        if (document.getElementById('info-bar-runtime-styles')) return;
 
-        return `
-            <div class="flex items-center gap-3 group cursor-default transform transition-all duration-300 hover:scale-105">
-                <div class="w-10 h-10 rounded-full bg-${c.accent}/20 flex items-center justify-center group-hover:bg-${c.accent}/30 transition-colors duration-300">
-                    <i class="${item.icon} text-${c.accent} text-lg group-hover:scale-110 transition-transform duration-300"></i>
-                </div>
-                <span class="text-sm font-medium opacity-90 group-hover:opacity-100 transition-opacity duration-300">${item.text}</span>
-            </div>
+        const style = document.createElement('style');
+        style.id = 'info-bar-runtime-styles';
+        style.textContent = `
+            .info-bar-glass {
+                background: rgba(255, 255, 255, 0.7);
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+            }
+            .info-item-icon {
+                color: ${this.primaryHex};
+                background-color: ${this.hexToRgba(this.primaryHex, 0.08)};
+            }
+            .info-bar-border {
+                border-top: 1px solid rgba(0, 0, 0, 0.03);
+                border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            }
         `;
+        document.head.appendChild(style);
     }
 
     /**
-     * Renderiza o HTML do componente
-     * @returns {string} HTML string do componente
+     * Renderiza o HTML com classes estáticas do Tailwind
      */
     render() {
-        const c = this.colors;
-        const itemsHtml = this.items.map(item => this.renderItem(item)).join('');
+        this.injectStyles();
+
+        const itemsHtml = this.items.map((item, index) => `
+            <div class="flex items-center gap-3 group transition-all duration-500"
+                 data-aos="fade-up"
+                 data-aos-delay="${index * 100}">
+
+                <div class="info-item-icon w-10 h-10 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:shadow-sm">
+                    <i class="${item.icon} text-sm"></i>
+                </div>
+
+                <span class="text-[11px] md:text-xs font-black uppercase tracking-[0.15em] text-slate-500 group-hover:text-slate-800 transition-colors">
+                    ${item.text}
+                </span>
+            </div>
+        `).join('');
 
         return `
-            <div class="bg-${c.background} text-${c.text} py-5 relative overflow-hidden" style="box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);">
-                <!-- Background decoration -->
-                <div class="absolute inset-0 opacity-5" style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');"></div>
+            <div class="info-bar-glass info-bar-border py-6 relative z-30 overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none -z-10">
+                    <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                                <path d="M 40 0 L 0 0 0 40" fill="none" stroke="currentColor" stroke-width="1"/>
+                            </pattern>
+                        </defs>
+                        <rect width="100%" height="100%" fill="url(#grid)" />
+                    </svg>
+                </div>
 
-                <div class="container mx-auto px-6 relative z-10">
-                    <div class="flex flex-wrap justify-center md:justify-between items-center gap-6 md:gap-4">
+                <div class="container mx-auto px-6 max-w-6xl">
+                    <div class="flex flex-wrap justify-center lg:justify-between items-center gap-8 md:gap-12">
                         ${itemsHtml}
                     </div>
                 </div>
@@ -73,22 +89,23 @@ class InfoBarComponent extends BaseComponent {
     }
 
     /**
-     * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde o componente será montado
+     * Monta o componente
      */
     mount(targetId) {
         const target = document.getElementById(targetId);
         if (target) {
             target.innerHTML = this.render();
+
+            // Inicializa AOS se disponível
+            if (typeof AOS !== 'undefined') {
+                setTimeout(() => {
+                    AOS.init({ duration: 800, once: true });
+                    AOS.refresh();
+                }, 50);
+            }
         }
     }
 
-    /**
-     * Método estático para criar e montar o componente
-     * @param {Object} data - Dados necessários
-     * @param {string} targetId - ID do elemento onde o componente será montado
-     * @returns {InfoBarComponent} Instância do componente
-     */
     static create(data, targetId) {
         const component = new InfoBarComponent(data);
         component.mount(targetId);
@@ -96,7 +113,7 @@ class InfoBarComponent extends BaseComponent {
     }
 }
 
-// Auto-registra no Component Registry
+// Registro
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('info-bar', InfoBarComponent);
 }
