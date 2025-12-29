@@ -14,6 +14,7 @@ class QuickServiceCardsComponent extends BaseComponent {
      */
     constructor(data) {
         super();
+        this.id = data.id || '';
         this.cards = data.cards || [];
 
         // Resolve cores dinâmicas (sempre usando o resolvedor do tema)
@@ -71,7 +72,7 @@ class QuickServiceCardsComponent extends BaseComponent {
         const cardsHtml = this.cards.map(card => this.renderCard(card)).join('');
 
         return `
-            <section class="relative z-20 -mt-16 pb-20 px-6">
+            <section ${this.id ? `id="${this.id}"` : ''} class="relative z-20 -mt-16 pb-20 px-6">
                 <div class="max-w-7xl mx-auto">
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                         ${cardsHtml}

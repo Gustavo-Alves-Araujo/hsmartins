@@ -1,0 +1,278 @@
+{
+  "theme": {
+    "colors": {
+      "primary": "#1e40af",
+      "primaryLight": "#3b82f6",
+      "secondary": "#60a5fa",
+      "tertiary": "#3b82f6",
+      "accent": "#3b82f6",
+      "background": "#F8FAF8",
+      "text": {
+        "dark": "#1F2937",
+        "medium": "#4B5563",
+        "light": "#9CA3AF",
+        "white": "#FFFFFF"
+      }
+    },
+    "fonts": {
+      "primary": "\"Poppins\", sans-serif",
+      "secondary": "\"Inter\", sans-serif",
+      "urls": {
+        "google": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
+      }
+    }
+  },
+  "contact-top-bar": {
+    "infoItems": [
+      {
+        "icon": "fas fa-phone-alt",
+        "text": "(11) 95432-1098"
+      },
+      {
+        "icon": "fas fa-map-marker-alt",
+        "text": "São Paulo - SP"
+      },
+      {
+        "icon": "fas fa-clock",
+        "text": "Seg-Sex: 09h às 18h"
+      }
+    ],
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com"
+      },
+      {
+        "icon": "fab fa-linkedin",
+        "href": "https://linkedin.com"
+      }
+    ]
+  },
+  "sticky-header-navigation": {
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png",
+    "logoAlt": "Logo Dr. Juliano Costa",
+    "siteName": "Dr. Juliano Costa",
+    "established": "OAB/SP 000.000",
+    "links": {
+      "about": {
+        "text": "Sobre",
+        "href": "#sobre"
+      },
+      "services": {
+        "text": "Atuação",
+        "href": "#atuacao"
+      },
+      "faq": {
+        "text": "Dúvidas",
+        "href": "#faq"
+      },
+      "cta": {
+        "text": "Falar com Advogado",
+        "href": "https://wa.me/5511954321098",
+        "target": "_blank"
+      }
+    }
+  },
+  "hero-overlay": {
+    "badge": "Direito de Família e Sucessões",
+    "title": "Advocacia humana e",
+    "titleHighlight": "Resultados Sólidos.",
+    "subtitle": "Atendimento acolhedor em momentos difíceis, com respostas rápidas e honorários transparentes desde o primeiro contato.",
+    "ctaPrimary": {
+      "text": "Consultar Especialista",
+      "href": "https://wa.me/5511954321098",
+      "target": "_blank"
+    },
+    "ctaSecondary": {
+      "text": "Áreas de Atuação",
+      "href": "#atuacao"
+    },
+    "backgroundImage": "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920",
+    "backgroundAlt": "Escritório de Advocacia",
+    "whatsappNumber": "5511954321098"
+  },
+  "info-bar": {
+    "items": [
+      {
+        "icon": "fas fa-check-circle",
+        "text": "Atendimento Rápido"
+      },
+      {
+        "icon": "fas fa-handshake",
+        "text": "Honorários Transparentes"
+      },
+      {
+        "icon": "fas fa-user-shield",
+        "text": "Sigilo Absoluto"
+      },
+      {
+        "icon": "fas fa-heart",
+        "text": "Acolhimento Humanizado"
+      }
+    ]
+  },
+  "about-image-features": {
+    "id": "sobre",
+    "tag": "Especialista",
+    "title": "Dr. Juliano Costa",
+    "paragraphs": [
+      "Com anos de dedicação ao Direito de Família e Sucessões, o Dr. Juliano Costa construiu uma trajetória pautada na ética, na transparência e, acima de tudo, na sensibilidade necessária para lidar com conflitos familiares.",
+      "Entendemos que por trás de cada processo existe uma história e pessoas que buscam segurança jurídica e paz de espírito.",
+      "Nosso diferencial está no suporte constante e na clareza em cada etapa do processo, garantindo que você nunca se sinta desamparado."
+    ],
+    "features": [
+      {
+        "icon": "fas fa-certificate",
+        "text": "Especialista em Sucessões"
+      },
+      {
+        "icon": "fas fa-users",
+        "text": "Foco em Solução de Conflitos"
+      },
+      {
+        "icon": "fas fa-gavel",
+        "text": "Atuação Consultiva e Judicial"
+      },
+      {
+        "icon": "fas fa-clock",
+        "text": "Respostas em Tempo Ágil"
+      }
+    ],
+    "imageUrl": "https://www.psicologodiegovigato.com.br/01.png",
+    "imageAlt": "Dr. Juliano Costa"
+  },
+  "quick-service-cards": {
+    "id": "atuacao",
+    "cards": [
+      {
+        "icon": "fas fa-ring",
+        "title": "Divórcio e Separação",
+        "description": "Assessoria completa em divórcios consensuais ou litigiosos, preservando seus direitos.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511954321098"
+      },
+      {
+        "icon": "fas fa-file-invoice-dollar",
+        "title": "Inventários e Herança",
+        "description": "Organização e partilha de bens de forma ágil para evitar desgastes familiares.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511954321098"
+      },
+      {
+        "icon": "fas fa-child",
+        "title": "Guarda e Pensão",
+        "description": "Garantindo o bem-estar dos filhos e o equilíbrio financeiro necessário.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511954321098"
+      },
+      {
+        "icon": "fas fa-users-cog",
+        "title": "Planejamento Sucessório",
+        "description": "Proteção de patrimônio e organização antecipada da sucessão familiar.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511954321098"
+      }
+    ]
+  },
+  "achievements-numbers-grid": {
+    "stats": [
+      {
+        "value": "10+",
+        "label": "Anos de Experiência"
+      },
+      {
+        "value": "500+",
+        "label": "Casos Encerrados"
+      },
+      {
+        "value": "98%",
+        "label": "Clientes Satisfeitos"
+      },
+      {
+        "value": "24h",
+        "label": "Resposta Máxima"
+      }
+    ]
+  },
+  "faq-accordion": {
+    "id": "faq",
+    "title": "Perguntas Frequentes",
+    "subtitle": "Esclareça as principais dúvidas sobre os procedimentos jurídicos.",
+    "questions": [
+      {
+        "question": "Quanto tempo demora um processo de inventário?",
+        "answer": "O tempo varia conforme o tipo (judicial ou extrajudicial) e a concordância dos herdeiros. Inventários extrajudiciais costumam ser resolvidos em poucos meses."
+      },
+      {
+        "question": "Como são definidos os honorários?",
+        "answer": "Trabalhamos com total transparência seguindo a tabela da OAB. Os valores são apresentados de forma clara no início da consultoria."
+      },
+      {
+        "question": "É possível fazer divórcio online?",
+        "answer": "Sim, em casos consensuais onde não há filhos menores ou incapazes, o divórcio pode ser realizado inteiramente por meio digital em cartório."
+      }
+    ]
+  },
+  "cta-banner": {
+    "title": "Precisa de uma orientação jurídica agora?",
+    "subtitle": "Estamos prontos para ouvir o seu caso e oferecer a melhor solução legal com a agilidade que você precisa.",
+    "buttons": [
+      {
+        "text": "Iniciar Conversa no WhatsApp",
+        "href": "https://wa.me/5511954321098",
+        "icon": "fab fa-whatsapp"
+      }
+    ]
+  },
+  "footer-contact": {
+    "title": "Dr. Juliano Costa Advocacia",
+    "address": {
+      "label": "Endereço",
+      "street": "Avenida Paulista, 1000 - Edifício Business",
+      "city": "São Paulo - SP",
+      "zipCode": "CEP: 01310-100",
+      "mapQuery": "Avenida Paulista São Paulo"
+    },
+    "contact": {
+      "label": "Canais de Contato",
+      "phone": "(11) 95432-1098"
+    },
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com",
+        "label": "Instagram"
+      },
+      {
+        "icon": "fab fa-linkedin",
+        "href": "https://linkedin.com",
+        "label": "LinkedIn"
+      },
+      {
+        "icon": "fab fa-whatsapp",
+        "href": "https://wa.me/5511954321098",
+        "label": "WhatsApp"
+      }
+    ],
+    "copyright": "© 2025 Dr. Juliano Costa Advocacia. Todos os direitos reservados. OAB/SP 000.000",
+    "tags": [
+      "Direito de Família",
+      "Inventários",
+      "Divórcios",
+      "Advogado São Paulo"
+    ]
+  },
+  "whatsapp-float-button": {
+    "icon": "fab fa-whatsapp",
+    "text": "Falar com Dr. Juliano",
+    "href": "https://wa.me/5511954321098?text=Olá,%20Doutor.%20Gostaria%20de%20uma%20orientação%20jurídica.",
+    "color": "#25D366"
+  },
+  "site": {
+    "title": "Dr. Juliano Costa Advocacia | Direito de Família e Sucessões em São Paulo",
+    "name": "Dr. Juliano Costa Advocacia",
+    "established": "OAB/SP 000.000",
+    "logoAlt": "Logotipo Dr. Juliano Costa Advocacia",
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png"
+  }
+}

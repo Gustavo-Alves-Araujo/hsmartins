@@ -181,9 +181,36 @@ class StickyHeaderNavigationComponent extends BaseComponent {
         });
 
         // Fechar ao clicar em link (mobile)
-        navMenu.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', () => {
-                navMenu.classList.remove('mobile-active');
+        if (navMenu) {
+            navMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navMenu.classList.remove('mobile-active');
+                });
+            });
+        }
+
+        // Smooth scroll para links de navegação (anchor links)
+        const allNavLinks = document.querySelectorAll('#main-header a[href^="#"]');
+        allNavLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                const href = link.getAttribute('href');
+                if (href && href !== '#') {
+                    e.preventDefault();
+                    const targetSection = document.querySelector(href);
+                    if (targetSection) {
+                        // Fecha menu mobile se estiver aberto
+                        if (navMenu) {
+                            navMenu.classList.remove('mobile-active');
+                        }
+                        // Calcula offset para compensar header fixo
+                        const headerHeight = header ? header.offsetHeight : 80;
+                        const targetPosition = targetSection.offsetTop - headerHeight;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
             });
         });
     }

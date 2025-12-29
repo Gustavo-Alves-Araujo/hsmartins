@@ -20,6 +20,7 @@ class AboutImageFeaturesComponent extends BaseComponent {
      */
     constructor(data) {
         super();
+        this.id = data.id || '';
         this.tag = data.tag || '';
         this.title = data.title || '';
         this.paragraphs = data.paragraphs || [];
@@ -34,7 +35,7 @@ class AboutImageFeaturesComponent extends BaseComponent {
 
         this.colors = {
             tagBg: this.getColorVariant(primaryBase, 100),
-            tagText: this.getColorVariant(primaryBase, 700),
+            tagText: this.getColorVariant(primaryBase, 500), // Cor primária padrão
             title: 'slate-900', // Alto contraste (Light Theme)
             text: 'slate-600',  // Alto contraste (Light Theme)
             featureBg: 'slate-50',
@@ -66,7 +67,7 @@ class AboutImageFeaturesComponent extends BaseComponent {
             .join('');
 
         return `
-            <section class="relative py-12 md:py-24 bg-white overflow-hidden isolate mb-6">
+            <section ${this.id ? `id="${this.id}"` : ''} class="relative py-12 md:py-24 bg-white overflow-hidden isolate mb-6">
                 <div class="container mx-auto px-6 max-w-6xl relative z-10">
                     <div class="flex flex-col ${this.reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-10 lg:gap-16">
 

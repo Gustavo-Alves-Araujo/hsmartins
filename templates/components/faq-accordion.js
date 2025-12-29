@@ -12,6 +12,7 @@ class FaqAccordionComponent extends BaseComponent {
      */
     constructor(data) {
         super();
+        this.id = data.id || '';
         this.title = data.title || 'Perguntas Frequentes';
         this.items = data.items || data.questions || [];
 
@@ -82,7 +83,7 @@ class FaqAccordionComponent extends BaseComponent {
         `).join('');
 
         return `
-            <section class="relative py-16 md:py-24 overflow-hidden isolate">
+            <section ${this.id ? `id="${this.id}"` : ''} class="relative py-16 md:py-24 overflow-hidden isolate">
                 <div class="absolute top-1/4 -left-20 w-72 h-72 rounded-full blur-[100px] -z-10 opacity-30" style="background-color: ${this.primaryHex}"></div>
                 <div class="absolute bottom-1/4 -right-20 w-96 h-96 bg-slate-200 rounded-full blur-[120px] -z-10 opacity-50"></div>
 
