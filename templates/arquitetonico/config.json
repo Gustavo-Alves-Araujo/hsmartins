@@ -1,0 +1,291 @@
+{
+  "theme": {
+    "colors": {
+      "primary": "#d4a574",
+      "primaryLight": "#e2c2a2",
+      "secondary": "#1f2937",
+      "tertiary": "#4b5563",
+      "accent": "#d4a574",
+      "background": "#ffffff",
+      "text": {
+        "dark": "#111827",
+        "medium": "#4b5563",
+        "light": "#9ca3af",
+        "white": "#ffffff"
+      }
+    },
+    "fonts": {
+      "primary": "\"Poppins\", sans-serif",
+      "secondary": "\"Inter\", sans-serif",
+      "urls": {
+        "google": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@300;400;500;600;700&display=swap"
+      }
+    }
+  },
+  "contact-top-bar": {
+    "infoItems": [
+      {
+        "icon": "fas fa-phone-alt",
+        "text": "(11) 94321-0987"
+      },
+      {
+        "icon": "fas fa-map-marker-alt",
+        "text": "São Paulo - SP"
+      },
+      {
+        "icon": "fas fa-clock",
+        "text": "Segunda a Sexta: 09h às 18h"
+      }
+    ],
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com"
+      },
+      {
+        "icon": "fab fa-linkedin-in",
+        "href": "https://linkedin.com"
+      }
+    ]
+  },
+  "sticky-header-navigation": {
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png",
+    "logoAlt": "Studio André Paula Arquitetura",
+    "siteName": "Studio André Paula",
+    "established": "Projetos Autorais",
+    "links": {
+      "home": {
+        "text": "Início",
+        "href": "#"
+      },
+      "about": {
+        "text": "O Studio",
+        "href": "#sobre"
+      },
+      "services": {
+        "text": "Serviços",
+        "href": "#servicos"
+      },
+      "portfolio": {
+        "text": "Portfólio",
+        "href": "#portfolio"
+      },
+      "cta": {
+        "text": "Solicitar Orçamento",
+        "href": "https://wa.me/5511943210987",
+        "target": "_blank"
+      }
+    }
+  },
+  "hero-overlay": {
+    "badge": "Arquitetura Residencial e Interiores",
+    "title": "Projetos que refletem a sua",
+    "titleHighlight": "personalidade.",
+    "subtitle": "No Studio André Paula, criamos espaços autorais com renderizações 3D realistas que permitem que você vivencie seu sonho antes mesmo da obra começar.",
+    "ctaPrimary": {
+      "text": "Iniciar meu Projeto",
+      "href": "https://wa.me/5511943210987",
+      "target": "_blank"
+    },
+    "ctaSecondary": {
+      "text": "Ver Portfólio",
+      "href": "#portfolio"
+    },
+    "backgroundImage": "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?w=1920",
+    "backgroundAlt": "Projeto arquitetônico moderno",
+    "whatsappNumber": "5511943210987"
+  },
+  "info-bar": {
+    "items": [
+      {
+        "icon": "fas fa-pencil-ruler",
+        "text": "Projetos Exclusivos"
+      },
+      {
+        "icon": "fas fa-vr-cardboard",
+        "text": "Visualização 3D Realista"
+      },
+      {
+        "icon": "fas fa-home",
+        "text": "Design de Interiores"
+      },
+      {
+        "icon": "fas fa-check-circle",
+        "text": "Acompanhamento Técnico"
+      }
+    ]
+  },
+  "about-image-features": {
+    "id": "sobre",
+    "tag": "André Paula",
+    "title": "Arquitetura Autoral com Foco no Cliente",
+    "paragraphs": [
+      "O Studio André Paula nasceu da paixão por transformar necessidades em soluções arquitetônicas que unem estética, funcionalidade e a identidade única de cada morador.",
+      "Acreditamos que cada projeto é uma história diferente. Por isso, utilizamos tecnologia de ponta em renderização 3D para garantir que cada detalhe, textura e iluminação sejam compreendidos perfeitamente.",
+      "Nossa missão é criar ambientes que não sejam apenas bonitos, mas que proporcionem bem-estar e contem a sua história através do design."
+    ],
+    "features": [
+      {
+        "icon": "fas fa-fingerprint",
+        "text": "Design Personalizado"
+      },
+      {
+        "icon": "fas fa-cube",
+        "text": "Maquetes Eletrônicas"
+      },
+      {
+        "icon": "fas fa-lightbulb",
+        "text": "Soluções Criativas"
+      },
+      {
+        "icon": "fas fa-shield-alt",
+        "text": "Segurança e Técnica"
+      }
+    ],
+    "imageUrl": "https://www.psicologodiegovigato.com.br/01.png",
+    "imageAlt": "Arquiteto André Paula em trabalho"
+  },
+  "achievements-numbers-grid": {
+    "title": "Nossa Trajetória",
+    "description": "Resultados que consolidam nossa expertise em criar espaços extraordinários.",
+    "stats": [
+      {
+        "value": "50+",
+        "label": "Projetos Realizados"
+      },
+      {
+        "value": "15k",
+        "label": "m² Projetados"
+      },
+      {
+        "value": "100%",
+        "label": "Satisfação"
+      },
+      {
+        "value": "8",
+        "label": "Anos de Experiência"
+      }
+    ]
+  },
+  "quick-service-cards": {
+    "id": "servicos",
+    "cards": [
+      {
+        "icon": "fas fa-pencil-ruler",
+        "title": "Arquitetura Residencial",
+        "description": "Projetos do zero para sua casa, focando em ventilação, iluminação e fluxo.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511943210987"
+      },
+      {
+        "icon": "fas fa-couch",
+        "title": "Design de Interiores",
+        "description": "Transformação de ambientes internos com mobiliário, cores e texturas exclusivas.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511943210987"
+      },
+      {
+        "icon": "fas fa-laptop-code",
+        "title": "Consultoria e 3D",
+        "description": "Visualização realista para que você não tenha dúvidas sobre as escolhas do projeto.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511943210987"
+      }
+    ]
+  },
+  "card-grid": {
+    "id": "portfolio",
+    "title": "Nossos Projetos",
+    "subtitle": "Conheça alguns dos projetos autorais desenvolvidos pelo Studio.",
+    "items": [
+      {
+        "title": "Residência Contemporânea",
+        "description": "São Paulo, SP",
+        "image": "https://images.unsplash.com/photo-1613490493576-7fde63acd811?w=600",
+        "tag": "Arquitetura"
+      },
+      {
+        "title": "Apartamento Design",
+        "description": "Interiores Modernos",
+        "image": "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=600",
+        "tag": "Interiores"
+      },
+      {
+        "title": "Loft Industrial",
+        "description": "Visualização 3D",
+        "image": "https://images.unsplash.com/photo-1505691938895-1758d7feb511?w=600",
+        "tag": "Render 3D"
+      },
+      {
+        "title": "Espaço Gourmet",
+        "description": "Área de Lazer",
+        "image": "https://images.unsplash.com/photo-1556912177-f5133317768e?w=600",
+        "tag": "Lazer"
+      }
+    ]
+  },
+  "faq-accordion": {
+    "title": "Dúvidas Frequentes",
+    "subtitle": "Entenda como funciona o processo de criação no nosso Studio.",
+    "questions": [
+      {
+        "question": "Como funciona a primeira etapa do projeto?",
+        "answer": "Realizamos uma reunião de briefing para entender seus desejos, necessidades e estilo de vida. A partir daí, traçamos o conceito do projeto."
+      },
+      {
+        "question": "O que está incluso no projeto 3D?",
+        "answer": "Incluímos imagens fotorrealistas de todos os ângulos principais dos ambientes, permitindo visualizar materiais, iluminação e texturas reais."
+      },
+      {
+        "question": "Vocês atendem fora de São Paulo?",
+        "answer": "Sim, realizamos projetos online com a mesma qualidade e acompanhamento, atendendo clientes em todo o Brasil."
+      }
+    ]
+  },
+  "footer-contact": {
+    "title": "Vamos construir seu sonho?",
+    "address": {
+      "label": "Escritório",
+      "street": "Studio André Paula Arquitetura",
+      "city": "São Paulo - SP",
+      "zipCode": "Atendimento com Hora Marcada",
+      "mapQuery": "São Paulo"
+    },
+    "contact": {
+      "label": "Fale Conosco",
+      "phone": "(11) 94321-0987"
+    },
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com",
+        "label": "Instagram"
+      },
+      {
+        "icon": "fab fa-whatsapp",
+        "href": "https://wa.me/5511943210987",
+        "label": "WhatsApp"
+      }
+    ],
+    "copyright": "© 2024 Studio André Paula Arquitetura. Todos os direitos reservados.",
+    "tags": [
+      "Arquitetura",
+      "Design de Interiores",
+      "Projetos 3D",
+      "Arquitetura Residencial"
+    ]
+  },
+  "whatsapp-float-button": {
+    "icon": "fab fa-whatsapp",
+    "text": "Falar com Arquiteto",
+    "href": "https://wa.me/5511943210987?text=Olá André, gostaria de falar sobre um projeto arquitetônico.",
+    "color": "#25D366"
+  },
+  "site": {
+    "title": "Studio André Paula | Arquitetura Residencial e Design de Interiores",
+    "name": "Studio André Paula Arquitetura",
+    "established": "Projetos Autorais",
+    "logoAlt": "Logo Studio André Paula",
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png"
+  }
+}
