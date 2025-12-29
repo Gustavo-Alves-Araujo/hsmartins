@@ -13,7 +13,8 @@ class FaqAccordionComponent extends BaseComponent {
     constructor(data) {
         super();
         this.title = data.title || 'Perguntas Frequentes';
-        this.items = data.items || [];
+        // Aceita tanto 'items' quanto 'questions' para compatibilidade
+        this.items = data.items || data.questions || [];
 
         // Resolve cores do tema
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#9333EA');

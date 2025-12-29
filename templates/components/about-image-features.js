@@ -206,6 +206,7 @@ class AboutImageFeaturesComponent {
         style.textContent = `
             .about {
                 padding: 80px 0;
+                margin-bottom: 80px;
                 background-color: ${background};
             }
             .about-content {
@@ -265,6 +266,7 @@ class AboutImageFeaturesComponent {
             }
             .clinical {
                 padding: 100px 0;
+                margin-bottom: 80px;
             }
             .clinical-content {
                 display: flex;
