@@ -1,17 +1,17 @@
 {
   "theme": {
     "colors": {
-      "primary": "#147ce5",
-      "primaryLight": "#4396eb",
-      "secondary": "#0e56a0",
-      "tertiary": "#f3f4f6",
-      "accent": "#22c55e",
-      "background": "#F8FAFB",
+      "primary": "#6d28d9",
+      "primaryLight": "#8b5cf6",
+      "secondary": "#4c1d95",
+      "tertiary": "#ede9fe",
+      "accent": "#f59e0b",
+      "background": "#ffffff",
       "text": {
-        "dark": "#1F2937",
-        "medium": "#4B5563",
-        "light": "#9CA3AF",
-        "white": "#FFFFFF"
+        "dark": "#1f2937",
+        "medium": "#4b5563",
+        "light": "#9ca3af",
+        "white": "#ffffff"
       }
     },
     "fonts": {
@@ -22,246 +22,186 @@
       }
     }
   },
-  "contact-top-bar": {
-    "infoItems": [
-      {
-        "icon": "fas fa-phone-alt",
-        "text": "(11) 99876-5432"
-      },
-      {
-        "icon": "fas fa-clock",
-        "text": "Seg-Sex: 9h às 18h | Sáb: 9h às 13h"
-      },
-      {
-        "icon": "fas fa-map-marker-alt",
-        "text": "Atendimento Expresso em São Paulo"
-      }
+  "marquee-info-bar": {
+    "items": [
+      "Taxa de conveniência reduzida em todo o site",
+      "Parcele seus ingressos em até 12x",
+      "Setores VIP exclusivos para membros GospelPass",
+      "Confira a agenda das maiores turnês de 2025"
     ],
-    "socialLinks": [
-      {
-        "icon": "fab fa-instagram",
-        "href": "https://instagram.com/irepair"
-      },
-      {
-        "icon": "fab fa-facebook",
-        "href": "https://facebook.com/irepair"
-      }
-    ]
-  },
-  "sticky-header-navigation": {
-    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png",
-    "logoAlt": "Logo iRepair - Assistência Técnica Apple",
-    "siteName": "iRepair",
-    "established": "Especialista Apple",
-    "links": {
-      "services": {
-        "text": "Serviços",
-        "href": "#servicos"
-      },
-      "about": {
-        "text": "Sobre Nós",
-        "href": "#sobre"
-      },
-      "faq": {
-        "text": "Dúvidas",
-        "href": "#faq"
-      },
-      "cta": {
-        "text": "Orçamento Grátis",
-        "href": "https://wa.me/5511998765432",
-        "target": "_blank"
-      }
+    "colors": {
+      "background": "#6d28d9",
+      "text": "#ffffff"
     }
   },
+  "navbar-ecommerce": {
+    "logoText": "GospelPass",
+    "logoUrl": "https://www.exemplo.com.br/logo-gospelpass.png",
+    "links": [
+      { "text": "Shows", "href": "#eventos" },
+      { "text": "Conferências", "href": "#conferencias" },
+      { "text": "Turnês", "href": "#turnes" },
+      { "text": "Suporte", "href": "#faq" }
+    ],
+    "sticky": true
+  },
   "hero-overlay": {
-    "badge": "Técnicos Certificados Apple",
-    "title": "Seu Apple em",
-    "titleHighlight": "boas mãos.",
-    "subtitle": "Especialistas em manutenção de iPhone, iPad e MacBook com peças originais e reparo expresso em até 2 horas.",
+    "badge": "A maior plataforma de eventos cristãos",
+    "title": "A sua entrada para os melhores",
+    "titleHighlight": "eventos gospel.",
+    "subtitle": "Garanta seu lugar nos maiores shows, conferências e turnês cristãs do Brasil com as melhores condições do mercado.",
+    "backgroundImage": "https://images.unsplash.com/photo-1470225620779-ad43838428e3?w=1920",
     "ctaPrimary": {
-      "text": "Solicitar Orçamento",
-      "href": "https://wa.me/5511998765432",
-      "target": "_blank"
+      "text": "Ver Eventos Disponíveis",
+      "href": "#eventos"
     },
     "ctaSecondary": {
-      "text": "Nossos Serviços",
-      "href": "#servicos"
+      "text": "Minha Conta",
+      "href": "#login"
+    }
+  },
+  "social-proof-logos": {
+    "title": "Os maiores artistas e produtoras confiam na GospelPass",
+    "logos": [
+      { "url": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=200", "alt": "Produtora Alpha" },
+      { "url": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=200", "alt": "Evento Beta" },
+      { "url": "https://images.unsplash.com/photo-1563906417323-b0c20c35df83?w=200", "alt": "Tour Gamma" }
+    ]
+  },
+  "benefits-grid": {
+    "benefits": [
+      {
+        "icon": "fas fa-percentage",
+        "title": "Taxa Reduzida",
+        "description": "Menores taxas de conveniência do mercado para você economizar em cada ingresso."
+      },
+      {
+        "icon": "fas fa-crown",
+        "title": "Setores VIP",
+        "description": "Acesso exclusivo aos melhores lugares e meet & greet com seus artistas favoritos."
+      },
+      {
+        "icon": "fas fa-credit-card",
+        "title": "Parcelamento Facilitado",
+        "description": "Pague em até 12x no cartão de crédito ou utilize o PIX com aprovação imediata."
+      },
+      {
+        "icon": "fas fa-star",
+        "title": "Curadoria Premium",
+        "description": "Selecionamos apenas os maiores e melhores eventos cristãos de todo o Brasil."
+      }
+    ]
+  },
+  "product-grid-ecommerce": {
+    "id": "eventos",
+    "title": "Eventos em Destaque",
+    "subtitle": "Confira as próximas turnês e conferências confirmadas",
+    "products": [
+      {
+        "name": "Turnê Adoração Profética",
+        "price": "R$ 80,00",
+        "imageUrl": "https://images.unsplash.com/photo-1501281668939-262a6408d629?w=600",
+        "badge": "MAIS VENDIDO",
+        "description": "Ingressos a partir de R$ 80,00"
+      },
+      {
+        "name": "Conferência Aviva 2025",
+        "price": "R$ 150,00",
+        "imageUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600",
+        "badge": "LOTE 1",
+        "description": "Ingressos a partir de R$ 150,00"
+      },
+      {
+        "name": "Show Grande Reencontro",
+        "price": "R$ 65,00",
+        "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600",
+        "badge": "ÚLTIMOS INGRESSOS",
+        "description": "Ingressos a partir de R$ 65,00"
+      },
+      {
+        "name": "Summit Liderança Cristã",
+        "price": "R$ 220,00",
+        "imageUrl": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600",
+        "description": "Ingressos a partir de R$ 220,00"
+      }
+    ]
+  },
+  "promo-banner-split": {
+    "title": "Experiência VIP Exclusiva",
+    "badge": "NOVIDADE",
+    "description": "Tenha acesso a passagens de som, áreas reservadas e entrada prioritária nos maiores shows do ano através do nosso selo GospelPass VIP.",
+    "button": {
+      "text": "Conhecer Benefícios VIP",
+      "href": "#vip"
     },
-    "backgroundImage": "https://images.unsplash.com/photo-1616440752223-2951195966ca?w=1920",
-    "backgroundAlt": "Reparo de MacBook em bancada técnica",
-    "whatsappNumber": "5511998765432"
-  },
-  "info-bar": {
-    "items": [
-      {
-        "icon": "fas fa-microscope",
-        "text": "Diagnóstico Gratuito"
-      },
-      {
-        "icon": "fas fa-bolt",
-        "text": "Reparo em 2 Horas"
-      },
-      {
-        "icon": "fas fa-shield-alt",
-        "text": "Peças Originais"
-      },
-      {
-        "icon": "fas fa-certificate",
-        "text": "Garantia Estendida"
-      }
-    ]
-  },
-  "quick-service-cards": {
-    "id": "servicos",
-    "cards": [
-      {
-        "icon": "fas fa-mobile-alt",
-        "title": "Reparo de iPhone",
-        "description": "Troca de tela, bateria, conectores e reparos em placa com agilidade.",
-        "buttonText": "Saiba Mais",
-        "buttonHref": "https://wa.me/5511998765432"
-      },
-      {
-        "icon": "fas fa-laptop",
-        "title": "Manutenção MacBook",
-        "description": "Upgrade de memória, limpeza interna, troca de teclado e reparo de tela.",
-        "buttonText": "Saiba Mais",
-        "buttonHref": "https://wa.me/5511998765432"
-      },
-      {
-        "icon": "fas fa-tablet-alt",
-        "title": "Conserto de iPad",
-        "description": "Recuperação de carcaça, troca de vidro, touch e baterias originais.",
-        "buttonText": "Saiba Mais",
-        "buttonHref": "https://wa.me/5511998765432"
-      },
-      {
-        "icon": "fas fa-tools",
-        "title": "Reparo de Placa",
-        "description": "Serviço especializado de microsoldagem e recuperação de aparelhos molhados.",
-        "buttonText": "Saiba Mais",
-        "buttonHref": "https://wa.me/5511998765432"
-      }
-    ]
-  },
-  "about-image-features": {
-    "id": "sobre",
-    "tag": "Quem Somos",
-    "title": "Especialistas em Ecossistema Apple",
-    "paragraphs": [
-      "A iRepair nasceu da paixão pela tecnologia e do compromisso com a qualidade. Somos uma assistência técnica focada exclusivamente em produtos Apple.",
-      "Contamos com técnicos certificados e laboratório de última geração para garantir que seu dispositivo volte a funcionar como novo no menor tempo possível.",
-      "Nossa transparência começa no diagnóstico gratuito e vai até a entrega do aparelho com garantia total dos serviços realizados."
-    ],
-    "features": [
-      {
-        "icon": "fas fa-check-circle",
-        "text": "Técnicos Certificados Apple"
-      },
-      {
-        "icon": "fas fa-medal",
-        "text": "Peças Originais Garantidas"
-      },
-      {
-        "icon": "fas fa-user-shield",
-        "text": "Diagnóstico 100% Gratuito"
-      },
-      {
-        "icon": "fas fa-rocket",
-        "text": "Reparo Expresso em 2h"
-      }
-    ],
-    "imageUrl": "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?w=800",
-    "imageAlt": "Técnico trabalhando em reparo de precisão"
-  },
-  "achievements-numbers-grid": {
-    "stats": [
-      {
-        "value": "15k+",
-        "label": "Aparelhos Reparados"
-      },
-      {
-        "value": "100%",
-        "label": "Peças Originais"
-      },
-      {
-        "value": "2h",
-        "label": "Prazo Médio"
-      },
-      {
-        "value": "5 Estrelas",
-        "label": "Avaliação Google"
-      }
-    ]
+    "imageUrl": "https://images.unsplash.com/photo-1514525253344-90463974d678?w=800",
+    "reverse": true
   },
   "faq-accordion": {
     "id": "faq",
-    "title": "Perguntas Frequentes",
-    "subtitle": "Tire suas dúvidas sobre nossos serviços e prazos",
+    "title": "Dúvidas Frequentes",
+    "subtitle": "Tudo o que você precisa saber sobre sua compra na GospelPass",
     "questions": [
       {
-        "question": "O diagnóstico realmente é gratuito?",
-        "answer": "Sim! Realizamos a análise completa do seu dispositivo sem qualquer custo. Você só paga se aprovar o orçamento do reparo."
+        "question": "Como recebo meu ingresso?",
+        "answer": "Após a confirmação do pagamento, seu ingresso digital (QR Code) será enviado para seu e-mail e ficará disponível na sua conta em nosso site."
       },
       {
-        "question": "Quanto tempo demora o reparo da tela?",
-        "answer": "Para a maioria dos modelos de iPhone, a troca de tela é feita em nossa modalidade expressa, levando no máximo 2 horas."
+        "question": "Quais as formas de pagamento aceitas?",
+        "answer": "Aceitamos PIX, boleto bancário e cartões de crédito (Visa, Mastercard, Elo, Amex) com parcelamento em até 12 vezes."
       },
       {
-        "question": "As peças utilizadas são originais?",
-        "answer": "Trabalhamos exclusivamente com peças originais e de primeira linha (OEM) que mantêm todas as funcionalidades e qualidade do seu Apple."
+        "question": "Como funciona a meia-entrada?",
+        "answer": "Seguimos a legislação vigente para estudantes, idosos, professores e PCD. É necessário apresentar o documento comprobatório na entrada do evento."
       },
       {
-        "question": "Qual a garantia dos serviços?",
-        "answer": "Oferecemos garantia legal e contratual em todos os reparos, variando de 90 dias a 1 ano, dependendo do tipo de serviço realizado."
+        "question": "Posso transferir meu ingresso para outra pessoa?",
+        "answer": "Sim, a transferência é permitida através do nosso painel de usuário até 48 horas antes do início do evento."
       }
     ]
   },
-  "footer-contact": {
-    "title": "iRepair Apple Specialist",
-    "address": {
-      "label": "Onde Estamos",
-      "street": "Avenida Paulista, 1000 - Bela Vista",
-      "city": "São Paulo - SP",
-      "zipCode": "CEP: 01310-100",
-      "mapQuery": "Avenida Paulista, São Paulo"
-    },
-    "contact": {
-      "label": "Fale Conosco",
-      "phone": "(11) 99876-5432"
-    },
-    "socialLinks": [
+  "footer-multi-column-dark": {
+    "columns": [
       {
-        "icon": "fab fa-instagram",
-        "href": "https://instagram.com",
-        "label": "Instagram"
+        "title": "Navegação",
+        "links": [
+          { "text": "Próximos Eventos", "href": "#eventos" },
+          { "text": "Artistas", "href": "#" },
+          { "text": "Conferências", "href": "#" },
+          { "text": "Venda na GospelPass", "href": "#" }
+        ]
       },
       {
-        "icon": "fab fa-whatsapp",
-        "href": "https://wa.me/5511998765432",
-        "label": "WhatsApp"
+        "title": "Suporte",
+        "links": [
+          { "text": "Central de Ajuda", "href": "#faq" },
+          { "text": "Termos de Uso", "href": "#" },
+          { "text": "Política de Privacidade", "href": "#" },
+          { "text": "Cancelamentos", "href": "#" }
+        ]
+      },
+      {
+        "title": "Redes Sociais",
+        "links": [
+          { "text": "Instagram", "href": "https://instagram.com" },
+          { "text": "Facebook", "href": "https://facebook.com" },
+          { "text": "YouTube", "href": "https://youtube.com" }
+        ]
       }
     ],
-    "copyright": "© 2024 iRepair - Assistência Técnica Apple. Todos os direitos reservados.",
-    "tags": [
-      "Reparo de iPhone",
-      "Assistência Apple",
-      "MacBook Pro",
-      "Troca de Tela",
-      "Bateria iPhone"
-    ]
+    "description": "GospelPass - A maior plataforma de ingressos para o público cristão do Brasil.",
+    "copyright": "© 2025 GospelPass. Todos os direitos reservados. CNPJ: 00.000.000/0001-00"
   },
   "whatsapp-float-button": {
-    "icon": "fab fa-whatsapp",
-    "text": "Orçamento Online",
-    "href": "https://wa.me/5511998765432?text=Olá!%20Gostaria%20de%20um%20orçamento%20para%20reparo.",
+    "href": "https://wa.me/5511998765432?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20um%20ingresso.",
+    "text": "Suporte Online",
     "color": "#25D366"
   },
   "site": {
-    "title": "iRepair - Assistência Técnica Apple | Reparo Expresso em SP",
-    "name": "iRepair - Especialista Apple",
-    "established": "Desde 2019",
-    "logoAlt": "Logo iRepair",
-    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png"
+    "title": "GospelPass - Ingressos para Shows e Conferências Cristãs",
+    "name": "GospelPass - Ingressos Cristãos",
+    "established": "Desde 2020",
+    "logoAlt": "Logo GospelPass",
+    "logoUrl": "https://www.exemplo.com.br/logo-gospelpass.png"
   }
 }
