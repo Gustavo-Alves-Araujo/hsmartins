@@ -4,22 +4,36 @@
  * Tecnologia: 100% Tailwind CSS (Compatível com CDN) + AOS
  */
 
-class AchievementsNumbersGridComponent {
+class AchievementsNumbersGridComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
      * @param {string} data.id - ID da seção
      * @param {string} data.title - Título principal
      * @param {Array} data.stats - Array de estatísticas { value: string, label: string }
      * @param {string} data.description - Descrição adicional (opcional)
+     * @param {Object} data.colors - Cores do tema (opcional)
+     * @param {string} data.colors.primary - Nome base da cor primária (ex: 'green', 'yellow')
      */
     constructor(data) {
+        super();
         this.id = data.id || 'achievements';
         this.title = data.title || '';
         this.stats = data.stats || [];
         this.description = data.description || '';
+
+        // Resolve cores do tema dinamicamente
+        const primaryBase = this.resolveColor(data.colors?.primary, 'primary', 'green');
+
+        this.colors = {
+            value: this.getColorVariant(primaryBase, 600),
+            hoverBar: this.getColorVariant(primaryBase, 300),
+            backgroundGlow: this.getColorVariant(primaryBase, 50)
+        };
     }
 
     render() {
+        const c = this.colors;
+
         // Grid responsivo ajustado para ser mais denso
         const gridCols = this.stats.length >= 4 ? 'lg:grid-cols-4' : `lg:grid-cols-${this.stats.length}`;
 
@@ -31,11 +45,11 @@ class AchievementsNumbersGridComponent {
                     data-aos-delay="${index * 100}"
                 >
                     <div class="relative z-10">
-                        <span class="block text-4xl md:text-5xl font-black text-green-600 mb-3 tracking-tight leading-none">
+                        <span class="block text-4xl md:text-5xl font-black text-${c.value} mb-3 tracking-tight leading-none">
                             ${stat.value}
                         </span>
 
-                        <div class="h-1 w-6 bg-slate-100 mx-auto mb-3 rounded-full group-hover:w-10 group-hover:bg-green-300 transition-all duration-300"></div>
+                        <div class="h-1 w-6 bg-slate-100 mx-auto mb-3 rounded-full group-hover:w-10 group-hover:bg-${c.hoverBar} transition-all duration-300"></div>
 
                         <p class="text-[11px] md:text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">
                             ${stat.label}
@@ -47,7 +61,7 @@ class AchievementsNumbersGridComponent {
 
         return `
             <section id="${this.id}" class="relative py-16 md:py-24 bg-white overflow-hidden isolate">
-                <div class="absolute top-[-15%] left-[-15%] w-[350px] h-[350px] bg-green-50/50 rounded-full blur-[90px] -z-10 pointer-events-none"></div>
+                <div class="absolute top-[-15%] left-[-15%] w-[350px] h-[350px] bg-${c.backgroundGlow}/50 rounded-full blur-[90px] -z-10 pointer-events-none"></div>
                 <div class="absolute bottom-[-15%] right-[-15%] w-[300px] h-[300px] bg-slate-50/80 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
 
                 <div class="container mx-auto px-6 max-w-5xl relative">
