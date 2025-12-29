@@ -17,8 +17,52 @@
         constructor() {
             this.components = {};
             this.loadedScripts = new Set();
-            this.componentsPath = '../components/';
+            this.componentsPath = this.detectComponentsPath();
             this.mountedComponents = [];
+        }
+
+        /**
+         * Detecta automaticamente o caminho correto para os componentes
+         * baseado na localização do script atual e da página HTML
+         */
+        detectComponentsPath() {
+            // Detecta o caminho da página atual
+            const currentPagePath = window.location.pathname;
+            const isRoot = currentPagePath === '/' ||
+                          currentPagePath.endsWith('/index.html') ||
+                          (currentPagePath.split('/').filter(p => p && p !== 'index.html').length === 0);
+
+            // Tenta encontrar o script component-registry.js
+            const registryScript = document.currentScript ||
+                Array.from(document.querySelectorAll('script')).find(
+                    script => script.src && script.src.includes('component-registry.js')
+                );
+
+            if (registryScript) {
+                const scriptSrc = registryScript.src || registryScript.getAttribute('src');
+                if (scriptSrc) {
+                    // Se o script está sendo carregado com caminho templates/components/
+                    // e estamos na raiz, retorna templates/components/
+                    if (scriptSrc.includes('templates/components/') && isRoot) {
+                        return 'templates/components/';
+                    }
+                    // Se o script está sendo carregado com caminho ../components/
+                    // estamos dentro de templates/, retorna ../components/
+                    if (scriptSrc.includes('../components/') ||
+                        (scriptSrc.includes('components/') && !scriptSrc.includes('templates/components/'))) {
+                        return '../components/';
+                    }
+                }
+            }
+
+            // Fallback baseado na localização da página
+            if (isRoot) {
+                // Estamos na raiz, então o caminho é templates/components/
+                return 'templates/components/';
+            }
+
+            // Fallback padrão (para templates dentro de templates/)
+            return '../components/';
         }
 
         /**
