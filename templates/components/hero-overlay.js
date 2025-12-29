@@ -36,13 +36,13 @@ class HeroComponent extends BaseComponent {
         // Mapeamento original de chaves do objeto this.colors
         this.colors = {
             overlay: this.getColorVariant(primaryBase, 900),
-            badge: this.getColorVariant(accentBase, 400),
+            badge: this.getColorVariant(primaryBase, 400),
             title: this.getColorVariant(textBase, 100),
-            titleHighlight: this.getColorVariant(accentBase, 400),
+            titleHighlight: this.getColorVariant(primaryBase, 400),
             subtitle: this.getColorVariant(textBase, 200),
-            ctaPrimaryBg: this.getColorVariant(accentBase, 500),
-            ctaPrimaryText: this.getColorVariant(primaryBase, 900),
-            ctaPrimaryHover: this.getColorVariant(accentBase, 400),
+            ctaPrimaryBg: this.getColorVariant(primaryBase, 500),
+            ctaPrimaryText: this.getColorVariant(textBase, 100),
+            ctaPrimaryHover: this.getColorVariant(primaryBase, 400),
             ctaSecondaryBorder: this.getColorVariant(textBase, 100),
             ctaSecondaryText: this.getColorVariant(textBase, 100),
             ctaSecondaryHover: this.getColorVariant(primaryBase, 800)
