@@ -1,0 +1,267 @@
+{
+  "theme": {
+    "colors": {
+      "primary": "#147ce5",
+      "primaryLight": "#4396eb",
+      "secondary": "#0e56a0",
+      "tertiary": "#f3f4f6",
+      "accent": "#22c55e",
+      "background": "#F8FAFB",
+      "text": {
+        "dark": "#1F2937",
+        "medium": "#4B5563",
+        "light": "#9CA3AF",
+        "white": "#FFFFFF"
+      }
+    },
+    "fonts": {
+      "primary": "\"Poppins\", sans-serif",
+      "secondary": "\"Inter\", sans-serif",
+      "urls": {
+        "google": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
+      }
+    }
+  },
+  "contact-top-bar": {
+    "infoItems": [
+      {
+        "icon": "fas fa-phone-alt",
+        "text": "(11) 99876-5432"
+      },
+      {
+        "icon": "fas fa-clock",
+        "text": "Seg-Sex: 9h às 18h | Sáb: 9h às 13h"
+      },
+      {
+        "icon": "fas fa-map-marker-alt",
+        "text": "Atendimento Expresso em São Paulo"
+      }
+    ],
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com/irepair"
+      },
+      {
+        "icon": "fab fa-facebook",
+        "href": "https://facebook.com/irepair"
+      }
+    ]
+  },
+  "sticky-header-navigation": {
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png",
+    "logoAlt": "Logo iRepair - Assistência Técnica Apple",
+    "siteName": "iRepair",
+    "established": "Especialista Apple",
+    "links": {
+      "services": {
+        "text": "Serviços",
+        "href": "#servicos"
+      },
+      "about": {
+        "text": "Sobre Nós",
+        "href": "#sobre"
+      },
+      "faq": {
+        "text": "Dúvidas",
+        "href": "#faq"
+      },
+      "cta": {
+        "text": "Orçamento Grátis",
+        "href": "https://wa.me/5511998765432",
+        "target": "_blank"
+      }
+    }
+  },
+  "hero-overlay": {
+    "badge": "Técnicos Certificados Apple",
+    "title": "Seu Apple em",
+    "titleHighlight": "boas mãos.",
+    "subtitle": "Especialistas em manutenção de iPhone, iPad e MacBook com peças originais e reparo expresso em até 2 horas.",
+    "ctaPrimary": {
+      "text": "Solicitar Orçamento",
+      "href": "https://wa.me/5511998765432",
+      "target": "_blank"
+    },
+    "ctaSecondary": {
+      "text": "Nossos Serviços",
+      "href": "#servicos"
+    },
+    "backgroundImage": "https://images.unsplash.com/photo-1616440752223-2951195966ca?w=1920",
+    "backgroundAlt": "Reparo de MacBook em bancada técnica",
+    "whatsappNumber": "5511998765432"
+  },
+  "info-bar": {
+    "items": [
+      {
+        "icon": "fas fa-microscope",
+        "text": "Diagnóstico Gratuito"
+      },
+      {
+        "icon": "fas fa-bolt",
+        "text": "Reparo em 2 Horas"
+      },
+      {
+        "icon": "fas fa-shield-alt",
+        "text": "Peças Originais"
+      },
+      {
+        "icon": "fas fa-certificate",
+        "text": "Garantia Estendida"
+      }
+    ]
+  },
+  "quick-service-cards": {
+    "id": "servicos",
+    "cards": [
+      {
+        "icon": "fas fa-mobile-alt",
+        "title": "Reparo de iPhone",
+        "description": "Troca de tela, bateria, conectores e reparos em placa com agilidade.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511998765432"
+      },
+      {
+        "icon": "fas fa-laptop",
+        "title": "Manutenção MacBook",
+        "description": "Upgrade de memória, limpeza interna, troca de teclado e reparo de tela.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511998765432"
+      },
+      {
+        "icon": "fas fa-tablet-alt",
+        "title": "Conserto de iPad",
+        "description": "Recuperação de carcaça, troca de vidro, touch e baterias originais.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511998765432"
+      },
+      {
+        "icon": "fas fa-tools",
+        "title": "Reparo de Placa",
+        "description": "Serviço especializado de microsoldagem e recuperação de aparelhos molhados.",
+        "buttonText": "Saiba Mais",
+        "buttonHref": "https://wa.me/5511998765432"
+      }
+    ]
+  },
+  "about-image-features": {
+    "id": "sobre",
+    "tag": "Quem Somos",
+    "title": "Especialistas em Ecossistema Apple",
+    "paragraphs": [
+      "A iRepair nasceu da paixão pela tecnologia e do compromisso com a qualidade. Somos uma assistência técnica focada exclusivamente em produtos Apple.",
+      "Contamos com técnicos certificados e laboratório de última geração para garantir que seu dispositivo volte a funcionar como novo no menor tempo possível.",
+      "Nossa transparência começa no diagnóstico gratuito e vai até a entrega do aparelho com garantia total dos serviços realizados."
+    ],
+    "features": [
+      {
+        "icon": "fas fa-check-circle",
+        "text": "Técnicos Certificados Apple"
+      },
+      {
+        "icon": "fas fa-medal",
+        "text": "Peças Originais Garantidas"
+      },
+      {
+        "icon": "fas fa-user-shield",
+        "text": "Diagnóstico 100% Gratuito"
+      },
+      {
+        "icon": "fas fa-rocket",
+        "text": "Reparo Expresso em 2h"
+      }
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1597740985671-2a8a3b80502e?w=800",
+    "imageAlt": "Técnico trabalhando em reparo de precisão"
+  },
+  "achievements-numbers-grid": {
+    "stats": [
+      {
+        "value": "15k+",
+        "label": "Aparelhos Reparados"
+      },
+      {
+        "value": "100%",
+        "label": "Peças Originais"
+      },
+      {
+        "value": "2h",
+        "label": "Prazo Médio"
+      },
+      {
+        "value": "5 Estrelas",
+        "label": "Avaliação Google"
+      }
+    ]
+  },
+  "faq-accordion": {
+    "id": "faq",
+    "title": "Perguntas Frequentes",
+    "subtitle": "Tire suas dúvidas sobre nossos serviços e prazos",
+    "questions": [
+      {
+        "question": "O diagnóstico realmente é gratuito?",
+        "answer": "Sim! Realizamos a análise completa do seu dispositivo sem qualquer custo. Você só paga se aprovar o orçamento do reparo."
+      },
+      {
+        "question": "Quanto tempo demora o reparo da tela?",
+        "answer": "Para a maioria dos modelos de iPhone, a troca de tela é feita em nossa modalidade expressa, levando no máximo 2 horas."
+      },
+      {
+        "question": "As peças utilizadas são originais?",
+        "answer": "Trabalhamos exclusivamente com peças originais e de primeira linha (OEM) que mantêm todas as funcionalidades e qualidade do seu Apple."
+      },
+      {
+        "question": "Qual a garantia dos serviços?",
+        "answer": "Oferecemos garantia legal e contratual em todos os reparos, variando de 90 dias a 1 ano, dependendo do tipo de serviço realizado."
+      }
+    ]
+  },
+  "footer-contact": {
+    "title": "iRepair Apple Specialist",
+    "address": {
+      "label": "Onde Estamos",
+      "street": "Avenida Paulista, 1000 - Bela Vista",
+      "city": "São Paulo - SP",
+      "zipCode": "CEP: 01310-100",
+      "mapQuery": "Avenida Paulista, São Paulo"
+    },
+    "contact": {
+      "label": "Fale Conosco",
+      "phone": "(11) 99876-5432"
+    },
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com",
+        "label": "Instagram"
+      },
+      {
+        "icon": "fab fa-whatsapp",
+        "href": "https://wa.me/5511998765432",
+        "label": "WhatsApp"
+      }
+    ],
+    "copyright": "© 2024 iRepair - Assistência Técnica Apple. Todos os direitos reservados.",
+    "tags": [
+      "Reparo de iPhone",
+      "Assistência Apple",
+      "MacBook Pro",
+      "Troca de Tela",
+      "Bateria iPhone"
+    ]
+  },
+  "whatsapp-float-button": {
+    "icon": "fab fa-whatsapp",
+    "text": "Orçamento Online",
+    "href": "https://wa.me/5511998765432?text=Olá!%20Gostaria%20de%20um%20orçamento%20para%20reparo.",
+    "color": "#25D366"
+  },
+  "site": {
+    "title": "iRepair - Assistência Técnica Apple | Reparo Expresso em SP",
+    "name": "iRepair - Especialista Apple",
+    "established": "Desde 2019",
+    "logoAlt": "Logo iRepair",
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png"
+  }
+}
