@@ -173,6 +173,10 @@ class AboutImageFeaturesComponent {
             .about-text h2 {
                 font-size: 2.5rem;
                 margin-bottom: 20px;
+                color: var(--secondary);
+            }
+            .about-text p {
+                color: var(--text-body);
             }
             .about-list {
                 margin-top: 20px;

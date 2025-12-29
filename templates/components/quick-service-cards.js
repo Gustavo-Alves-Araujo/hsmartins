@@ -160,10 +160,12 @@ class QuickServiceCardsComponent {
             .card h3 {
                 margin-bottom: 15px;
                 font-size: 1.4rem;
+                color: var(--secondary);
             }
             .card p {
                 font-size: 0.95rem;
                 margin-bottom: 25px;
+                color: var(--text-body);
             }
         `;
         document.head.appendChild(style);

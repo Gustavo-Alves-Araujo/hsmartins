@@ -175,6 +175,10 @@ class AboutImageFeaturesClinicalComponent {
             .about-text h2 {
                 font-size: 2.5rem;
                 margin-bottom: 20px;
+                color: var(--secondary);
+            }
+            .about-text p {
+                color: var(--text-body);
             }
             .about-list {
                 margin-top: 20px;
@@ -193,12 +197,22 @@ class AboutImageFeaturesClinicalComponent {
             }
             .clinical {
                 padding: 100px 0;
+                background-color: var(--white);
             }
             .clinical-content {
                 display: flex;
                 flex-direction: row-reverse;
                 align-items: center;
                 gap: 50px;
+            }
+            .clinical .about-text {
+                color: var(--text-body);
+            }
+            .clinical .about-text h2 {
+                color: var(--secondary);
+            }
+            .clinical .about-text p {
+                color: var(--text-body);
             }
             @media (max-width: 992px) {
                 .about-content, .clinical-content { flex-direction: column; }

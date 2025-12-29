@@ -142,6 +142,10 @@ class AchievementsNumbersGridComponent {
             }
             .units h2 {
                 margin-bottom: 40px;
+                color: var(--secondary);
+            }
+            .units p {
+                color: var(--text-body);
             }
             .stats-grid {
                 display: flex;
@@ -156,6 +160,7 @@ class AchievementsNumbersGridComponent {
             .stat-item p {
                 font-weight: 700;
                 text-transform: uppercase;
+                color: var(--text-body);
             }
         `;
         document.head.appendChild(style);

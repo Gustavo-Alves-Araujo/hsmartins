@@ -26,11 +26,21 @@ class PlansCalloutBoxComponent extends BaseComponent {
 
         // Resolve cores do tema
         this.backgroundHex = this.resolveColorHex(data.colors?.background, 'primary', '#16A34A');
-        this.cardBackgroundHex = data.colors?.cardBackground || this.lightenColor(this.backgroundHex, 0.3);
+        this.cardBackgroundHex = data.colors?.cardBackground || this.lightenColor(this.backgroundHex, 0.4);
 
         // Calcula cor de texto com contraste adequado usando método do BaseComponent
-        this.textColor = data.colors?.text || this.getBestTextColor(this.cardBackgroundHex, 4.5);
-        this.titleColor = data.colors?.title || this.getBestTextColor(this.cardBackgroundHex, 4.5);
+        // Se o card for muito claro, usa texto escuro; se for escuro, usa texto branco
+        const isCardLight = this.isLightColor(this.cardBackgroundHex);
+        this.textColor = data.colors?.text || (isCardLight ? '#1F2937' : '#FFFFFF');
+        this.titleColor = data.colors?.title || (isCardLight ? '#1F2937' : '#FFFFFF');
+
+        // Garante contraste mínimo de 4.5:1
+        if (!this.hasEnoughContrast(this.textColor, this.cardBackgroundHex, 4.5)) {
+            this.textColor = this.getBestTextColor(this.cardBackgroundHex, 4.5);
+        }
+        if (!this.hasEnoughContrast(this.titleColor, this.cardBackgroundHex, 4.5)) {
+            this.titleColor = this.getBestTextColor(this.cardBackgroundHex, 4.5);
+        }
     }
 
     /**
