@@ -119,7 +119,7 @@ class ComponentRecommender {
 
         const layoutOrder = {
             'top': ['contact-top-bar', 'sticky-header-navigation', 'sticky-navbar-gradient', 'header-navigation'],
-            'after-header': ['hero-image-badge', 'hero-overlay', 'hero-badge-preview'],
+            'after-header': ['hero-image-badge', 'hero-overlay''],
             'after-hero': ['info-bar', 'social-proof-logos'],
             'mid-page': ['achievements-numbers-grid', 'quick-service-cards', 'about-image-features', 'about-image-features-clinical', 'features-grid-glass', 'benefit-highlight-split', 'feature-highlight', 'card-grid'],
             'mid-to-late-page': ['pricing-grid-highlight', 'plans-callout-box', 'email-signup-form'],

@@ -140,7 +140,6 @@ Temos **30+ componentes** organizados por categoria:
 ### 🎯 Hero
 - `hero-image-badge` - Hero com imagem e badge
 - `hero-overlay` - Hero cinematográfico com overlay
-- `hero-badge-preview` - Hero moderno com preview
 
 ### 📊 Informação
 - `info-bar` - Barra de informações genérica

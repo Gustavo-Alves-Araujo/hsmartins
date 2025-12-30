@@ -76,26 +76,6 @@
         "placement": "after-header"
       }
     },
-    "hero-badge-preview": {
-      "id": "hero-badge-preview",
-      "name": "Hero Badge Preview",
-      "description": "Seção hero com badge, título com gradiente, descrição, botões e preview de dashboard",
-      "category": "hero",
-      "tags": ["hero", "badge", "gradient", "preview", "saas"],
-      "niches": ["saas", "software", "digital-products", "startups", "tech"],
-      "requiredProps": ["title", "titleHighlight", "description"],
-      "optionalProps": ["badge", "buttons", "preview", "colors"],
-      "dependencies": [],
-      "compatibleWith": ["sticky-navbar-gradient", "features-grid-glass"],
-      "incompatibleWith": [],
-      "style": "modern",
-      "theme": "adapts",
-      "file": "hero-badge-preview.js",
-      "suggestions": {
-        "bestFor": ["SaaS e plataformas", "Produtos digitais", "Startups tech"],
-        "placement": "after-header"
-      }
-    },
     "info-bar": {
       "id": "info-bar",
       "name": "Info Bar",
@@ -286,7 +266,7 @@
       "requiredProps": ["logoUrl", "links"],
       "optionalProps": ["logoAlt", "ctaButton", "colors"],
       "dependencies": [],
-      "compatibleWith": ["hero-badge-preview", "features-grid-glass"],
+      "compatibleWith": ["features-grid-glass"],
       "incompatibleWith": [],
       "style": "modern-gradient",
       "theme": "adapts",
@@ -326,7 +306,7 @@
       "requiredProps": ["features"],
       "optionalProps": ["title", "subtitle", "colors"],
       "dependencies": [],
-      "compatibleWith": ["hero-badge-preview", "sticky-navbar-gradient"],
+      "compatibleWith": ["sticky-navbar-gradient"],
       "incompatibleWith": [],
       "style": "glassmorphism",
       "theme": "adapts",
@@ -346,7 +326,7 @@
       "requiredProps": ["title", "benefits"],
       "optionalProps": ["visual", "image", "reverse", "colors"],
       "dependencies": [],
-      "compatibleWith": ["features-grid-glass", "hero-badge-preview"],
+      "compatibleWith": ["features-grid-glass"],
       "incompatibleWith": [],
       "style": "split-glow",
       "theme": "adapts",
@@ -406,7 +386,7 @@
       "requiredProps": ["logos"],
       "optionalProps": ["title", "colors"],
       "dependencies": [],
-      "compatibleWith": ["hero-badge-preview", "features-grid-glass"],
+      "compatibleWith": ["features-grid-glass"],
       "incompatibleWith": [],
       "style": "minimalist",
       "theme": "adapts",
@@ -486,7 +466,7 @@
       "requiredProps": ["columns"],
       "optionalProps": ["logo", "description", "copyright", "colors"],
       "dependencies": [],
-      "compatibleWith": ["sticky-navbar-gradient", "hero-badge-preview"],
+      "compatibleWith": ["sticky-navbar-gradient"],
       "incompatibleWith": [],
       "style": "multi-column-dark",
       "theme": "adapts",
@@ -546,7 +526,7 @@
       "requiredProps": ["title", "description", "button"],
       "optionalProps": ["footerText", "colors"],
       "dependencies": [],
-      "compatibleWith": ["features-grid-glass", "hero-badge-preview"],
+      "compatibleWith": ["features-grid-glass"],
       "incompatibleWith": [],
       "style": "glow-gradient",
       "theme": "adapts",
@@ -566,7 +546,7 @@
       "requiredProps": [],
       "optionalProps": ["colors", "intensity"],
       "dependencies": [],
-      "compatibleWith": ["hero-badge-preview", "features-grid-glass"],
+      "compatibleWith": ["features-grid-glass"],
       "incompatibleWith": [],
       "style": "ambient",
       "theme": "adapts",
@@ -899,7 +879,7 @@
   },
   "categories": {
     "navigation": ["contact-top-bar", "sticky-header-navigation", "sticky-navbar-gradient", "header-navigation", "marquee-info-bar", "navbar-ecommerce", "navbar-ecommerce-advanced"],
-    "hero": ["hero-image-badge", "hero-overlay", "hero-badge-preview", "hero-split", "hero-product-showcase"],
+    "hero": ["hero-image-badge", "hero-overlay","hero-split", "hero-product-showcase"],
     "information": ["info-bar", "achievements-numbers-grid", "social-proof-logos"],
     "services": ["quick-service-cards", "features-grid-glass", "benefit-highlight-split", "feature-highlight", "benefits-grid", "benefits-grid-ecommerce"],
     "content": ["about-image-features", "about-image-features-clinical", "card-grid", "product-grid-ecommerce", "store-concept-section", "category-carousel", "product-filters-bar", "product-grid-advanced"],
@@ -918,7 +898,7 @@
       "optional": ["cta-banner", "faq-accordion"]
     },
     "saas": {
-      "recommended": ["sticky-navbar-gradient", "hero-badge-preview", "social-proof-logos", "features-grid-glass", "benefit-highlight-split", "pricing-grid-highlight", "faq-accordion", "cta-glow-card", "footer-multi-column-dark"],
+      "recommended": ["sticky-navbar-gradient","social-proof-logos", "features-grid-glass", "benefit-highlight-split", "pricing-grid-highlight", "faq-accordion", "cta-glow-card", "footer-multi-column-dark"],
       "optional": ["ambient-background-effects", "email-signup-form"]
     },
     "clinics": {
