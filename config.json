@@ -1,17 +1,17 @@
 {
   "theme": {
     "colors": {
-      "primary": "#6d28d9",
-      "primaryLight": "#8b5cf6",
-      "secondary": "#4c1d95",
-      "tertiary": "#ede9fe",
-      "accent": "#f59e0b",
-      "background": "#ffffff",
+      "primary": "#eab308",
+      "primaryLight": "#fde047",
+      "secondary": "#d97706",
+      "tertiary": "#fef3c7",
+      "accent": "#fbbf24",
+      "background": "#F9FAFB",
       "text": {
-        "dark": "#1f2937",
-        "medium": "#4b5563",
-        "light": "#9ca3af",
-        "white": "#ffffff"
+        "dark": "#1F2937",
+        "medium": "#4B5563",
+        "light": "#9CA3AF",
+        "white": "#FFFFFF"
       }
     },
     "fonts": {
@@ -22,186 +22,270 @@
       }
     }
   },
-  "marquee-info-bar": {
+  "contact-top-bar": {
+    "infoItems": [
+      {
+        "icon": "fas fa-phone-alt",
+        "text": "(11) 98320-4567"
+      },
+      {
+        "icon": "fas fa-map-marker-alt",
+        "text": "São Paulo - SP"
+      },
+      {
+        "icon": "fas fa-envelope",
+        "text": "contato@marianoprocopio.com.br"
+      }
+    ],
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com"
+      },
+      {
+        "icon": "fab fa-whatsapp",
+        "href": "https://wa.me/5511983204567"
+      }
+    ]
+  },
+  "sticky-header-navigation": {
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png",
+    "logoAlt": "Logo Mariano Procópio Nutrição",
+    "siteName": "Mariano Procópio",
+    "established": "Nutrição Clínica e Esportiva",
+    "links": {
+      "about": {
+        "text": "Sobre",
+        "href": "#sobre"
+      },
+      "services": {
+        "text": "Serviços",
+        "href": "#servicos"
+      },
+      "faq": {
+        "text": "Dúvidas",
+        "href": "#faq"
+      },
+      "cta": {
+        "text": "Agendar Consulta",
+        "href": "https://wa.me/5511983204567",
+        "target": "_blank"
+      }
+    }
+  },
+  "hero-image-badge": {
+    "tag": "Nutrição com Propósito",
+    "tagIcon": "fas fa-leaf",
+    "title": "Saúde e Performance com",
+    "titleHighlight": "Reeducação Sustentável",
+    "description": "Atendimento personalizado em nutrição clínica e esportiva. Conquiste seus objetivos com acompanhamento contínuo e uma rotina alimentar que você consegue manter.",
+    "buttons": [
+      {
+        "text": "Começar Minha Transformação",
+        "href": "https://wa.me/5511983204567",
+        "class": "btn-primary",
+        "icon": "fab fa-whatsapp"
+      },
+      {
+        "text": "Ver Especialidades",
+        "href": "#servicos",
+        "class": "btn-outline"
+      }
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1543362906-acfc16c67564?w=800",
+    "imageAlt": "Mariano Procópio Nutricionista",
+    "rating": {
+      "stars": 5,
+      "text": "500+ pacientes satisfeitos"
+    },
+    "badge": {
+      "icon": "fas fa-heartbeat",
+      "title": "Acompanhamento",
+      "text": "Via WhatsApp 24/7"
+    }
+  },
+  "info-bar": {
     "items": [
-      "Taxa de conveniência reduzida em todo o site",
-      "Parcele seus ingressos em até 12x",
-      "Setores VIP exclusivos para membros GospelPass",
-      "Confira a agenda das maiores turnês de 2025"
-    ],
-    "colors": {
-      "background": "#6d28d9",
-      "text": "#ffffff"
-    }
-  },
-  "navbar-ecommerce": {
-    "logoText": "GospelPass",
-    "logoUrl": "https://maxvethospital.com.br/wp-content/webp-express/webp-images/uploads/2024/06/Logo-Site.png.webp",
-    "links": [
-      { "text": "Shows", "href": "#eventos" },
-      { "text": "Conferências", "href": "#conferencias" },
-      { "text": "Turnês", "href": "#turnes" },
-      { "text": "Suporte", "href": "#faq" }
-    ],
-    "sticky": true
-  },
-  "hero-overlay": {
-    "badge": "A maior plataforma de eventos cristãos",
-    "title": "A sua entrada para os melhores",
-    "titleHighlight": "eventos gospel.",
-    "subtitle": "Garanta seu lugar nos maiores shows, conferências e turnês cristãs do Brasil com as melhores condições do mercado.",
-    "backgroundImage": "https://images.unsplash.com/photo-1470225620779-ad43838428e3?w=1920",
-    "ctaPrimary": {
-      "text": "Ver Eventos Disponíveis",
-      "href": "#eventos"
-    },
-    "ctaSecondary": {
-      "text": "Minha Conta",
-      "href": "#login"
-    }
-  },
-  "social-proof-logos": {
-    "title": "Os maiores artistas e produtoras confiam na GospelPass",
-    "logos": [
-      { "url": "https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=200", "alt": "Produtora Alpha" },
-      { "url": "https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=200", "alt": "Evento Beta" },
-      { "url": "https://images.unsplash.com/photo-1563906417323-b0c20c35df83?w=200", "alt": "Tour Gamma" }
-    ]
-  },
-  "benefits-grid": {
-    "benefits": [
       {
-        "icon": "fas fa-percentage",
-        "title": "Taxa Reduzida",
-        "description": "Menores taxas de conveniência do mercado para você economizar em cada ingresso."
+        "icon": "fas fa-utensils",
+        "text": "Sem Dieta Restritiva"
       },
       {
-        "icon": "fas fa-crown",
-        "title": "Setores VIP",
-        "description": "Acesso exclusivo aos melhores lugares e meet & greet com seus artistas favoritos."
+        "icon": "fas fa-dumbbell",
+        "text": "Foco em Performance"
       },
       {
-        "icon": "fas fa-credit-card",
-        "title": "Parcelamento Facilitado",
-        "description": "Pague em até 12x no cartão de crédito ou utilize o PIX com aprovação imediata."
+        "icon": "fas fa-check-circle",
+        "text": "Resultados Duradouros"
       },
       {
-        "icon": "fas fa-star",
-        "title": "Curadoria Premium",
-        "description": "Selecionamos apenas os maiores e melhores eventos cristãos de todo o Brasil."
+        "icon": "fas fa-mobile-alt",
+        "text": "Suporte Contínuo"
       }
     ]
   },
-  "product-grid-ecommerce": {
-    "id": "eventos",
-    "title": "Eventos em Destaque",
-    "subtitle": "Confira as próximas turnês e conferências confirmadas",
-    "products": [
+  "about-image-features": {
+    "id": "sobre",
+    "tag": "Diferencial",
+    "title": "Por que escolher o meu acompanhamento?",
+    "paragraphs": [
+      "Acredito que a nutrição deve ser adaptada à sua vida, e não o contrário. Meu foco é a reeducação alimentar sustentável, onde você aprende a comer de tudo de forma equilibrada.",
+      "Com especialização em nutrição clínica e esportiva, uno a ciência do desempenho físico com o bem-estar metabólico para gerar resultados que permanecem.",
+      "O grande diferencial é o suporte via WhatsApp: você nunca estará sozinho em sua jornada, tirando dúvidas em tempo real sobre escolhas e refeições."
+    ],
+    "features": [
       {
-        "name": "Turnê Adoração Profética",
-        "price": "R$ 80,00",
-        "imageUrl": "https://images.unsplash.com/photo-1501281668939-262a6408d629?w=600",
-        "badge": "MAIS VENDIDO",
-        "description": "Ingressos a partir de R$ 80,00"
+        "icon": "fas fa-clipboard-check",
+        "text": "Plano alimentar 100% individualizado"
       },
       {
-        "name": "Conferência Aviva 2025",
-        "price": "R$ 150,00",
-        "imageUrl": "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=600",
-        "badge": "LOTE 1",
-        "description": "Ingressos a partir de R$ 150,00"
+        "icon": "fas fa-comments",
+        "text": "Acompanhamento diário via WhatsApp"
       },
       {
-        "name": "Show Grande Reencontro",
-        "price": "R$ 65,00",
-        "imageUrl": "https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=600",
-        "badge": "ÚLTIMOS INGRESSOS",
-        "description": "Ingressos a partir de R$ 65,00"
+        "icon": "fas fa-chart-line",
+        "text": "Análise de composição corporal"
       },
       {
-        "name": "Summit Liderança Cristã",
-        "price": "R$ 220,00",
-        "imageUrl": "https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=600",
-        "description": "Ingressos a partir de R$ 220,00"
+        "icon": "fas fa-apple-alt",
+        "text": "Foco em reeducação, não restrição"
+      }
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800",
+    "imageAlt": "Alimentação Saudável e Equilibrada"
+  },
+  "quick-service-cards": {
+    "id": "servicos",
+    "cards": [
+      {
+        "icon": "fas fa-user-md",
+        "title": "Nutrição Clínica",
+        "description": "Tratamento de patologias, melhora de exames laboratoriais e saúde digestiva através da alimentação.",
+        "buttonText": "Saber Mais",
+        "buttonHref": "https://wa.me/5511983204567"
+      },
+      {
+        "icon": "fas fa-running",
+        "title": "Nutrição Esportiva",
+        "description": "Estratégias para ganho de massa, perda de gordura e otimização da performance nos treinos.",
+        "buttonText": "Saber Mais",
+        "buttonHref": "https://wa.me/5511983204567"
+      },
+      {
+        "icon": "fas fa-sync-alt",
+        "title": "Reeducação Alimentar",
+        "description": "Mudança definitiva de hábitos para quem busca longevidade sem abrir mão do prazer de comer.",
+        "buttonText": "Saber Mais",
+        "buttonHref": "https://wa.me/5511983204567"
       }
     ]
   },
-  "promo-banner-split": {
-    "title": "Experiência VIP Exclusiva",
-    "badge": "NOVIDADE",
-    "description": "Tenha acesso a passagens de som, áreas reservadas e entrada prioritária nos maiores shows do ano através do nosso selo GospelPass VIP.",
-    "button": {
-      "text": "Conhecer Benefícios VIP",
-      "href": "#vip"
-    },
-    "imageUrl": "https://images.unsplash.com/photo-1514525253344-90463974d678?w=800",
-    "reverse": true
+  "achievements-numbers-grid": {
+    "stats": [
+      {
+        "value": "500+",
+        "label": "Vidas Transformadas"
+      },
+      {
+        "value": "8+",
+        "label": "Anos de Experiência"
+      },
+      {
+        "value": "15k",
+        "label": "Quilos Eliminados"
+      },
+      {
+        "value": "100%",
+        "label": "Suporte Online"
+      }
+    ],
+    "title": "Nossos Resultados em Números",
+    "description": "A consistência e o método validado trazem transformações reais para nossos pacientes."
   },
   "faq-accordion": {
     "id": "faq",
-    "title": "Dúvidas Frequentes",
-    "subtitle": "Tudo o que você precisa saber sobre sua compra na GospelPass",
+    "title": "Perguntas Frequentes",
+    "subtitle": "Tire suas principais dúvidas sobre o acompanhamento nutricional",
     "questions": [
       {
-        "question": "Como recebo meu ingresso?",
-        "answer": "Após a confirmação do pagamento, seu ingresso digital (QR Code) será enviado para seu e-mail e ficará disponível na sua conta em nosso site."
+        "question": "Como funciona o acompanhamento pelo WhatsApp?",
+        "answer": "Você terá um canal direto comigo para tirar dúvidas sobre rótulos, substituições em restaurantes ou motivação, garantindo que você não saia do plano por falta de informação."
       },
       {
-        "question": "Quais as formas de pagamento aceitas?",
-        "answer": "Aceitamos PIX, boleto bancário e cartões de crédito (Visa, Mastercard, Elo, Amex) com parcelamento em até 12 vezes."
+        "question": "Preciso comprar suplementos caros?",
+        "answer": "Não. A base do meu trabalho é a 'comida de verdade'. Suplementos são utilizados apenas se houver necessidade real e comprovada por exames ou rotina intensa."
       },
       {
-        "question": "Como funciona a meia-entrada?",
-        "answer": "Seguimos a legislação vigente para estudantes, idosos, professores e PCD. É necessário apresentar o documento comprobatório na entrada do evento."
+        "question": "O plano alimentar é muito restritivo?",
+        "answer": "Pelo contrário. Meu foco é a nutrição sustentável. Trabalhamos com flexibilidade para que você consiga manter sua vida social e prazeres alimentares enquanto atinge suas metas."
       },
       {
-        "question": "Posso transferir meu ingresso para outra pessoa?",
-        "answer": "Sim, a transferência é permitida através do nosso painel de usuário até 48 horas antes do início do evento."
+        "question": "Qual o intervalo entre as consultas?",
+        "answer": "Geralmente as consultas ocorrem a cada 30 ou 45 dias, mas o contato via WhatsApp é diário para ajustes finos."
       }
     ]
   },
-  "footer-multi-column-dark": {
-    "columns": [
+  "cta-banner": {
+    "title": "Pronto para transformar sua saúde?",
+    "subtitle": "Agende sua primeira consulta e receba um plano feito exclusivamente para você.",
+    "buttons": [
       {
-        "title": "Navegação",
-        "links": [
-          { "text": "Próximos Eventos", "href": "#eventos" },
-          { "text": "Artistas", "href": "#" },
-          { "text": "Conferências", "href": "#" },
-          { "text": "Venda na GospelPass", "href": "#" }
-        ]
+        "text": "Agendar Agora pelo WhatsApp",
+        "href": "https://wa.me/5511983204567",
+        "target": "_blank"
+      }
+    ]
+  },
+  "footer-contact": {
+    "title": "Mariano Procópio Nutrição",
+    "address": {
+      "label": "Localização",
+      "street": "Atendimento Presencial e Online",
+      "city": "São Paulo - SP",
+      "zipCode": "Consulte disponibilidade",
+      "mapQuery": "São Paulo"
+    },
+    "contact": {
+      "label": "Contato Direto",
+      "phone": "(11) 98320-4567"
+    },
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "https://instagram.com",
+        "label": "Instagram"
       },
       {
-        "title": "Suporte",
-        "links": [
-          { "text": "Central de Ajuda", "href": "#faq" },
-          { "text": "Termos de Uso", "href": "#" },
-          { "text": "Política de Privacidade", "href": "#" },
-          { "text": "Cancelamentos", "href": "#" }
-        ]
+        "icon": "fab fa-facebook",
+        "href": "https://facebook.com",
+        "label": "Facebook"
       },
       {
-        "title": "Redes Sociais",
-        "links": [
-          { "text": "Instagram", "href": "https://instagram.com" },
-          { "text": "Facebook", "href": "https://facebook.com" },
-          { "text": "YouTube", "href": "https://youtube.com" }
-        ]
+        "icon": "fab fa-whatsapp",
+        "href": "https://wa.me/5511983204567",
+        "label": "WhatsApp"
       }
     ],
-    "description": "GospelPass - A maior plataforma de ingressos para o público cristão do Brasil.",
-    "copyright": "© 2025 GospelPass. Todos os direitos reservados. CNPJ: 00.000.000/0001-00"
+    "copyright": "© 2025 Mariano Procópio Nutrição. Todos os direitos reservados.",
+    "tags": [
+      "Nutrição Esportiva",
+      "Nutrição Clínica",
+      "Emagrecimento",
+      "Hipertrofia",
+      "Reeducação Alimentar"
+    ]
   },
   "whatsapp-float-button": {
-    "href": "https://wa.me/5511998765432?text=Olá!%20Tenho%20uma%20dúvida%20sobre%20um%20ingresso.",
-    "text": "Suporte Online",
+    "icon": "fab fa-whatsapp",
+    "text": "Agendar Consulta",
+    "href": "https://wa.me/5511983204567?text=Olá! Gostaria de informações sobre o acompanhamento nutricional.",
     "color": "#25D366"
   },
   "site": {
-    "title": "GospelPass - Ingressos para Shows e Conferências Cristãs",
-    "name": "GospelPass - Ingressos Cristãos",
-    "established": "Desde 2020",
-    "logoAlt": "Logo GospelPass",
-    "logoUrl": "https://www.exemplo.com.br/logo-gospelpass.png"
+    "title": "Mariano Procópio | Nutrição Clínica e Esportiva",
+    "name": "Mariano Procópio Nutrição",
+    "established": "Nutricionista CRN-XXXX",
+    "logoAlt": "Mariano Procópio Nutrição",
+    "logoUrl": "https://www.psicologodiegovigato.com.br/01.png"
   }
 }
