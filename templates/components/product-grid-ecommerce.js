@@ -1,28 +1,12 @@
 /**
- * Product Grid E-commerce Component
- * Grid de produtos para e-commerce com preço, badge, botão de ação
- * Genérico mas otimizado para produtos físicos/digitais
+ * Product Grid E-commerce Component - Versão Final Ultra-Compatível
+ * Estilo: Modern Clean / Boutique
+ * MANTIDA A INTERFACE E LÓGICA ORIGINAL DE PROPRIEDADES
  */
 
 class ProductGridEcommerceComponent extends BaseComponent {
     /**
-     * @param {Object} data - Dados necessários para o Product Grid
-     * @param {string} data.title - Título da seção
-     * @param {string} data.subtitle - Subtítulo da seção (opcional)
-     * @param {string} data.linkText - Texto do link "Ver todos" (opcional)
-     * @param {string} data.linkHref - URL do link "Ver todos" (opcional)
-     * @param {Array} data.products - Array de produtos
-     * @param {string} data.products[].id - ID do produto
-     * @param {string} data.products[].name - Nome do produto
-     * @param {number} data.products[].price - Preço do produto
-     * @param {string} data.products[].image - URL da imagem
-     * @param {string} data.products[].imageAlt - Texto alternativo da imagem
-     * @param {string} data.products[].badge - Badge do produto (ex: "NOVO", "HOT", "SALE") (opcional)
-     * @param {string} data.products[].category - Categoria do produto (opcional)
-     * @param {boolean} data.products[].showInstallment - Se deve mostrar parcelamento (padrão: true)
-     * @param {number} data.products[].installmentMonths - Número de parcelas (padrão: 10)
-     * @param {number} data.layout.columns - Número de colunas no grid (padrão: 4)
-     * @param {Object} data.colors - Cores customizáveis (opcional)
+     * @param {Object} data - Dados originais
      */
     constructor(data) {
         super();
@@ -33,7 +17,7 @@ class ProductGridEcommerceComponent extends BaseComponent {
         this.products = data.products || [];
         this.columns = data.layout?.columns || 4;
 
-        // Resolve cores base (override > tema > fallback)
+        // RESOLUÇÃO DE CORES ORIGINAL - MANTIDA
         const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
         const titleBase = this.resolveColor(data.colors?.title, 'primary', 'black');
 
@@ -44,91 +28,78 @@ class ProductGridEcommerceComponent extends BaseComponent {
             subtitle: 'gray-500',
         };
 
-        // Injeta estilos se necessário
-        this.injectStyles();
+        // Mapeamento de colunas explícito para o scanner do Tailwind ver as strings
+        const colMap = {
+            1: 'lg:grid-cols-1',
+            2: 'lg:grid-cols-2',
+            3: 'lg:grid-cols-3',
+            4: 'lg:grid-cols-4'
+        };
+        this.gridColsClass = colMap[this.columns] || 'lg:grid-cols-4';
     }
 
     /**
-     * Injeta estilos CSS customizados
-     */
-    injectStyles() {
-        if (document.getElementById('product-grid-ecommerce-styles')) return;
-
-        const style = document.createElement('style');
-        style.id = 'product-grid-ecommerce-styles';
-        style.textContent = `
-            .product-card-hover-zoom {
-                overflow: hidden;
-            }
-            .product-card-hover-zoom img {
-                transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            }
-            .product-card:hover .product-card-hover-zoom img {
-                transform: scale(1.05);
-            }
-            .product-add-btn {
-                transition: transform 0.3s;
-            }
-            .product-card:hover .product-add-btn {
-                transform: translateY(0);
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    /**
-     * Formata preço para moeda brasileira
-     * @param {number} price - Preço a ser formatado
-     * @returns {string} Preço formatado
+     * Formata preço para moeda brasileira - MANTIDO ORIGINAL
      */
     formatPrice(price) {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL',
-            minimumFractionDigits: 2
-        }).format(price);
+        const numPrice = typeof price === 'string'
+            ? parseFloat(price.replace(/[^\d,.-]/g, '').replace(',', '.'))
+            : Number(price);
+
+        if (isNaN(numPrice) || numPrice < 0) {
+            return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(0);
+        }
+
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numPrice);
     }
 
     /**
      * Renderiza um produto individual
-     * @param {Object} product - Dados do produto
-     * @returns {string} HTML do produto
      */
-    renderProduct(product) {
+    renderProduct(product, index) {
+        const price = typeof product.price === 'string'
+            ? parseFloat(product.price.replace(/[^\d,.-]/g, '').replace(',', '.'))
+            : Number(product.price) || 0;
+
         const installmentMonths = product.installmentMonths || 10;
         const showInstallment = product.showInstallment !== false;
-        const installmentPrice = product.price / installmentMonths;
+        const installmentPrice = price / installmentMonths;
 
         return `
-            <div class="product-card group cursor-pointer">
-                <div class="relative bg-gray-100 mb-4 overflow-hidden rounded-lg product-card-hover-zoom h-[300px] flex items-center justify-center">
+            <div class="group flex flex-col bg-white rounded-3xl p-3 shadow-sm hover:shadow-xl transition-all duration-500"
+                 data-aos="fade-up" data-aos-delay="${index * 50}">
+
+                <div class="relative bg-gray-50 overflow-hidden rounded-2xl aspect-[4/5] flex items-center justify-center">
                     ${product.badge ? `
-                        <span class="absolute top-3 left-3 bg-black text-white text-[10px] font-bold px-2 py-1 z-10">
+                        <span class="absolute top-4 left-4 z-10 bg-black text-white text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-widest">
                             ${product.badge}
                         </span>
                     ` : ''}
+
                     <img src="${product.image}"
                          alt="${product.imageAlt || product.name}"
-                         class="w-full h-full object-cover">
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
 
                     <button onclick="window.productGridAddToCart && window.productGridAddToCart('${product.id}')"
-                            class="absolute bottom-4 right-4 bg-white p-3 rounded-full shadow-lg translate-y-16 product-add-btn hover:bg-black hover:text-white transition-all">
+                            class="absolute bottom-4 right-4 bg-white p-4 rounded-2xl shadow-lg translate-y-20 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 hover:bg-black hover:text-white">
                         <i data-lucide="shopping-bag" class="w-5 h-5"></i>
                     </button>
                 </div>
-                <div>
-                    <h3 class="font-bold text-lg leading-tight mb-1 group-hover:underline text-${this.colors.title}">
+
+                <div class="pt-5 pb-2 px-2">
+                    <p class="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                        ${product.category || 'Premium'}
+                    </p>
+                    <h3 class="font-bold text-lg leading-tight mb-3 transition-colors text-${this.colors.title}">
                         ${product.name}
                     </h3>
-                    ${product.category ? `
-                        <p class="text-gray-500 text-sm mb-2">${product.category}</p>
-                    ` : ''}
-                    <div class="flex items-center justify-between">
-                        <span class="font-bold text-${this.colors.title}">
-                            ${this.formatPrice(product.price)}
+
+                    <div class="flex flex-col">
+                        <span class="text-xl font-black text-${this.colors.title}">
+                            ${this.formatPrice(price)}
                         </span>
                         ${showInstallment ? `
-                            <span class="text-xs text-gray-400">
+                            <span class="text-[11px] text-gray-400 font-medium">
                                 ${installmentMonths}x de ${this.formatPrice(installmentPrice)}
                             </span>
                         ` : ''}
@@ -139,30 +110,28 @@ class ProductGridEcommerceComponent extends BaseComponent {
     }
 
     /**
-     * Renderiza o HTML do componente
-     * @returns {string} HTML string do componente
+     * Renderiza o HTML principal
      */
     render() {
         const c = this.colors;
-        const gridCols = `grid-cols-1 sm:grid-cols-2 lg:grid-cols-${this.columns}`;
-        const productsHtml = this.products.map(product => this.renderProduct(product)).join('');
+        const productsHtml = this.products.map((p, i) => this.renderProduct(p, i)).join('');
 
         return `
-            <section id="lancamentos" class="py-20 container mx-auto px-4">
+            <section id="lancamentos" class="py-20 container mx-auto px-6">
                 ${this.title || this.subtitle ? `
-                    <div class="flex justify-between items-end mb-10">
+                    <div class="flex justify-between items-end mb-12">
                         <div>
                             ${this.title ? `
-                                <h2 class="text-3xl md:text-4xl font-display font-bold uppercase text-${c.title}">
+                                <h2 class="text-3xl md:text-5xl font-bold tracking-tighter text-${c.title}">
                                     ${this.title}
                                 </h2>
                             ` : ''}
                             ${this.subtitle ? `
-                                <p class="text-gray-500 mt-2">${this.subtitle}</p>
+                                <p class="text-gray-500 mt-3 text-lg">${this.subtitle}</p>
                             ` : ''}
                         </div>
                         ${this.linkText ? `
-                            <a href="${this.linkHref}" class="hidden md:flex items-center font-bold text-sm border-b border-black pb-1 hover:text-gray-600">
+                            <a href="${this.linkHref}" class="hidden md:flex items-center font-bold text-xs uppercase tracking-widest border-b-2 border-black pb-1 hover:opacity-50 transition-all">
                                 ${this.linkText}
                                 <i data-lucide="arrow-right" class="w-4 h-4 ml-2"></i>
                             </a>
@@ -170,14 +139,13 @@ class ProductGridEcommerceComponent extends BaseComponent {
                     </div>
                 ` : ''}
 
-                <!-- Product Grid -->
-                <div class="grid ${gridCols} gap-8" id="product-grid-content">
+                <div class="grid grid-cols-1 sm:grid-cols-2 ${this.gridColsClass} gap-8">
                     ${productsHtml}
                 </div>
 
                 ${this.linkText ? `
-                    <div class="mt-10 text-center md:hidden">
-                        <a href="${this.linkHref}" class="inline-block border border-black px-6 py-3 font-bold text-sm uppercase">
+                    <div class="mt-12 text-center md:hidden">
+                        <a href="${this.linkHref}" class="inline-block border-2 border-black px-8 py-3 font-bold text-xs uppercase tracking-widest rounded-xl">
                             ${this.linkText}
                         </a>
                     </div>
@@ -187,25 +155,24 @@ class ProductGridEcommerceComponent extends BaseComponent {
     }
 
     /**
-     * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde o componente será montado
+     * Monta o componente - MANTIDO ORIGINAL
      */
     mount(targetId) {
         const target = document.getElementById(targetId);
         if (target) {
             target.innerHTML = this.render();
-            // Inicializa ícones Lucide se disponível
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
+
+            // Força o Tailwind a escanear o novo HTML injetado
+            if (window.tailwind && typeof window.tailwind.track === 'function') {
+                window.tailwind.track();
             }
+
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
     }
 
     /**
-     * Método estático para criar e montar o componente
-     * @param {Object} data - Dados necessários
-     * @param {string} targetId - ID do elemento onde o componente será montado
-     * @returns {ProductGridEcommerceComponent} Instância do componente
+     * Método estático - MANTIDO ORIGINAL
      */
     static create(data, targetId) {
         const component = new ProductGridEcommerceComponent(data);
@@ -214,8 +181,7 @@ class ProductGridEcommerceComponent extends BaseComponent {
     }
 }
 
-// Auto-registra no Component Registry
+// Auto-registro
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('product-grid-ecommerce', ProductGridEcommerceComponent);
 }
-

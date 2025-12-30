@@ -1,68 +1,58 @@
 /**
- * Marquee Info Bar Component
- * Barra superior com texto em scroll horizontal (marquee)
- * Genérico para qualquer tipo de informação que precise ser destacada
+ * Marquee Info Bar Component - Refatorado
+ * Design: Modern Clean / High Contrast com Máscara de Gradiente
  */
 
 class MarqueeInfoBarComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para a Marquee Info Bar
-     * @param {Array} data.items - Array de textos a serem exibidos no marquee
-     * @param {string} data.items[].text - Texto do item
-     * @param {string} data.items[].separator - Separador opcional (padrão: '•')
-     * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo base (ex: 'black', 'primary', 'brand-dark')
-     * @param {string} data.colors.text - Cor do texto base (ex: 'white', 'yellow')
+     * @param {Array} data.items - Array de textos ou objetos {text, separator}
+     * @param {Object} data.colors - Cores customizáveis
      */
     constructor(data) {
         super();
-        this.items = data.items || [];
+        const rawItems = data.items || [];
+        this.items = rawItems.map(item => {
+            if (typeof item === 'string') return { text: item };
+            return item;
+        });
 
-        // Resolve cores base (override > tema > fallback)
+        // RESOLUÇÃO DE CORES (Interface do Projeto)
+        // Resolvemos para classes Tailwind estáticas para evitar quebra no JIT do CDN
         const bgBase = this.resolveColor(data.colors?.background, 'primary', 'black');
         const textBase = this.resolveColor(data.colors?.text, null, 'white');
 
-        // Aplica variações automáticas conforme o contexto
         this.colors = {
-            background: bgBase === 'black' ? 'black' : this.getColorVariant(bgBase, 900),
-            text: textBase,
+            // Se for preto, mantém preto puro para contraste máximo, senão usa variante 950
+            background: bgBase === 'black' ? 'bg-black' : `bg-${bgBase}-950`,
+            text: `text-${textBase}`,
+            accent: bgBase === 'black' ? 'text-white/40' : `text-${bgBase}-400/50`
         };
 
-        // Injetar estilos do marquee se necessário
         this.injectStyles();
     }
 
     /**
-     * Injeta estilos CSS para animação do marquee
+     * Injeta a animação do marquee (não nativa do Tailwind core)
      */
     injectStyles() {
-        if (document.getElementById('marquee-info-bar-styles')) return;
+        if (document.getElementById('marquee-animation-runtime')) return;
 
         const style = document.createElement('style');
-        style.id = 'marquee-info-bar-styles';
+        style.id = 'marquee-animation-runtime';
         style.textContent = `
-            .marquee-wrapper {
-                display: inline-flex;
-                width: max-content;
-            }
-            @keyframes marquee {
+            @keyframes marquee-infinite {
                 0% { transform: translateX(0); }
                 100% { transform: translateX(-50%); }
             }
-            .marquee-container {
-                display: inline-flex;
-                gap: 2rem;
-                animation: marquee 30s linear infinite;
+            .animate-marquee {
+                display: flex;
+                width: max-content;
+                animation: marquee-infinite 40s linear infinite;
             }
-            .marquee-container:hover {
-                animation-play-state: paused;
-            }
-            @keyframes slideUp {
-                0% { transform: translateY(20px); opacity: 0; }
-                100% { transform: translateY(0); opacity: 1; }
-            }
-            .animate-slide-up {
-                animation: slideUp 0.5s ease-out forwards;
+            .marquee-fade-mask {
+                mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+                -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
             }
         `;
         document.head.appendChild(style);
@@ -70,26 +60,27 @@ class MarqueeInfoBarComponent extends BaseComponent {
 
     /**
      * Renderiza o HTML do componente
-     * @returns {string} HTML string do componente
      */
     render() {
         const c = this.colors;
 
-        // Duplica os itens para criar loop contínuo
-        const itemsDuplicated = [...this.items, ...this.items];
+        // Triplicamos os itens para garantir que em telas ultra-wide não haja "buracos"
+        const itemsDuplicated = [...this.items, ...this.items, ...this.items];
 
-        const itemsHtml = itemsDuplicated.map((item, index) => {
-            const separator = item.separator !== undefined ? item.separator : '•';
+        const itemsHtml = itemsDuplicated.map((item) => {
+            const separator = item.separator || '•';
             return `
-                <span>${item.text}</span>
-                ${index < itemsDuplicated.length - 1 ? `<span>${separator}</span>` : ''}
+                <div class="flex items-center gap-8 whitespace-nowrap">
+                    <span class="text-[10px] md:text-xs font-black uppercase tracking-[0.3em]">${item.text}</span>
+                    <span class="${c.accent} text-[10px]">${separator}</span>
+                </div>
             `;
         }).join('');
 
         return `
-            <div class="bg-${c.background} text-${c.text} text-xs font-bold py-2 overflow-hidden whitespace-nowrap relative">
-                <div class="marquee-wrapper">
-                    <div class="inline-flex gap-8 marquee-container">
+            <div class="${c.background} ${c.text} py-2.5 overflow-hidden relative z-[100] border-b border-white/5">
+                <div class="marquee-fade-mask relative w-full overflow-hidden">
+                    <div class="animate-marquee gap-8 hover:[animation-play-state:paused] cursor-default">
                         ${itemsHtml}
                     </div>
                 </div>
@@ -99,20 +90,21 @@ class MarqueeInfoBarComponent extends BaseComponent {
 
     /**
      * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde o componente será montado
      */
     mount(targetId) {
         const target = document.getElementById(targetId);
         if (target) {
             target.innerHTML = this.render();
+
+            // Força o Tailwind a processar as novas classes injetadas
+            if (window.tailwind && typeof window.tailwind.track === 'function') {
+                window.tailwind.track();
+            }
         }
     }
 
     /**
-     * Método estático para criar e montar o componente
-     * @param {Object} data - Dados necessários
-     * @param {string} targetId - ID do elemento onde o componente será montado
-     * @returns {MarqueeInfoBarComponent} Instância do componente
+     * Método estático para criação rápida
      */
     static create(data, targetId) {
         const component = new MarqueeInfoBarComponent(data);
@@ -121,8 +113,7 @@ class MarqueeInfoBarComponent extends BaseComponent {
     }
 }
 
-// Auto-registra no Component Registry
+// Auto-registra no Registry
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('marquee-info-bar', MarqueeInfoBarComponent);
 }
-

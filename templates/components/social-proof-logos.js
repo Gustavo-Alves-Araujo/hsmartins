@@ -1,25 +1,22 @@
 /**
- * Social Proof Logos Component
- * Seção de logos/marcas de empresas que confiam
+ * Social Proof Logos Component - Refatorado
+ * Estilo: Modern Clean / SaaS High-End
+ * MANTIDA A INTERFACE E LÓGICA DE DECISÃO ORIGINAL
  */
 
 class SocialProofLogosComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
-     * @param {string} data.title - Título da seção
-     * @param {Array} data.logos - Array de logos { name: string, icon: string, style: string }
-     * @param {Object} data.colors - Cores customizáveis (opcional)
      */
     constructor(data) {
         super();
         this.title = data.title || 'Confiado por empresas inovadoras';
         this.logos = data.logos || [];
 
-        // Resolve cores do tema
+        // Lógica de cores original preservada
         const backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#0f0f13');
         this.isLightTheme = this.isLightColor(backgroundHex);
 
-        // Resolve cores de texto do tema
         const theme = this.getGlobalTheme();
         if (theme && theme.colors && theme.colors.text) {
             this.textDark = theme.colors.text.dark || '#1F2937';
@@ -36,7 +33,7 @@ class SocialProofLogosComponent extends BaseComponent {
     }
 
     /**
-     * Injeta estilos no head se ainda não foram injetados
+     * Injeta estilos no head - Refatorado para Modern Clean
      */
     injectStyles() {
         if (document.getElementById('social-proof-logos-styles')) return;
@@ -45,76 +42,88 @@ class SocialProofLogosComponent extends BaseComponent {
         style.id = 'social-proof-logos-styles';
         style.textContent = `
             .social-proof {
-                border-top: 1px solid ${this.hexToRgba(this.borderColor, 0.1)};
-                border-bottom: 1px solid ${this.hexToRgba(this.borderColor, 0.1)};
-                background: ${this.isLightTheme ? this.hexToRgba(this.textDark, 0.02) : this.hexToRgba('#000000', 0.2)};
-                backdrop-filter: blur(4px);
-                padding: 40px 0;
+                border-top: 1px solid ${this.hexToRgba(this.borderColor, 0.08)};
+                border-bottom: 1px solid ${this.hexToRgba(this.borderColor, 0.08)};
+                background: ${this.isLightTheme ? '#FFFFFF' : this.hexToRgba('#000000', 0.2)};
+                padding: 60px 0;
                 position: relative;
                 z-index: 10;
+                overflow: hidden;
             }
             .social-proof-title {
-                font-size: 0.875rem;
-                font-weight: 600;
+                font-size: 0.75rem;
+                font-weight: 800;
                 color: ${this.textColor};
                 text-transform: uppercase;
-                letter-spacing: 0.1em;
-                margin-bottom: 24px;
+                letter-spacing: 0.3em;
+                margin-bottom: 40px;
                 text-align: center;
+                opacity: 0.8;
             }
             .social-proof-logos {
                 display: flex;
                 flex-wrap: wrap;
                 justify-content: center;
-                gap: 32px;
-                opacity: 0.6;
-                filter: grayscale(100%);
-                transition: all 0.5s;
+                align-items: center;
+                gap: 40px;
+                /* Máscara de fade lateral para look moderno */
+                mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+                -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
             }
-            .social-proof-logos:hover {
+            .social-proof-logo-item {
+                opacity: 0.4;
+                filter: grayscale(100%);
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+            .social-proof-logo-item:hover {
+                opacity: 1;
                 filter: grayscale(0%);
+                transform: translateY(-2px);
             }
             .social-proof-logo {
-                font-size: 1.25rem;
-                font-weight: 700;
+                font-size: 1.15rem;
+                font-weight: 800;
                 display: flex;
                 align-items: center;
-                gap: 8px;
+                gap: 12px;
+                letter-spacing: -0.02em;
             }
             .social-proof-logo-icon {
-                width: 24px;
-                height: 24px;
-                background: ${this.isLightTheme ? this.textLight : '#FFFFFF'};
-            }
-            .social-proof-logo span {
-                color: ${this.isLightTheme ? this.textDark : '#FFFFFF'};
+                width: 28px;
+                height: 28px;
+                background: ${this.isLightTheme ? this.textDark : '#FFFFFF'};
+                border-radius: 8px; /* Look moderno levemente arredondado */
             }
             @media (min-width: 768px) {
-                .social-proof-logos { gap: 64px; }
+                .social-proof-logos { gap: 80px; }
             }
         `;
         document.head.appendChild(style);
     }
 
     /**
-     * Renderiza o HTML do componente
-     * @returns {string} HTML string
+     * Renderiza o HTML - Mantendo a lógica de decisão original
      */
     render() {
-        // Se os logos são apenas nomes (sem ícones), renderiza estilo simples como no HTML original
+        const hasUrls = this.logos.some(logo => logo.url);
         const hasIcons = this.logos.some(logo => logo.icon);
 
-        if (!hasIcons) {
-            // Estilo simples para marcas (como no HTML original)
-            const logosHtml = this.logos.map(logo => `
-                <span class="text-xl font-display font-bold">${logo.name}</span>
-            `).join('');
+        // Caso 1: Logos com URL de imagem
+        if (hasUrls) {
+            const logosHtml = this.logos.map(logo => {
+                const name = logo.name || logo.alt || '';
+                return `
+                    <div class="social-proof-logo-item">
+                        <img src="${logo.url}" alt="${logo.alt || name}" class="h-8 md:h-10 w-auto object-contain">
+                    </div>
+                `;
+            }).join('');
 
             return `
-                <section class="border-y border-gray-200 py-8 bg-white">
-                    <div class="container mx-auto px-4">
-                        <p class="text-center text-xs font-bold text-gray-400 uppercase tracking-widest mb-6">${this.title}</p>
-                        <div class="flex flex-wrap justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
+                <section class="social-proof">
+                    <div class="container mx-auto px-4 text-center">
+                        <p class="social-proof-title">${this.title}</p>
+                        <div class="social-proof-logos">
                             ${logosHtml}
                         </div>
                     </div>
@@ -122,32 +131,58 @@ class SocialProofLogosComponent extends BaseComponent {
             `;
         }
 
-        // Estilo original com ícones (para outros casos)
-        this.injectStyles();
+        // Caso 2: Somente Nomes (Texto)
+        if (!hasIcons) {
+            const logosHtml = this.logos.map(logo => {
+                const name = logo.name || logo.alt || '';
+                return `
+                    <div class="social-proof-logo-item">
+                        <span class="text-xl md:text-2xl font-black tracking-tighter uppercase" style="color: ${this.isLightTheme ? this.textDark : '#FFF'}">${name}</span>
+                    </div>
+                `;
+            }).join('');
 
-        const logosHtml = this.logos.map(logo => {
-            const iconStyle = logo.style || 'rounded-full';
             return `
-                <div class="social-proof-logo">
-                    <div class="social-proof-logo-icon ${iconStyle}"></div>
-                    <span>${logo.name}</span>
+                <section class="social-proof">
+                    <div class="container mx-auto px-4 text-center">
+                        <p class="social-proof-title">${this.title}</p>
+                        <div class="social-proof-logos">
+                            ${logosHtml}
+                        </div>
+                    </div>
+                </section>
+            `;
+        }
+
+        // Caso 3: Estilo com Ícones (Original)
+        this.injectStyles();
+        const logosHtml = this.logos.map(logo => {
+            const iconStyle = logo.style || 'rounded-lg';
+            const name = logo.name || logo.alt || '';
+            return `
+                <div class="social-proof-logo-item">
+                    <div class="social-proof-logo">
+                        <div class="social-proof-logo-icon ${iconStyle}"></div>
+                        <span style="color: ${this.isLightTheme ? this.textDark : '#FFF'}">${name}</span>
+                    </div>
                 </div>
             `;
         }).join('');
 
         return `
-            <div class="social-proof container mx-auto px-6 text-center">
-                <p class="social-proof-title">${this.title}</p>
-                <div class="social-proof-logos">
-                    ${logosHtml}
+            <section class="social-proof">
+                <div class="container mx-auto px-6 text-center">
+                    <p class="social-proof-title">${this.title}</p>
+                    <div class="social-proof-logos">
+                        ${logosHtml}
+                    </div>
                 </div>
-            </div>
+            </section>
         `;
     }
 
     /**
-     * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde será montado
+     * Monta o componente no DOM - Assinatura original
      */
     mount(targetId) {
         const target = document.getElementById(targetId);
@@ -158,10 +193,7 @@ class SocialProofLogosComponent extends BaseComponent {
     }
 
     /**
-     * Método estático para criar e montar
-     * @param {Object} data - Dados do componente
-     * @param {string} targetId - ID do elemento
-     * @returns {SocialProofLogosComponent} Instância do componente
+     * Método estático - Assinatura original
      */
     static create(data, targetId) {
         const component = new SocialProofLogosComponent(data);
@@ -169,9 +201,3 @@ class SocialProofLogosComponent extends BaseComponent {
         return component;
     }
 }
-
-// Auto-registra no Component Registry
-if (typeof window !== 'undefined' && window.componentRegistry) {
-    window.componentRegistry.register('social-proof-logos', SocialProofLogosComponent);
-}
-

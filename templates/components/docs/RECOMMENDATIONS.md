@@ -1669,7 +1669,7 @@ Se não encontrar no banco acima, use alguma IMAGEM FORNECIDA PELA PESSOA NO PRO
 
 ### ✅ CHECKLIST ANTES DE GERAR:
 
-- [ ] URL começa com `https://images.unsplash.com/photo-`
+- [ ] URL começa com `https://images.unsplaash.com/photo-`
 - [ ] ID tem exatamente 13 dígitos ou formato `XXXXX-XXXXXXXX`
 - [ ] Termina com `?w=[numero]`
 - [ ] ID está no banco aprovado OU é um genérico seguro

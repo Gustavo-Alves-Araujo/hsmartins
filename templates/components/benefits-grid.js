@@ -25,17 +25,58 @@ class BenefitsGridComponent extends BaseComponent {
 
         // Resolve cores base (override > tema > fallback)
         const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
-        const iconBgBase = this.resolveColor(data.colors?.iconBackground, 'primary', 'gray');
+        const iconBgBase = data.colors?.iconBackground || 'primary';
         const titleBase = this.resolveColor(data.colors?.title, 'primary', 'black');
 
+        // Para o background do ícone, usa a cor primária em versão clara
+        // SEMPRE pega do tema, nunca usa valores fixos
+        const theme = this.getGlobalTheme();
+        const primaryHexForBg = theme?.colors?.primary;
+
+        let iconBgColor;
+        if (iconBgBase === 'primary' && primaryHexForBg) {
+            // Usa a cor primária em versão clara para o background
+            iconBgColor = this.lightenColor(primaryHexForBg, 0.85); // Versão muito clara da cor primária
+        } else if (iconBgBase === 'gray' || iconBgBase === 'gray-50') {
+            iconBgColor = '#f3f4f6'; // gray-50
+        } else {
+            // Tenta pegar do tema primeiro
+            const customColor = theme?.colors?.[iconBgBase] || this.getThemeColorHex(iconBgBase);
+            if (customColor) {
+                iconBgColor = customColor;
+                // Se não for uma cor clara, clareia ela
+                if (!iconBgBase.includes('gray') && !iconBgBase.includes('50')) {
+                    iconBgColor = this.lightenColor(iconBgColor, 0.85);
+                }
+            } else {
+                // Fallback apenas para gray
+                iconBgColor = '#f3f4f6';
+            }
+        }
+
         // Aplica variações automáticas conforme o contexto
+        // Para o ícone, SEMPRE usa a cor primária do tema - SEM FALLBACK FIXO
+        // Pega SEMPRE do tema, nunca usa valores fixos
+        const primaryHex = theme?.colors?.primary;
+
+        if (!primaryHex) {
+            console.error('❌ Cor primária não encontrada no tema! Verifique o config.json');
+        }
+
         this.colors = {
             background: bgBase,
-            iconBackground: iconBgBase === 'gray' ? 'gray-50' : this.getColorVariant(iconBgBase, 50),
-            icon: titleBase === 'black' ? 'black' : this.getColorVariant(titleBase, 900),
-            title: titleBase === 'black' ? 'black' : this.getColorVariant(titleBase, 900),
-            description: 'gray-500',
+            iconBackground: iconBgColor,
+            icon: primaryHex, // SEMPRE cor primária do tema
+            title: titleBase === 'black' ? '#000000' : primaryHex, // Título também usa primary
+            description: '#6b7280', // gray-500
         };
+
+        // Debug: verifica se a cor foi definida
+        if (this.colors.icon) {
+            console.log('✅ Cor do ícone definida:', this.colors.icon);
+        } else {
+            console.error('❌ Cor do ícone não definida!');
+        }
 
         // Injeta estilos se necessário
         this.injectStyles();
@@ -66,15 +107,51 @@ class BenefitsGridComponent extends BaseComponent {
      * @returns {string} HTML do ícone
      */
     renderIcon(benefit) {
-        const iconType = benefit.iconType || 'lucide';
         const c = this.colors;
+        const icon = benefit.icon || '';
 
-        if (iconType === 'lucide' && typeof lucide !== 'undefined') {
+        // Detecta automaticamente o tipo de ícone
+        let iconType = benefit.iconType;
+        if (!iconType) {
+            // Se contém "fa-" ou começa com "fa", "fas", "far", "fal", "fab", é FontAwesome
+            const iconLower = icon.toLowerCase().trim();
+            if (iconLower.includes('fa-') || iconLower.startsWith('fas ') || iconLower.startsWith('far ') ||
+                iconLower.startsWith('fal ') || iconLower.startsWith('fab ') || iconLower.startsWith('fa ')) {
+                iconType = 'fontawesome';
+            } else {
+                // Caso contrário, assume Lucide
+                iconType = 'lucide';
+            }
+        }
+
+        // Resolve cor do ícone em hex para usar em style inline
+        // SEMPRE usa a cor primária do tema
+        const iconColorHex = c.icon;
+
+        if (!iconColorHex) {
+            console.warn('⚠️ Cor do ícone não definida. Verificando tema...');
+            const theme = this.getGlobalTheme();
+            const fallbackColor = theme?.colors?.primary;
+            if (!fallbackColor) {
+                console.error('❌ Cor primária não encontrada no tema!');
+            }
+        }
+
+        if (iconType === 'fontawesome') {
+            // FontAwesome - usa classes e style inline para garantir visibilidade
+            // Garante que a classe está correta (pode ter espaços extras)
+            const cleanIcon = icon.trim();
+            const finalColor = iconColorHex || this.getGlobalTheme()?.colors?.primary || '#6d28d9';
+            return `<i class="${cleanIcon}" style="font-size: 1.75rem; color: ${finalColor} !important; display: inline-block; width: 1.75rem; height: 1.75rem; line-height: 1.75rem; text-align: center;"></i>`;
+        } else if (iconType === 'lucide' && typeof lucide !== 'undefined') {
             // Ícone Lucide será renderizado via data-lucide
-            return `<i data-lucide="${benefit.icon}" class="w-8 h-8 text-${c.icon}"></i>`;
+            const finalColor = iconColorHex || this.getGlobalTheme()?.colors?.primary || '#6d28d9';
+            return `<i data-lucide="${icon}" class="w-8 h-8" style="color: ${finalColor} !important;"></i>`;
         } else {
-            // FontAwesome ou outro
-            return `<i class="${benefit.icon} w-8 h-8 text-${c.icon}"></i>`;
+            // Fallback para FontAwesome se não detectou corretamente
+            const cleanIcon = icon.trim();
+            const finalColor = iconColorHex || this.getGlobalTheme()?.colors?.primary || '#6d28d9';
+            return `<i class="${cleanIcon}" style="font-size: 1.75rem; color: ${finalColor} !important; display: inline-block; width: 1.75rem; height: 1.75rem; line-height: 1.75rem; text-align: center;"></i>`;
         }
     }
 
@@ -88,13 +165,13 @@ class BenefitsGridComponent extends BaseComponent {
 
         return `
             <div class="flex flex-col items-center text-center p-6 border border-gray-100 rounded-lg benefit-card">
-                <div class="bg-${c.iconBackground} p-4 rounded-full mb-4">
+                <div class="p-4 rounded-full mb-4 flex items-center justify-center w-16 h-16" style="background-color: ${c.iconBackground};">
                     ${this.renderIcon(benefit)}
                 </div>
-                <h4 class="font-bold text-lg mb-2 text-${c.title}">
+                <h4 class="font-bold text-lg mb-2" style="color: ${c.title};">
                     ${benefit.title}
                 </h4>
-                <p class="text-${c.description} text-sm">
+                <p class="text-sm" style="color: ${c.description};">
                     ${benefit.description}
                 </p>
             </div>

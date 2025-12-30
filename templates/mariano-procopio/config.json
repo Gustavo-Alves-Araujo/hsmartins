@@ -1,11 +1,11 @@
 {
   "theme": {
     "colors": {
-      "primary": "#2d7a3e",
-      "primaryLight": "#4ea661",
-      "secondary": "#1e5229",
-      "tertiary": "#86efac",
-      "accent": "#facc15",
+      "primary": "#eab308",
+      "primaryLight": "#fde047",
+      "secondary": "#d97706",
+      "tertiary": "#fef3c7",
+      "accent": "#fbbf24",
       "background": "#F9FAFB",
       "text": {
         "dark": "#1F2937",

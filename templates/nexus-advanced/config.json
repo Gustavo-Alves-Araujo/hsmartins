@@ -1,0 +1,365 @@
+{
+  "theme": {
+    "colors": {
+      "primary": "#16a34a",
+      "primaryLight": "#22c55e",
+      "secondary": "#15803d",
+      "tertiary": "#dcfce7",
+      "accent": "#f59e0b",
+      "background": "#ffffff",
+      "text": {
+        "dark": "#1f2937",
+        "medium": "#4b5563",
+        "light": "#9ca3af",
+        "white": "#ffffff"
+      }
+    },
+    "fonts": {
+      "primary": "\"Inter\", sans-serif",
+      "secondary": "\"Inter\", sans-serif",
+      "urls": {
+        "google": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+      }
+    }
+  },
+  "site": {
+    "title": "Nexus Store | Template Universal",
+    "name": "Nexus Store",
+    "established": "",
+    "logoAlt": "Nexus Store",
+    "logoUrl": ""
+  },
+  "navbar-ecommerce-advanced": {
+    "logoText": "Nexus",
+    "logoIcon": "N",
+    "logoAlt": "Nexus Store",
+    "searchPlaceholder": "O que você está procurando hoje?",
+    "categories": [
+      { "text": "Novidades", "href": "#" },
+      { "text": "Moda", "href": "#" },
+      { "text": "Tecnologia", "href": "#" },
+      { "text": "Casa & Decor", "href": "#" },
+      { "text": "Esportes", "href": "#" },
+      { "text": "Ofertas do Dia", "href": "#", "highlight": true }
+    ],
+    "actions": {
+      "favorites": { "href": "#" },
+      "account": { "href": "#" },
+      "cart": { "href": "#", "count": 3 }
+    }
+  },
+  "hero-product-showcase": {
+    "badges": [
+      { "text": "Novo", "style": "solid" },
+      { "text": "Edição Limitada", "style": "outline" }
+    ],
+    "title": "Som Puro.",
+    "titleHighlight": "Sem Limites.",
+    "description": "A nova geração da série Nexus X traz cancelamento de ruído adaptativo e drivers de titânio para uma imersão sonora absoluta.",
+    "price": {
+      "value": "R$ 1.299",
+      "installments": "Em até 12x sem juros"
+    },
+    "rating": {
+      "value": "4.9/5",
+      "stars": 5
+    },
+    "buttons": [
+      {
+        "text": "Comprar Agora",
+        "href": "#",
+        "primary": true,
+        "icon": "fas fa-arrow-right"
+      },
+      {
+        "text": "Ver Review",
+        "href": "#",
+        "primary": false,
+        "icon": "fas fa-play"
+      }
+    ],
+    "imageUrl": "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2070&auto=format&fit=crop",
+    "imageAlt": "Headphones Nexus X",
+    "specs": [
+      {
+        "icon": "fas fa-battery-full",
+        "value": "40h",
+        "label": "Bateria"
+      },
+      {
+        "icon": "fas fa-wifi",
+        "value": "BT 5.3",
+        "label": "Conexão"
+      }
+    ]
+  },
+  "store-concept-section": {
+    "tag": "O Padrão Nexus",
+    "title": "Mais do que uma loja, uma curadoria.",
+    "description": "Selecionamos produtos que unem design excepcional, funcionalidade e durabilidade. Descubra por que somos a escolha número um para entusiastas de lifestyle.",
+    "features": [
+      {
+        "icon": "fas fa-gem",
+        "title": "Curadoria Premium",
+        "description": "Não vendemos tudo. Vendemos o melhor. Cada item do nosso catálogo passa por um rigoroso processo de seleção de qualidade e design.",
+        "iconBg": "primary-50",
+        "iconColor": "primary-600"
+      },
+      {
+        "icon": "fas fa-shipping-fast",
+        "title": "Logística Ágil",
+        "description": "Sabemos que a ansiedade é grande. Nossa rede logística garante entregas em tempo recorde para as principais capitais do país.",
+        "iconBg": "indigo-50",
+        "iconColor": "indigo-600"
+      },
+      {
+        "icon": "fas fa-shield-alt",
+        "title": "Garantia Estendida",
+        "description": "Confiamos tanto no que vendemos que oferecemos suporte dedicado e garantia estendida em toda a linha de eletrônicos.",
+        "iconBg": "purple-50",
+        "iconColor": "purple-600"
+      }
+    ]
+  },
+  "promo-countdown-banner": {
+    "emoji": "🎉",
+    "title": "Promoção Relâmpago",
+    "description": "Use o cupom e ganhe 20% OFF em toda a loja.",
+    "couponCode": "NEXUS20",
+    "countdown": true
+  },
+  "category-carousel": {
+    "title": "Navegue por Categorias",
+    "categories": [
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=2070&auto=format&fit=crop",
+        "imageAlt": "Moda",
+        "title": "Moda",
+        "href": "#",
+        "subtitle": "Ver coleção"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=2080&auto=format&fit=crop",
+        "imageAlt": "Smartphones",
+        "title": "Smartphones",
+        "href": "#",
+        "subtitle": "Ver coleção"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1540932296774-3ed6d13caa63?q=80&w=2000&auto=format&fit=crop",
+        "imageAlt": "Decoração",
+        "title": "Decoração",
+        "href": "#",
+        "subtitle": "Ver coleção"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1571019614242-c5c5dee9f50b?q=80&w=2070&auto=format&fit=crop",
+        "imageAlt": "Fitness",
+        "title": "Fitness",
+        "href": "#",
+        "subtitle": "Ver coleção"
+      },
+      {
+        "imageUrl": "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?q=80&w=2087&auto=format&fit=crop",
+        "imageAlt": "Beleza",
+        "title": "Beleza",
+        "href": "#",
+        "subtitle": "Ver coleção"
+      }
+    ]
+  },
+  "product-filters-bar": {
+    "tabs": [
+      { "text": "Mais Vendidos", "active": true },
+      { "text": "Lançamentos", "active": false },
+      { "text": "Ofertas", "active": false }
+    ],
+    "filters": [
+      { "text": "Preço: R$0 - R$500", "removable": true, "highlight": true },
+      { "text": "Marca: Nike", "removable": true, "highlight": false }
+    ],
+    "sortOptions": {
+      "current": "Relevância",
+      "options": [
+        { "text": "Menor Preço", "value": "price-asc" },
+        { "text": "Maior Preço", "value": "price-desc" },
+        { "text": "Mais Recentes", "value": "newest" }
+      ]
+    }
+  },
+  "product-grid-advanced": {
+    "products": [
+      {
+        "title": "Nike Air Red Limited",
+        "category": "Calçados",
+        "images": [
+          "https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=2070&auto=format&fit=crop",
+          "https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?q=80&w=1964&auto=format&fit=crop"
+        ],
+        "price": {
+          "current": "R$ 599",
+          "original": "R$ 899"
+        },
+        "rating": "4.9",
+        "installments": "12x de R$ 49,90 sem juros",
+        "badge": {
+          "text": "-30%",
+          "style": "discount"
+        }
+      },
+      {
+        "title": "Smart Watch Series 7",
+        "category": "Acessórios",
+        "images": [
+          "https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1999&auto=format&fit=crop"
+        ],
+        "price": {
+          "current": "R$ 1.499"
+        },
+        "rating": "4.8",
+        "installments": "12x de R$ 124,90"
+      },
+      {
+        "title": "Óculos de Sol Vibe",
+        "category": "Acessórios",
+        "images": [
+          "https://images.unsplash.com/photo-1589782182703-2aaa69037b5b?q=80&w=2074&auto=format&fit=crop"
+        ],
+        "price": {
+          "current": "R$ 299"
+        },
+        "rating": "4.5",
+        "installments": "3x de R$ 99,66",
+        "badge": {
+          "text": "Novo",
+          "style": "new"
+        }
+      },
+      {
+        "title": "Câmera Polaroid One",
+        "category": "Eletrônicos",
+        "images": [
+          "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?q=80&w=2070&auto=format&fit=crop"
+        ],
+        "price": {
+          "current": "R$ 899"
+        },
+        "rating": "5.0",
+        "installments": "10x de R$ 89,90"
+      }
+    ],
+    "linkText": "Carregar Mais Produtos",
+    "linkHref": "#"
+  },
+  "testimonials-section": {
+    "title": "O que dizem nossos clientes",
+    "overallRating": {
+      "value": "4.9",
+      "stars": 5,
+      "reviewCount": "Baseado em 12.000+ reviews"
+    },
+    "reviews": [
+      {
+        "avatar": "https://i.pravatar.cc/150?img=32",
+        "name": "Ana Souza",
+        "rating": 5,
+        "verified": true,
+        "text": "A qualidade do Audio Pro X-Series é inacreditável. O cancelamento de ruído funciona perfeitamente no metrô. Entrega super rápida!"
+      },
+      {
+        "avatar": "https://i.pravatar.cc/150?img=11",
+        "name": "Carlos Mendes",
+        "rating": 5,
+        "verified": true,
+        "text": "O site é muito fácil de navegar e o suporte ao cliente foi excelente quando tive dúvidas sobre o tamanho do tênis. Recomendo!"
+      },
+      {
+        "avatar": "https://i.pravatar.cc/150?img=5",
+        "name": "Julia Lima",
+        "rating": 4.5,
+        "verified": true,
+        "text": "Preços justos e produtos originais. O smartwatch chegou em 2 dias bem embalado. A experiência de compra foi 10/10."
+      }
+    ]
+  },
+  "benefits-grid-ecommerce": {
+    "benefits": [
+      {
+        "icon": "fas fa-truck",
+        "title": "Frete Grátis",
+        "description": "Acima de R$ 299"
+      },
+      {
+        "icon": "fas fa-shield-alt",
+        "title": "Pagamento Seguro",
+        "description": "Certificado SSL"
+      },
+      {
+        "icon": "fas fa-undo",
+        "title": "Troca Fácil",
+        "description": "30 dias para trocas"
+      },
+      {
+        "icon": "fas fa-headset",
+        "title": "Suporte 24/7",
+        "description": "Atendimento humano"
+      }
+    ]
+  },
+  "footer-ecommerce-advanced": {
+    "brand": {
+      "logoText": "Nexus",
+      "logoIcon": "N",
+      "description": "Sua loja de confiança para moda, tecnologia e lifestyle. Trazendo o futuro do varejo para o presente."
+    },
+    "socialLinks": [
+      {
+        "icon": "fab fa-instagram",
+        "href": "#"
+      },
+      {
+        "icon": "fab fa-twitter",
+        "href": "#"
+      },
+      {
+        "icon": "fab fa-facebook-f",
+        "href": "#"
+      }
+    ],
+    "columns": [
+      {
+        "title": "Departamentos",
+        "links": [
+          { "text": "Novidades", "href": "#" },
+          { "text": "Moda Masculina", "href": "#" },
+          { "text": "Moda Feminina", "href": "#" },
+          { "text": "Eletrônicos", "href": "#" },
+          { "text": "Casa & Jardim", "href": "#" }
+        ]
+      },
+      {
+        "title": "Ajuda",
+        "links": [
+          { "text": "Rastrear Pedido", "href": "#" },
+          { "text": "Trocas e Devoluções", "href": "#" },
+          { "text": "Perguntas Frequentes", "href": "#" },
+          { "text": "Política de Privacidade", "href": "#" },
+          { "text": "Fale Conosco", "href": "#" }
+        ]
+      }
+    ],
+    "newsletter": {
+      "title": "Fique por dentro",
+      "description": "Receba ofertas exclusivas e novidades no seu e-mail.",
+      "placeholder": "Seu melhor e-mail",
+      "buttonText": "Inscrever-se"
+    },
+    "copyright": "© 2024 Nexus Store. Todos os direitos reservados.",
+    "paymentMethods": [
+      { "icon": "fab fa-cc-visa" },
+      { "icon": "fab fa-cc-mastercard" },
+      { "icon": "fab fa-cc-paypal" },
+      { "icon": "fab fa-pix" }
+    ]
+  }
+}

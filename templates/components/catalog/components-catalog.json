@@ -1,7 +1,7 @@
 {
   "version": "1.0.0",
   "lastUpdated": "2024",
-  "totalComponents": 36,
+  "totalComponents": 46,
   "components": {
     "contact-top-bar": {
       "id": "contact-top-bar",
@@ -695,19 +695,220 @@
         "bestFor": ["E-commerce", "Serviços", "Destaque de vantagens"],
         "placement": "mid-to-late-page"
       }
+    },
+    "navbar-ecommerce-advanced": {
+      "id": "navbar-ecommerce-advanced",
+      "name": "Navbar E-commerce Advanced",
+      "description": "Navbar completa para e-commerce com busca, categorias, ações e menu responsivo",
+      "category": "navigation",
+      "tags": ["navbar", "ecommerce", "search", "categories", "cart", "advanced"],
+      "niches": ["ecommerce", "stores", "shopping", "retail"],
+      "requiredProps": ["logoText"],
+      "optionalProps": ["logoUrl", "logoAlt", "logoIcon", "searchPlaceholder", "categories", "actions", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["hero-product-showcase", "category-carousel"],
+      "incompatibleWith": [],
+      "style": "ecommerce-advanced",
+      "theme": "adapts",
+      "file": "navbar-ecommerce-advanced.js",
+      "suggestions": {
+        "bestFor": ["E-commerce completo", "Lojas online avançadas", "Marketplaces"],
+        "placement": "top"
+      }
+    },
+    "hero-product-showcase": {
+      "id": "hero-product-showcase",
+      "name": "Hero Product Showcase",
+      "description": "Hero section com produto em destaque, preço, avaliações e especificações técnicas",
+      "category": "hero",
+      "tags": ["hero", "product", "showcase", "price", "rating", "specs"],
+      "niches": ["ecommerce", "products", "electronics", "retail"],
+      "requiredProps": ["title", "imageUrl"],
+      "optionalProps": ["badges", "titleHighlight", "description", "price", "rating", "buttons", "specs", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["navbar-ecommerce-advanced", "store-concept-section"],
+      "incompatibleWith": [],
+      "style": "product-showcase",
+      "theme": "adapts",
+      "file": "hero-product-showcase.js",
+      "suggestions": {
+        "bestFor": ["E-commerce", "Produtos em destaque", "Lançamentos"],
+        "placement": "after-header"
+      }
+    },
+    "store-concept-section": {
+      "id": "store-concept-section",
+      "name": "Store Concept Section",
+      "description": "Seção genérica para explicar conceito/valores com cards de features",
+      "category": "content",
+      "tags": ["concept", "values", "features", "about", "explanation"],
+      "niches": ["ecommerce", "stores", "any"],
+      "requiredProps": ["title", "features"],
+      "optionalProps": ["tag", "description", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["hero-product-showcase", "promo-countdown-banner"],
+      "incompatibleWith": [],
+      "style": "concept-cards",
+      "theme": "adapts",
+      "file": "store-concept-section.js",
+      "suggestions": {
+        "bestFor": ["Explicar valores da loja", "Diferenciais", "Conceito do negócio"],
+        "placement": "mid-page"
+      }
+    },
+    "promo-countdown-banner": {
+      "id": "promo-countdown-banner",
+      "name": "Promo Countdown Banner",
+      "description": "Banner promocional com countdown e cupom de desconto",
+      "category": "cta",
+      "tags": ["promo", "countdown", "coupon", "banner", "urgency"],
+      "niches": ["ecommerce", "stores", "promotions", "any"],
+      "requiredProps": ["title", "couponCode"],
+      "optionalProps": ["emoji", "description", "countdown", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["category-carousel", "product-grid-advanced"],
+      "incompatibleWith": [],
+      "style": "countdown-promo",
+      "theme": "adapts",
+      "file": "promo-countdown-banner.js",
+      "suggestions": {
+        "bestFor": ["Promoções urgentes", "Ofertas limitadas", "Cupons de desconto"],
+        "placement": "mid-page"
+      }
+    },
+    "category-carousel": {
+      "id": "category-carousel",
+      "name": "Category Carousel",
+      "description": "Carrossel horizontal de categorias com imagens",
+      "category": "content",
+      "tags": ["carousel", "categories", "navigation", "images", "horizontal"],
+      "niches": ["ecommerce", "stores", "catalog", "any"],
+      "requiredProps": ["categories"],
+      "optionalProps": ["title", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["navbar-ecommerce-advanced", "product-filters-bar"],
+      "incompatibleWith": [],
+      "style": "carousel-horizontal",
+      "theme": "adapts",
+      "file": "category-carousel.js",
+      "suggestions": {
+        "bestFor": ["Navegação por categorias", "Destaque de departamentos"],
+        "placement": "mid-page"
+      }
+    },
+    "product-filters-bar": {
+      "id": "product-filters-bar",
+      "name": "Product Filters Bar",
+      "description": "Barra de filtros e tabs para produtos",
+      "category": "content",
+      "tags": ["filters", "tabs", "sort", "products", "navigation"],
+      "niches": ["ecommerce", "stores", "catalog"],
+      "requiredProps": [],
+      "optionalProps": ["tabs", "filters", "sortOptions", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["category-carousel", "product-grid-advanced"],
+      "incompatibleWith": [],
+      "style": "filters-bar",
+      "theme": "adapts",
+      "file": "product-filters-bar.js",
+      "suggestions": {
+        "bestFor": ["Catálogo de produtos", "Filtros avançados", "Ordenação"],
+        "placement": "before-product-grid"
+      }
+    },
+    "product-grid-advanced": {
+      "id": "product-grid-advanced",
+      "name": "Product Grid Advanced",
+      "description": "Grid de produtos avançado com cards completos, hover effects e múltiplas imagens",
+      "category": "content",
+      "tags": ["products", "grid", "ecommerce", "cards", "advanced", "hover"],
+      "niches": ["ecommerce", "stores", "retail", "marketplace"],
+      "requiredProps": ["products"],
+      "optionalProps": ["linkText", "linkHref", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["product-filters-bar", "testimonials-section"],
+      "incompatibleWith": [],
+      "style": "product-grid-advanced",
+      "theme": "adapts",
+      "file": "product-grid-advanced.js",
+      "suggestions": {
+        "bestFor": ["E-commerce completo", "Catálogos avançados", "Lojas online"],
+        "placement": "mid-page"
+      }
+    },
+    "testimonials-section": {
+      "id": "testimonials-section",
+      "name": "Testimonials Section",
+      "description": "Seção de avaliações/testimonials com cards de clientes",
+      "category": "social-proof",
+      "tags": ["testimonials", "reviews", "ratings", "social-proof", "customers"],
+      "niches": ["ecommerce", "services", "any"],
+      "requiredProps": ["reviews"],
+      "optionalProps": ["title", "overallRating", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["product-grid-advanced", "benefits-grid-ecommerce"],
+      "incompatibleWith": [],
+      "style": "testimonials-cards",
+      "theme": "adapts",
+      "file": "testimonials-section.js",
+      "suggestions": {
+        "bestFor": ["Social proof", "Avaliações de clientes", "Testimonials"],
+        "placement": "mid-to-late-page"
+      }
+    },
+    "benefits-grid-ecommerce": {
+      "id": "benefits-grid-ecommerce",
+      "name": "Benefits Grid E-commerce",
+      "description": "Grid de benefícios para e-commerce (frete, garantia, etc)",
+      "category": "features",
+      "tags": ["benefits", "ecommerce", "shipping", "guarantee", "trust"],
+      "niches": ["ecommerce", "stores", "retail"],
+      "requiredProps": ["benefits"],
+      "optionalProps": ["colors"],
+      "dependencies": [],
+      "compatibleWith": ["testimonials-section", "footer-ecommerce-advanced"],
+      "incompatibleWith": [],
+      "style": "benefits-grid",
+      "theme": "adapts",
+      "file": "benefits-grid-ecommerce.js",
+      "suggestions": {
+        "bestFor": ["Destaque de benefícios", "Frete, garantia, suporte"],
+        "placement": "late-page"
+      }
+    },
+    "footer-ecommerce-advanced": {
+      "id": "footer-ecommerce-advanced",
+      "name": "Footer E-commerce Advanced",
+      "description": "Footer completo para e-commerce com múltiplas colunas, newsletter e redes sociais",
+      "category": "footer",
+      "tags": ["footer", "ecommerce", "newsletter", "social", "advanced", "multi-column"],
+      "niches": ["ecommerce", "stores", "retail", "marketplace"],
+      "requiredProps": ["brand"],
+      "optionalProps": ["socialLinks", "columns", "newsletter", "copyright", "paymentMethods", "colors"],
+      "dependencies": [],
+      "compatibleWith": ["benefits-grid-ecommerce", "navbar-ecommerce-advanced"],
+      "incompatibleWith": [],
+      "style": "footer-advanced",
+      "theme": "adapts",
+      "file": "footer-ecommerce-advanced.js",
+      "suggestions": {
+        "bestFor": ["E-commerce completo", "Lojas online", "Footer completo"],
+        "placement": "bottom"
+      }
     }
   },
   "categories": {
-    "navigation": ["contact-top-bar", "sticky-header-navigation", "sticky-navbar-gradient", "header-navigation", "marquee-info-bar", "navbar-ecommerce"],
-    "hero": ["hero-image-badge", "hero-overlay", "hero-badge-preview", "hero-split"],
+    "navigation": ["contact-top-bar", "sticky-header-navigation", "sticky-navbar-gradient", "header-navigation", "marquee-info-bar", "navbar-ecommerce", "navbar-ecommerce-advanced"],
+    "hero": ["hero-image-badge", "hero-overlay", "hero-badge-preview", "hero-split", "hero-product-showcase"],
     "information": ["info-bar", "achievements-numbers-grid", "social-proof-logos"],
-    "services": ["quick-service-cards", "features-grid-glass", "benefit-highlight-split", "feature-highlight", "benefits-grid"],
-    "content": ["about-image-features", "about-image-features-clinical", "card-grid", "product-grid-ecommerce"],
+    "services": ["quick-service-cards", "features-grid-glass", "benefit-highlight-split", "feature-highlight", "benefits-grid", "benefits-grid-ecommerce"],
+    "content": ["about-image-features", "about-image-features-clinical", "card-grid", "product-grid-ecommerce", "store-concept-section", "category-carousel", "product-filters-bar", "product-grid-advanced"],
     "pricing": ["pricing-grid-highlight", "plans-callout-box"],
-    "footer": ["footer-contact", "footer-multi-column-dark", "footer-multi-column-links"],
-    "cta": ["cta-banner", "cta-glow-card", "promo-banner-split"],
+    "footer": ["footer-contact", "footer-multi-column-dark", "footer-multi-column-links", "footer-ecommerce-advanced"],
+    "cta": ["cta-banner", "cta-glow-card", "promo-banner-split", "promo-countdown-banner"],
     "forms": ["email-signup-form"],
     "support": ["faq-accordion"],
+    "social-proof": ["testimonials-section"],
     "integration": ["whatsapp-float-button"],
     "visual": ["ambient-background-effects"]
   },
@@ -729,8 +930,8 @@
       "optional": ["cta-banner", "whatsapp-float-button"]
     },
     "ecommerce": {
-      "recommended": ["marquee-info-bar", "navbar-ecommerce", "hero-split", "social-proof-logos", "product-grid-ecommerce", "promo-banner-split", "benefits-grid", "footer-multi-column-dark"],
-      "optional": ["whatsapp-float-button", "faq-accordion", "pricing-grid-highlight"]
+      "recommended": ["navbar-ecommerce-advanced", "hero-product-showcase", "store-concept-section", "promo-countdown-banner", "category-carousel", "product-filters-bar", "product-grid-advanced", "testimonials-section", "benefits-grid-ecommerce", "footer-ecommerce-advanced"],
+      "optional": ["whatsapp-float-button", "faq-accordion", "pricing-grid-highlight", "social-proof-logos"]
     },
     "corporate": {
       "recommended": ["sticky-header-navigation", "hero-overlay", "about-image-features", "achievements-numbers-grid", "feature-highlight", "footer-multi-column-links"],

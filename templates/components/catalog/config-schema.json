@@ -249,6 +249,370 @@
         "href": { "type": "string", "format": "uri" },
         "color": { "type": "string" }
       }
+    },
+    "navbar-ecommerce-advanced": {
+      "type": "object",
+      "required": ["logoText"],
+      "properties": {
+        "logoText": { "type": "string" },
+        "logoUrl": { "type": "string", "format": "uri" },
+        "logoAlt": { "type": "string" },
+        "logoIcon": { "type": "string" },
+        "searchPlaceholder": { "type": "string" },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string" },
+              "href": { "type": "string" },
+              "highlight": { "type": "boolean" }
+            }
+          }
+        },
+        "actions": {
+          "type": "object",
+          "properties": {
+            "favorites": { "type": "object", "properties": { "href": { "type": "string" } } },
+            "account": { "type": "object", "properties": { "href": { "type": "string" } } },
+            "cart": { "type": "object", "properties": { "href": { "type": "string" }, "count": { "type": "number" } } }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "hero-product-showcase": {
+      "type": "object",
+      "required": ["title", "imageUrl"],
+      "properties": {
+        "badges": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string" },
+              "style": { "type": "string", "enum": ["solid", "outline"] }
+            }
+          }
+        },
+        "title": { "type": "string" },
+        "titleHighlight": { "type": "string" },
+        "description": { "type": "string" },
+        "price": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "installments": { "type": "string" }
+          }
+        },
+        "rating": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "stars": { "type": "number", "minimum": 0, "maximum": 5 }
+          }
+        },
+        "buttons": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["text", "href"],
+            "properties": {
+              "text": { "type": "string" },
+              "href": { "type": "string" },
+              "primary": { "type": "boolean" },
+              "icon": { "type": "string" }
+            }
+          }
+        },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "imageAlt": { "type": "string" },
+        "specs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "value", "label"],
+            "properties": {
+              "icon": { "type": "string" },
+              "value": { "type": "string" },
+              "label": { "type": "string" }
+            }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "store-concept-section": {
+      "type": "object",
+      "required": ["title", "features"],
+      "properties": {
+        "tag": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "features": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "title", "description"],
+            "properties": {
+              "icon": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" },
+              "iconBg": { "type": "string" },
+              "iconColor": { "type": "string" }
+            }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "promo-countdown-banner": {
+      "type": "object",
+      "required": ["title", "couponCode"],
+      "properties": {
+        "emoji": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "couponCode": { "type": "string" },
+        "countdown": {
+          "type": ["object", "boolean"],
+          "properties": {
+            "hours": { "type": "number" },
+            "minutes": { "type": "number" },
+            "seconds": { "type": "number" }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "category-carousel": {
+      "type": "object",
+      "required": ["categories"],
+      "properties": {
+        "title": { "type": "string" },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["imageUrl", "title"],
+            "properties": {
+              "imageUrl": { "type": "string", "format": "uri" },
+              "imageAlt": { "type": "string" },
+              "title": { "type": "string" },
+              "href": { "type": "string" },
+              "subtitle": { "type": "string" }
+            }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "product-filters-bar": {
+      "type": "object",
+      "properties": {
+        "tabs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string" },
+              "active": { "type": "boolean" },
+              "href": { "type": "string" }
+            }
+          }
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["text"],
+            "properties": {
+              "text": { "type": "string" },
+              "removable": { "type": "boolean" },
+              "highlight": { "type": "boolean" }
+            }
+          }
+        },
+        "sortOptions": {
+          "type": "object",
+          "properties": {
+            "current": { "type": "string" },
+            "options": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["text", "value"],
+                "properties": {
+                  "text": { "type": "string" },
+                  "value": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "product-grid-advanced": {
+      "type": "object",
+      "required": ["products"],
+      "properties": {
+        "products": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title"],
+            "properties": {
+              "title": { "type": "string" },
+              "category": { "type": "string" },
+              "images": {
+                "type": "array",
+                "items": { "type": "string", "format": "uri" }
+              },
+              "price": {
+                "type": "object",
+                "properties": {
+                  "current": { "type": "string" },
+                  "original": { "type": "string" }
+                }
+              },
+              "rating": { "type": "string" },
+              "installments": { "type": "string" },
+              "badge": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "style": { "type": "string", "enum": ["new", "discount"] }
+                }
+              }
+            }
+          }
+        },
+        "linkText": { "type": "string" },
+        "linkHref": { "type": "string" },
+        "colors": { "type": "object" }
+      }
+    },
+    "testimonials-section": {
+      "type": "object",
+      "required": ["reviews"],
+      "properties": {
+        "title": { "type": "string" },
+        "overallRating": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "stars": { "type": "number", "minimum": 0, "maximum": 5 },
+            "reviewCount": { "type": "string" }
+          }
+        },
+        "reviews": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["avatar", "name", "rating", "text"],
+            "properties": {
+              "avatar": { "type": "string", "format": "uri" },
+              "name": { "type": "string" },
+              "rating": { "type": "number", "minimum": 0, "maximum": 5 },
+              "verified": { "type": "boolean" },
+              "text": { "type": "string" }
+            }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "benefits-grid-ecommerce": {
+      "type": "object",
+      "required": ["benefits"],
+      "properties": {
+        "benefits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "title"],
+            "properties": {
+              "icon": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "colors": { "type": "object" }
+      }
+    },
+    "footer-ecommerce-advanced": {
+      "type": "object",
+      "required": ["brand"],
+      "properties": {
+        "brand": {
+          "type": "object",
+          "required": ["logoText"],
+          "properties": {
+            "logoText": { "type": "string" },
+            "logoIcon": { "type": "string" },
+            "logoUrl": { "type": "string", "format": "uri" },
+            "description": { "type": "string" }
+          }
+        },
+        "socialLinks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon", "href"],
+            "properties": {
+              "icon": { "type": "string" },
+              "href": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["title", "links"],
+            "properties": {
+              "title": { "type": "string" },
+              "links": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["text", "href"],
+                  "properties": {
+                    "text": { "type": "string" },
+                    "href": { "type": "string" }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "newsletter": {
+          "type": "object",
+          "properties": {
+            "title": { "type": "string" },
+            "description": { "type": "string" },
+            "placeholder": { "type": "string" },
+            "buttonText": { "type": "string" }
+          }
+        },
+        "copyright": { "type": "string" },
+        "paymentMethods": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon"],
+            "properties": {
+              "icon": { "type": "string" }
+            }
+          }
+        },
+        "colors": { "type": "object" }
+      }
     }
   },
   "additionalProperties": true,
