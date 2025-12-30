@@ -111,3 +111,4 @@ if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('category-carousel', CategoryCarouselComponent);
 }
 
+

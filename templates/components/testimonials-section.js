@@ -116,3 +116,4 @@ if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('testimonials-section', TestimonialsSectionComponent);
 }
 
+
