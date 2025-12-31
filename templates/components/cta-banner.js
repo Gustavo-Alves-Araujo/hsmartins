@@ -113,13 +113,13 @@ class CtaBannerComponent extends BaseComponent {
         const c = this.colors;
         const buttonsHtml = this.buttons.map(btn => this.renderButton(btn)).join('');
 
-        // Estilos para gradiente de fundo
+        // Estilos para gradiente de fundo (de baixo para cima)
         const gradStyle = c.useHex
-            ? `style="background: linear-gradient(to bottom right, ${c.gradStartColor}, white);"`
+            ? `style="background: linear-gradient(to top, ${c.gradStartColor}, white);"`
             : '';
         const gradClass = c.useHex
-            ? 'bg-gradient-to-br to-white overflow-hidden px-6'
-            : `bg-gradient-to-br ${c.gradStart} ${c.gradEnd} overflow-hidden px-6`;
+            ? 'bg-gradient-to-t to-white overflow-hidden px-6'
+            : `bg-gradient-to-t ${c.gradStart} ${c.gradEnd} overflow-hidden px-6`;
 
         // Estilos para badge "Novidade"
         const badgeStyle = c.useHex

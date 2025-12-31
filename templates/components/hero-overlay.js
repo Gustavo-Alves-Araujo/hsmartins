@@ -41,8 +41,9 @@ class HeroComponent extends BaseComponent {
         const textColor = textBase === 'white' ? '#ffffff' : '#000000';
 
         // Mapeamento usando sempre a cor primária do tema - SEM VALORES FIXOS
+        // Overlay mais claro: usa versão clareada da cor primária
         this.colors = {
-            overlay: primaryHex ? this.darkenColor(primaryHex, 0.3) : (primaryHex || '#1a1a2e'),
+            overlay: primaryHex ? this.lightenColor(primaryHex, 0.6) : (primaryHex || '#1a1a2e'), // Mais claro
             badge: primaryHex, // SEMPRE cor primária do tema
             title: textColor,
             titleHighlight: primaryHex, // SEMPRE cor primária do tema
@@ -68,13 +69,13 @@ class HeroComponent extends BaseComponent {
                 <div class="absolute inset-0 z-0">
                     <img src="${this.backgroundImage}"
                          alt="${this.backgroundAlt}"
-                         class="w-full h-full object-cover scale-100 opacity-70"
-                         style="filter: blur(10px) brightness(0.8) contrast(1.1);">
+                         class="w-full h-full object-cover scale-100 opacity-80"
+                         style="filter: blur(10px) brightness(1.1) contrast(1.0);">
 
-                    <div class="absolute inset-0 opacity-50 mix-blend-multiply" style="background-color: ${c.overlay};"></div>
+                    <div class="absolute inset-0 opacity-25 mix-blend-overlay" style="background-color: ${c.overlay};"></div>
 
-                    <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60 opacity-90"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-black/40 opacity-40"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/40 opacity-60"></div>
+                    <div class="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 opacity-30"></div>
                 </div>
 
                 <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-pulse" style="background-color: ${c.titleHighlight}; opacity: 0.2; animation-duration: 4s;"></div>

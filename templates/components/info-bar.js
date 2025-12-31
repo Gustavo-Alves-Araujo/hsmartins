@@ -67,7 +67,7 @@ class InfoBarComponent extends BaseComponent {
         `).join('');
 
         return `
-            <div class="info-bar-glass info-bar-border py-6 relative z-30 overflow-hidden">
+            <div class="info-bar-glass info-bar-border py-6 relative z-30 overflow-hidden mb-32">
                 <div class="absolute top-0 left-0 w-full h-full opacity-[0.03] pointer-events-none -z-10">
                     <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
                         <defs>
