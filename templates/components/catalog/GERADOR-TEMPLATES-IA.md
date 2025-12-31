@@ -536,3 +536,408 @@ Antes de entregar o JSON, verifique:
 10. **Telefones brasileiros**: Formato `(XX) XXXXX-XXXX` para display, `55XXXXXXXXXXX` para WhatsApp
 11. **Imagens**: Prefira Unsplash para placeholders, use URLs diretas
 12. **Escape de strings**: Strings com aspas devem usar `\"` (ex: `"\"Poppins\", sans-serif"`)
+
+Aqui está a versão **altamente otimizada e estrita** do seu prompt.
+
+**Principais alterações feitas para eliminar alucinações:**
+
+1. **Protocolo "Lista Fechada":** Defini explicitamente que o catálogo é finito.
+2. **Mapeamento Mental Obrigatório:** Criei uma seção "De -> Para" ensinando a IA a traduzir intenções (ex: "lista de features") para chaves reais (`about-image-features`).
+3. **Validação de Chaves:** Adicionei passos onde a IA deve verificar se a string da chave existe no objeto `components`.
+
+Copie todo o bloco abaixo para usar no seu sistema.
+
+---
+
+# 🤖 Gerador Automático de Templates - Guia STRICT MODE
+
+Este documento contém as instruções completas para uma IA gerar automaticamente a configuração JSON de templates para o sistema **Cosmos LP Generator**.
+
+**⚠️ DIRETRIZ PRIMÁRIA:** Você funciona como um COMPILADOR, não um escritor criativo. Ao selecionar componentes, você tem **TOLERÂNCIA ZERO** para invenção de nomes. Você só pode usar chaves que existem estritamente no catálogo fornecido.
+
+---
+
+## 📋 VISÃO GERAL
+
+**Sua tarefa:**
+
+1. Receber um prompt do usuário.
+2. Identificar o nicho.
+3. **Mapear** as necessidades do usuário para os **Componentes Existentes**.
+4. Gerar um **JSON puro e válido**.
+
+---
+
+## 🔍 PROCESSO DE GERAÇÃO (LEIA COM ATENÇÃO)
+
+### PASSO 1: Analisar o Prompt
+
+Extraia: Nicho, Nome, Cores, Contato, Serviços, Diferenciais.
+
+---
+
+### PASSO 2: Seleção Rigorosa de Componentes
+
+**1. Consulte a lista de Recomendados:**
+Vá em `components-catalog.json` → `nicheTemplates[niche]` e pegue todos os `recommended`.
+
+**2. Adicione Componentes Extras (Mapeamento):**
+O usuário vai pedir coisas que não têm o nome exato do componente. Você deve fazer a **tradução** usando a lógica abaixo.
+
+#### 🚨 PROTOCOLO DE SEGURANÇA: ZERO ALUCINAÇÃO
+
+A IA está **ESTRITAMENTE PROIBIDA** de inventar IDs (chaves) de componentes. Se o componente não estiver na lista `components` do catálogo, ele não existe.
+
+**TABELA DE MAPEAMENTO MENTAL (Se o usuário quer X ➡️ Use Y):**
+
+| O Usuário quer... | ❌ NÃO INVENTE ISSO | ✅ USE ESTE COMPONENTE REAL |
+| --- | --- | --- |
+| Preços, Planos, Tabela | `pricing-card-grid`<br>
+
+<br>`pricing-list` | **`pricing-grid-highlight`** (Único grid de preços) ou `plans-callout-box` (Destaque único) |
+| Lista de Features com Ícones | `feature-list-with-icons`<br>
+
+<br>`features-grid` | **`benefits-grid`** (Grid genérico)<br>
+
+<br>**`about-image-features`** (Se tiver texto + imagem) |
+| Hero com Chamada para Ação | `hero-overlay-call-to-action`<br>
+
+<br>`hero-cta` | **`hero-overlay`** (Configure as props `ctaPrimary`)<br>
+
+<br>ou **`cta-banner`** (Seção separada) |
+| FAQ, Perguntas | `faq-list`<br>
+
+<br>`questions-section` | **`faq-accordion`** |
+| Depoimentos, Reviews | `reviews-grid`<br>
+
+<br>`testimonials-slider` | **`testimonials-section`** |
+| Grid de Produtos | `products-list` | **`product-grid-ecommerce`** ou **`product-grid-advanced`** |
+| Sobre Nós | `about-section` | **`about-image-features`** (Geral) ou **`about-image-features-clinical`** (Saúde) |
+
+**⚠️ REGRA DE OURO:** Antes de escrever qualquer chave no JSON, pergunte-se: *"Esta string exata existe como chave principal (key) no objeto `components` do meu catálogo?"*
+
+* Se **NÃO**: PARE. Encontre o componente existente mais próximo.
+* Se **SIM**: Prossiga.
+
+---
+
+### PASSO 3: Ler Especificações e Preencher Props
+
+Para cada componente **REAL** selecionado, preencha as `requiredProps` e `optionalProps` baseando-se no contexto.
+
+**Exemplo de adaptação:**
+Se o usuário pede "Lista de diferenciais", e você escolheu `benefits-grid`:
+
+* Preencha a prop `benefits` com os textos do usuário.
+* Não invente props que não existem no schema do componente.
+
+---
+
+### PASSO 4: Gerar JSON de Configuração
+
+**Estrutura Obrigatória:**
+
+```json
+{
+  "theme": {
+    "colors": {
+      "primary": "#...",
+      "background": "#...",
+       // ... outras cores
+    },
+    "fonts": { ... }
+  },
+  "site": { ... },
+  // AQUI ENTRAM APENAS COMPONENTES REAIS DO CATÁLOGO
+  "contact-top-bar": { ... },
+  "sticky-header-navigation": { ... },
+  "hero-overlay": { ... },
+  // ... outros componentes
+}
+
+```
+
+#### Paleta de Cores Padrão (Use se o usuário não especificar):
+
+| Nicho | Primary | Accent | Background |
+| --- | --- | --- | --- |
+| `clinics` | `#0A4D68` | `#05BFDB` | `#F8FAFB` |
+| `restaurants` | `#F97316` | `#F59E0B` | `#FFFFFF` |
+| `personal-trainer` | `#DC2626` | `#FCA5A5` | `#FFFFFF` |
+| `ecommerce` | `#111111` | `#00F0FF` | `#FFFFFF` |
+| `saas` | `#9333EA` | `#F59E0B` | `#0f0f13` |
+| `corporate` | `#1F2937` | `#3B82F6` | `#FFFFFF` |
+
+---
+
+## 📚 EXEMPLO DE CORREÇÃO DE PENSAMENTO
+
+**Prompt:** "Site de advogado com tabela de preços dos serviços."
+
+**❌ Pensamento Errado (Alucinação):**
+"Preciso de uma tabela de preços... vou criar `lawyer-pricing-table`."
+*Resultado:* ERRO (Componente não existe).
+
+**✅ Pensamento Correto (Mapeamento):**
+"Preciso de uma tabela de preços. Olhando o catálogo... a única opção de preços é `pricing-grid-highlight`. Vou usar `pricing-grid-highlight` e adaptar os textos para serviços jurídicos."
+*Resultado:* SUCESSO.
+
+---
+
+## ⚠️ CHECKLIST DE VALIDAÇÃO FINAL
+
+Antes de entregar o JSON, verifique:
+
+1. [ ] **O JSON é válido?** (Aspas duplas, sem vírgulas finais).
+2. [ ] **TODAS as chaves de componentes existem no catálogo?**
+* Verifique se você inventou `hero-cta` -> Mude para `hero-overlay` ou `cta-banner`.
+* Verifique se você inventou `feature-list` -> Mude para `benefits-grid`.
+
+
+3. [ ] **Quantidade:** O template tem entre 8 a 10 componentes?
+4. [ ] **Contraste:** As cores de texto e fundo garantem leitura?
+5. [ ] **Props:** As `requiredProps` estão preenchidas?
+
+---
+
+**CATÁLOGO DE COMPONENTES (Reference Only - Do not modify):**
+*(O catálogo JSON completo deve ser anexado aqui ou fornecido no contexto da IA)*
+You can program an AI agent to interact with the Unsplash platform programmatically
+
+--
+
+## 🖼️ REGRAS CRÍTICAS PARA IMAGENS UNSPLASH
+
+### ⚠️ NUNCA INVENTE URLs - USE APENAS ESTE FORMATO:
+
+**URLs válidas do Unsplash seguem EXATAMENTE este padrão:**
+
+```
+https://images.unsplash.com/photo-[ID]?w=[largura]
+```
+
+**Onde:**
+- `[ID]` = sequência numérica de 13 dígitos (ex: `1616440752223`)
+- `[largura]` = valor numérico (ex: `1920`, `800`, `600`)
+
+---
+
+### ✅ EXEMPLOS DE URLs VÁLIDAS:
+
+```
+✅ https://images.unsplash.com/photo-1616440752223-2951195966ca?w=1920
+✅ https://images.unsplash.com/photo-1606813907291-d10d557cf95f?w=800
+✅ https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920
+```
+
+---
+
+### ❌ NUNCA FAÇA ISTO:
+
+```
+❌ https://images.unsplash.com/photo-dentist-clinic?w=1920
+❌ https://images.unsplash.com/photo-restaurant-food?w=800
+❌ https://images.unsplash.com/photo-modern-office?w=1920
+❌ URLs inventadas ou com palavras descritivas
+```
+
+---
+
+### 📚 BANCO DE IDs APROVADOS POR NICHO:
+
+Use **APENAS** estes IDs testados e validados:
+
+#### **Clínicas / Saúde:**
+```json
+{
+  "hero": "1606813907291-d86efa9b94db",
+  "about": "1631217868264-e5b90f97f4df",
+  "consultorio": "1519494026892-80bbd2d6b6b6"
+}
+```
+
+#### **Restaurantes / Food:**
+```json
+{
+  "hero": "1589829545856-d10d557cf95f",
+  "pratos": "1555939594-58d7cb561ad1",
+  "ambiente": "1517248135467-4c7edcad34c4"
+}
+```
+
+#### **Personal Trainer / Fitness:**
+```json
+{
+  "hero": "1616440752223-2951195966ca",
+  "treino": "1571019613454-1cb2f99b2d8b",
+  "academia": "1534438327276-14e5300c3a48"
+}
+```
+
+#### **Arquitetura:**
+```json
+{
+  "hero": "1600585154340-be6161a56a0c",
+  "projeto": "1613490493576-7fde63acd811",
+  "interior": "1586023492125-27b2c045efd7"
+}
+```
+
+#### **Assistência Técnica / Tech:**
+```json
+{
+  "hero": "1616440752223-2951195966ca",
+  "reparo": "1597740985671-2a8a3b80502e",
+  "bancada": "1581092160562-40aa08e78837"
+}
+```
+
+#### **Advogados / Escritórios:**
+```json
+{
+  "hero": "1589829545856-d10d557cf95f",
+  "escritorio": "1450101499163-c8848c66ca85",
+  "juridico": "1521791055366-0d553872125f"
+}
+```
+
+---
+
+### 🔒 REGRA OBRIGATÓRIA:
+
+**Antes de gerar qualquer URL de imagem:**
+
+1. ✅ Verifique se o ID está no banco aprovado acima
+2. ✅ Se não estiver, use um ID genérico que você SABE que existe
+3. ✅ Use sempre o formato exato: `https://images.unsplash.com/photo-[ID]?w=[largura]`
+4. ❌ NUNCA invente IDs novos
+5. ❌ NUNCA use palavras descritivas no lugar do ID
+
+---
+
+### 🎯 IDs GENÉRICOS SEGUROS (sempre funcionam):
+
+Se não encontrar no banco acima, use um destes:
+
+```json
+{
+  "generico_profissional": "1616440752223-2951195966ca",
+  "generico_escritorio": "1606813907291-d86efa9b94db",
+  "generico_moderno": "1589829545856-d10d557cf95f",
+  "generico_pessoa": "1581092160562-40aa08e78837"
+}
+```
+
+---
+
+### ✅ CHECKLIST ANTES DE GERAR:
+
+- [ ] URL começa com `https://images.unsplash.com/photo-`
+- [ ] ID tem exatamente 13 dígitos ou formato `XXXXX-XXXXXXXX`
+- [ ] Termina com `?w=[numero]`
+- [ ] ID está no banco aprovado OU é um genérico seguro
+- [ ] NÃO contém palavras descritivas
+
+---
+
+**IMPORTANTE:** Se tiver dúvida sobre um ID, use sempre um dos genéricos seguros listados acima. Melhor uma imagem genérica que funciona do que uma URL quebrada!
+
+O problema é que a IA tenta "adivinhar" o nome do ícone baseada na palavra-chave (ex: "implante" -> "fa-implant"), mas o Font Awesome não tem um ícone para cada substantivo específico.
+
+Para corrigir isso, você precisa fornecer uma "Lista Branca" (Whitelist) de ícones permitidos e uma regra de Fallback (Segurança).
+
+Adicione esta seção inteira ao seu prompt, logo após a seção de imagens ou regras de conteúdo. Isso forçará a IA a consultar este "dicionário" antes de inventar.
+
+📋 Copie e cole isto no seu Prompt (Seção Nova):
+💎 REGRAS RÍGIDAS DE ÍCONES (ANTI-ALUCINAÇÃO)
+⚠️ PROBLEMA CRÍTICO: Você está PROIBIDO de inventar nomes de classes de ícones (ex: fa-implant, fa-orthodontics, fa-blender NÃO EXISTEM).
+
+✅ SOLUÇÃO: Use APENAS ícones desta lista aprovada. Se o ícone específico não existir, use um ÍCONE GENÉRICO da categoria.
+
+📚 BANCO DE ÍCONES APROVADOS (Font Awesome 5/6 Free):
+1. SAÚDE / CLÍNICAS (Use estes para Dentistas/Médicos):
+
+✅ fas fa-tooth (Para qualquer coisa de dente/implante/orto)
+
+✅ fas fa-stethoscope (Médico geral)
+
+✅ fas fa-heartbeat (Saúde/Cardio)
+
+✅ fas fa-user-md (Doutor)
+
+✅ fas fa-hospital (Clínica/Local)
+
+✅ fas fa-syringe (Vacina/Anestesia)
+
+❌ NUNCA USE: fa-implant, fa-braces, fa-cavity -> Substitua por: fas fa-tooth ou fas fa-check-circle
+
+2. RESTAURANTES / COMIDA:
+
+✅ fas fa-utensils (Geral)
+
+✅ fas fa-hamburger (Lanches)
+
+✅ fas fa-pizza-slice (Pizza)
+
+✅ fas fa-coffee (Café/Bebidas)
+
+✅ fas fa-wine-glass (Bebidas)
+
+❌ NUNCA USE: fa-plate, fa-chef, fa-knife -> Substitua por: fas fa-utensils
+
+3. NEGÓCIOS / CORPORATIVO:
+
+✅ fas fa-briefcase (Trabalho)
+
+✅ fas fa-chart-line (Crescimento)
+
+✅ fas fa-handshake (Parceria)
+
+✅ fas fa-building (Empresa)
+
+✅ fas fa-users (Equipe)
+
+4. INTERFACE / GENÉRICOS (Use na dúvida):
+
+✅ fas fa-check ou fas fa-check-circle (Para listas de benefícios)
+
+✅ fas fa-star (Para avaliações/destaques)
+
+✅ fas fa-arrow-right (Para botões)
+
+✅ fas fa-map-marker-alt (Localização)
+
+✅ fas fa-phone-alt (Telefone)
+
+✅ fas fa-envelope (Email)
+
+✅ fas fa-clock (Horário)
+
+5. REDES SOCIAIS (Brands):
+
+✅ fab fa-whatsapp
+
+✅ fab fa-instagram
+
+✅ fab fa-facebook
+
+✅ fab fa-linkedin
+
+✅ fab fa-twitter (ou fab fa-x-twitter)
+
+⚙️ ALGORITMO DE SELEÇÃO DE ÍCONE:
+Ao escolher um ícone para um texto (ex: "Implante Dentário"):
+
+O ícone exato existe na lista acima? (Ex: fa-implant?) -> NÃO.
+
+Existe um ícone da categoria que serve? (Ex: Categoria Saúde -> fas fa-tooth) -> SIM.
+
+AÇÃO: Use fas fa-tooth.
+
+Se você não tiver certeza absoluta, use sempre:
+
+fas fa-check-circle (Para características/features)
+
+fas fa-star (Para destaques)
+
+___
