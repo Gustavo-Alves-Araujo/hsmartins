@@ -28,7 +28,7 @@ class FeatureHighlightComponent extends BaseComponent {
      */
     constructor(data) {
         super();
-        this.badge = data.badge || '';
+        this.badge = data.badge || data.tag || ''; // Suporta tanto 'badge' quanto 'tag'
         this.title = data.title;
         this.description = data.description;
         this.features = data.features || [];
@@ -42,10 +42,11 @@ class FeatureHighlightComponent extends BaseComponent {
             target: data.cta.target || ''
         } : null;
 
-        // Layout
+        // Layout - suporta tanto string direta quanto objeto
         this.layout = {
-            imagePosition: 'left',
-            ...data.layout
+            imagePosition: typeof data.layout === 'string'
+                ? data.layout.replace('image-', '') // 'image-right' -> 'right'
+                : (data.layout?.imagePosition || 'left')
         };
 
         // Resolve cores base (override > tema > fallback)
@@ -69,18 +70,22 @@ class FeatureHighlightComponent extends BaseComponent {
 
     /**
      * Renderiza um item da lista de features
-     * @param {string} feature - Texto do feature
+     * @param {Object|string} feature - Objeto com {icon, text} ou string simples
      * @returns {string} HTML do item
      */
     renderFeature(feature) {
         const c = this.colors;
 
+        // Suporta tanto objeto {icon, text} quanto string simples
+        const icon = typeof feature === 'object' ? (feature.icon || 'fas fa-check') : 'fas fa-check';
+        const text = typeof feature === 'object' ? feature.text : feature;
+
         return `
             <li class="flex items-center gap-3">
                 <span class="w-8 h-8 rounded-full bg-${c.accentColor}/20 flex items-center justify-center text-${c.titleColor} flex-shrink-0">
-                    <i class="fas fa-check text-xs"></i>
+                    <i class="${icon} text-xs"></i>
                 </span>
-                <span class="text-gray-700 font-medium">${feature}</span>
+                <span class="text-gray-700 font-medium">${text}</span>
             </li>
         `;
     }
