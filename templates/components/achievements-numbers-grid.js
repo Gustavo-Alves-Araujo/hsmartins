@@ -9,7 +9,7 @@ class AchievementsNumbersGridComponent extends BaseComponent {
      * @param {Object} data - Dados do componente
      * @param {string} data.id - ID da seção
      * @param {string} data.title - Título principal
-     * @param {Array} data.stats - Array de estatísticas { value: string, label: string }
+     * @param {Array} data.stats - Array de estatísticas { number: string, label: string } ou { value: string, label: string }
      * @param {string} data.description - Descrição adicional (opcional)
      * @param {Object} data.colors - Cores do tema (opcional)
      * @param {string} data.colors.primary - Nome base da cor primária (ex: 'green', 'yellow')
@@ -21,47 +21,74 @@ class AchievementsNumbersGridComponent extends BaseComponent {
         this.stats = data.stats || [];
         this.description = data.description || '';
 
-        // Resolve cores do tema dinamicamente
+        // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
+        const theme = this.getGlobalTheme();
+        const primaryHex = theme?.colors?.primary;
+
+        if (!primaryHex) {
+            console.warn('⚠️ Cor primária não encontrada no tema. Verifique o config.json');
+        }
+
+        // Resolve cores usando sempre a cor primária do tema
         const primaryBase = this.resolveColor(data.colors?.primary, 'primary', 'green');
 
         this.colors = {
             value: this.getColorVariant(primaryBase, 600),
             hoverBar: this.getColorVariant(primaryBase, 300),
-            backgroundGlow: this.getColorVariant(primaryBase, 50)
+            backgroundGlow: this.getColorVariant(primaryBase, 50),
+            primaryHex: primaryHex // Guarda o hex para uso direto se necessário
         };
+
     }
 
     render() {
         const c = this.colors;
+        const primaryHex = this.colors.primaryHex;
+        const useHex = primaryHex && primaryHex.startsWith('#');
+
+        // Calcula variações se for hex
+        const valueColor = useHex ? primaryHex : null;
+        const hoverBarColor = useHex ? this.lightenColor(primaryHex, 0.3) : null;
+        const backgroundGlowColor = useHex ? this.lightenColor(primaryHex, 0.85) : null;
 
         // Grid responsivo ajustado para ser mais denso
         const gridCols = this.stats.length >= 4 ? 'lg:grid-cols-4' : `lg:grid-cols-${this.stats.length}`;
 
         const statsHtml = this.stats
-            .map((stat, index) => `
+            .map((stat, index) => {
+                const valueStyle = useHex ? `style="color: ${valueColor};"` : '';
+                const hoverBarStyle = useHex ? `style="background-color: ${hoverBarColor};"` : '';
+                const valueClass = useHex ? '' : `text-${c.value}`;
+                const hoverBarClass = useHex ? '' : `group-hover:bg-${c.hoverBar}`;
+
+                return `
                 <div
                     class="group relative bg-white p-6 md:p-8 rounded-2xl border border-slate-100/80 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-1 flex flex-col items-center justify-center text-center"
                     data-aos="fade-up"
                     data-aos-delay="${index * 100}"
                 >
                     <div class="relative z-10">
-                        <span class="block text-4xl md:text-5xl font-black text-${c.value} mb-3 tracking-tight leading-none">
-                            ${stat.value}
+                        <span class="block text-4xl md:text-5xl font-black ${valueClass} mb-3 tracking-tight leading-none" ${valueStyle}>
+                            ${stat.number || stat.value}
                         </span>
 
-                        <div class="h-1 w-6 bg-slate-100 mx-auto mb-3 rounded-full group-hover:w-10 group-hover:bg-${c.hoverBar} transition-all duration-300"></div>
+                        <div class="h-1 w-6 bg-slate-100 mx-auto mb-3 rounded-full group-hover:w-10 ${hoverBarClass} transition-all duration-300" ${hoverBarStyle}></div>
 
                         <p class="text-[11px] md:text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">
                             ${stat.label}
                         </p>
                     </div>
                 </div>
-            `)
+            `;
+            })
             .join('');
+
+        const bgGlowStyle = useHex ? `style="background-color: ${backgroundGlowColor}50;"` : '';
+        const bgGlowClass = useHex ? '' : `bg-${c.backgroundGlow}/50`;
 
         return `
             <section id="${this.id}" class="relative py-16 md:py-24 bg-white overflow-hidden isolate">
-                <div class="absolute top-[-15%] left-[-15%] w-[350px] h-[350px] bg-${c.backgroundGlow}/50 rounded-full blur-[90px] -z-10 pointer-events-none"></div>
+                <div class="absolute top-[-15%] left-[-15%] w-[350px] h-[350px] ${bgGlowClass} rounded-full blur-[90px] -z-10 pointer-events-none" ${bgGlowStyle}></div>
                 <div class="absolute bottom-[-15%] right-[-15%] w-[300px] h-[300px] bg-slate-50/80 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
 
                 <div class="container mx-auto px-6 max-w-5xl relative">

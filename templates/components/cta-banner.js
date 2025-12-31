@@ -21,20 +21,70 @@ class CtaBannerComponent extends BaseComponent {
         this.buttons = data.buttons || [];
         this.backgroundPattern = data.backgroundPattern || '';
 
-        // Resolve a cor primária do tema
+        // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
+        const theme = this.getGlobalTheme();
+        const primaryHex = theme?.colors?.primary;
+
+        if (!primaryHex) {
+            console.warn('⚠️ Cor primária não encontrada no tema. Verifique o config.json');
+        }
+
+        // Resolve cores usando sempre a cor primária do tema
         const primaryBase = this.resolveColor(data.colors?.primary, 'primary', 'blue');
+        const useHex = primaryHex && primaryHex.startsWith('#');
+
+        // Calcula variações se for hex
+        const gradStartColor = useHex ? this.lightenColor(primaryHex, 0.85) : null; // 50
+        const btnColor = useHex ? primaryHex : null; // 600
+        const btnHoverColor = useHex ? this.darkenColor(primaryHex, 0.1) : null; // 700
+        const badgeBgColor = useHex ? this.lightenColor(primaryHex, 0.9) : null; // Background muito claro
+        const badgeTextColor = useHex ? primaryHex : null; // Texto da badge
 
         this.colors = {
-            gradStart: `from-${primaryBase}-50`,
+            gradStart: useHex ? '' : `from-${primaryBase}-50`,
             gradEnd: `to-white`,
-            primaryBtn: `bg-${primaryBase}-600`,
-            primaryBtnHover: `hover:bg-${primaryBase}-700`,
-            primaryText: `text-${primaryBase}-900`,
-            primaryRing: `focus:ring-${primaryBase}-500/30`,
-            primaryShadow: `hover:shadow-${primaryBase}-500/20`,
+            primaryBtn: useHex ? '' : `bg-${primaryBase}-600`,
+            primaryBtnHover: useHex ? '' : `hover:bg-${primaryBase}-700`,
+            primaryText: useHex ? '' : `text-${primaryBase}-900`,
+            primaryRing: useHex ? '' : `focus:ring-${primaryBase}-500/30`,
+            primaryShadow: useHex ? '' : `hover:shadow-${primaryBase}-500/20`,
             titleText: 'text-slate-900',
-            subtitleText: 'text-slate-600'
+            subtitleText: 'text-slate-600',
+            // Cores hex para uso direto
+            primaryHex: primaryHex,
+            gradStartColor: gradStartColor,
+            btnColor: btnColor,
+            btnHoverColor: btnHoverColor,
+            badgeBgColor: badgeBgColor,
+            badgeTextColor: badgeTextColor,
+            useHex: useHex
         };
+
+        // Injeta estilos CSS se usar cores hex
+        if (useHex) {
+            this.injectStyles();
+        }
+    }
+
+    /**
+     * Injeta estilos CSS customizados para cores hex
+     */
+    injectStyles() {
+        if (document.getElementById('cta-banner-styles')) return;
+
+        const style = document.createElement('style');
+        style.id = 'cta-banner-styles';
+        const c = this.colors;
+
+        style.textContent = `
+            .cta-banner-btn-primary {
+                background-color: ${c.btnColor} !important;
+            }
+            .cta-banner-btn-primary:hover {
+                background-color: ${c.btnHoverColor} !important;
+            }
+        `;
+        document.head.appendChild(style);
     }
 
     /**
@@ -45,15 +95,13 @@ class CtaBannerComponent extends BaseComponent {
         const hrefAttr = button.href ? `href="${button.href}"` : '';
         const targetAttr = button.target ? `target="${button.target}"` : '';
 
+        const btnClass = this.colors.useHex
+            ? 'cta-banner-btn-primary text-white font-bold rounded-xl text-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg active:scale-[0.98] focus:outline-none focus:ring-4'
+            : `${this.colors.primaryBtn} ${this.colors.primaryBtnHover} text-white font-bold rounded-xl text-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-lg ${this.colors.primaryShadow} active:scale-[0.98] focus:outline-none focus:ring-4 ${this.colors.primaryRing}`;
+
         return `
             <${tag} ${hrefAttr} ${targetAttr}
-                class="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5
-                       ${this.colors.primaryBtn} ${this.colors.primaryBtnHover}
-                       text-white font-bold rounded-xl text-sm
-                       transition-all duration-300 ease-out
-                       hover:-translate-y-0.5 hover:shadow-lg ${this.colors.primaryShadow}
-                       active:scale-[0.98]
-                       focus:outline-none focus:ring-4 ${this.colors.primaryRing}">
+                class="group relative inline-flex items-center justify-center gap-2 px-6 py-2.5 ${btnClass}">
 
                 ${button.icon ? `<i class="${button.icon} text-base transition-transform group-hover:scale-110"></i>` : ''}
                 <span class="tracking-tight">${button.text}</span>
@@ -65,14 +113,30 @@ class CtaBannerComponent extends BaseComponent {
         const c = this.colors;
         const buttonsHtml = this.buttons.map(btn => this.renderButton(btn)).join('');
 
+        // Estilos para gradiente de fundo
+        const gradStyle = c.useHex
+            ? `style="background: linear-gradient(to bottom right, ${c.gradStartColor}, white);"`
+            : '';
+        const gradClass = c.useHex
+            ? 'bg-gradient-to-br to-white overflow-hidden px-6'
+            : `bg-gradient-to-br ${c.gradStart} ${c.gradEnd} overflow-hidden px-6`;
+
+        // Estilos para badge "Novidade"
+        const badgeStyle = c.useHex
+            ? `style="background-color: ${c.badgeBgColor}; color: ${c.badgeTextColor};"`
+            : '';
+        const badgeClass = c.useHex
+            ? 'inline-flex items-center px-3 py-1 rounded-full shadow-sm border border-slate-100 text-[10px] font-bold uppercase tracking-widest mb-4'
+            : `inline-flex items-center px-3 py-1 rounded-full bg-white shadow-sm border border-slate-100 text-[10px] font-bold ${c.primaryText} uppercase tracking-widest mb-4`;
+
         return `
-            <section class="relative py-12 md:py-16 bg-gradient-to-br ${c.gradStart} ${c.gradEnd} overflow-hidden px-6">
+            <section class="relative py-12 md:py-16 ${gradClass}" ${gradStyle}>
 
                 <div class="container mx-auto relative z-10">
                     <div class="max-w-4xl mx-auto bg-white/60 backdrop-blur-lg p-6 md:p-10 rounded-[1.5rem]
                                 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] border border-white/80 text-center">
 
-                        <div class="inline-flex items-center px-3 py-1 rounded-full bg-white shadow-sm border border-slate-100 text-[10px] font-bold ${c.primaryText} uppercase tracking-widest mb-4">
+                        <div class="${badgeClass}" ${badgeStyle}>
                             Novidade
                         </div>
 
