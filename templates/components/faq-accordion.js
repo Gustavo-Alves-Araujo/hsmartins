@@ -43,16 +43,37 @@ class FaqAccordionComponent extends BaseComponent {
                 max-height: 0;
                 opacity: 0;
                 overflow: hidden;
-                display: none;
+                transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                            opacity 0.3s ease-in-out,
+                            padding 0.3s ease-in-out;
+                padding: 0;
             }
             .faq-item.active .faq-content-wrapper {
                 max-height: 1000px;
                 opacity: 1;
-                display: block !important;
-                overflow: visible;
+                padding: 0;
+                transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), 
+                            opacity 0.4s ease-in-out 0.1s,
+                            padding 0.3s ease-in-out;
+            }
+            .faq-chevron {
+                transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             }
             .faq-item.active .faq-chevron {
                 transform: rotate(180deg);
+            }
+            .faq-chevron-container {
+                transition: background-color 0.3s ease-in-out, 
+                            color 0.3s ease-in-out,
+                            transform 0.2s ease-in-out;
+            }
+            .faq-item.active .faq-chevron-container {
+                transform: scale(1.05);
+            }
+            .faq-item {
+                transition: border-color 0.3s ease-in-out, 
+                            background-color 0.3s ease-in-out,
+                            box-shadow 0.3s ease-in-out;
             }
             .faq-item.active {
                 border-color: ${this.hexToRgba(this.primaryHex, 0.3)};
@@ -149,19 +170,31 @@ class FaqAccordionComponent extends BaseComponent {
             btn.addEventListener('click', () => {
                 const isActive = item.classList.contains('active');
 
-                // Fecha outros itens (Comportamento exclusivo)
+                // Fecha outros itens (Comportamento exclusivo) com animação
                 items.forEach(other => {
-                    other.classList.remove('active');
-                    const otherChevron = other.querySelector('.faq-chevron-container');
-                    otherChevron.style.backgroundColor = '#ffffff';
-                    otherChevron.style.color = '#94a3b8'; // slate-400
+                    if (other !== item && other.classList.contains('active')) {
+                        other.classList.remove('active');
+                        const otherChevron = other.querySelector('.faq-chevron-container');
+                        setTimeout(() => {
+                            otherChevron.style.backgroundColor = '#ffffff';
+                            otherChevron.style.color = '#94a3b8'; // slate-400
+                        }, 150);
+                    }
                 });
 
-                // Abre o item atual
-                if (!isActive) {
+                // Abre/fecha o item atual com animação
+                if (isActive) {
+                    item.classList.remove('active');
+                    setTimeout(() => {
+                        chevronContainer.style.backgroundColor = '#ffffff';
+                        chevronContainer.style.color = '#94a3b8';
+                    }, 150);
+                } else {
                     item.classList.add('active');
-                    chevronContainer.style.backgroundColor = this.primaryHex;
-                    chevronContainer.style.color = '#ffffff';
+                    setTimeout(() => {
+                        chevronContainer.style.backgroundColor = this.primaryHex;
+                        chevronContainer.style.color = '#ffffff';
+                    }, 50);
                 }
             });
         });

@@ -34,7 +34,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
             <span class="absolute top-3 left-3 ${product.badge.style === 'new' ? 'bg-gray-900' : 'bg-red-500'} text-white text-[10px] font-bold px-2 py-1 rounded uppercase z-10">${product.badge.text}</span>
         ` : '';
 
-        const placeholderImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEbmNxhl6aFUDwBtyelBzun4EnBJLblVb56w&s';
+        const placeholderImage = 'https://media.istockphoto.com/id/2149306104/vector/blank-white-price-tag-with-string-attached-on-transparent-background-vector-illustration.jpg?s=612x612&w=0&k=20&c=YeTKKzZCTjoighA9DjrXSyNw-kUE_Ndk6SH5WDMFPIA=';
         const imagesHtml = `
             <img src="${placeholderImage}" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" alt="${product.title}">
         `;

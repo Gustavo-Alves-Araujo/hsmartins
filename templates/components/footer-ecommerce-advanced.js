@@ -41,7 +41,7 @@ class FooterEcommerceAdvancedComponent extends BaseComponent {
     render() {
         const c = this.colors;
         const logoHtml = this.brand.logoUrl
-            ? `<img src="${this.brand.logoUrl}" alt="${this.brand.logoText}" class="h-8 w-auto">`
+            ? `<img src="${this.brand.logoUrl}" alt="${this.brand.logoText}" class="h-10 w-10 rounded-full object-cover">`
             : `<div class="flex items-center gap-2">
                 ${this.brand.logoIcon ? `<div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xl" style="background-color: ${c.primary};">${this.brand.logoIcon}</div>` : ''}
                 <span class="text-2xl font-bold tracking-tight text-white">${this.brand.logoText || 'Store'}<span style="color: ${c.primary};">.</span></span>
@@ -88,29 +88,16 @@ class FooterEcommerceAdvancedComponent extends BaseComponent {
                         </div>
 
                         ${columnsHtml}
-
-                        <!-- Newsletter -->
-                        ${this.newsletter.title ? `
-                            <div>
-                                <h4 class="text-white font-bold mb-6">${this.newsletter.title}</h4>
-                                ${this.newsletter.description ? `
-                                    <p class="text-sm text-gray-400 mb-4">${this.newsletter.description}</p>
-                                ` : ''}
-                                <form class="flex flex-col gap-3">
-                                    <input type="email"
-                                           placeholder="${this.newsletter.placeholder || 'Seu melhor e-mail'}"
-                                           class="bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-lg focus:outline-none text-sm"
-                                           style="border-color: ${c.primary};">
-                                    <button class="text-white px-4 py-3 rounded-lg font-bold transition text-sm uppercase tracking-wide hover:opacity-90" style="background-color: ${c.primary};">
-                                        ${this.newsletter.buttonText || 'Inscrever-se'}
-                                    </button>
-                                </form>
-                            </div>
-                        ` : ''}
                     </div>
 
                     <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4" style="border-color: ${c.border};">
-                        ${this.copyright ? `<p class="text-sm text-gray-500">${this.copyright}</p>` : ''}
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            ${this.copyright ? `<p class="text-sm text-gray-500">${this.copyright}</p>` : ''}
+                            <span class="text-sm text-gray-500">•</span>
+                            <p class="text-sm text-gray-500">
+                                Feito por: <a href="https://www.axolutions.com.br" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" style="color: ${c.primary};">www.axolutions.com.br</a>
+                            </p>
+                        </div>
                         ${this.paymentMethods.length > 0 ? `
                             <div class="flex gap-4 text-2xl text-gray-500">
                                 ${paymentMethodsHtml}

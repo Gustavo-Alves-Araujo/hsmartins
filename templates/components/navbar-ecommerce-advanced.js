@@ -41,7 +41,7 @@ class NavbarEcommerceAdvancedComponent extends BaseComponent {
     render() {
         const c = this.colors;
         const logoHtml = this.logoUrl
-            ? `<img src="${this.logoUrl}" alt="${this.logoAlt}" class="h-8 w-auto">`
+            ? `<img src="${this.logoUrl}" alt="${this.logoAlt}" class="h-10 w-10 rounded-full object-cover">`
             : `<div class="flex items-center gap-2">
                 ${this.logoIcon ? `<div class="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-xl" style="background-color: ${c.primary};">${this.logoIcon}</div>` : ''}
                 <span class="text-2xl font-bold tracking-tight text-gray-900">${this.logoText}<span style="color: ${c.primary};">.</span></span>
@@ -111,16 +111,9 @@ class NavbarEcommerceAdvancedComponent extends BaseComponent {
                             ` : ''}
                         </div>
                     </div>
-
-                    <!-- Secondary Nav (Categories) -->
-                    ${this.categories.length > 0 ? `
-                        <div class="hidden md:flex justify-center space-x-8 py-3 mt-2 text-sm font-medium text-gray-600 border-t border-gray-100">
-                            ${categoriesHtml}
-                        </div>
-                    ` : ''}
                 </div>
             </nav>
-            <div class="h-[120px] md:h-[150px]"></div>
+            <div class="h-[80px]"></div>
         `;
     }
 

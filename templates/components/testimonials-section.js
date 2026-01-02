@@ -107,8 +107,8 @@ class TestimonialsSectionComponent extends BaseComponent {
                         </div>
                     </div>
                     ${review.verified ? `
-                        <div class="ml-auto text-green-600 text-xs flex items-center gap-1 whitespace-nowrap">
-                            <i class="fas fa-check-circle"></i> Compra Verificada
+                        <div class="ml-auto">
+                            <i class="fas fa-check-circle text-green-500 text-lg"></i>
                         </div>
                     ` : ''}
                 </div>

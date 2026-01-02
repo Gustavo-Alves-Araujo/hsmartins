@@ -1,8 +1,6 @@
 /**
- * Benefits Flow Component (Compact & Elegant)
- * - Fontes reduzidas para um visual mais delicado e profissional
- * - Ícones redimensionados proporcionalmente
- * - Mantém a largura total e o layout fluido
+ * Benefits Grid Component
+ * Grid de benefícios com design moderno e limpo (Modern Clean)
  */
 
 class BenefitsGridComponent extends BaseComponent {
@@ -24,170 +22,123 @@ class BenefitsGridComponent extends BaseComponent {
 
         this.columns = data.columns || 3;
 
-        // --- CORES & TEMA ---
-        const theme = this.getGlobalTheme();
-        const primaryHex = theme?.colors?.primary || '#6d28d9';
-        const useHex = primaryHex && primaryHex.startsWith('#');
-
-        // Calcula variações para o badge
-        const badgeBgHex = useHex ? this.lightenColor(primaryHex, 0.9) : null;
-        const badgeTextHex = useHex ? primaryHex : null;
-
-        // Gradiente de Fundo (Mantido)
-        let backgroundStyle;
-        if (data.colors?.background && data.colors.background !== 'transparent') {
-            backgroundStyle = `background-color: ${data.colors.background};`;
-        } else {
-            backgroundStyle = `background: linear-gradient(135deg, #ffffff 0%, ${primaryHex}08 50%, #ffffff 100%);`;
-        }
-
-        // Estilo do Ícone (Squircle)
-        const iconBgStyle = `background-color: ${primaryHex}1A; color: ${primaryHex};`;
+        // Resolve cores usando o sistema de cores do site
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
+        const primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#2563eb');
+        const bgHex = this.resolveColorHex(data.colors?.background, 'background', '#ffffff');
+        const primary50Hex = this.hexToRgba(primaryHex, 0.1);
 
         this.colors = {
-            backgroundStyle: backgroundStyle,
-            iconBgStyle: iconBgStyle,
-            icon: primaryHex,
-            title: primaryHex, // Usa cor primária diretamente
-            titleHex: primaryHex,
-            description: '#4b5563',
-            badgeBg: useHex ? '' : this.getColorVariant(this.resolveColor(null, 'primary', 'gray'), 100),
-            badgeText: useHex ? '' : this.getColorVariant(this.resolveColor(null, 'primary', 'gray'), 700),
-            badgeBgHex: badgeBgHex,
-            badgeTextHex: badgeTextHex,
-            useHex: useHex
+            background: bgBase,
+            backgroundHex: bgHex,
+            primary: primaryHex,
+            primary50: primary50Hex,
+            title: 'gray-900',
+            description: 'gray-600'
         };
-
-        this.injectStyles();
     }
 
-    injectStyles() {
-        if (document.getElementById('benefits-flow-styles')) return;
 
-        const style = document.createElement('style');
-        style.id = 'benefits-flow-styles';
-        style.textContent = `
-            .benefit-flow-row {
-                /* Reduzi um pouco a margem inferior já que os itens são menores */
-                margin-bottom: 3.5rem;
-            }
-            .benefit-flow-row:last-child {
-                margin-bottom: 0;
-            }
-
-            .flow-icon-box {
-                /* REDUÇÃO: de 4.5rem (72px) para 3.5rem (56px) */
-                width: 3.5rem;
-                height: 3.5rem;
-                border-radius: 0.75rem; /* Ajuste no arredondamento */
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                flex-shrink: 0;
-                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            }
-
-            .benefit-flow-row:hover .flow-icon-box {
-                transform: scale(1.1) rotate(-3deg);
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            }
-
-            @media (max-width: 768px) {
-                .benefit-flow-row, .benefit-flow-row-reverse {
-                    flex-direction: column !important;
-                    align-items: flex-start !important;
-                    text-align: left !important;
-                }
-                .benefit-flow-gap {
-                    gap: 1rem !important;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    }
-
-    renderIcon(benefit) {
-        let iconType = benefit.iconType;
-        const icon = benefit.icon || '';
-        if (!iconType) {
-            const iconLower = icon.toLowerCase().trim();
-            iconType = (iconLower.includes('fa-') || iconLower.startsWith('fas ')) ? 'fontawesome' : 'lucide';
-        }
-
-        // Ícones menores para harmonizar com o texto
-        if (iconType === 'fontawesome') {
-            return `<i class="${icon}" style="font-size: 1.25rem; color: inherit;"></i>`;
-        } else {
-            return `<i data-lucide="${icon}" class="w-6 h-6" style="color: inherit;"></i>`;
-        }
+    getDefaultIcon(index) {
+        // Ícones variados baseados no índice para evitar repetição
+        const icons = [
+            'fas fa-rocket',
+            'fas fa-lightbulb',
+            'fas fa-shield-alt',
+            'fas fa-chart-line',
+            'fas fa-users',
+            'fas fa-cog',
+            'fas fa-star',
+            'fas fa-heart',
+            'fas fa-trophy',
+            'fas fa-gem',
+            'fas fa-bolt',
+            'fas fa-fire'
+        ];
+        return icons[index % icons.length];
     }
 
     renderBenefit(benefit, index) {
         const c = this.colors;
-        const isEven = index % 2 === 0;
-        const directionClass = isEven ? 'flex-row' : 'flex-row-reverse benefit-flow-row-reverse';
-
-        // Suporta tanto 'text' quanto 'title'/'description'
         const benefitTitle = benefit.title || benefit.text || '';
         const benefitDescription = benefit.description || '';
+        // Usa o ícone fornecido ou um ícone padrão variado
+        const icon = benefit.icon || this.getDefaultIcon(index);
+        const isEven = index % 2 === 0;
+        const alignment = isEven ? 'lg:flex-row' : 'lg:flex-row-reverse';
+        const textAlign = isEven ? 'lg:text-left' : 'lg:text-right';
 
         return `
-            <div class="benefit-flow-row flex ${directionClass} items-center gap-6 md:gap-16 benefit-flow-gap w-full group">
-
-                <div class="flow-icon-box" style="${c.iconBgStyle}">
-                    ${this.renderIcon(benefit)}
+            <div class="group relative mb-16 lg:mb-20 last:mb-0">
+                <div class="flex flex-col ${alignment} items-center gap-8 lg:gap-12">
+                    <!-- Ícone com número -->
+                    <div class="relative flex-shrink-0">
+                        <div class="relative w-20 h-20 lg:w-24 lg:h-24 rounded-2xl flex items-center justify-center transition-all duration-500 group-hover:scale-110 group-hover:rotate-3" style="background: linear-gradient(135deg, ${c.primary} 0%, ${this.darkenColor(c.primary, 0.15)} 100%); box-shadow: 0 10px 30px ${this.hexToRgba(c.primary, 0.3)};">
+                            <i class="${icon} text-2xl lg:text-3xl text-white"></i>
+                        </div>
+                        <div class="absolute -top-2 -right-2 w-8 h-8 lg:w-10 lg:h-10 rounded-full flex items-center justify-center font-bold text-white text-sm lg:text-base" style="background-color: ${c.primary};">
+                            ${index + 1}
+                        </div>
+                    </div>
+                    
+                    <!-- Conteúdo -->
+                    <div class="flex-1 ${textAlign} text-center lg:text-left max-w-xl">
+                        ${benefitTitle ? `
+                            <h3 class="font-bold text-xl lg:text-2xl text-gray-900 mb-2 leading-tight">
+                                ${benefitTitle}
+                            </h3>
+                        ` : ''}
+                        ${benefitDescription ? `
+                            <p class="text-sm lg:text-base text-gray-600 leading-relaxed">
+                                ${benefitDescription}
+                            </p>
+                        ` : ''}
+                    </div>
                 </div>
-
-                <div class="flex-1 text-left">
-                    ${benefitTitle ? `
-                        <h3 class="font-bold text-lg md:text-xl mb-2 tracking-tight leading-snug" style="color: ${c.titleHex};">
-                            ${benefitTitle}
-                        </h3>
-                    ` : ''}
-
-                    ${benefitDescription ? `
-                        <p class="text-sm md:text-base leading-relaxed text-gray-600 font-normal max-w-2xl" style="color: ${c.description};">
-                            ${benefitDescription}
-                        </p>
-                    ` : ''}
-                </div>
+                
+                <!-- Linha conectora decorativa (apenas desktop) -->
+                ${index < this.benefits.length - 1 ? `
+                    <div class="hidden lg:block absolute left-1/2 transform -translate-x-1/2 mt-8" style="top: 100px;">
+                        <div class="w-0.5 h-16" style="background: linear-gradient(to bottom, ${c.primary}, transparent);"></div>
+                        <div class="absolute left-1/2 transform -translate-x-1/2 -top-2 w-4 h-4 rounded-full" style="background-color: ${c.primary};"></div>
+                    </div>
+                ` : ''}
             </div>
         `;
     }
 
     render() {
-        const benefitsHtml = this.benefits.map((b, i) => this.renderBenefit(b, i)).join('');
         const c = this.colors;
+        const benefitsHtml = this.benefits.map((b, i) => this.renderBenefit(b, i)).join('');
 
         return `
-            <section id="${this.id}" class="py-20 md:py-24 w-full" style="${this.colors.backgroundStyle}">
-                <div class="container mx-auto px-4 md:px-8">
+            <section id="${this.id || ''}" class="py-16 lg:py-24 px-4 sm:px-6 lg:px-8" style="background-color: ${c.backgroundHex};">
+                <div class="max-w-4xl mx-auto">
                     ${this.tag || this.title || this.description || this.paragraphs.length > 0 ? `
-                        <div class="text-center max-w-3xl mx-auto mb-16">
+                        <div class="text-center max-w-3xl mx-auto mb-12 lg:mb-16">
                             ${this.tag ? `
-                                <div class="inline-block px-4 py-2 rounded-full ${c.useHex ? '' : `bg-${c.badgeBg} text-${c.badgeText}`} text-xs font-bold uppercase tracking-widest mb-6" ${c.useHex ? `style="background-color: ${c.badgeBgHex}; color: ${c.badgeTextHex};"` : ''}>
+                                <span class="inline-block px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider mb-6" style="background-color: ${c.primary50}; color: ${c.primary};">
                                     ${this.tag}
-                                </div>
+                                </span>
                             ` : ''}
                             ${this.title ? `
-                                <h2 class="text-3xl md:text-4xl font-black mb-6 tracking-tight" style="color: ${c.titleHex};">
+                                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                                     ${this.title}
                                 </h2>
                             ` : ''}
                             ${this.description ? `
-                                <p class="text-lg mb-6" style="color: ${c.description};">
+                                <p class="text-lg text-gray-600 mb-6 leading-relaxed">
                                     ${this.description}
                                 </p>
                             ` : ''}
                             ${this.paragraphs.length > 0 ? this.paragraphs.map(p => `
-                                <p class="text-base mb-4 last:mb-0" style="color: ${c.description};">
+                                <p class="text-base text-gray-600 mb-4 last:mb-0 leading-relaxed">
                                     ${p}
                                 </p>
                             `).join('') : ''}
                         </div>
                     ` : ''}
-                    <div class="flex flex-col w-full">
+                    <div class="relative">
                         ${benefitsHtml}
                     </div>
                 </div>
@@ -199,7 +150,6 @@ class BenefitsGridComponent extends BaseComponent {
         const target = document.getElementById(targetId);
         if (target) {
             target.innerHTML = this.render();
-            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
     }
 

@@ -13,7 +13,8 @@ class HeroImageBadgeComponent extends BaseComponent {
      * @param {string} data.description - Descrição
      * @param {Array} data.buttons - Array de botões { text: string, href: string, style: string, icon: string, class: string, hero: boolean }
      * @param {Object} data.rating - Informações de avaliação { stars: number, text: string }
-     * @param {string} data.imageUrl - URL da imagem
+     * @param {string} data.imageUrl - URL da imagem (fallback se logoUrl não for fornecido)
+     * @param {string} data.logoUrl - URL da logo do usuário (prioridade sobre imageUrl)
      * @param {string} data.imageAlt - Texto alternativo da imagem
      * @param {Object} data.badge - Badge flutuante { icon: string, title: string, text: string }
      * @param {Object} data.colors - Cores customizáveis (opcional)
@@ -30,9 +31,19 @@ class HeroImageBadgeComponent extends BaseComponent {
         this.description = data.description || '';
         this.buttons = data.buttons || [];
         this.rating = data.rating || null;
+        // Prioriza logoUrl sobre imageUrl - sempre usa logoUrl se disponível
+        // Tenta pegar logoUrl do header se não foi passado diretamente
+        this.logoUrl = data.logoUrl || '';
+        this.logoAlt = data.logoAlt || '';
         this.imageUrl = data.imageUrl || '';
         this.imageAlt = data.imageAlt || '';
         this.badge = data.badge || null;
+        
+        // Se não tiver logoUrl mas tiver imageUrl, tenta usar imageUrl como logo
+        // Se logoUrl estiver disponível, força seu uso e ignora imageUrl
+        if (this.logoUrl) {
+            this.imageUrl = ''; // Limpa imageUrl quando logoUrl está disponível
+        }
 
         // Resolve cores do tema (override > tema > fallback)
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#16A34A');
@@ -332,6 +343,7 @@ class HeroImageBadgeComponent extends BaseComponent {
      */
     render() {
         this.injectStyles();
+        
         const tagHtml = this.tag ? `
             <span class="hero-tag">
                 ${this.tagIcon ? `<i class="${this.tagIcon}"></i> ` : ''}
@@ -339,15 +351,23 @@ class HeroImageBadgeComponent extends BaseComponent {
             </span>
         ` : '';
 
-        const titleHtml = this.titleHighlight
-            ? `${this.title} <span class="highlight-text">${this.titleHighlight}</span>`
-            : this.title;
-
         const buttonsHtml = this.buttons
-            .map(btn => {
-                const style = btn.style || '';
+            .map((btn, index) => {
+                const isPrimary = index === 0; // Primeiro botão é sempre primário
                 const icon = btn.icon ? ` <i class="${btn.icon}"></i>` : '';
-                return `<a href="${btn.href}" class="btn ${btn.class || 'btn-primary'} ${btn.hero ? 'btn-hero' : ''}" style="${style}">${btn.text}${icon}</a>`;
+                
+                // SEMPRE usa estilo inline para garantir contraste, mesmo se tiver classe
+                const primaryStyle = `background: ${this.primaryHex} !important; color: white !important; box-shadow: 0 10px 25px ${this.hexToRgba(this.primaryHex, 0.5)} !important; font-weight: 700 !important; padding: 15px 40px !important; border-radius: 12px !important; transition: all 0.3s ease !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; border: none !important; cursor: pointer !important; text-decoration: none !important;`;
+                const secondaryStyle = `background: white !important; color: ${this.primaryHex} !important; border: 2px solid ${this.primaryHex} !important; box-shadow: 0 4px 15px ${this.hexToRgba(this.primaryHex, 0.2)} !important; font-weight: 700 !important; padding: 12px 30px !important; border-radius: 12px !important; transition: all 0.3s ease !important; display: inline-flex !important; align-items: center !important; justify-content: center !important; cursor: pointer !important; text-decoration: none !important;`;
+                
+                const style = isPrimary ? primaryStyle : secondaryStyle;
+                
+                return `<a href="${btn.href || '#'}" 
+                           style="${style}"
+                           onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 15px 35px ${this.hexToRgba(this.primaryHex, 0.7)}';"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='${isPrimary ? `0 10px 25px ${this.hexToRgba(this.primaryHex, 0.5)}` : `0 4px 15px ${this.hexToRgba(this.primaryHex, 0.2)}`}';">
+                           ${btn.text}${icon}
+                       </a>`;
             })
             .join('');
 
@@ -374,6 +394,24 @@ class HeroImageBadgeComponent extends BaseComponent {
             </div>
         ` : '';
 
+        // Tenta pegar logoUrl do header se não foi passado
+        let finalLogoUrl = this.logoUrl;
+        if (!finalLogoUrl) {
+            // Tenta encontrar o header e pegar a logo
+            const headerImg = document.querySelector('#main-header img[src]');
+            if (headerImg) {
+                finalLogoUrl = headerImg.getAttribute('src');
+            }
+        }
+        
+        // Se ainda não tiver logo, usa imageUrl como fallback
+        const imageToUse = finalLogoUrl || this.imageUrl;
+        const isLogo = !!finalLogoUrl;
+
+        const titleHtml = this.titleHighlight
+            ? `${this.title} <span class="highlight-text">${this.titleHighlight}</span>`
+            : this.title;
+
         return `
             <section id="home" class="hero">
                 <div class="hero-blob blob-1"></div>
@@ -393,7 +431,10 @@ class HeroImageBadgeComponent extends BaseComponent {
                     </div>
 
                     <div class="hero-img-wrapper">
-                        <img src="${this.imageUrl}" alt="${this.imageAlt}" class="hero-main-img">
+                        <img src="${imageToUse}" 
+                             alt="${this.logoAlt || this.imageAlt || 'Logo'}" 
+                             class="hero-main-img"
+                             style="${isLogo ? 'border-radius: 50% !important; object-fit: cover !important; animation: none !important;' : ''}">
                         ${badgeHtml}
                     </div>
                 </div>
