@@ -64,13 +64,16 @@ class HeroComponent extends BaseComponent {
         const c = this.colors;
 
         return `
-            <header class="relative min-h-screen flex items-center justify-center overflow-hidden isolate bg-black pt-12">
+            <header class="relative min-h-screen flex items-center justify-center overflow-hidden isolate bg-black pt-20 md:pt-12">
 
                 <div class="absolute inset-0 z-0">
                     <img src="${this.backgroundImage}"
                          alt="${this.backgroundAlt}"
-                         class="w-full h-full object-cover scale-100 opacity-80"
+                         class="w-full h-full object-cover scale-100 opacity-20"
                          style="filter: blur(10px) brightness(1.1) contrast(1.0);">
+
+                    <!-- Blur overlay com cor primária -->
+                    <div class="absolute inset-0 backdrop-blur-sm" style="background-color: ${this.hexToRgba(c.ctaPrimaryBg, 0.3)};"></div>
 
                     <div class="absolute inset-0 opacity-25 mix-blend-overlay" style="background-color: ${c.overlay};"></div>
 
@@ -81,10 +84,10 @@ class HeroComponent extends BaseComponent {
                 <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-pulse" style="background-color: ${c.titleHighlight}; opacity: 0.2; animation-duration: 4s;"></div>
                 <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] blur-[130px] rounded-full pointer-events-none mix-blend-overlay" style="background-color: ${c.ctaPrimaryBg}; opacity: 0.1;"></div>
 
-                <div class="container mx-auto px-6 relative z-10 text-center">
+                <div class="container mx-auto px-4 md:px-6 relative z-10 text-center">
 
-                    <div class="inline-flex items-center justify-center mb-8" data-aos="fade-down" data-aos-duration="1000">
-                        <span class="py-2 px-6 rounded-full text-[10px] md:text-xs font-black uppercase tracking-[0.4em] backdrop-blur-md bg-white/10 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)]" style="color: ${c.badge};">
+                    <div class="inline-flex items-center justify-center mb-6 md:mb-8 mt-4 md:mt-0" data-aos="fade-down" data-aos-duration="1000">
+                        <span class="py-1.5 px-4 md:py-2 md:px-6 rounded-full text-[9px] md:text-xs font-black uppercase tracking-[0.3em] md:tracking-[0.4em] backdrop-blur-md bg-white/10 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)]" style="color: ${c.badge};">
                             ${this.badge}
                         </span>
                     </div>

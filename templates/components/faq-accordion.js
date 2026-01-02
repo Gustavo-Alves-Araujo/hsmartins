@@ -42,11 +42,14 @@ class FaqAccordionComponent extends BaseComponent {
             .faq-content-wrapper {
                 max-height: 0;
                 opacity: 0;
+                overflow: hidden;
                 display: none;
             }
             .faq-item.active .faq-content-wrapper {
+                max-height: 1000px;
                 opacity: 1;
-                display: block;
+                display: block !important;
+                overflow: visible;
             }
             .faq-item.active .faq-chevron {
                 transform: rotate(180deg);
@@ -85,7 +88,7 @@ class FaqAccordionComponent extends BaseComponent {
                     </div>
                 </button>
 
-                <div class="faq-content-wrapper overflow-hidden">
+                <div class="faq-content-wrapper">
                     <div class="px-6 pb-6 text-slate-600 leading-relaxed pt-2">
                         <div class="h-px w-full bg-slate-100 mb-4"></div>
                         ${item.answer}

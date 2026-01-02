@@ -26,9 +26,11 @@ class CardGridComponent extends BaseComponent {
      */
     constructor(data) {
         super();
+        this.id = data.id || '';
         this.title = data.title;
-        this.subtitle = data.subtitle || '';
-        this.items = data.items || [];
+        this.subtitle = data.subtitle || data.description || '';
+        // Aceita tanto 'cards' quanto 'items'
+        this.items = data.cards || data.items || [];
 
         // Layout
         this.layout = {
@@ -68,7 +70,7 @@ class CardGridComponent extends BaseComponent {
             <div class="group relative overflow-hidden rounded-2xl cursor-pointer transform transition-all duration-300 hover:scale-[1.02] hover:shadow-2xl"
                  style="aspect-ratio: ${this.layout.aspectRatio};">
                 <img src="${item.image}"
-                     alt="${item.alt}"
+                     alt="${item.alt || item.imageAlt || ''}"
                      class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
                 <div class="absolute inset-0 bg-gradient-to-t from-${c.cardOverlay}/90 via-${c.cardOverlay}/30 to-transparent flex flex-col justify-end p-6 md:p-8">
                     <div class="transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
@@ -92,7 +94,7 @@ class CardGridComponent extends BaseComponent {
         const gridCols = `md:grid-cols-${this.layout.columns}`;
 
         return `
-            <section class="py-20 md:py-24 bg-${c.background}">
+            <section ${this.id ? `id="${this.id}"` : ''} class="py-20 md:py-24 bg-${c.background}">
                 <div class="container mx-auto px-6">
                     <!-- Header -->
                     <div class="text-center mb-12 md:mb-16">
