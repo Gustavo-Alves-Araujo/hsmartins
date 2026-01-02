@@ -168,7 +168,13 @@ class FooterContactComponent extends BaseComponent {
 
                     <!-- Bottom Bar -->
                     <div style="border-top: 1px solid ${c.borderColor}; color: ${c.textMuted};" class="pt-8 flex flex-col md:flex-row justify-between items-center text-sm gap-4">
-                        <p>${this.copyright}</p>
+                        <div class="flex flex-col md:flex-row items-center gap-2">
+                            ${this.copyright ? `<p>${this.copyright}</p>` : ''}
+                            ${this.copyright ? '<span>•</span>' : ''}
+                            <p>
+                                Feito por: <a href="https://www.axolutions.com.br" target="_blank" rel="noopener noreferrer" class="hover:opacity-80 transition" style="color: ${c.iconColor};">www.axolutions.com.br</a>
+                            </p>
+                        </div>
                         ${this.tags.length > 0 ? `
                             <div class="flex flex-wrap justify-center items-center gap-1">
                                 ${tagsHtml}

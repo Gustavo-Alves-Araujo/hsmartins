@@ -107,69 +107,47 @@ class FeatureHighlightComponent extends BaseComponent {
             .map(f => this.renderFeature(f))
             .filter(html => html !== '') // Remove itens vazios
             .join('');
-        const imageFirst = this.layout.imagePosition === 'left';
-        const flexOrder = imageFirst ? '' : 'lg:flex-row-reverse';
 
         return `
             <section class="py-16 lg:py-24 px-4 sm:px-6 lg:px-8" style="background-color: ${c.backgroundHex};">
-                <div class="max-w-7xl mx-auto">
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center ${flexOrder}">
-                        <!-- Image Side -->
-                        <div class="order-1 ${imageFirst ? 'lg:order-1' : 'lg:order-2'}">
-                            <div class="relative">
-                                <div class="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 shadow-lg">
-                                    ${this.image ? `
-                                        <img src="${this.image}"
-                                             alt="${this.imageAlt || ''}"
-                                             class="w-full h-full object-cover">
-                                    ` : `
-                                        <div class="w-full h-full flex items-center justify-center bg-gray-100">
-                                            <div class="w-32 h-32 rounded-full bg-gray-200"></div>
-                                        </div>
-                                    `}
-                                </div>
+                <div class="max-w-4xl mx-auto">
+                    <div class="space-y-8">
+                        ${this.badge ? `
+                            <div class="text-center">
+                                <span class="inline-block px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider mb-6" style="background-color: ${c.primary}; color: white;">
+                                    ${this.badge}
+                                </span>
                             </div>
+                        ` : ''}
+
+                        <div class="text-center space-y-4">
+                            <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                                ${this.title || ''}
+                            </h2>
                         </div>
 
-                        <!-- Content Side -->
-                        <div class="order-2 ${imageFirst ? 'lg:order-2' : 'lg:order-1'} space-y-8">
-                            ${this.badge ? `
-                                <div>
-                                    <span class="inline-block px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider mb-6" style="background-color: ${c.primary}; color: white;">
-                                        ${this.badge}
-                                    </span>
-                                </div>
-                            ` : ''}
+                        ${this.description ? `
+                            <p class="text-lg text-gray-600 leading-relaxed text-center max-w-2xl mx-auto">
+                                ${this.description}
+                            </p>
+                        ` : ''}
 
-                            <div class="space-y-4">
-                                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
-                                    ${this.title || ''}
-                                </h2>
+                        ${featuresHtml ? `
+                            <ul class="space-y-4 max-w-2xl mx-auto">
+                                ${featuresHtml}
+                            </ul>
+                        ` : ''}
+
+                        ${this.cta ? `
+                            <div class="text-center pt-2">
+                                <a href="${this.cta.href || '#'}"
+                                   ${this.cta.target ? `target="${this.cta.target}"` : ''}
+                                   class="inline-flex items-center justify-center gap-2 px-8 py-3.5 font-semibold rounded-full text-white hover:opacity-90 transition-opacity duration-200"
+                                   style="background-color: ${c.primary};">
+                                    ${this.cta.text || 'Saiba Mais'}
+                                </a>
                             </div>
-
-                            ${this.description ? `
-                                <p class="text-lg text-gray-600 leading-relaxed max-w-xl">
-                                    ${this.description}
-                                </p>
-                            ` : ''}
-
-                            ${featuresHtml ? `
-                                <ul class="space-y-4">
-                                    ${featuresHtml}
-                                </ul>
-                            ` : ''}
-
-                            ${this.cta ? `
-                                <div class="pt-2">
-                                    <a href="${this.cta.href || '#'}"
-                                       ${this.cta.target ? `target="${this.cta.target}"` : ''}
-                                       class="inline-flex items-center justify-center gap-2 px-8 py-3.5 font-semibold rounded-lg text-white hover:opacity-90 transition-opacity duration-200"
-                                       style="background-color: ${c.primary};">
-                                        ${this.cta.text || 'Saiba Mais'}
-                                    </a>
-                                </div>
-                            ` : ''}
-                        </div>
+                        ` : ''}
                     </div>
                 </div>
             </section>
