@@ -700,143 +700,93 @@ Antes de entregar o JSON, verifique:
 
 ---
 
-**CATÁLOGO DE COMPONENTES (Reference Only - Do not modify):**
-*(O catálogo JSON completo deve ser anexado aqui ou fornecido no contexto da IA)*
 You can program an AI agent to interact with the Unsplash platform programmatically
 
---
 
-## 🖼️ REGRAS CRÍTICAS PARA IMAGENS UNSPLASH
+🖼️ PROTOCOLO DE IMAGENS (MODO INPUT-DRIVEN)
 
-### ⚠️ NUNCA INVENTE URLs - USE APENAS ESTE FORMATO:
+Fonte das imagens
+	•	A IA NÃO gera, NÃO escolhe e NÃO infere imagens
+	•	Todas as imagens já vêm prontas no objeto de entrada
+	•	A IA APENAS CONSOME os campos abaixo
 
-**URLs válidas do Unsplash seguem EXATAMENTE este padrão:**
+⸻
 
-```
-https://images.unsplash.com/photo-[ID]?w=[largura]
-```
+📥 Estrutura de entrada garantida
 
-**Onde:**
-- `[ID]` = sequência numérica de 13 dígitos (ex: `1616440752223`)
-- `[largura]` = valor numérico (ex: `1920`, `800`, `600`)
+O objeto de configuração PODE conter:
 
----
-
-### ✅ EXEMPLOS DE URLs VÁLIDAS:
-
-```
-✅ https://images.unsplash.com/photo-1616440752223-2951195966ca?w=1920
-✅ https://images.unsplash.com/photo-1606813907291-d10d557cf95f?w=800
-✅ https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=1920
-```
-
----
-
-### ❌ NUNCA FAÇA ISTO:
-
-```
-❌ https://images.unsplash.com/photo-dentist-clinic?w=1920
-❌ https://images.unsplash.com/photo-restaurant-food?w=800
-❌ https://images.unsplash.com/photo-modern-office?w=1920
-❌ URLs inventadas ou com palavras descritivas
-```
-
----
-
-### 📚 BANCO DE IDs APROVADOS POR NICHO:
-
-Use **APENAS** estes IDs testados e validados:
-
-#### **Clínicas / Saúde:**
-```json
 {
-  "hero": "1606813907291-d86efa9b94db",
-  "about": "1631217868264-e5b90f97f4df",
-  "consultorio": "1519494026892-80bbd2d6b6b6"
+  "logoOrProfilePicUrl": "https://...",
+  "unsplashImages": {
+    "primary": "https://images.unsplash.com/...",
+    "secondary": "https://images.unsplash.com/..."
+  }
 }
-```
 
-#### **Restaurantes / Food:**
-```json
+
+⸻
+
+🧠 Regras de uso (CRÍTICAS)
+	•	logoOrProfilePicUrl
+	•	Deve ser usado como:
+	•	site.logoUrl
+	•	sticky-header-navigation.logoUrl
+	•	Qualquer componente que exija logo/avatar
+	•	NUNCA usar logoUrl antigo
+	•	NUNCA inventar fallback
+	•	unsplashImages.primary
+	•	Usar como imagem principal de destaque:
+	•	hero-overlay.backgroundImage
+	•	Primeira imagem de seções visuais (about-image-features, etc.)
+	•	unsplashImages.secondary
+	•	Usar como imagem de apoio:
+	•	seções secundárias
+	•	grids, cards ou banners adicionais
+	•	Nunca substituir a primary
+
+⸻
+
+❌ Proibições absolutas
+	•	❌ NÃO gerar URLs do Unsplash
+	•	❌ NÃO usar banco interno de imagens
+	•	❌ NÃO usar placeholders genéricos
+	•	❌ NÃO repetir a mesma imagem em múltiplos contextos se houver secondary
+
+Se unsplashImages não existir, a IA:
+	•	Não adiciona imagem nenhuma
+	•	Não cria fallback
+	•	Não tenta “resolver sozinha”
+
+⸻
+
+✅ Exemplo de aplicação correta
+
+Entrada:
+
 {
-  "hero": "1589829545856-d10d557cf95f",
-  "pratos": "1555939594-58d7cb561ad1",
-  "ambiente": "1517248135467-4c7edcad34c4"
+  "logoOrProfilePicUrl": "https://www.exemplo.com.br/logo.png",
+  "unsplashImages": {
+    "primary": "https://images.unsplash.com/photo-AAA",
+    "secondary": "https://images.unsplash.com/photo-BBB"
+  }
 }
-```
 
-#### **Personal Trainer / Fitness:**
-```json
+Uso esperado no JSON final:
+
 {
-  "hero": "1616440752223-2951195966ca",
-  "treino": "1571019613454-1cb2f99b2d8b",
-  "academia": "1534438327276-14e5300c3a48"
+  "site": {
+    "logoUrl": "https://www.exemplo.com.br/logo.png"
+  },
+  "hero-overlay": {
+    "backgroundImage": "https://images.unsplash.com/photo-AAA"
+  },
+  "about-image-features": {
+    "imageUrl": "https://images.unsplash.com/photo-BBB"
+  }
 }
-```
 
-#### **Arquitetura:**
-```json
-{
-  "hero": "1600585154340-be6161a56a0c",
-  "projeto": "1613490493576-7fde63acd811",
-  "interior": "1586023492125-27b2c045efd7"
-}
-```
 
-#### **Assistência Técnica / Tech:**
-```json
-{
-  "hero": "1616440752223-2951195966ca",
-  "reparo": "1597740985671-2a8a3b80502e",
-  "bancada": "1581092160562-40aa08e78837"
-}
-```
-
-#### **Advogados / Escritórios:**
-```json
-{
-  "hero": "1589829545856-d10d557cf95f",
-  "escritorio": "1450101499163-c8848c66ca85",
-  "juridico": "1521791055366-0d553872125f"
-}
-```
-
----
-
-### 🔒 REGRA OBRIGATÓRIA:
-
-**Antes de gerar qualquer URL de imagem:**
-
-1. ✅ Verifique se o ID está no banco aprovado acima
-2. ✅ Se não estiver, use um ID genérico que você SABE que existe
-3. ✅ Use sempre o formato exato: `https://images.unsplash.com/photo-[ID]?w=[largura]`
-4. ❌ NUNCA invente IDs novos
-5. ❌ NUNCA use palavras descritivas no lugar do ID
-
----
-
-### 🎯 IDs GENÉRICOS SEGUROS (sempre funcionam):
-
-Se não encontrar no banco acima, use um destes:
-
-```json
-{
-  "generico_profissional": "1616440752223-2951195966ca",
-  "generico_escritorio": "1606813907291-d86efa9b94db",
-  "generico_moderno": "1589829545856-d10d557cf95f",
-  "generico_pessoa": "1581092160562-40aa08e78837"
-}
-```
-
----
-
-### ✅ CHECKLIST ANTES DE GERAR:
-
-- [ ] URL começa com `https://images.unsplash.com/photo-`
-- [ ] ID tem exatamente 13 dígitos ou formato `XXXXX-XXXXXXXX`
-- [ ] Termina com `?w=[numero]`
-- [ ] ID está no banco aprovado OU é um genérico seguro
-- [ ] NÃO contém palavras descritivas
 
 ---
 
