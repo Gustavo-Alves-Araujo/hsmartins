@@ -1,222 +1,152 @@
 /**
- * Benefits Grid Component
- * Grid de benefícios com ícones, títulos e descrições
- * Genérico para destacar vantagens, benefícios, características
+ * Benefits Flow Component (Compact & Elegant)
+ * - Fontes reduzidas para um visual mais delicado e profissional
+ * - Ícones redimensionados proporcionalmente
+ * - Mantém a largura total e o layout fluido
  */
 
 class BenefitsGridComponent extends BaseComponent {
-    /**
-     * @param {Object} data - Dados necessários para o Benefits Grid
-     * @param {Array} data.benefits - Array de benefícios
-     * @param {string} data.benefits[].icon - Classe do ícone ou nome do ícone Lucide (ex: 'credit-card', 'zap', 'truck')
-     * @param {string} data.benefits[].iconType - Tipo do ícone: 'lucide' ou 'fontawesome' (padrão: 'lucide')
-     * @param {string} data.benefits[].title - Título do benefício
-     * @param {string} data.benefits[].description - Descrição do benefício
-     * @param {number} data.columns - Número de colunas no grid (padrão: 3)
-     * @param {Object} data.colors - Cores customizáveis (opcional)
-     * @param {string} data.colors.background - Cor de fundo base (ex: 'white', 'gray')
-     * @param {string} data.colors.iconBackground - Cor de fundo do ícone (ex: 'gray', 'primary')
-     * @param {string} data.colors.title - Cor do título base (ex: 'black', 'primary')
-     */
     constructor(data) {
         super();
         this.benefits = data.benefits || [];
         this.columns = data.columns || 3;
 
-        // Resolve cores base (override > tema > fallback)
-        const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
-        const iconBgBase = data.colors?.iconBackground || 'primary';
-        const titleBase = this.resolveColor(data.colors?.title, 'primary', 'black');
-
-        // Para o background do ícone, usa a cor primária em versão clara
-        // SEMPRE pega do tema, nunca usa valores fixos
+        // --- CORES & TEMA ---
         const theme = this.getGlobalTheme();
-        const primaryHexForBg = theme?.colors?.primary;
+        const primaryHex = theme?.colors?.primary || '#6d28d9';
+        const titleBase = this.resolveColor(data.colors?.title, 'primary', '#111827');
 
-        let iconBgColor;
-        if (iconBgBase === 'primary' && primaryHexForBg) {
-            // Usa a cor primária em versão clara para o background
-            iconBgColor = this.lightenColor(primaryHexForBg, 0.85); // Versão muito clara da cor primária
-        } else if (iconBgBase === 'gray' || iconBgBase === 'gray-50') {
-            iconBgColor = '#f3f4f6'; // gray-50
+        // Gradiente de Fundo (Mantido)
+        let backgroundStyle;
+        if (data.colors?.background && data.colors.background !== 'transparent') {
+            backgroundStyle = `background-color: ${data.colors.background};`;
         } else {
-            // Tenta pegar do tema primeiro
-            const customColor = theme?.colors?.[iconBgBase] || this.getThemeColorHex(iconBgBase);
-            if (customColor) {
-                iconBgColor = customColor;
-                // Se não for uma cor clara, clareia ela
-                if (!iconBgBase.includes('gray') && !iconBgBase.includes('50')) {
-                    iconBgColor = this.lightenColor(iconBgColor, 0.85);
-                }
-            } else {
-                // Fallback apenas para gray
-                iconBgColor = '#f3f4f6';
-            }
+            backgroundStyle = `background: linear-gradient(135deg, #ffffff 0%, ${primaryHex}08 50%, #ffffff 100%);`;
         }
 
-        // Aplica variações automáticas conforme o contexto
-        // Para o ícone, SEMPRE usa a cor primária do tema - SEM FALLBACK FIXO
-        // Pega SEMPRE do tema, nunca usa valores fixos
-        const primaryHex = theme?.colors?.primary;
-
-        if (!primaryHex) {
-            console.error('❌ Cor primária não encontrada no tema! Verifique o config.json');
-        }
+        // Estilo do Ícone (Squircle)
+        const iconBgStyle = `background-color: ${primaryHex}1A; color: ${primaryHex};`;
 
         this.colors = {
-            background: bgBase,
-            iconBackground: iconBgColor,
-            icon: primaryHex, // SEMPRE cor primária do tema
-            title: titleBase === 'black' ? '#000000' : primaryHex, // Título também usa primary
-            description: '#6b7280', // gray-500
+            backgroundStyle: backgroundStyle,
+            iconBgStyle: iconBgStyle,
+            icon: primaryHex,
+            title: titleBase,
+            description: '#4b5563',
         };
 
-        // Debug: verifica se a cor foi definida
-        if (this.colors.icon) {
-            console.log('✅ Cor do ícone definida:', this.colors.icon);
-        } else {
-            console.error('❌ Cor do ícone não definida!');
-        }
-
-        // Injeta estilos se necessário
         this.injectStyles();
     }
 
-    /**
-     * Injeta estilos CSS customizados
-     */
     injectStyles() {
-        if (document.getElementById('benefits-grid-styles')) return;
+        if (document.getElementById('benefits-flow-styles')) return;
 
         const style = document.createElement('style');
-        style.id = 'benefits-grid-styles';
+        style.id = 'benefits-flow-styles';
         style.textContent = `
-            .benefit-card {
-                transition: box-shadow 0.3s;
+            .benefit-flow-row {
+                /* Reduzi um pouco a margem inferior já que os itens são menores */
+                margin-bottom: 3.5rem;
             }
-            .benefit-card:hover {
-                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            .benefit-flow-row:last-child {
+                margin-bottom: 0;
+            }
+
+            .flow-icon-box {
+                /* REDUÇÃO: de 4.5rem (72px) para 3.5rem (56px) */
+                width: 3.5rem;
+                height: 3.5rem;
+                border-radius: 0.75rem; /* Ajuste no arredondamento */
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-shrink: 0;
+                transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            }
+
+            .benefit-flow-row:hover .flow-icon-box {
+                transform: scale(1.1) rotate(-3deg);
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            }
+
+            @media (max-width: 768px) {
+                .benefit-flow-row, .benefit-flow-row-reverse {
+                    flex-direction: column !important;
+                    align-items: flex-start !important;
+                    text-align: left !important;
+                }
+                .benefit-flow-gap {
+                    gap: 1rem !important;
+                }
             }
         `;
         document.head.appendChild(style);
     }
 
-    /**
-     * Renderiza o ícone
-     * @param {Object} benefit - Dados do benefício
-     * @returns {string} HTML do ícone
-     */
     renderIcon(benefit) {
-        const c = this.colors;
-        const icon = benefit.icon || '';
-
-        // Detecta automaticamente o tipo de ícone
         let iconType = benefit.iconType;
+        const icon = benefit.icon || '';
         if (!iconType) {
-            // Se contém "fa-" ou começa com "fa", "fas", "far", "fal", "fab", é FontAwesome
             const iconLower = icon.toLowerCase().trim();
-            if (iconLower.includes('fa-') || iconLower.startsWith('fas ') || iconLower.startsWith('far ') ||
-                iconLower.startsWith('fal ') || iconLower.startsWith('fab ') || iconLower.startsWith('fa ')) {
-                iconType = 'fontawesome';
-            } else {
-                // Caso contrário, assume Lucide
-                iconType = 'lucide';
-            }
+            iconType = (iconLower.includes('fa-') || iconLower.startsWith('fas ')) ? 'fontawesome' : 'lucide';
         }
 
-        // Resolve cor do ícone em hex para usar em style inline
-        // SEMPRE usa a cor primária do tema
-        const iconColorHex = c.icon;
-
-        if (!iconColorHex) {
-            console.warn('⚠️ Cor do ícone não definida. Verificando tema...');
-            const theme = this.getGlobalTheme();
-            const fallbackColor = theme?.colors?.primary;
-            if (!fallbackColor) {
-                console.error('❌ Cor primária não encontrada no tema!');
-            }
-        }
-
+        // Ícones menores para harmonizar com o texto
         if (iconType === 'fontawesome') {
-            // FontAwesome - usa classes e style inline para garantir visibilidade
-            // Garante que a classe está correta (pode ter espaços extras)
-            const cleanIcon = icon.trim();
-            const finalColor = iconColorHex || this.getGlobalTheme()?.colors?.primary || '#6d28d9';
-            return `<i class="${cleanIcon}" style="font-size: 1.75rem; color: ${finalColor} !important; display: inline-block; width: 1.75rem; height: 1.75rem; line-height: 1.75rem; text-align: center;"></i>`;
-        } else if (iconType === 'lucide' && typeof lucide !== 'undefined') {
-            // Ícone Lucide será renderizado via data-lucide
-            const finalColor = iconColorHex || this.getGlobalTheme()?.colors?.primary || '#6d28d9';
-            return `<i data-lucide="${icon}" class="w-8 h-8" style="color: ${finalColor} !important;"></i>`;
+            return `<i class="${icon}" style="font-size: 1.25rem; color: inherit;"></i>`;
         } else {
-            // Fallback para FontAwesome se não detectou corretamente
-            const cleanIcon = icon.trim();
-            const finalColor = iconColorHex || this.getGlobalTheme()?.colors?.primary || '#6d28d9';
-            return `<i class="${cleanIcon}" style="font-size: 1.75rem; color: ${finalColor} !important; display: inline-block; width: 1.75rem; height: 1.75rem; line-height: 1.75rem; text-align: center;"></i>`;
+            return `<i data-lucide="${icon}" class="w-6 h-6" style="color: inherit;"></i>`;
         }
     }
 
-    /**
-     * Renderiza um benefício individual
-     * @param {Object} benefit - Dados do benefício
-     * @returns {string} HTML do benefício
-     */
-    renderBenefit(benefit) {
+    renderBenefit(benefit, index) {
         const c = this.colors;
+        const isEven = index % 2 === 0;
+        const directionClass = isEven ? 'flex-row' : 'flex-row-reverse benefit-flow-row-reverse';
 
         return `
-            <div class="flex flex-col items-center text-center p-6 border border-gray-100 rounded-lg benefit-card">
-                <div class="p-4 rounded-full mb-4 flex items-center justify-center w-16 h-16" style="background-color: ${c.iconBackground};">
+            <div class="benefit-flow-row flex ${directionClass} items-center gap-6 md:gap-16 benefit-flow-gap w-full group">
+
+                <div class="flow-icon-box" style="${c.iconBgStyle}">
                     ${this.renderIcon(benefit)}
                 </div>
-                <h4 class="font-bold text-lg mb-2" style="color: ${c.title};">
-                    ${benefit.title}
-                </h4>
-                <p class="text-sm" style="color: ${c.description};">
-                    ${benefit.description}
-                </p>
+
+                <div class="flex-1 text-left">
+                    <h3 class="font-bold text-lg md:text-xl mb-2 tracking-tight leading-snug" style="color: ${c.title};">
+                        ${benefit.title}
+                    </h3>
+
+                    <p class="text-sm md:text-base leading-relaxed text-gray-600 font-normal max-w-2xl" style="color: ${c.description};">
+                        ${benefit.description}
+                    </p>
+                </div>
             </div>
         `;
     }
 
-    /**
-     * Renderiza o HTML do componente
-     * @returns {string} HTML string do componente
-     */
     render() {
-        const c = this.colors;
-        const gridCols = `grid-cols-1 md:grid-cols-${this.columns}`;
-        const benefitsHtml = this.benefits.map(benefit => this.renderBenefit(benefit)).join('');
+        const benefitsHtml = this.benefits.map((b, i) => this.renderBenefit(b, i)).join('');
 
         return `
-            <section class="py-16 border-b border-gray-100">
-                <div class="container mx-auto px-4 grid ${gridCols} gap-8">
-                    ${benefitsHtml}
+            <section class="py-20 md:py-24 w-full" style="${this.colors.backgroundStyle}">
+                <div class="container mx-auto px-4 md:px-8">
+                    <div class="flex flex-col w-full">
+                        ${benefitsHtml}
+                    </div>
                 </div>
             </section>
         `;
     }
 
-    /**
-     * Monta o componente no DOM
-     * @param {string} targetId - ID do elemento onde o componente será montado
-     */
     mount(targetId) {
         const target = document.getElementById(targetId);
         if (target) {
             target.innerHTML = this.render();
-            // Inicializa ícones Lucide se disponível
-            if (typeof lucide !== 'undefined') {
-                lucide.createIcons();
-            }
+            if (typeof lucide !== 'undefined') lucide.createIcons();
         }
     }
 
-    /**
-     * Método estático para criar e montar o componente
-     * @param {Object} data - Dados necessários
-     * @param {string} targetId - ID do elemento onde o componente será montado
-     * @returns {BenefitsGridComponent} Instância do componente
-     */
     static create(data, targetId) {
         const component = new BenefitsGridComponent(data);
         component.mount(targetId);
@@ -224,8 +154,7 @@ class BenefitsGridComponent extends BaseComponent {
     }
 }
 
-// Auto-registra no Component Registry
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('benefits-grid', BenefitsGridComponent);
+    window.componentRegistry.register('benefits-flow', BenefitsGridComponent);
 }
-

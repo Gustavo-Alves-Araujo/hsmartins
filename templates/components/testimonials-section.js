@@ -14,18 +14,53 @@ class TestimonialsSectionComponent extends BaseComponent {
     constructor(data) {
         super();
         this.title = data.title || 'O que dizem nossos clientes';
+        this.tag = data.tag || '';
         this.overallRating = data.overallRating || {};
-        this.reviews = data.reviews || [];
+
+        // Aceita tanto 'reviews' quanto 'testimonials'
+        const reviewsData = data.reviews || data.testimonials || [];
+
+        // Normaliza os dados: mapeia 'author' para 'name', 'review' para 'text', adiciona avatar padrão se necessário
+        this.reviews = reviewsData.map(item => ({
+            avatar: item.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.author || item.name || '') + '&background=random',
+            name: item.name || item.author || '',
+            rating: item.rating || 5,
+            verified: item.verified !== undefined ? item.verified : false,
+            text: item.text || item.review || '',
+            pet: item.pet || null // Armazena info do pet se disponível
+        }));
+
+        // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
+        const theme = this.getGlobalTheme();
+        const primaryHex = theme?.colors?.primary;
+
+        if (!primaryHex) {
+            console.warn('⚠️ Cor primária não encontrada no tema. Verifique o config.json');
+        }
 
         // Resolve cores com contraste adequado
         const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
-        const primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#6366f1');
+        const primaryBase = this.resolveColor(data.colors?.primary, 'primary', 'green');
+        const useHex = primaryHex && primaryHex.startsWith('#');
+
+        // Calcula variações se for hex
+        const badgeBgHex = useHex ? this.lightenColor(primaryHex, 0.9) : null;
+        const cardBgHex = useHex ? this.lightenColor(primaryHex, 0.95) : null;
+        const badgeTextHex = useHex ? primaryHex : null;
 
         this.colors = {
             background: bgBase,
             primary: primaryHex,
+            primaryBase: primaryBase,
             title: 'gray-900',
-            text: 'gray-600'
+            text: 'gray-600',
+            badgeBg: useHex ? '' : this.getColorVariant(primaryBase, 100),
+            badgeText: useHex ? '' : this.getColorVariant(primaryBase, 600),
+            cardBg: useHex ? '' : this.getColorVariant(primaryBase, 50),
+            badgeBgHex: badgeBgHex,
+            badgeTextHex: badgeTextHex,
+            cardBgHex: cardBgHex,
+            useHex: useHex
         };
     }
 
@@ -50,30 +85,45 @@ class TestimonialsSectionComponent extends BaseComponent {
 
     render() {
         const c = this.colors;
-        const reviewsHtml = this.reviews.map(review => `
-            <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+        const reviewsHtml = this.reviews.map(review => {
+            const cardBgStyle = c.useHex
+                ? `style="background-color: ${c.cardBgHex};"`
+                : '';
+            const cardBgClass = c.useHex
+                ? 'p-6 rounded-2xl border border-gray-100'
+                : `bg-${c.cardBg} p-6 rounded-2xl border border-gray-100`;
+
+            return `
+            <div class="${cardBgClass}" ${cardBgStyle}>
                 <div class="flex items-center gap-4 mb-4">
                     <img src="${review.avatar}" alt="${review.name}" class="w-12 h-12 rounded-full object-cover">
-                    <div>
+                    <div class="flex-1">
                         <h4 class="font-bold text-gray-900">${review.name}</h4>
-                        <div class="flex text-yellow-400 text-xs">
+                        ${review.pet ? `<p class="text-xs text-gray-500 mt-0.5">${review.pet}</p>` : ''}
+                        <div class="flex text-yellow-400 text-xs mt-1">
                             ${this.renderStars(review.rating)}
                         </div>
                     </div>
                     ${review.verified ? `
-                        <div class="ml-auto text-green-600 text-xs flex items-center gap-1">
+                        <div class="ml-auto text-green-600 text-xs flex items-center gap-1 whitespace-nowrap">
                             <i class="fas fa-check-circle"></i> Compra Verificada
                         </div>
                     ` : ''}
                 </div>
                 <p class="text-gray-600 text-sm leading-relaxed">"${review.text}"</p>
             </div>
-        `).join('');
+        `;
+        }).join('');
 
         return `
             <section class="bg-white py-16 border-t border-gray-100">
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="text-center mb-12">
+                        ${this.tag ? `
+                            <div class="inline-block px-3 py-1 rounded-full ${c.useHex ? '' : `bg-${c.badgeBg} text-${c.badgeText}`} text-xs font-bold uppercase tracking-widest mb-4" ${c.useHex ? `style="background-color: ${c.badgeBgHex}; color: ${c.badgeTextHex};"` : ''}>
+                                ${this.tag}
+                            </div>
+                        ` : ''}
                         <h2 class="text-3xl font-bold text-gray-900 mb-4">${this.title}</h2>
                         ${this.overallRating.value ? `
                             <div class="flex justify-center items-center gap-2">

@@ -29,9 +29,21 @@ class AboutImageFeaturesComponent extends BaseComponent {
         this.imageAlt = data.imageAlt || '';
         this.reverse = data.reverse || false;
 
+        // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
+        const theme = this.getGlobalTheme();
+        const primaryHex = theme?.colors?.primary;
+
+        if (!primaryHex) {
+            console.warn('⚠️ Cor primária não encontrada no tema. Verifique o config.json');
+        }
+
         // RESOLUÇÃO DE CORES (Interface Padronizada)
         const primaryBase = this.resolveColor(data.colors?.primary, 'primary', 'green');
-        const accentBase = this.resolveColor(data.colors?.accent, 'accent', 'green');
+        const useHex = primaryHex && primaryHex.startsWith('#');
+
+        // Calcula variações se for hex
+        const badgeIconBgHex = useHex ? primaryHex : null;
+        const badgeIconBgShadowHex = useHex ? this.hexToRgba(primaryHex, 0.3) : null;
 
         this.colors = {
             tagBg: this.getColorVariant(primaryBase, 100),
@@ -40,8 +52,11 @@ class AboutImageFeaturesComponent extends BaseComponent {
             text: 'slate-600',  // Alto contraste (Light Theme)
             featureBg: 'slate-50',
             featureIcon: this.getColorVariant(primaryBase, 600),
-            badgeIconBg: this.getColorVariant(accentBase, 600),
-            accentGlow: this.getColorVariant(primaryBase, 400)
+            badgeIconBg: useHex ? '' : this.getColorVariant(primaryBase, 600), // Usa primary ao invés de accent
+            badgeIconBgHex: badgeIconBgHex,
+            badgeIconBgShadowHex: badgeIconBgShadowHex,
+            accentGlow: this.getColorVariant(primaryBase, 400),
+            useHex: useHex
         };
     }
 
@@ -80,7 +95,7 @@ class AboutImageFeaturesComponent extends BaseComponent {
                                      style="border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;">
 
                                 <div class="absolute bottom-6 -right-4 md:right-4 bg-white p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.12)] border border-slate-50 flex items-center gap-3 animate-float">
-                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white bg-${c.badgeIconBg} shadow-lg shadow-${c.badgeIconBg}/30">
+                                    <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white ${c.useHex ? '' : `bg-${c.badgeIconBg} shadow-lg shadow-${c.badgeIconBg}/30`}" ${c.useHex ? `style="background-color: ${c.badgeIconBgHex}; box-shadow: 0 10px 15px -3px ${c.badgeIconBgShadowHex}, 0 4px 6px -2px ${c.badgeIconBgShadowHex};"` : ''}>
                                         <i class="fas fa-check text-base"></i>
                                     </div>
                                     <div class="pr-2">

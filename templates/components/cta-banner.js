@@ -17,9 +17,22 @@ class CtaBannerComponent extends BaseComponent {
     constructor(data) {
         super();
         this.title = data.title;
-        this.subtitle = data.subtitle;
-        this.buttons = data.buttons || [];
+        this.subtitle = data.subtitle || data.description || '';
         this.backgroundPattern = data.backgroundPattern || '';
+        this.tag = data.tag || 'Novidade';
+
+        // Converte ctaPrimary/ctaSecondary para array de buttons se necessário
+        if (data.buttons && Array.isArray(data.buttons)) {
+            this.buttons = data.buttons;
+        } else {
+            this.buttons = [];
+            if (data.ctaPrimary) {
+                this.buttons.push(data.ctaPrimary);
+            }
+            if (data.ctaSecondary) {
+                this.buttons.push(data.ctaSecondary);
+            }
+        }
 
         // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
         const theme = this.getGlobalTheme();
@@ -136,9 +149,9 @@ class CtaBannerComponent extends BaseComponent {
                     <div class="max-w-4xl mx-auto bg-white/60 backdrop-blur-lg p-6 md:p-10 rounded-[1.5rem]
                                 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.08)] border border-white/80 text-center">
 
-                        <div class="${badgeClass}" ${badgeStyle}>
-                            Novidade
-                        </div>
+                        ${this.tag ? `<div class="${badgeClass}" ${badgeStyle}>
+                            ${this.tag}
+                        </div>` : ''}
 
                         <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold ${c.titleText} mb-3 tracking-tight leading-tight">
                             ${this.title}
