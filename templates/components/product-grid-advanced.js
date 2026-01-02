@@ -1,6 +1,6 @@
 /**
  * Product Grid Advanced Component
- * Grid de produtos avançado com cards completos, hover effects e múltiplas imagens
+ * Grid de produtos avançado com cards completos, hover effects e placeholder de imagem
  */
 
 class ProductGridAdvancedComponent extends BaseComponent {
@@ -34,15 +34,10 @@ class ProductGridAdvancedComponent extends BaseComponent {
             <span class="absolute top-3 left-3 ${product.badge.style === 'new' ? 'bg-gray-900' : 'bg-red-500'} text-white text-[10px] font-bold px-2 py-1 rounded uppercase z-10">${product.badge.text}</span>
         ` : '';
 
-        const hasMultipleImages = product.images && product.images.length > 1;
-        const imagesHtml = product.images && product.images.length > 0 ? `
-            ${product.images[0] ? `
-                <img src="${product.images[0]}" class="object-cover w-full h-full transition duration-500 ${hasMultipleImages ? 'group-hover:opacity-0' : 'group-hover:scale-105'}" alt="${product.title}">
-            ` : ''}
-            ${product.images[1] ? `
-                <img src="${product.images[1]}" class="absolute inset-0 object-cover w-full h-full opacity-0 transition duration-500 group-hover:opacity-100" alt="${product.title}">
-            ` : ''}
-        ` : '';
+        const placeholderImage = 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEbmNxhl6aFUDwBtyelBzun4EnBJLblVb56w&s';
+        const imagesHtml = `
+            <img src="${placeholderImage}" class="object-cover w-full h-full transition duration-500 group-hover:scale-105" alt="${product.title}">
+        `;
 
         const priceHtml = product.price ? `
             <div>

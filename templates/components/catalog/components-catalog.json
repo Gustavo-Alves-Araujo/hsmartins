@@ -759,9 +759,9 @@
     "category-carousel": {
       "id": "category-carousel",
       "name": "Category Carousel",
-      "description": "Carrossel horizontal de categorias com imagens",
+      "description": "Carrossel horizontal de categorias com placeholders coloridos",
       "category": "content",
-      "tags": ["carousel", "categories", "navigation", "images", "horizontal"],
+      "tags": ["carousel", "categories", "navigation", "horizontal"],
       "niches": ["ecommerce", "stores", "catalog", "any"],
       "requiredProps": ["categories"],
       "optionalProps": ["title", "colors"],
@@ -799,7 +799,7 @@
     "product-grid-advanced": {
       "id": "product-grid-advanced",
       "name": "Product Grid Advanced",
-      "description": "Grid de produtos avançado com cards completos, hover effects e múltiplas imagens",
+      "description": "Grid de produtos avançado com cards completos, hover effects e placeholder de imagem",
       "category": "content",
       "tags": ["products", "grid", "ecommerce", "cards", "advanced", "hover"],
       "niches": ["ecommerce", "stores", "retail", "marketplace"],

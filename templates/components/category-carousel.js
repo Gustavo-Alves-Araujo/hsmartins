@@ -7,7 +7,7 @@ class CategoryCarouselComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
      * @param {string} data.title - Título da seção
-     * @param {Array} data.categories - Array de categorias { imageUrl: string, imageAlt: string, title: string, href: string, subtitle?: string }
+     * @param {Array} data.categories - Array de categorias { title: string, href: string, subtitle?: string }
      * @param {Object} data.colors - Cores customizáveis
      */
     constructor(data) {
@@ -30,11 +30,23 @@ class CategoryCarouselComponent extends BaseComponent {
         const c = this.colors;
         const carouselId = `cat-scroll-${Math.random().toString(36).substr(2, 9)}`;
 
-        const categoriesHtml = this.categories.map(cat => `
+        const categoriesHtml = this.categories.map((cat, index) => {
+            // Gera um gradiente único para cada categoria baseado no índice
+            const gradients = [
+                'from-purple-500 to-pink-500',
+                'from-blue-500 to-cyan-500',
+                'from-green-500 to-emerald-500',
+                'from-orange-500 to-red-500',
+                'from-indigo-500 to-purple-500',
+                'from-teal-500 to-blue-500',
+                'from-yellow-500 to-orange-500',
+                'from-rose-500 to-pink-500'
+            ];
+            const gradient = gradients[index % gradients.length];
+            
+            return `
             <a href="${cat.href || '#'}" class="group min-w-[200px] h-[280px] relative rounded-2xl overflow-hidden cursor-pointer snap-start">
-                <img src="${cat.imageUrl}"
-                     class="absolute inset-0 w-full h-full object-cover transition duration-500 group-hover:scale-110"
-                     alt="${cat.imageAlt || cat.title}">
+                <div class="absolute inset-0 bg-gradient-to-br ${gradient}"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"></div>
                 <div class="absolute bottom-0 p-6 w-full">
                     <h3 class="text-white font-bold text-xl mb-1 group-hover:translate-x-2 transition">${cat.title}</h3>
@@ -43,7 +55,8 @@ class CategoryCarouselComponent extends BaseComponent {
                     ` : ''}
                 </div>
             </a>
-        `).join('');
+        `;
+        }).join('');
 
         return `
             <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">

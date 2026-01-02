@@ -33,17 +33,19 @@ class PromoBannerSplitComponent extends BaseComponent {
         this.imageAlt = data.imageAlt || '';
         this.reverse = data.reverse || false;
 
-        // Resolve cores base (override > tema > fallback)
-        const bgBase = this.resolveColor(data.colors?.background, 'primary', 'black');
-        const textBase = this.resolveColor(data.colors?.text, null, 'white');
-        const accentBase = this.resolveColor(data.colors?.accent, 'accent', 'yellow');
+        // Resolve cores usando o sistema de cores do site (primary)
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
+        const primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#2563eb');
+        const textBase = this.resolveColor(data.colors?.text, 'text', 'gray-900');
+        const accentBase = this.resolveColor(data.colors?.accent, 'primary', 'primary');
 
-        // Aplica variações automáticas conforme o contexto
+        // Cores modernas e limpas
         this.colors = {
-            background: bgBase === 'black' ? 'black' : this.getColorVariant(bgBase, 900),
+            background: bgBase,
+            primary: primaryHex,
             text: textBase,
-            accent: accentBase === 'yellow' ? 'yellow-400' : this.getColorVariant(accentBase, 400),
-            textSecondary: 'gray-400',
+            accent: accentBase,
+            textSecondary: 'gray-600',
         };
     }
 
@@ -53,53 +55,64 @@ class PromoBannerSplitComponent extends BaseComponent {
      */
     render() {
         const c = this.colors;
-        const layoutClass = this.reverse ? 'flex-row-reverse' : '';
+        const layoutClass = this.reverse ? 'lg:flex-row-reverse' : '';
 
         return `
-            <section class="py-10 px-4">
-                <div class="container mx-auto bg-black text-white rounded-2xl overflow-hidden relative">
-                    <div class="flex flex-col md:flex-row ${layoutClass} items-center">
-                        <!-- Content -->
-                        <div class="p-10 md:w-1/2 z-10">
-                            ${this.badge ? `
-                                <span class="bg-yellow-400 text-black text-xs font-bold px-2 py-1 uppercase mb-4 inline-block">
-                                    ${this.badge}
-                                </span>
-                            ` : ''}
-                            <h3 class="text-3xl md:text-5xl font-display font-bold mb-4 uppercase">
-                                ${this.title}
-                            </h3>
-                            ${this.description ? `
-                                <p class="text-gray-200 mb-6">
-                                    ${this.description}
-                                </p>
-                            ` : ''}
-                            ${this.price || this.originalPrice ? `
-                                <div class="flex items-center gap-4 mb-6">
-                                    ${this.price ? `
-                                        <span class="text-2xl font-bold text-yellow-400">
-                                            ${this.price}
-                                        </span>
-                                    ` : ''}
-                                    ${this.originalPrice ? `
-                                        <span class="text-sm text-gray-500 line-through">
-                                            ${this.originalPrice}
-                                        </span>
-                                    ` : ''}
-                                </div>
-                            ` : ''}
-                            ${this.button ? `
-                                <button onclick="window.location.href='${this.button.href}'"
-                                        class="${this.button.class || 'bg-white text-black px-8 py-3 font-bold uppercase hover:bg-gray-200 transition-colors'}">
-                                    ${this.button.text}
-                                </button>
-                            ` : ''}
-                        </div>
-                        <!-- Image -->
-                        <div class="md:w-1/2 relative h-64 md:h-96 w-full bg-gray-900 flex items-center justify-center overflow-hidden">
-                            ${this.imageUrl ? `
-                                <div class="absolute w-full h-full bg-[url('${this.imageUrl}')] bg-cover bg-center opacity-40"></div>
-                            ` : ''}
+            <section class="py-12 lg:py-16 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto">
+                    <div class="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+                        <div class="flex flex-col lg:flex-row ${layoutClass}">
+                            <!-- Content -->
+                            <div class="p-8 lg:p-12 xl:p-16 lg:w-1/2 flex flex-col justify-center">
+                                ${this.badge ? `
+                                    <span class="inline-block px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider mb-6" style="background-color: ${c.primary}; color: white;">
+                                        ${this.badge}
+                                    </span>
+                                ` : ''}
+                                <h3 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                                    ${this.title}
+                                </h3>
+                                ${this.description ? `
+                                    <p class="text-lg text-gray-600 mb-8 leading-relaxed">
+                                        ${this.description}
+                                    </p>
+                                ` : ''}
+                                ${this.price || this.originalPrice ? `
+                                    <div class="flex items-baseline gap-4 mb-8">
+                                        ${this.price ? `
+                                            <span class="text-3xl lg:text-4xl font-bold text-gray-900" style="color: ${c.primary};">
+                                                ${this.price}
+                                            </span>
+                                        ` : ''}
+                                        ${this.originalPrice ? `
+                                            <span class="text-lg text-gray-400 line-through">
+                                                ${this.originalPrice}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                ` : ''}
+                                ${this.button ? `
+                                    <div>
+                                        <a href="${this.button.href || '#'}" 
+                                           class="${this.button.class || `inline-flex items-center justify-center px-8 py-3.5 font-semibold rounded-lg text-white hover:opacity-90 transition-opacity duration-200`}"
+                                           style="${!this.button.class ? `background-color: ${c.primary};` : ''}">
+                                            ${this.button.text}
+                                        </a>
+                                    </div>
+                                ` : ''}
+                            </div>
+                            <!-- Image -->
+                            <div class="lg:w-1/2 relative h-64 md:h-80 lg:h-auto min-h-[400px] bg-gray-50">
+                                ${this.imageUrl ? `
+                                    <img src="${this.imageUrl}" 
+                                         alt="${this.imageAlt || ''}" 
+                                         class="w-full h-full object-cover">
+                                ` : `
+                                    <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                        <div class="w-32 h-32 rounded-full bg-gray-200"></div>
+                                    </div>
+                                `}
+                            </div>
                         </div>
                     </div>
                 </div>

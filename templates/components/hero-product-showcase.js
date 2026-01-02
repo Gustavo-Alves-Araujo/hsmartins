@@ -1,6 +1,7 @@
 /**
  * Hero Product Showcase Component
  * Hero section com produto em destaque, preço, avaliações e especificações técnicas
+ * Estilo moderno e limpo (Modern Clean)
  */
 
 class HeroProductShowcaseComponent extends BaseComponent {
@@ -31,20 +32,15 @@ class HeroProductShowcaseComponent extends BaseComponent {
         this.imageAlt = data.imageAlt || '';
         this.specs = data.specs || [];
 
-        // Resolve cores com contraste adequado (fundo escuro, texto branco)
-        const bgHex = this.resolveColorHex(data.colors?.background, 'primary', '#000000');
-        const primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#16a34a');
-        const primaryLightHex = this.lightenColor(primaryHex, 0.2);
-        const primaryDarkHex = this.darkenColor(primaryHex, 0.3);
+        // Resolve cores com estilo moderno e limpo (fundo claro)
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
+        const primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#2563eb');
 
         this.colors = {
-            background: bgHex,
+            background: bgBase,
             primary: primaryHex,
-            primaryLight: primaryLightHex,
-            primaryDark: primaryDarkHex,
-            title: '#FFFFFF', // Sempre branco em fundo escuro
-            description: '#D1D5DB', // Cinza claro para contraste adequado
-            accent: primaryLightHex // Cor primária clara para gradiente
+            title: 'gray-900',
+            description: 'gray-600'
         };
     }
 
@@ -70,110 +66,103 @@ class HeroProductShowcaseComponent extends BaseComponent {
     render() {
         const c = this.colors;
         const badgesHtml = this.badges.map(badge => {
-            const style = badge.style === 'outline'
-                ? 'bg-white/10 backdrop-blur-sm border border-white/20 text-white'
-                : 'bg-white text-gray-900';
-            return `<span class="inline-block px-3 py-1 ${style} text-xs font-bold uppercase tracking-wider rounded-sm">${badge.text}</span>`;
+            if (badge.style === 'outline') {
+                return `<span class="inline-block px-4 py-1.5 border border-gray-200 text-gray-700 bg-transparent text-xs font-semibold uppercase tracking-wider rounded-md">${badge.text}</span>`;
+            } else {
+                return `<span class="inline-block px-4 py-1.5 bg-gray-900 text-white text-xs font-semibold uppercase tracking-wider rounded-md">${badge.text}</span>`;
+            }
         }).join('');
 
         const buttonsHtml = this.buttons.map(btn => {
             const isPrimary = btn.primary !== false;
-            const shadowColor = this.hexToRgba(c.primary, 0.4);
+            const iconHtml = btn.icon ? `<i class="${btn.icon}"></i>` : '';
             if (isPrimary) {
-                const btnStyle = `background-color: ${c.primary}; box-shadow: 0 0 20px ${shadowColor};`;
-                const iconHtml = btn.icon ? `<i class="${btn.icon}"></i>` : '';
-                return `<a href="${btn.href || '#'}" class="text-white px-10 py-4 rounded-full font-bold transition transform hover:-translate-y-1 text-sm uppercase tracking-wide flex items-center gap-2 hover:opacity-90" style="${btnStyle}">${btn.text} ${iconHtml}</a>`;
+                return `<a href="${btn.href || '#'}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors duration-200 text-sm" style="background-color: ${c.primary};">
+                    ${btn.text} ${iconHtml}
+                </a>`;
             } else {
-                const iconHtml = btn.icon ? `<i class="${btn.icon}"></i>` : '';
-                return `<a href="${btn.href || '#'}" class="px-8 py-4 rounded-full font-bold text-white hover:bg-white/10 transition border border-gray-600 flex items-center gap-2 text-sm uppercase tracking-wide backdrop-blur-sm">${btn.text} ${iconHtml}</a>`;
+                return `<a href="${btn.href || '#'}" class="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200 text-sm">
+                    ${btn.text} ${iconHtml}
+                </a>`;
             }
         }).join('');
 
         const specsHtml = this.specs.map(spec => `
-            <div class="bg-white/10 backdrop-blur-md border border-white/10 p-4 rounded-xl flex-1 lg:flex-none lg:w-32 text-center hover:bg-white/20 transition cursor-default">
-                <i class="${spec.icon} text-xl mb-1" style="color: ${c.primaryLight};"></i>
-                <p class="text-white font-bold text-sm">${spec.value}</p>
-                <p class="text-gray-400 text-[10px] uppercase">${spec.label}</p>
+            <div class="flex flex-col items-center p-6 bg-white border border-gray-200 rounded-xl hover:border-gray-300 transition-colors">
+                <i class="${spec.icon} text-2xl mb-3" style="color: ${c.primary};"></i>
+                <p class="text-gray-900 font-bold text-lg mb-1">${spec.value}</p>
+                <p class="text-gray-500 text-xs uppercase tracking-wider">${spec.label}</p>
             </div>
         `).join('');
 
         return `
-            <section class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-                <div class="relative bg-black rounded-3xl overflow-hidden shadow-2xl animate-fade-in group">
-                    <!-- Background Gradients/Effects -->
-                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 z-0"></div>
-                    <div class="absolute top-0 right-0 w-2/3 h-full z-0" style="background: linear-gradient(to left, ${this.hexToRgba(c.primaryDark, 0.4)}, transparent);"></div>
-                    <div class="absolute -top-40 -right-40 w-96 h-96 rounded-full blur-3xl animate-pulse-slow z-0" style="background-color: ${this.hexToRgba(c.primary, 0.2)};"></div>
+            <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                    <!-- Text Content -->
+                    <div class="order-2 lg:order-1 space-y-8">
+                        ${this.badges.length > 0 ? `
+                            <div class="flex items-center gap-3 flex-wrap">
+                                ${badgesHtml}
+                            </div>
+                        ` : ''}
 
-                    <div class="grid grid-cols-1 lg:grid-cols-2 min-h-[550px] relative z-10">
-                        <!-- Text Content -->
-                        <div class="p-8 md:p-14 lg:p-20 flex flex-col justify-center order-2 lg:order-1">
-                            ${this.badges.length > 0 ? `
-                                <div class="flex items-center gap-3 mb-6">
-                                    ${badgesHtml}
-                                </div>
-                            ` : ''}
-
-                            <h1 class="text-4xl md:text-5xl lg:text-7xl font-extrabold text-white mb-6 leading-none tracking-tight">
+                        <div class="space-y-4">
+                            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight tracking-tight">
                                 ${this.title}
                                 ${this.titleHighlight ? `
                                     <br>
-                                    <span style="background: linear-gradient(to right, ${c.primaryLight}, ${c.accent}, ${c.primaryLight}); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">${this.titleHighlight}</span>
+                                    <span class="text-gray-600 font-normal">${this.titleHighlight}</span>
                                 ` : ''}
                             </h1>
+                        </div>
 
-                            ${this.description ? `
-                                <p class="text-gray-300 text-lg mb-8 max-w-md leading-relaxed font-light pl-4" style="border-left: 2px solid ${c.primary};">
-                                    ${this.description}
-                                </p>
+                        ${this.description ? `
+                            <p class="text-lg text-gray-600 leading-relaxed max-w-xl">
+                                ${this.description}
+                            </p>
+                        ` : ''}
+
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-8 pt-4">
+                            ${this.price.value ? `
+                                <div class="flex flex-col">
+                                    <span class="text-4xl font-bold text-gray-900">${this.price.value}</span>
+                                    ${this.price.installments ? `
+                                        <span class="text-sm text-gray-500 mt-1">${this.price.installments}</span>
+                                    ` : ''}
+                                </div>
                             ` : ''}
+                            ${this.price.value && this.rating.value ? '<div class="h-12 w-px bg-gray-200 hidden sm:block"></div>' : ''}
+                            ${this.rating.value ? `
+                                <div class="flex items-center gap-3">
+                                    <div class="flex text-yellow-400 text-base">
+                                        ${this.renderStars(this.rating.stars || 5)}
+                                    </div>
+                                    <span class="text-gray-700 font-medium">${this.rating.value}</span>
+                                </div>
+                            ` : ''}
+                        </div>
 
-                            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-10">
-                                ${this.price.value ? `
-                                    <div class="flex flex-col">
-                                        <span class="text-4xl font-bold text-white tracking-tight">${this.price.value}</span>
-                                        ${this.price.installments ? `
-                                            <span class="text-sm text-gray-400">${this.price.installments}</span>
-                                        ` : ''}
-                                    </div>
-                                ` : ''}
-                                ${this.price.value && this.rating.value ? '<div class="h-10 w-px bg-gray-700 hidden sm:block"></div>' : ''}
-                                ${this.rating.value ? `
-                                    <div class="flex items-center gap-2">
-                                        <div class="flex text-yellow-400 text-sm">
-                                            ${this.renderStars(this.rating.stars || 5)}
-                                        </div>
-                                        <span class="text-white font-medium text-sm">${this.rating.value}</span>
-                                    </div>
-                                ` : ''}
+                        ${this.buttons.length > 0 ? `
+                            <div class="flex flex-wrap gap-4 pt-2">
+                                ${buttonsHtml}
                             </div>
+                        ` : ''}
+                    </div>
 
-                            ${this.buttons.length > 0 ? `
-                                <div class="flex flex-wrap gap-4">
-                                    ${buttonsHtml}
-                                </div>
-                            ` : ''}
+                    <!-- Image Content -->
+                    <div class="relative order-1 lg:order-2">
+                        <div class="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 shadow-lg">
+                            <img src="${this.imageUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEbmNxhl6aFUDwBtyelBzun4EnBJLblVb56w&s'}"
+                                 class="w-full h-full object-cover"
+                                 alt="${this.imageAlt || 'Product image'}">
                         </div>
 
-                        <!-- Image Content -->
-                        <div class="relative h-72 lg:h-auto order-1 lg:order-2 overflow-hidden">
-                            ${this.imageUrl ? `
-                                <img src="${this.imageUrl}"
-                                     class="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-1000"
-                                     alt="${this.imageAlt}">
-                            ` : ''}
-
-                            <!-- Gradient Overlays -->
-                            <div class="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 lg:bg-gradient-to-l lg:from-transparent lg:via-transparent lg:to-black"></div>
-                            <div class="absolute inset-0 mix-blend-overlay" style="background-color: ${this.hexToRgba(c.primaryDark, 0.2)};"></div>
-
-                            <!-- Floating Tech Specs -->
-                            ${this.specs.length > 0 ? `
-                                <div class="absolute bottom-6 left-6 right-6 lg:left-auto lg:right-12 lg:bottom-12 flex gap-3 animate-slide-up">
-                                    ${specsHtml}
-                                </div>
-                            ` : ''}
-                        </div>
+                        <!-- Tech Specs -->
+                        ${this.specs.length > 0 ? `
+                            <div class="grid grid-cols-3 gap-4 mt-8">
+                                ${specsHtml}
+                            </div>
+                        ` : ''}
                     </div>
                 </div>
             </section>

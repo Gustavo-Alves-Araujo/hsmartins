@@ -396,10 +396,8 @@
           "type": "array",
           "items": {
             "type": "object",
-            "required": ["imageUrl", "title"],
+            "required": ["title"],
             "properties": {
-              "imageUrl": { "type": "string", "format": "uri" },
-              "imageAlt": { "type": "string" },
               "title": { "type": "string" },
               "href": { "type": "string" },
               "subtitle": { "type": "string" }
@@ -468,10 +466,6 @@
             "properties": {
               "title": { "type": "string" },
               "category": { "type": "string" },
-              "images": {
-                "type": "array",
-                "items": { "type": "string", "format": "uri" }
-              },
               "price": {
                 "type": "object",
                 "properties": {
