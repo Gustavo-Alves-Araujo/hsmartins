@@ -526,6 +526,35 @@
         "colors": { "type": "object" }
       }
     },
+    "benefits-grid": {
+      "type": "object",
+      "required": ["benefits"],
+      "properties": {
+        "id": { "type": "string" },
+        "tag": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "paragraphs": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "benefits": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["icon"],
+            "properties": {
+              "icon": { "type": "string" },
+              "text": { "type": "string" },
+              "title": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "columns": { "type": "number" },
+        "colors": { "type": "object" }
+      }
+    },
     "benefits-grid-ecommerce": {
       "type": "object",
       "required": ["benefits"],
