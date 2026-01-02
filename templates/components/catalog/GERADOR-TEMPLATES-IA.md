@@ -229,6 +229,14 @@ Para cada componente, preencher baseado em:
 - **Textos**: Adapte ao contexto brasileiro (horários, formatos de telefone)
 - **Valores padrão**: Se não especificado, use valores genéricos apropriados
 
+🧱 REGRA ESTRUTURAL ABSOLUTA — ORDEM DOS COMPONENTES
+	•	O JSON gerado representa a ordem visual da página de cima para baixo
+	•	A ordem das chaves no JSON IMPORTA
+	•	A IA deve montar o JSON na ordem exata de renderização
+
+Regra inquebrável do Footer
+	•	UM componente do tipo footer DEVE SER SEMPRE O ÚLTIMO COMPONENTE DO JSON
+
 ---
 
 ## 📚 EXEMPLOS COMPLETOS
