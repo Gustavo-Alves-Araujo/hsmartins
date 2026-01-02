@@ -87,7 +87,7 @@ class AchievementsNumbersGridComponent extends BaseComponent {
                         <div class="h-1 w-6 bg-slate-100 mx-auto mb-3 rounded-full group-hover:w-10 ${hoverBarClass} transition-all duration-300" ${hoverBarStyle}></div>
 
                         <p class="text-[11px] md:text-xs font-bold uppercase tracking-widest text-slate-500 group-hover:text-slate-700 transition-colors">
-                            ${stat.label}
+                            ${stat.label || stat.unit || stat.description || ''}
                         </p>
                     </div>
                 </div>
