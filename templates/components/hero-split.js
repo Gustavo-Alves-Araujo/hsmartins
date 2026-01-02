@@ -1,7 +1,7 @@
 /**
  * Hero Split Component
  * Hero section com layout split (texto à esquerda, imagem à direita)
- * Genérico para qualquer tipo de hero que precise de layout dividido
+ * Estilo moderno e limpo (Modern Clean)
  */
 
 class HeroSplitComponent extends BaseComponent {
@@ -31,21 +31,19 @@ class HeroSplitComponent extends BaseComponent {
         this.imageAlt = data.imageAlt || '';
         this.reverse = data.reverse || false;
 
-        // Resolve cores base (override > tema > fallback)
-        const bgBase = this.resolveColor(data.colors?.background, 'background', 'gray');
-        const titleBase = this.resolveColor(data.colors?.title, 'primary', 'black');
-        const highlightBase = this.resolveColor(data.colors?.titleHighlight, 'primary', 'gray');
+        // Resolve cores usando o sistema de cores do site
+        const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
+        const primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#2563eb');
+        const bgHex = this.resolveColorHex(data.colors?.background, 'background', '#ffffff');
 
-        // Aplica variações automáticas conforme o contexto
         this.colors = {
-            background: bgBase === 'gray' ? 'brand-gray' : this.getColorVariant(bgBase, 50),
-            title: titleBase === 'black' ? 'black' : this.getColorVariant(titleBase, 900),
-            titleHighlight: highlightBase === 'gray' ? 'gray-500' : this.getColorVariant(highlightBase, 500),
+            background: bgBase,
+            backgroundHex: bgHex,
+            primary: primaryHex,
+            title: 'gray-900',
+            titleHighlight: 'gray-600',
             description: 'gray-600',
         };
-
-        // Obtém hex do background para usar no style inline
-        this.backgroundHex = this.resolveColorHex(data.colors?.background, 'background', '#F9FAFB');
     }
 
     /**
@@ -55,16 +53,35 @@ class HeroSplitComponent extends BaseComponent {
     renderButtons() {
         if (this.buttons.length === 0) return '';
 
-        return this.buttons.map(button => {
-            const btnClass = button.class || 'bg-black text-white px-8 py-4 font-bold uppercase tracking-wider hover:bg-gray-900 transition-all hover:scale-105 shadow-xl';
+        const c = this.colors;
+        return this.buttons.map((button, index) => {
+            const isPrimary = index === 0;
             const iconHtml = button.icon ? `<i class="${button.icon}"></i>` : '';
-
-            return `
-                <a href="${button.href}" class="${btnClass}">
-                    ${iconHtml}
-                    ${button.text}
-                </a>
-            `;
+            
+            if (button.class) {
+                return `
+                    <a href="${button.href || '#'}" class="${button.class}">
+                        ${iconHtml} ${button.text}
+                    </a>
+                `;
+            }
+            
+            if (isPrimary) {
+                return `
+                    <a href="${button.href || '#'}" 
+                       class="inline-flex items-center justify-center gap-2 px-8 py-3.5 font-semibold rounded-lg text-white hover:opacity-90 transition-opacity duration-200"
+                       style="background-color: ${c.primary};">
+                        ${iconHtml} ${button.text}
+                    </a>
+                `;
+            } else {
+                return `
+                    <a href="${button.href || '#'}" 
+                       class="inline-flex items-center justify-center gap-2 px-8 py-3.5 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200">
+                        ${iconHtml} ${button.text}
+                    </a>
+                `;
+            }
         }).join('');
     }
 
@@ -74,48 +91,53 @@ class HeroSplitComponent extends BaseComponent {
      */
     render() {
         const c = this.colors;
-        const layoutClass = this.reverse ? 'flex-row-reverse' : '';
-        const textAlignment = this.reverse ? 'lg:text-right' : 'lg:text-left';
+        const layoutClass = this.reverse ? 'lg:flex-row-reverse' : '';
 
         return `
-            <section class="relative overflow-hidden p-16" style="background-color: ${this.backgroundHex};">
-                <div class="container mx-auto px-4 py-16 lg:py-24 flex flex-col-reverse lg:flex-row ${layoutClass} items-center gap-0">
-                    <!-- Text Content -->
-                    <div class="lg:w-1/2 z-10 text-center ${textAlignment} mt-10 lg:mt-0 animate-slide-up">
-                        ${this.badge ? `
-                            <span class="text-sm font-bold tracking-widest text-gray-500 uppercase mb-4 block">
-                                ${this.badge}
-                            </span>
-                        ` : ''}
-                        <h1 class="text-5xl lg:text-7xl font-display font-bold leading-[0.9] mb-6 text-${c.title}">
-                            ${this.title}
-                            ${this.titleHighlight ? `
-                                <br>
-                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-black to-gray-500">
-                                    ${this.titleHighlight}
-                                </span>
+            <section class="relative pt-24 lg:pt-32 pb-16 lg:pb-24 px-4 sm:px-6 lg:px-8" style="background-color: ${c.backgroundHex};">
+                <div class="max-w-7xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+                        <!-- Text Content -->
+                        <div class="order-2 lg:order-1 space-y-8">
+                            ${this.badge ? `
+                                <div>
+                                    <span class="inline-block px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider mb-6" style="background-color: ${c.primary}; color: white;">
+                                        ${this.badge}
+                                    </span>
+                                </div>
                             ` : ''}
-                        </h1>
-                        ${this.description ? `
-                            <p class="text-gray-600 text-lg mb-8 max-w-md mx-auto lg:mx-0">
-                                ${this.description}
-                            </p>
-                        ` : ''}
-                        ${this.buttons.length > 0 ? `
-                            <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                                ${this.renderButtons()}
+                            
+                            <div class="space-y-4">
+                                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
+                                    ${this.title}
+                                    ${this.titleHighlight ? `
+                                        <br>
+                                        <span class="text-gray-600 font-normal">${this.titleHighlight}</span>
+                                    ` : ''}
+                                </h1>
                             </div>
-                        ` : ''}
-                    </div>
 
-                    <!-- Image -->
-                    <div class="lg:w-1/2 relative flex justify-center items-center">
-                        <!-- Abstract BG shape -->
-                        <div class="absolute w-[300px] h-[300px] lg:w-[500px] lg:h-[500px] bg-gray-300 rounded-full blur-[80px] opacity-60 animate-pulse"></div>
+                            ${this.description ? `
+                                <p class="text-lg text-gray-600 leading-relaxed max-w-xl">
+                                    ${this.description}
+                                </p>
+                            ` : ''}
+
+                            ${this.buttons.length > 0 ? `
+                                <div class="flex flex-wrap gap-4 pt-2">
+                                    ${this.renderButtons()}
+                                </div>
+                            ` : ''}
+                        </div>
+
                         <!-- Image -->
-                        <img src="${this.imageUrl}"
-                             alt="${this.imageAlt}"
-                             class="w-full max-w-md drop-shadow-2xl transform -rotate-12 hover:rotate-0 transition-transform duration-700 cursor-pointer relative z-10">
+                        <div class="order-1 lg:order-2 relative">
+                            <div class="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 shadow-lg">
+                                <img src="${this.imageUrl || 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQEbmNxhl6aFUDwBtyelBzun4EnBJLblVb56w&s'}"
+                                     alt="${this.imageAlt || ''}"
+                                     class="w-full h-full object-cover">
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

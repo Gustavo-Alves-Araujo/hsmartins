@@ -112,7 +112,7 @@ class StickyHeaderNavigationComponent extends BaseComponent {
                 <div class="container mx-auto px-6">
                     <nav class="flex items-center justify-between bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 shadow-sm">
                         <a href="#" class="flex items-center gap-3 group transition-transform hover:scale-105">
-                            <img src="${this.logoUrl}" alt="${this.logoAlt}" class="h-10 md:h-12 w-auto object-contain">
+                            <img src="${this.logoUrl}" alt="${this.logoAlt}" class="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover">
                             ${this.siteName ? `<span class="hidden md:block font-black text-slate-800 tracking-tight">${this.siteName}</span>` : ''}
                         </a>
 

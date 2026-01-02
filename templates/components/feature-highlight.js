@@ -49,22 +49,17 @@ class FeatureHighlightComponent extends BaseComponent {
                 : (data.layout?.imagePosition || 'left')
         };
 
-        // Resolve cores base (override > tema > fallback)
+        // Resolve cores usando o sistema de cores do site
         const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');
-        const titleBase = this.resolveColor(data.colors?.titleColor, 'primary', 'gray');
-        const badgeBase = this.resolveColor(data.colors?.badgeColor, 'primary', 'green');
-        const accentBase = this.resolveColor(data.colors?.accentColor, 'accent', 'orange');
-        const ctaBase = this.resolveColor(data.colors?.ctaColor, 'primary', 'green');
-        const ctaHoverBase = this.resolveColor(data.colors?.ctaHoverColor, 'primary', 'green');
+        const primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#2563eb');
+        const bgHex = this.resolveColorHex(data.colors?.background, 'background', '#ffffff');
 
-        // Aplica variações automáticas conforme o contexto
         this.colors = {
-            background: bgBase === 'white' ? 'white' : this.getColorVariant(bgBase, 50),
-            titleColor: this.getColorVariant(titleBase, 900),
-            badgeColor: this.getColorVariant(badgeBase, 700),
-            accentColor: this.getColorVariant(accentBase, 500),
-            ctaColor: this.getColorVariant(ctaBase, 600),
-            ctaHoverColor: this.getColorVariant(ctaHoverBase, 700),
+            background: bgBase,
+            backgroundHex: bgHex,
+            primary: primaryHex,
+            title: 'gray-900',
+            description: 'gray-600',
         };
     }
 
@@ -76,16 +71,28 @@ class FeatureHighlightComponent extends BaseComponent {
     renderFeature(feature) {
         const c = this.colors;
 
-        // Suporta tanto objeto {icon, text} quanto string simples
-        const icon = typeof feature === 'object' ? (feature.icon || 'fas fa-check') : 'fas fa-check';
-        const text = typeof feature === 'object' ? feature.text : feature;
+        // Suporta tanto objeto {icon, text, label, name} quanto string simples
+        let icon = 'fas fa-check';
+        let text = '';
+        
+        if (typeof feature === 'object' && feature !== null) {
+            icon = feature.icon || feature.iconClass || 'fas fa-check';
+            text = feature.text || feature.label || feature.name || feature.title || '';
+        } else if (typeof feature === 'string' && feature.trim() !== '') {
+            text = feature;
+        }
+
+        // Se ainda não tiver texto válido, não renderiza
+        if (!text || text.trim() === '' || text === 'undefined') {
+            return '';
+        }
 
         return `
-            <li class="flex items-center gap-3">
-                <span class="w-8 h-8 rounded-full bg-${c.accentColor}/20 flex items-center justify-center text-${c.titleColor} flex-shrink-0">
-                    <i class="${icon} text-xs"></i>
+            <li class="flex items-start gap-4">
+                <span class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style="background-color: ${this.hexToRgba(c.primary, 0.1)}; color: ${c.primary};">
+                    <i class="${icon} text-sm"></i>
                 </span>
-                <span class="text-gray-700 font-medium">${text}</span>
+                <span class="text-gray-700 font-medium text-base leading-relaxed pt-2">${text}</span>
             </li>
         `;
     }
@@ -96,53 +103,71 @@ class FeatureHighlightComponent extends BaseComponent {
      */
     render() {
         const c = this.colors;
-        const featuresHtml = this.features.map(f => this.renderFeature(f)).join('');
+        const featuresHtml = this.features
+            .map(f => this.renderFeature(f))
+            .filter(html => html !== '') // Remove itens vazios
+            .join('');
         const imageFirst = this.layout.imagePosition === 'left';
-        const flexOrder = imageFirst ? '' : 'flex-row-reverse';
+        const flexOrder = imageFirst ? '' : 'lg:flex-row-reverse';
 
         return `
-            <section class="py-20 md:py-24 bg-${c.background}">
-                <div class="container mx-auto px-6">
-                    <div class="flex flex-col md:flex-row ${flexOrder} items-center gap-12 md:gap-16">
+            <section class="py-16 lg:py-24 px-4 sm:px-6 lg:px-8" style="background-color: ${c.backgroundHex};">
+                <div class="max-w-7xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center ${flexOrder}">
                         <!-- Image Side -->
-                        <div class="w-full md:w-1/2">
+                        <div class="order-1 ${imageFirst ? 'lg:order-1' : 'lg:order-2'}">
                             <div class="relative">
-                                <!-- Decorative Circle -->
-                                <div class="absolute -top-4 -left-4 w-24 h-24 bg-${c.accentColor}/20 rounded-full -z-10"></div>
-                                <img src="${this.image}"
-                                     alt="${this.imageAlt}"
-                                     class="relative rounded-lg shadow-2xl w-full object-cover">
+                                <div class="relative aspect-square rounded-2xl overflow-hidden bg-gray-50 shadow-lg">
+                                    ${this.image ? `
+                                        <img src="${this.image}"
+                                             alt="${this.imageAlt || ''}"
+                                             class="w-full h-full object-cover">
+                                    ` : `
+                                        <div class="w-full h-full flex items-center justify-center bg-gray-100">
+                                            <div class="w-32 h-32 rounded-full bg-gray-200"></div>
+                                        </div>
+                                    `}
+                                </div>
                             </div>
                         </div>
 
                         <!-- Content Side -->
-                        <div class="w-full md:w-1/2">
+                        <div class="order-2 ${imageFirst ? 'lg:order-2' : 'lg:order-1'} space-y-8">
                             ${this.badge ? `
-                                <span class="text-${c.badgeColor} font-bold uppercase tracking-widest text-sm mb-2 block">
-                                    ${this.badge}
-                                </span>
+                                <div>
+                                    <span class="inline-block px-4 py-1.5 rounded-md text-xs font-semibold uppercase tracking-wider mb-6" style="background-color: ${c.primary}; color: white;">
+                                        ${this.badge}
+                                    </span>
+                                </div>
                             ` : ''}
 
-                            <h2 class="font-serif text-3xl md:text-4xl lg:text-5xl text-${c.titleColor} mb-6 leading-tight font-medium">
-                                ${this.title}
-                            </h2>
+                            <div class="space-y-4">
+                                <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight">
+                                    ${this.title || ''}
+                                </h2>
+                            </div>
 
-                            <p class="text-gray-600 mb-8 leading-relaxed text-lg">
-                                ${this.description}
-                            </p>
+                            ${this.description ? `
+                                <p class="text-lg text-gray-600 leading-relaxed max-w-xl">
+                                    ${this.description}
+                                </p>
+                            ` : ''}
 
-                            ${this.features.length > 0 ? `
-                                <ul class="space-y-4 mb-8">
+                            ${featuresHtml ? `
+                                <ul class="space-y-4">
                                     ${featuresHtml}
                                 </ul>
                             ` : ''}
 
                             ${this.cta ? `
-                                <a href="${this.cta.href}"
-                                   ${this.cta.target ? `target="${this.cta.target}"` : ''}
-                                   class="inline-block border-b-2 border-${c.ctaColor} text-${c.ctaColor} font-serif text-xl pb-1 hover:text-${c.ctaHoverColor} hover:border-${c.ctaHoverColor} transition-colors">
-                                    ${this.cta.text}
-                                </a>
+                                <div class="pt-2">
+                                    <a href="${this.cta.href || '#'}"
+                                       ${this.cta.target ? `target="${this.cta.target}"` : ''}
+                                       class="inline-flex items-center justify-center gap-2 px-8 py-3.5 font-semibold rounded-lg text-white hover:opacity-90 transition-opacity duration-200"
+                                       style="background-color: ${c.primary};">
+                                        ${this.cta.text || 'Saiba Mais'}
+                                    </a>
+                                </div>
                             ` : ''}
                         </div>
                     </div>
