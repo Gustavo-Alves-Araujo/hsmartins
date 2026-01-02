@@ -20,14 +20,15 @@ class TestimonialsSectionComponent extends BaseComponent {
         // Aceita tanto 'reviews' quanto 'testimonials'
         const reviewsData = data.reviews || data.testimonials || [];
 
-        // Normaliza os dados: mapeia 'author' para 'name', 'review' para 'text', adiciona avatar padrão se necessário
+        // Normaliza os dados: mapeia 'author' para 'name', 'review'/'quote' para 'text', adiciona avatar padrão se necessário
         this.reviews = reviewsData.map(item => ({
             avatar: item.avatar || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(item.author || item.name || '') + '&background=random',
             name: item.name || item.author || '',
             rating: item.rating || 5,
             verified: item.verified !== undefined ? item.verified : false,
-            text: item.text || item.review || '',
-            pet: item.pet || null // Armazena info do pet se disponível
+            text: item.text || item.review || item.quote || '',
+            pet: item.pet || null, // Armazena info do pet se disponível
+            role: item.role || null // Armazena role/cargo se disponível
         }));
 
         // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
@@ -100,6 +101,7 @@ class TestimonialsSectionComponent extends BaseComponent {
                     <div class="flex-1">
                         <h4 class="font-bold text-gray-900">${review.name}</h4>
                         ${review.pet ? `<p class="text-xs text-gray-500 mt-0.5">${review.pet}</p>` : ''}
+                        ${review.role ? `<p class="text-xs text-gray-500 mt-0.5">${review.role}</p>` : ''}
                         <div class="flex text-yellow-400 text-xs mt-1">
                             ${this.renderStars(review.rating)}
                         </div>

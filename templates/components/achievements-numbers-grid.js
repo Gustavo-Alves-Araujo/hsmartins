@@ -17,8 +17,10 @@ class AchievementsNumbersGridComponent extends BaseComponent {
     constructor(data) {
         super();
         this.id = data.id || 'achievements';
+        this.tag = data.tag || '';
         this.title = data.title || '';
-        this.stats = data.stats || [];
+        // Aceita tanto 'stats' quanto 'numbers' para compatibilidade
+        this.stats = data.stats || data.numbers || [];
         this.description = data.description || '';
 
         // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
@@ -31,12 +33,22 @@ class AchievementsNumbersGridComponent extends BaseComponent {
 
         // Resolve cores usando sempre a cor primária do tema
         const primaryBase = this.resolveColor(data.colors?.primary, 'primary', 'green');
+        const useHex = primaryHex && primaryHex.startsWith('#');
+
+        // Calcula variações para o badge
+        const badgeBgHex = useHex ? this.lightenColor(primaryHex, 0.9) : null;
+        const badgeTextHex = useHex ? primaryHex : null;
 
         this.colors = {
             value: this.getColorVariant(primaryBase, 600),
             hoverBar: this.getColorVariant(primaryBase, 300),
             backgroundGlow: this.getColorVariant(primaryBase, 50),
-            primaryHex: primaryHex // Guarda o hex para uso direto se necessário
+            primaryHex: primaryHex, // Guarda o hex para uso direto se necessário
+            badgeBg: useHex ? '' : this.getColorVariant(primaryBase, 100),
+            badgeText: useHex ? '' : this.getColorVariant(primaryBase, 600),
+            badgeBgHex: badgeBgHex,
+            badgeTextHex: badgeTextHex,
+            useHex: useHex
         };
 
     }
@@ -92,8 +104,13 @@ class AchievementsNumbersGridComponent extends BaseComponent {
                 <div class="absolute bottom-[-15%] right-[-15%] w-[300px] h-[300px] bg-slate-50/80 rounded-full blur-[80px] -z-10 pointer-events-none"></div>
 
                 <div class="container mx-auto px-6 max-w-5xl relative">
-                    ${this.title || this.description ? `
+                    ${this.tag || this.title || this.description ? `
                         <div class="text-center max-w-2xl mx-auto mb-12">
+                            ${this.tag ? `
+                                <div class="inline-block px-3 py-1 rounded-full ${c.useHex ? '' : `bg-${c.badgeBg} text-${c.badgeText}`} text-xs font-bold uppercase tracking-widest mb-4" ${c.useHex ? `style="background-color: ${c.badgeBgHex}; color: ${c.badgeTextHex};"` : ''} data-aos="fade-up">
+                                    ${this.tag}
+                                </div>
+                            ` : ''}
                             ${this.title ? `
                                 <h2 class="text-3xl md:text-4xl font-black text-slate-900 mb-4 tracking-tight" data-aos="fade-up">
                                     ${this.title}
