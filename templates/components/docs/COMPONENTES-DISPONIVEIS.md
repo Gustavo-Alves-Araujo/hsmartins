@@ -6,22 +6,6 @@ Este documento lista todos os componentes disponíveis no sistema, suas funciona
 
 ## 🎨 Componentes de Navegação e Header
 
-### `sticky-navbar-gradient`
-**Descrição**: Navbar fixa com gradiente no logo e menu responsivo. Fica fixa no topo ao fazer scroll.
-
-**Funcionalidades**:
-- Logo com gradiente de cores
-- Menu responsivo (desktop e mobile)
-- Botão CTA destacado
-- Efeito de blur ao fazer scroll
-
-**Útil para**:
-- ✅ SaaS/Software (Nexus, plataformas)
-- ✅ Serviços profissionais
-- ✅ E-commerce moderno
-- ✅ Landing pages corporativas
-
----
 
 ### `sticky-header-navigation`
 **Descrição**: Header fixo sticky com logo, menu de navegação responsivo e botão de área do cliente.
@@ -543,7 +527,6 @@ Este documento lista todos os componentes disponíveis no sistema, suas funciona
 - `whatsapp-float-button` - Botão WhatsApp
 
 ### 💻 SaaS / Plataformas
-- `sticky-navbar-gradient` - Navbar moderna
 - `hero-badge-preview` - Hero com preview
 - `social-proof-logos` - Logos de clientes
 - `features-grid-glass` - Funcionalidades

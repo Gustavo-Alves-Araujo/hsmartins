@@ -134,7 +134,6 @@ Temos **30+ componentes** organizados por categoria:
 ### 🧭 Navegação
 - `contact-top-bar` - Barra superior com contato
 - `sticky-header-navigation` - Header fixo profissional
-- `sticky-navbar-gradient` - Navbar moderna com gradiente
 - `header-navigation` - Header simples e limpo
 
 ### 🎯 Hero

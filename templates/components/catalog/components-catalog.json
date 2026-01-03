@@ -256,26 +256,6 @@
         "placement": "top"
       }
     },
-    "sticky-navbar-gradient": {
-      "id": "sticky-navbar-gradient",
-      "name": "Sticky Navbar Gradient",
-      "description": "Navbar fixa com gradiente no logo e menu responsivo. Fica fixa no topo ao fazer scroll",
-      "category": "navigation",
-      "tags": ["navbar", "sticky", "gradient", "modern", "saas"],
-      "niches": ["saas", "software", "professional-services", "ecommerce", "corporate"],
-      "requiredProps": ["logoUrl", "links"],
-      "optionalProps": ["logoAlt", "ctaButton", "colors"],
-      "dependencies": [],
-      "compatibleWith": ["features-grid-glass"],
-      "incompatibleWith": [],
-      "style": "modern-gradient",
-      "theme": "adapts",
-      "file": "sticky-navbar-gradient.js",
-      "suggestions": {
-        "bestFor": ["SaaS/Software", "E-commerce moderno", "Landing pages corporativas"],
-        "placement": "top"
-      }
-    },
     "header-navigation": {
       "id": "header-navigation",
       "name": "Header Navigation",
@@ -878,7 +858,7 @@
     }
   },
   "categories": {
-    "navigation": ["contact-top-bar", "sticky-header-navigation", "sticky-navbar-gradient", "header-navigation", "marquee-info-bar", "navbar-ecommerce", "navbar-ecommerce-advanced"],
+    "navigation": ["contact-top-bar", "sticky-header-navigation", "header-navigation", "marquee-info-bar", "navbar-ecommerce", "navbar-ecommerce-advanced"],
     "hero": ["hero-image-badge", "hero-overlay","hero-split", "hero-product-showcase"],
     "information": ["info-bar", "achievements-numbers-grid", "social-proof-logos"],
     "services": ["quick-service-cards", "features-grid-glass", "benefit-highlight-split", "feature-highlight", "benefits-grid", "benefits-grid-ecommerce"],
@@ -898,7 +878,7 @@
       "optional": ["cta-banner", "faq-accordion"]
     },
     "saas": {
-      "recommended": ["sticky-navbar-gradient","social-proof-logos", "features-grid-glass", "benefit-highlight-split", "pricing-grid-highlight", "faq-accordion", "cta-glow-card", "footer-multi-column-dark"],
+      "recommended": ["header-navigation","social-proof-logos", "features-grid-glass", "benefit-highlight-split", "pricing-grid-highlight", "faq-accordion", "cta-glow-card", "footer-multi-column-dark"],
       "optional": ["ambient-background-effects", "email-signup-form"]
     },
     "clinics": {

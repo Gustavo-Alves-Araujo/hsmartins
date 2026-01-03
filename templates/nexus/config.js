@@ -30,18 +30,7 @@ const config = {
     ]
   },
 
-  'sticky-navbar-gradient': {
-    logoText: 'NEXUS',
-    menuItems: [
-      { text: 'Recursos', href: '#recursos' },
-      { text: 'Benefícios', href: '#beneficios' },
-      { text: 'Planos', href: '#precos' }
-    ],
-    ctaButton: {
-      text: 'Começar Agora',
-      href: '#precos'
-    }
-  },
+
 
   'hero-badge-preview': {
     badge: {
