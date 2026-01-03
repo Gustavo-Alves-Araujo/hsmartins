@@ -226,8 +226,13 @@ class FooterMultiColumnLinksComponent {
                         ` : ''}
                     </div>
                     <div class="footer-bottom">
-                        <p>${this.copyright}</p>
-                        ${this.developer ? `<p style="font-size: 0.8rem; margin-top: 5px;">${this.developer}</p>` : ''}
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 8px;">
+                            ${this.copyright ? `<p>${this.copyright}</p>` : ''}
+                            <p style="font-size: 0.9rem;">
+                                Feito por: <a href="https://www.axolutions.com.br" target="_blank" rel="noopener noreferrer" style="color: var(--primary); text-decoration: none; transition: opacity 0.3s;" onmouseover="this.style.opacity='0.8';" onmouseout="this.style.opacity='1';">www.axolutions.com.br</a>
+                            </p>
+                            ${this.developer ? `<p style="font-size: 0.8rem; margin-top: 5px;">${this.developer}</p>` : ''}
+                        </div>
                     </div>
                 </div>
             </footer>
