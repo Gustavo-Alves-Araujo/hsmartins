@@ -10,10 +10,24 @@ class CategoryCarouselComponent extends BaseComponent {
      * @param {Array} data.categories - Array de categorias { title: string, href: string, subtitle?: string }
      * @param {Object} data.colors - Cores customizáveis
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        this.title = data.title || 'Navegue por Categorias';
-        this.categories = data.categories || [];
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            title: 'Pesquisas Mais Populares',
+            categories: [
+                { title: 'Sobrado para Venda em Poá', href: '#' },
+                { title: 'Casa Térrea para Venda em Poá', href: '#' },
+                { title: 'Apartamento para Venda em Itaquaquecetuba', href: '#' },
+                { title: 'Casa para Venda em Poá', href: '#' },
+                { title: 'Apartamento para Venda em São Paulo', href: '#' },
+                { title: 'Terreno para Venda em Poá', href: '#' }
+            ]
+        };
+        
+        this.title = data.title || defaults.title;
+        this.categories = data.categories || defaults.categories;
 
         // Resolve cores com contraste adequado
         const bgBase = this.resolveColor(data.colors?.background, 'background', 'gray-50');

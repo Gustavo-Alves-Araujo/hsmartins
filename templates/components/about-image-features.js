@@ -18,15 +18,35 @@ class AboutImageFeaturesComponent extends BaseComponent {
      * @param {string} data.colors.primary - Nome base da cor primária (ex: 'green', 'blue')
      * @param {string} data.colors.accent - Nome base da cor de destaque
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        this.id = data.id || '';
-        this.tag = data.tag || '';
-        this.title = data.title || '';
-        this.paragraphs = data.paragraphs || [];
-        this.features = data.features || [];
-        this.imageUrl = data.imageUrl || '';
-        this.imageAlt = data.imageAlt || '';
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            id: 'sobre',
+            tag: 'Sobre a Imobiliária H.S Martins',
+            title: 'Atendimento completo para comprar, vender e financiar seu imóvel',
+            paragraphs: [
+                'Somos a Imobiliária H.S Martins (Creci. 21.189), com foco em imóveis em Poá e região: apartamentos, casas, terrenos e oportunidades para diferentes perfis.',
+                'Da busca ao fechamento, você conta com atendimento personalizado e suporte na negociação — além de orientação completa para financiamento como Correspondente Caixa.'
+            ],
+            features: [
+                { icon: 'fas fa-home', text: 'Compra e Venda de Imóveis' },
+                { icon: 'fas fa-building', text: 'Apartamentos, Casas e Terrenos' },
+                { icon: 'fas fa-university', text: 'Correspondente Caixa (Financiamento)' },
+                { icon: 'fas fa-user-tie', text: 'Atendimento e Suporte na Documentação' }
+            ],
+            imageUrl: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwyfHxyZWFsJTIwZXN0YXRlfGVufDB8MHx8fDE3NjkyNTUyMzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+            imageAlt: 'Time de profissionais imobiliários'
+        };
+        
+        this.id = data.id || defaults.id;
+        this.tag = data.tag !== undefined ? data.tag : defaults.tag;
+        this.title = data.title || defaults.title;
+        this.paragraphs = data.paragraphs || defaults.paragraphs;
+        this.features = data.features || defaults.features;
+        this.imageUrl = data.imageUrl || defaults.imageUrl;
+        this.imageAlt = data.imageAlt || defaults.imageAlt;
         this.reverse = data.reverse || false;
 
         // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO
@@ -66,14 +86,22 @@ class AboutImageFeaturesComponent extends BaseComponent {
     render() {
         const c = this.colors;
 
+        // Observação: com Tailwind via CDN, classes montadas dinamicamente (ex: "text-${c.text}")
+        // podem não ser geradas. Aqui usamos classes fixas + estilos inline quando necessário,
+        // garantindo que o texto nunca "suma".
+        // Tailwind via CDN pode não gerar classes vindas de JS externo.
+        // Para garantir visibilidade do texto, usamos cor inline.
         const paragraphsHtml = this.paragraphs
-            .map(p => `<p class="text-sm md:text-base mb-4 leading-relaxed text-${c.text}">${p}</p>`)
+            .map(p => `<p class="text-sm md:text-base mb-4 leading-relaxed" style="color: #334155;">${p}</p>`)
             .join('');
 
+        const primaryHex = this.getThemeColorHex('primary') || '#005CA9';
+        const accentHex = this.getThemeColorHex('accent') || '#F39200';
         const featuresHtml = this.features
             .map(f => `
-                <div class="flex items-center gap-3 p-3 rounded-xl bg-${c.featureBg} border border-slate-100 shadow-sm transition-all hover:shadow-md">
-                    <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-white shadow-sm text-${c.featureIcon} border border-slate-100">
+                <div class="flex items-center gap-3 p-3 rounded-xl bg-slate-50 border border-slate-100 shadow-sm transition-all hover:shadow-md">
+                    <div class="w-8 h-8 rounded-lg flex items-center justify-center bg-white shadow-sm border border-slate-100"
+                         style="color: ${primaryHex};">
                         <i class="${f.icon} text-xs"></i>
                     </div>
                     <span class="text-xs font-bold text-slate-800">${f.text}</span>
@@ -86,8 +114,9 @@ class AboutImageFeaturesComponent extends BaseComponent {
                 <div class="container mx-auto px-6 max-w-6xl relative z-10">
                     <div class="flex flex-col ${this.reverse ? 'lg:flex-row-reverse' : 'lg:flex-row'} items-center gap-10 lg:gap-16">
 
-                        <div class="w-full lg:w-1/2 relative" data-aos="${this.reverse ? 'fade-left' : 'fade-right'}">
-                            <div class="absolute -top-10 -left-10 w-48 h-48 bg-${c.accentGlow}/10 blur-[80px] rounded-full pointer-events-none"></div>
+                        <div class="w-full lg:w-1/2 relative">
+                            <div class="absolute -top-10 -left-10 w-48 h-48 blur-[80px] rounded-full pointer-events-none"
+                                 style="background-color: ${this.hexToRgba(accentHex, 0.18)};"></div>
 
                             <div class="relative inline-block">
                                 <img src="${this.imageUrl}" alt="${this.imageAlt}"
@@ -105,14 +134,15 @@ class AboutImageFeaturesComponent extends BaseComponent {
                             </div>
                         </div>
 
-                        <div class="w-full lg:w-1/2" data-aos="${this.reverse ? 'fade-right' : 'fade-left'}">
+                        <div class="w-full lg:w-1/2">
                             ${this.tag ? `
-                                <div class="inline-flex items-center gap-2 py-1 px-3 rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-4 bg-${c.tagBg} text-${c.tagText} border border-${c.tagText}/20">
-                                    <i class="fas fa-leaf text-[8px]"></i> ${this.tag}
+                                <div class="inline-flex items-center gap-2 py-1 px-3 rounded-full text-[10px] font-extrabold uppercase tracking-widest mb-4"
+                                     style="background-color: ${this.hexToRgba(accentHex, 0.14)}; color: ${primaryHex}; border: 1px solid ${this.hexToRgba(accentHex, 0.28)};">
+                                    <i class="fas fa-sparkles text-[8px]"></i> ${this.tag}
                                 </div>
                             ` : ''}
 
-                            <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4 tracking-tight leading-tight text-${c.title}">
+                            <h2 class="text-2xl md:text-3xl lg:text-4xl font-extrabold mb-4 tracking-tight leading-tight" style="color: #0f172a;">
                                 ${this.title}
                             </h2>
 
@@ -140,7 +170,6 @@ class AboutImageFeaturesComponent extends BaseComponent {
         const target = document.getElementById(targetId);
         if (target) {
             target.innerHTML = this.render();
-            if (typeof AOS !== 'undefined') AOS.init();
         }
     }
 

@@ -1,1 +1,55 @@
-{"theme":{"colors":{"primary":"#3A47E5","primaryLight":"#6B7DEB","secondary":"#2A35B7","tertiary":"#CBD5E1","accent":"#F59E0B","background":"#F8FAFB","text":{"dark":"#1F2937","medium":"#4B5563","light":"#9CA3AF","white":"#FFFFFF"}},"fonts":{"primary":"\"Poppins\", sans-serif","secondary":"\"Inter\", sans-serif","urls":{"google":"https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"}}},"contact-top-bar":{"infoItems":[{"icon":"fas fa-phone-alt","text":"(11) 4638-2942"},{"icon":"fas fa-map-marker-alt","text":"Av. Leonor Bolsoni Marques da Silva, 230, Poá - SP"},{"icon":"fas fa-clock","text":"Seg-Sex: 9h às 17h | Sáb: 9h às 12h"}],"socialLinks":[{"icon":"fab fa-facebook","href":"https://facebook.com/hsmartins"},{"icon":"fab fa-instagram","href":"https://instagram.com/hsmartins"},{"icon":"fab fa-whatsapp","href":"https://wa.me/551146382942"}]},"sticky-header-navigation":{"logoUrl":"","logoAlt":"Logo HS Martins","siteName":"HS Martins","established":"Creci. 21.189","links":{"venda":{"text":"Venda","href":"#imoveis"},"negociar":{"text":"Negociar meu Imóvel","href":"#negociar"},"sobre":{"text":"Sobre Nós","href":"#sobre"},"contato":{"text":"Contato","href":"#contato"},"cta":{"text":"Fale Conosco","href":"https://wa.me/551146382942","target":"_blank"}}},"hero-overlay":{"badge":"Encontre o Imóvel dos Seus Sonhos","title":"Imóveis em Poá","titleHighlight":"e Região.","subtitle":"H.S Martins Empreendimentos Imobiliários Ltda, as melhores oportunidades de negócio, casa na praia e soluções completas para você.","ctaPrimary":{"text":"Buscar Imóveis","href":"#imoveis","target":"_self"},"ctaSecondary":{"text":"Negocie seu Imóvel","href":"#negociar","target":"_self"},"backgroundImage":"https://images.unsplash.com/photo-1582407947304-fd86f028f716?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlfGVufDB8MHx8fDE3NjkyNTUyMzV8MA&ixlib=rb-4.1.0&q=80&w=1080","backgroundAlt":"Fachada de casa moderna","whatsappNumber":"551146382942"},"about-image-features":{"id":"sobre","tag":"Sobre a HS Martins","title":"O Imóvel que você procura está aqui!","paragraphs":["H.S Martins Empreendimentos Imobiliários Ltda, as melhores oportunidades de imóveis em Poá e região.","Nosso compromisso é com a sua satisfação, oferecendo suporte completo e atendimento personalizado para a compra ou venda do seu imóvel."],"features":[{"icon":"fas fa-home","text":"Venda de Imóveis"},{"icon":"fas fa-handshake","text":"Negociação Imobiliária"},{"icon":"fas fa-money-check-alt","text":"Correspondente Bancário"},{"icon":"fas fa-user-tie","text":"Atendimento Personalizado"}],"imageUrl":"https://images.unsplash.com/photo-1580587771525-78b9dba3b914?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwyfHxyZWFsJTIwZXN0YXRlfGVufDB8MHx8fDE3NjkyNTUyMzV8MA&ixlib=rb-4.1.0&q=80&w=1080","imageAlt":"Time de profissionais imobiliários"},"product-grid-advanced":{"id":"imoveis","products":[{"title":"Sobrado para Venda em Poá","category":"Alto Padrão","price":{"current":"R$ 650.000","original":"R$ 680.000"},"rating":"4.8","installments":"Em até 360x","badge":{"text":"Novo","style":"new"}},{"title":"Casa Térrea para Venda em Poá","category":"Conforto e Lazer","price":{"current":"R$ 380.000"},"rating":"4.5","installments":"Em até 360x"},{"title":"Apartamento em Itaquaquecetuba","category":"Oportunidade","price":{"current":"R$ 220.000","original":"R$ 240.000"},"rating":"4.2","installments":"Em até 360x","badge":{"text":"Desconto","style":"discount"}},{"title":"Casa na Praia - Litoral Norte","category":"Lazer e Férias","price":{"current":"R$ 950.000"},"rating":"4.9","installments":"Em até 360x"}],"linkText":"Ver todos os Imóveis","linkHref":"#"},"benefits-grid":{"id":"negociar","title":"Agilize a Venda ou Financiamento do seu Imóvel","description":"Oferecemos o melhor suporte para a negociação e agilização do financiamento do seu imóvel.","benefits":[{"icon":"fas fa-search-dollar","title":"Oportunidades de Negócio","description":"Seleção especial com as melhores oportunidades de compra e venda."},{"icon":"fas fa-briefcase","title":"Correspondente Bancário","description":"Agilize o financiamento de seu imóvel, consulte nossa equipe especializada."},{"icon":"fas fa-chart-line","title":"Negocie seu Imóvel","description":"Oferecemos o melhor suporte para a venda e negociação do seu patrimônio."},{"icon":"fas fa-headset","title":"Atendimento Personalizado","description":"Entre em contato para que possamos lhe ajudar a encontrar ou vender seu imóvel."}],"columns":4},"category-carousel":{"title":"Pesquisas Mais Populares","categories":[{"title":"Sobrado para Venda em Poá","href":"#"},{"title":"Casa Térrea para Venda em Poá","href":"#"},{"title":"Apartamento para Venda em Itaquaquecetuba","href":"#"},{"title":"Casa para Venda em Poá","href":"#"},{"title":"Apartamento para Venda em São Paulo","href":"#"},{"title":"Terreno para Venda em Poá","href":"#"}]},"card-grid":{"title":"Notícias do Mercado Imobiliário","subtitle":"Fique por dentro sobre notícias, investimento e mais!","items":[{"imageUrl":"https://images.unsplash.com/photo-1579621970795-87facc2f976d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxncm93dGglMjBmaW5hbmNlfHxlbnwwfDB8fHwxNzA4MzcwODg4fDA&ixlib=rb-4.1.0&q=80&w=400","imageAlt":"Novas condições de financiamento","title":"NOVAS CONDIÇÕES DE FINANCIAMENTO","description":"Saiba mais sobre as recentes atualizações para facilitar a compra do seu imóvel.","buttonText":"Ler Mais","buttonHref":"#"},{"imageUrl":"https://images.unsplash.com/photo-1549923755-a2c7a6f2b45e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxtYXJyaWVkJTIwY291cGxlfHxlbnwwfDB8fHwxNzA4MzcwODg4fDA&ixlib=rb-4.1.0&q=80&w=400","imageAlt":"Casal discutindo","title":"Sou casado. Posso financiar um imóvel sozinho?","description":"Entenda as regras e possibilidades para o financiamento individual em caso de casamento.","buttonText":"Ler Mais","buttonHref":"#"},{"imageUrl":"https://images.unsplash.com/photo-1554224155-c474ad691500?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxtb3J0Z2FnZSUyMHByb2JsZW1zfHxlbnwwfDB8fHwxNzA4MzcwODg4fDA&ixlib=rb-4.1.0&q=80&w=400","imageAlt":"Pessoa preocupada com contas","title":"Não consigo pagar o financiamento da minha casa: o que faço?","description":"Opções e soluções para quem está com dificuldades no pagamento do financiamento imobiliário.","buttonText":"Ler Mais","buttonHref":"#"}]},"faq-accordion":{"title":"Tire suas Dúvidas sobre Financiamento","subtitle":"Informações úteis para quem busca realizar o sonho da casa própria.","questions":[{"question":"O FGTS pode ser usado para quitar parcelas atrasadas?","answer":"Sim, o FGTS poderá ser usado para quitar até 12 parcelas de financiamento atrasado, seguindo as regras da Caixa Econômica Federal."},{"question":"Tenho um imóvel quitado, posso financiar outro?","answer":"Sim, é possível financiar um segundo imóvel mesmo já possuindo um quitado, desde que atenda aos requisitos de crédito e endividamento."},{"question":"Quais as dicas para comprar um imóvel antes dos 30?","answer":"Planejamento financeiro, pesquisa de mercado, uso do FGTS, simulação de financiamento e busca por um bom corretor são essenciais."}]},"cta-banner":{"title":"Sua Próxima Conquista Começa Aqui!","subtitle":"Entre em contato com nossos especialistas e encontre o imóvel dos seus sonhos em Poá e região.","buttons":[{"text":"Fale com um Especialista","href":"https://wa.me/551146382942?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20imóveis.","primary":true,"icon":"fab fa-whatsapp"},{"text":"Ver Imóveis","href":"#imoveis","primary":false,"icon":"fas fa-arrow-right"}],"backgroundPattern":"dots"},"whatsapp-float-button":{"icon":"fab fa-whatsapp","text":"Fale Conosco","href":"https://wa.me/551146382942?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20imóveis.","color":"#25D366"},"footer-contact":{"id":"contato","title":"HS Martins Empreendimentos Imobiliários Ltda.","address":{"label":"Localização","street":"Av. Leonor Bolsoni Marques da Silva, 230","city":"Centro - Poá / SP","zipCode":"CEP: 08557-000","mapQuery":"Av. Leonor Bolsoni Marques da Silva, 230, Poá"},"contact":{"label":"Contato","phone":"(11) 4638-2942","email":"contato@hsmartins.com.br","hours":"Atendimento: Segunda á Sexta-feira - 09:00 ás 17:00 hs | Sábado - 09:00 ás 12:00 hs"},"socialLinks":[{"icon":"fab fa-facebook","href":"https://facebook.com/hsmartins","label":"Facebook"},{"icon":"fab fa-instagram","href":"https://instagram.com/hsmartins","label":"Instagram"},{"icon":"fab fa-whatsapp","href":"https://wa.me/551146382942","label":"WhatsApp"}],"copyright":"www.hsmartins.com.br © 2026. Todos os direitos reservados.","tags":["Imobiliária Poá","Imóveis Poá","Venda de Imóveis","Financiamento Imobiliário"]},"site":{"title":"HS Martins - Imobiliária em Poá e Região | Venda e Financiamento","name":"HS Martins","established":"Creci. 21.189","logoAlt":"Logo HS Martins","logoUrl":""}}
+{
+  "theme": {
+    "colors": {
+      "primary": "#005CA9",
+      "primaryLight": "#2D7FC1",
+      "secondary": "#004A87",
+      "tertiary": "#CBD5E1",
+      "accent": "#F39200",
+      "background": "#F8FAFB",
+      "text": {
+        "dark": "#1F2937",
+        "medium": "#4B5563",
+        "light": "#9CA3AF",
+        "white": "#FFFFFF"
+      }
+    },
+    "fonts": {
+      "primary": "\"Poppins\", sans-serif",
+      "secondary": "\"Inter\", sans-serif",
+      "urls": {
+        "google": "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"
+      }
+    }
+  },
+  "site": {
+    "title": "HS Martins - Imobiliária em Poá e Região | Venda e Financiamento",
+    "name": "HS Martins",
+    "established": "Creci. 21.189",
+    "logoAlt": "Logo HS Martins",
+    "logoUrl": ""
+  },
+  "contact-top-bar": {},
+  "sticky-header-navigation": {
+    "logoUrl": "img/logo.png",
+    "logoAlt": "Logo Imobiliária H.S Martins",
+    "siteName": "HS Martins",
+    "established": "Creci. 21.189",
+    "links": {
+      "venda": { "text": "Venda", "href": "#imoveis" },
+      "sobre": { "text": "Sobre", "href": "sobre.html" },
+      "correspondente": { "text": "Correspondente Caixa", "href": "correspondente.html" },
+
+      "cta": { "text": "Fale Conosco", "href": "https://wa.me/551146382942", "target": "_blank" }
+    }
+  },
+  "hero-overlay": {},
+  "about-image-features": {},
+  "product-grid-advanced": {},
+  "benefits-grid": {},
+  "card-grid": {},
+  "faq-accordion": {},
+  "cta-banner": {},
+  "whatsapp-float-button": {},
+  "footer-contact": {}
+}

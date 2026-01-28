@@ -8,25 +8,40 @@ class HeroComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados necessários para o Hero
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        this.badge = data.badge;
-        this.title = data.title;
-        this.titleHighlight = data.titleHighlight;
-        this.subtitle = data.subtitle;
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            badge: 'Imobiliária em Poá e Região • Leilões • Venda • Financiamento',
+            title: 'Imobiliária H.S Martins',
+            titleHighlight: '',
+            subtitle: 'Encontre apartamentos, casas e terrenos em Poá e região. Conte com apoio completo no financiamento (Correspondente Caixa).',
+            ctaPrimary: { text: 'Buscar Imóveis', href: '#imoveis', target: '_self' },
+            ctaSecondary: { text: 'Negocie seu Imóvel', href: '#negociar', target: '_self' },
+            backgroundImage: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlfGVufDB8MHx8fDE3NjkyNTUyMzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
+            backgroundAlt: 'Fachada de casa moderna',
+            whatsappNumber: '551146382942'
+        };
+        
+        this.badge = data.badge !== undefined ? data.badge : defaults.badge;
+        this.title = data.title || defaults.title;
+        this.titleHighlight = data.titleHighlight || defaults.titleHighlight;
+        this.subtitle = data.subtitle || defaults.subtitle;
 
         // CTAs com suporte a objeto { text, href, target } - MANTIDO ORIGINAL
+        const whatsappNumber = data.whatsappNumber || defaults.whatsappNumber;
         this.ctaPrimary = typeof data.ctaPrimary === 'string'
-            ? { text: data.ctaPrimary, href: `https://wa.me/${data.whatsappNumber}`, target: '_blank' }
-            : { text: 'Fazer Pedido', href: `https://wa.me/${data.whatsappNumber}`, target: '_blank', ...data.ctaPrimary };
+            ? { text: data.ctaPrimary, href: `https://wa.me/${whatsappNumber}`, target: '_blank' }
+            : { ...defaults.ctaPrimary, ...data.ctaPrimary };
 
         this.ctaSecondary = typeof data.ctaSecondary === 'string'
             ? { text: data.ctaSecondary, href: '#services' }
-            : { text: 'Explorar', href: '#services', ...data.ctaSecondary };
+            : { ...defaults.ctaSecondary, ...data.ctaSecondary };
 
-        this.backgroundImage = data.backgroundImage;
-        this.backgroundAlt = data.backgroundAlt;
-        this.whatsappNumber = data.whatsappNumber;
+        this.backgroundImage = data.backgroundImage || defaults.backgroundImage;
+        this.backgroundAlt = data.backgroundAlt || defaults.backgroundAlt;
+        this.whatsappNumber = whatsappNumber;
 
         // SEMPRE usa a cor primária do tema - SEM FALLBACK FIXO
         const theme = this.getGlobalTheme();
@@ -62,6 +77,9 @@ class HeroComponent extends BaseComponent {
      */
     render() {
         const c = this.colors;
+        const accentHex = this.getThemeColorHex('accent') || '#F39200';
+        const primaryHex = this.getThemeColorHex('primary') || c.ctaPrimaryBg;
+        const badgeText = this.getBestTextColor(accentHex);
 
         return `
             <header class="relative min-h-screen flex items-center justify-center overflow-hidden isolate bg-black pt-20 md:pt-12">
@@ -86,52 +104,50 @@ class HeroComponent extends BaseComponent {
 
                 <div class="container mx-auto px-4 md:px-6 relative z-10 text-center">
 
-                    <div class="inline-flex items-center justify-center mb-6 md:mb-8 mt-4 md:mt-0" data-aos="fade-down" data-aos-duration="1000">
-                        <span class="py-1.5 px-4 md:py-2 md:px-6 rounded-full text-[9px] md:text-xs font-black uppercase tracking-[0.3em] md:tracking-[0.4em] backdrop-blur-md bg-white/10 border border-white/20 shadow-[0_8px_32px_rgba(0,0,0,0.3)]" style="color: ${c.badge};">
+                    <div class="inline-flex items-center justify-center mb-6 md:mb-8 mt-4 md:mt-0">
+                        <span class="py-2 px-4 md:py-2.5 md:px-6 rounded-full text-[9px] md:text-xs font-black uppercase tracking-[0.3em] md:tracking-[0.4em] shadow-[0_18px_45px_rgba(0,0,0,0.35)] border"
+                              style="background-color: ${accentHex}; color: ${badgeText}; border-color: ${this.hexToRgba('#FFFFFF', 0.35)};">
                             ${this.badge}
                         </span>
                     </div>
 
-                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-black leading-[1.05] mb-8 tracking-tighter" style="color: ${c.title};" data-aos="zoom-out" data-aos-duration="1200">
-                        ${this.title} <br>
-                        <span class="italic font-serif opacity-100 relative inline-block" style="color: ${c.titleHighlight};">
-                            ${this.titleHighlight}
-                            <svg class="absolute -bottom-2 left-0 w-full h-2" viewBox="0 0 100 10" preserveAspectRatio="none" style="color: ${c.titleHighlight}; opacity: 0.4;">
-                                <path d="M0 5 Q 50 10 100 5" stroke="currentColor" stroke-width="2" fill="none" />
-                            </svg>
-                        </span>
+                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-black leading-[1.05] mb-6 tracking-tighter" style="color: ${c.title};">
+                        ${this.title}
                     </h1>
 
-                    <p class="max-w-2xl mx-auto text-lg md:text-xl lg:text-2xl mb-12 font-medium leading-relaxed opacity-90 tracking-tight" style="color: ${c.subtitle};" data-aos="fade-up" data-aos-delay="400">
+                    <p class="max-w-2xl mx-auto text-lg md:text-xl lg:text-2xl mb-10 font-medium leading-relaxed opacity-90 tracking-tight" style="color: ${c.subtitle};">
                         ${this.subtitle}
                     </p>
 
-                    <div class="flex flex-col sm:flex-row justify-center items-center gap-6" data-aos="fade-up" data-aos-delay="600">
+                    <div class="max-w-5xl mx-auto">
+                        <form id="hero-imoveis-search" class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 md:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
+                            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 items-center">
+                                <input
+                                    id="hero-search-q"
+                                    type="text"
+                                    placeholder="Buscar por título, tipo, bairro ou cidade..."
+                                    class="md:col-span-2 w-full px-4 py-3 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0"
+                                    style="--tw-ring-color: ${c.ctaPrimaryBg};"
+                                />
 
-                        <a href="${this.ctaPrimary.href}"
-                           ${this.ctaPrimary.target ? `target="${this.ctaPrimary.target}"` : ''}
-                           class="group relative px-12 py-5 font-black rounded-2xl
-                                  hover:scale-105 transition-all duration-500 flex items-center justify-center gap-3
-                                  shadow-[0_20px_40px_rgba(0,0,0,0.4)] overflow-hidden"
-                           style="background-color: ${c.ctaPrimaryBg}; color: ${c.ctaPrimaryText};"
-                           onmouseover="this.style.backgroundColor='${c.ctaPrimaryHover}'"
-                           onmouseout="this.style.backgroundColor='${c.ctaPrimaryBg}'">
+                                <select id="hero-search-type" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                    <option value="all">Todos os tipos</option>
+                                </select>
 
-                            <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:animate-shimmer"></div>
+                                <select id="hero-search-city" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                    <option value="all">Todas as cidades</option>
+                                </select>
 
-                            <i class="fab fa-whatsapp text-xl relative z-10"></i>
-                            <span class="relative z-10 uppercase tracking-widest text-xs">${this.ctaPrimary.text}</span>
-                        </a>
+                                <button type="submit" class="w-full px-5 py-3 rounded-xl font-extrabold uppercase tracking-widest text-xs shadow-[0_14px_28px_rgba(0,0,0,0.35)] hover:opacity-95 transition"
+                                        style="background: linear-gradient(135deg, ${accentHex} 0%, ${this.darkenColor(accentHex, 0.12)} 100%); color: ${badgeText};">
+                                    Pesquisar
+                                </button>
+                            </div>
 
-                        <a href="${this.ctaSecondary.href}"
-                           class="group px-12 py-5 font-bold rounded-2xl
-                                  border bg-white/5 backdrop-blur-md
-                                  hover:bg-white/10 hover:border-white/40 transition-all duration-500
-                                  text-xs uppercase tracking-widest flex items-center gap-2"
-                           style="color: ${c.ctaSecondaryText}; border-color: ${c.ctaSecondaryBorder};">
-                            ${this.ctaSecondary.text}
-                            <i class="fas fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
-                        </a>
+                            <div class="mt-3 text-[11px] md:text-xs opacity-90" style="color: ${c.subtitle};">
+                                Dica: ao digitar na busca, você pode refinar depois nos filtros da lista.
+                            </div>
+                        </form>
                     </div>
                 </div>
             </header>
@@ -155,13 +171,6 @@ class HeroComponent extends BaseComponent {
         if (target) {
             target.innerHTML = this.render();
             this.attachEventListeners();
-            if (typeof AOS !== 'undefined') {
-                AOS.init({
-                    duration: 1000,
-                    once: true
-                });
-                AOS.refresh();
-            }
         }
     }
 
@@ -172,27 +181,53 @@ class HeroComponent extends BaseComponent {
         const heroSection = document.querySelector('header.relative.min-h-screen');
         if (!heroSection) return;
 
-        // Smooth scroll para links de âncora dentro do hero
-        const anchorLinks = heroSection.querySelectorAll('a[href^="#"]');
-        anchorLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                const href = link.getAttribute('href');
-                if (href && href !== '#') {
-                    e.preventDefault();
-                    const targetSection = document.querySelector(href);
-                    if (targetSection) {
-                        // Calcula offset para compensar header fixo (se houver)
-                        const header = document.getElementById('main-header');
-                        const headerHeight = header ? header.offsetHeight : 80;
-                        const targetPosition = targetSection.offsetTop - headerHeight;
-                        window.scrollTo({
-                            top: targetPosition,
-                            behavior: 'smooth'
-                        });
-                    }
+        // Recebe opções dinâmicas (tipo/cidade) quando o grid carregar do Supabase
+        window.addEventListener('imoveis:options', (evt) => {
+            try {
+                const detail = evt?.detail || {};
+                const { tipos = [], cidades = [] } = detail;
+                const typeSel = document.getElementById('hero-search-type');
+                const citySel = document.getElementById('hero-search-city');
+                if (typeSel && Array.isArray(tipos)) {
+                    const keepFirst = typeSel.options[0];
+                    typeSel.innerHTML = '';
+                    typeSel.appendChild(keepFirst);
+                    tipos.forEach(v => {
+                        const opt = document.createElement('option');
+                        opt.value = v;
+                        opt.textContent = v;
+                        typeSel.appendChild(opt);
+                    });
                 }
-            });
+                if (citySel && Array.isArray(cidades)) {
+                    const keepFirst = citySel.options[0];
+                    citySel.innerHTML = '';
+                    citySel.appendChild(keepFirst);
+                    cidades.forEach(v => {
+                        const opt = document.createElement('option');
+                        opt.value = v;
+                        opt.textContent = v;
+                        citySel.appendChild(opt);
+                    });
+                }
+            } catch (e) {
+                // silencioso
+            }
         });
+
+        // Submit do Hero -> aplica filtros no grid e faz scroll para os produtos
+        const form = document.getElementById('hero-imoveis-search');
+        if (form) {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const payload = {
+                    search: document.getElementById('hero-search-q')?.value || '',
+                    type: document.getElementById('hero-search-type')?.value || 'all',
+                    city: document.getElementById('hero-search-city')?.value || 'all'
+                };
+                window.dispatchEvent(new CustomEvent('imoveis:hero-search', { detail: payload }));
+            });
+        }
     }
 
     /**

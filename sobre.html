@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Conheça a história da Imobiliária H.S Martins. Desde 2003, oferecemos atendimento personalizado e soluções imobiliárias para compra, venda, aluguel e financiamento em Poá e região.">
+  <title>Sobre Nós | H.S Martins - Imobiliária em Poá</title>
+
+  <!-- Preconnect para recursos externos -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link rel="dns-prefetch" href="https://unpkg.com">
+
+  <!-- Scripts críticos -->
+  <script src="config.js"></script>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Componentes -->
+  <script src="templates/components/base-component.js"></script>
+  <script src="templates/components/component-registry.js"></script>
+  <script src="templates/components/sticky-header-navigation.js"></script>
+</head>
+
+<body class="antialiased">
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-4">
+    <div class="container mx-auto px-6">
+      <nav class="flex items-center justify-between bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 shadow-sm">
+        <a href="index.html" class="flex items-center gap-3 group transition-transform hover:scale-105">
+          <img src="img/logo.png" alt="Logo HS Martins" class="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover flex-shrink-0">
+          <span class="hidden md:block font-black text-slate-800 tracking-tight">HS Martins</span>
+        </a>
+
+        <ul class="hidden lg:flex items-center gap-2">
+          <li><a href="index.html#imoveis" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Venda</a></li>
+          <li><a href="sobre.html" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Sobre</a></li>
+          <li><a href="correspondente.html" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Correspondente Caixa</a></li>
+          <li><a href="index.html#contato" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Contato</a></li>
+        </ul>
+
+        <a href="https://wa.me/551146382942" target="_blank"
+           class="flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg transition-all hover:scale-105"
+           style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);">
+          <i class="fab fa-whatsapp"></i>
+          <span>Fale Conosco</span>
+        </a>
+
+        <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+          <i class="fas fa-bars"></i>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="pt-32 md:pt-36">
+    <!-- Hero Temático -->
+    <section class="relative min-h-96 flex items-center justify-center overflow-hidden isolate bg-black py-16 md:py-24">
+      <div class="absolute inset-0 z-0">
+        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40"></div>
+        <div style="background: linear-gradient(135deg, rgba(0,92,169,0.15), rgba(243,146,0,0.1)); position: absolute; inset: 0;"></div>
+      </div>
+
+      <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] blur-[150px] rounded-full pointer-events-none mix-blend-screen opacity-20" style="background-color: #005CA9; animation: pulse 4s infinite;"></div>
+
+      <div class="relative z-10 text-center max-w-3xl mx-auto px-4">
+        <div class="inline-flex items-center justify-center mb-6" data-aos="fade-down">
+          <span class="py-2 px-6 rounded-full text-xs font-black uppercase tracking-widest backdrop-blur-md bg-white/10 border border-white/20 text-white shadow-sm" style="color: #F39200;">
+            Nossa História
+          </span>
+        </div>
+        <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6 tracking-tighter text-white">H.S Martins</h1>
+        <p class="max-w-2xl mx-auto text-lg md:text-xl font-medium leading-relaxed opacity-90 text-white">
+          Desde 2003, realizando sonhos imobiliários com segurança, honestidade e atendimento personalizado.
+        </p>
+      </div>
+    </section>
+
+    <!-- Seção: História + Valores -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div data-aos="fade-right">
+          <div class="inline-flex items-center gap-2 py-1 px-3 rounded-full text-xs font-extrabold uppercase tracking-widest mb-4" style="background-color: rgba(243,146,0,0.14); color: #005CA9; border: 1px solid rgba(243,146,0,0.28);">
+            <i class="fas fa-home"></i> Quem Somos
+          </div>
+          <h2 class="text-3xl md:text-4xl font-extrabold mb-4 text-slate-900">Mais de 20 anos de excelência</h2>
+          <p class="text-base md:text-lg text-slate-700 leading-relaxed mb-4">
+            Somos uma empresa imobiliária que desde a sua fundação em 2003 acredita na segurança dos negócios, realizando os sonhos dos clientes através de atendimento personalizado e profissionalismo.
+          </p>
+          <p class="text-base md:text-lg text-slate-700 leading-relaxed mb-4">
+            Com sede em Poá (região metropolitana de São Paulo), conquistamos confiança e credibilidade através de uma equipe altamente capacitada e alinhada com nossa filosofia de excelência.
+          </p>
+          <p class="text-base md:text-lg text-slate-700 leading-relaxed">
+            Hoje, somos reconhecidos pela qualidade dos trabalhos desenvolvidos. Com a colaboração da HS Martins, a escolha do imóvel certo para sua residência ou negócio torna-se mais fácil.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6" data-aos="fade-left">
+          <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: rgba(0,92,169,0.1); color: #005CA9;">
+                <i class="fas fa-bullseye text-xl"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-slate-900 mb-2">Nossa Missão</h3>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  Prover soluções imobiliárias com excelência por meio de equipe competente que supera expectativas dos clientes.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: rgba(243,146,0,0.1); color: #F39200;">
+                <i class="fas fa-eye text-xl"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-slate-900 mb-2">Nossa Visão</h3>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  Oferecer não somente o melhor negócio, mas a melhor oportunidade para realização de um sonho.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm hover:shadow-md transition">
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: rgba(0,92,169,0.1); color: #005CA9;">
+                <i class="fas fa-heart text-xl"></i>
+              </div>
+              <div>
+                <h3 class="font-extrabold text-slate-900 mb-2">Nossos Valores</h3>
+                <p class="text-sm text-slate-700 leading-relaxed">
+                  Ética, credibilidade, respeito, pontualidade e comprometimento com satisfação dos clientes.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA: Venha nos conhecer -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <div class="rounded-2xl p-8 md:p-12 overflow-hidden relative" style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);">
+        <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at top right, rgba(243,146,0,0.2), transparent 70%);"></div>
+        <div class="relative text-center text-white">
+          <h2 class="text-3xl md:text-4xl font-extrabold mb-4">Venha fazer parte da família H.S Martins</h2>
+          <p class="text-lg opacity-90 mb-6 max-w-2xl mx-auto">
+            Estamos aqui para orientá-lo em cada passo da sua jornada imobiliária com segurança e profissionalismo.
+          </p>
+          <a href="https://wa.me/551146382942" target="_blank" class="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-extrabold text-lg shadow-lg hover:opacity-95 transition" style="background-color: #F39200; color: white;">
+            <i class="fab fa-whatsapp"></i> Fale Conosco Agora
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contato -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+      <div class="text-center mb-12">
+        <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-4">Entre em Contato</h2>
+        <p class="text-lg text-slate-700">Estamos prontos para atendê-lo</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4" style="background-color: rgba(0,92,169,0.1); color: #005CA9;">
+            <i class="fas fa-map-marker-alt text-xl"></i>
+          </div>
+          <h3 class="font-extrabold text-slate-900 mb-2">Endereço</h3>
+          <p class="text-sm text-slate-700">Av. Leonor Bolsoni Marques da Silva, 230<br>Centro - Poá / SP<br>CEP 08550-150</p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4" style="background-color: rgba(243,146,0,0.1); color: #F39200;">
+            <i class="fas fa-phone text-xl"></i>
+          </div>
+          <h3 class="font-extrabold text-slate-900 mb-2">Telefone</h3>
+          <p class="text-sm text-slate-700">(11) 4638-2942<br><br><strong>Seg-Sex: 09h-17h</strong><br><strong>Sab: 09h-12h</strong></p>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 p-6 shadow-sm text-center">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl mb-4" style="background-color: rgba(0,92,169,0.1); color: #005CA9;">
+            <i class="fas fa-envelope text-xl"></i>
+          </div>
+          <h3 class="font-extrabold text-slate-900 mb-2">Email</h3>
+          <p class="text-sm text-slate-700">contato@hsmartins.com.br</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-100 bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-8 text-center text-sm text-slate-600">
+      <p>© 2026 H.S Martins Empreendimentos Imobiliários Ltda. Todos os direitos reservados.</p>
+      <p class="mt-2 text-xs">Creci. 21.189</p>
+    </div>
+  </footer>
+
+  <script>
+    // Efeito scroll no header
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('main-header');
+      if (window.scrollY > 50) {
+        header.style.backgroundColor = 'rgba(255,255,255,0.8)';
+        header.style.boxShadow = '0 10px 30px -10px rgba(0,0,0,0.08)';
+      } else {
+        header.style.backgroundColor = 'transparent';
+        header.style.boxShadow = 'none';
+      }
+    });
+
+    // Smooth scroll para links de âncora
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const href = link.getAttribute('href');
+        if (href && href !== '#') {
+          e.preventDefault();
+          const target = document.querySelector(href);
+          if (target) {
+            const headerHeight = document.getElementById('main-header').offsetHeight;
+            const targetPosition = target.offsetTop - headerHeight;
+            window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+          }
+        }
+      });
+    });
+  </script>
+
+  <style>
+    @keyframes pulse {
+      0%, 100% { opacity: 0.2; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+</body>
+
+</html>

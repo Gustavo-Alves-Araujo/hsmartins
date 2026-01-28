@@ -31,14 +31,42 @@ class FooterContactComponent extends BaseComponent {
      * @param {string} data.colors.iconColor - Cor dos ícones base (ex: 'green', 'brand-dark')
      * @param {string} data.colors.borderColor - Cor das bordas base (ex: 'gray', 'brand-dark')
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        this.title = data.title;
-        this.address = data.address || {};
-        this.contact = data.contact || {};
-        this.socialLinks = data.socialLinks || [];
-        this.copyright = data.copyright;
-        this.tags = data.tags || [];
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            id: 'contato',
+            title: 'HS Martins Empreendimentos Imobiliários Ltda.',
+            address: {
+                label: 'Localização',
+                street: 'Av. Leonor Bolsoni Marques da Silva, 230',
+                city: 'Centro - Poá / SP',
+                zipCode: 'CEP: 08557-000',
+                mapQuery: 'Av. Leonor Bolsoni Marques da Silva, 230, Poá'
+            },
+            contact: {
+                label: 'Contato',
+                phone: '(11) 4638-2942',
+                email: 'contato@hsmartins.com.br',
+                hours: 'Atendimento: Segunda á Sexta-feira - 09:00 ás 17:00 hs | Sábado - 09:00 ás 12:00 hs'
+            },
+            socialLinks: [
+                { icon: 'fab fa-facebook', href: 'https://facebook.com/hsmartins', label: 'Facebook' },
+                { icon: 'fab fa-instagram', href: 'https://instagram.com/hsmartins', label: 'Instagram' },
+                { icon: 'fab fa-whatsapp', href: 'https://wa.me/551146382942', label: 'WhatsApp' }
+            ],
+            copyright: 'www.hsmartins.com.br © 2026. Todos os direitos reservados.',
+            tags: ['Imobiliária Poá', 'Imóveis Poá', 'Venda de Imóveis', 'Financiamento Imobiliário']
+        };
+        
+        this.id = data.id || defaults.id;
+        this.title = data.title || defaults.title;
+        this.address = data.address || defaults.address;
+        this.contact = data.contact || defaults.contact;
+        this.socialLinks = data.socialLinks || defaults.socialLinks;
+        this.copyright = data.copyright || defaults.copyright;
+        this.tags = data.tags || defaults.tags;
 
         // Resolve cores hexadecimais para usar em estilos inline
         const bgHex = this.resolveColorHex(data.colors?.background, 'background', '#FFFFFF');

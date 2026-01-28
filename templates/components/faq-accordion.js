@@ -10,18 +10,38 @@ class FaqAccordionComponent extends BaseComponent {
      * @param {Array} data.items - Array de itens FAQ { question: string, answer: string }
      * @param {Object} data.colors - Cores customizáveis (opcional)
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        if (!data) data = {};
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            id: 'faq',
+            title: 'Tire suas Dúvidas sobre Financiamento',
+            subtitle: 'Informações úteis para quem busca realizar o sonho da casa própria.',
+            questions: [
+                {
+                    question: 'O FGTS pode ser usado para quitar parcelas atrasadas?',
+                    answer: 'Sim, o FGTS poderá ser usado para quitar até 12 parcelas de financiamento atrasado, seguindo as regras da Caixa Econômica Federal.'
+                },
+                {
+                    question: 'Tenho um imóvel quitado, posso financiar outro?',
+                    answer: 'Sim, é possível financiar um segundo imóvel mesmo já possuindo um quitado, desde que atenda aos requisitos de crédito e endividamento.'
+                },
+                {
+                    question: 'Quais as dicas para comprar um imóvel antes dos 30?',
+                    answer: 'Planejamento financeiro, pesquisa de mercado, uso do FGTS, simulação de financiamento e busca por um bom corretor são essenciais.'
+                }
+            ]
+        };
 
         // --- CORREÇÃO AQUI ---
         // Se o JSON não tiver 'id', usamos 'faq' como padrão para garantir que renderize
-        this.id = data.id || 'faq';
+        this.id = data.id || defaults.id;
 
-        this.title = data.title || 'Perguntas Frequentes';
-        this.subtitle = data.subtitle || '';
+        this.title = data.title || defaults.title;
+        this.subtitle = data.subtitle || defaults.subtitle;
         // Aceita tanto 'questions' quanto 'items'
-        this.items = data.questions || data.items || [];
+        this.items = data.questions || data.items || defaults.questions;
 
         // RESOLUÇÃO DE CORES (Usando métodos do BaseComponent)
         this.primaryHex = this.resolveColorHex(data.colors?.primary, 'primary', '#000000');

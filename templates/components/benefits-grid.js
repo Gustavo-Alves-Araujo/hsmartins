@@ -4,23 +4,54 @@
  */
 
 class BenefitsGridComponent extends BaseComponent {
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        this.id = data.id || '';
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            id: 'negociar',
+            title: 'Agilize a Venda ou Financiamento do seu Imóvel',
+            description: 'Oferecemos o melhor suporte para a negociação e agilização do financiamento do seu imóvel.',
+            benefits: [
+                {
+                    icon: 'fas fa-search-dollar',
+                    title: 'Oportunidades de Negócio',
+                    description: 'Seleção especial com as melhores oportunidades de compra e venda.'
+                },
+                {
+                    icon: 'fas fa-briefcase',
+                    title: 'Correspondente Bancário',
+                    description: 'Agilize o financiamento de seu imóvel, consulte nossa equipe especializada.'
+                },
+                {
+                    icon: 'fas fa-chart-line',
+                    title: 'Negocie seu Imóvel',
+                    description: 'Oferecemos o melhor suporte para a venda e negociação do seu patrimônio.'
+                },
+                {
+                    icon: 'fas fa-headset',
+                    title: 'Atendimento Personalizado',
+                    description: 'Entre em contato para que possamos lhe ajudar a encontrar ou vender seu imóvel.'
+                }
+            ],
+            columns: 4
+        };
+        
+        this.id = data.id || defaults.id;
         this.tag = data.tag || '';
-        this.title = data.title || '';
-        this.description = data.description || '';
+        this.title = data.title || defaults.title;
+        this.description = data.description || defaults.description;
         this.paragraphs = data.paragraphs || [];
 
         // Normaliza os benefícios para suportar tanto 'text' quanto 'title'/'description'
-        this.benefits = (data.benefits || []).map(benefit => ({
+        this.benefits = data.benefits ? (data.benefits || []).map(benefit => ({
             icon: benefit.icon || '',
             title: benefit.title || benefit.text || '',
             description: benefit.description || '',
             text: benefit.text || benefit.title || '' // Mantém compatibilidade
-        }));
+        })) : defaults.benefits;
 
-        this.columns = data.columns || 3;
+        this.columns = data.columns !== undefined ? data.columns : defaults.columns;
 
         // Resolve cores usando o sistema de cores do site
         const bgBase = this.resolveColor(data.colors?.background, 'background', 'white');

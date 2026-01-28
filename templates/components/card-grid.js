@@ -24,16 +24,58 @@ class CardGridComponent extends BaseComponent {
      * @param {string} data.colors.cardOverlay - Cor do overlay base (ex: 'gray', 'brand-dark')
      * @param {string} data.colors.accentLine - Cor da linha decorativa base (ex: 'green', 'brand-dark')
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            title: 'Notícias do Mercado Imobiliário',
+            subtitle: 'Fique por dentro sobre notícias, investimento e mais!',
+            items: [
+                {
+                    imageUrl: 'https://images.unsplash.com/photo-1579621970795-87facc2f976d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxncm93dGglMjBmaW5hbmNlfHxlbnwwfDB8fHwxNzA4MzcwODg4fDA&ixlib=rb-4.1.0&q=80&w=400',
+                    imageAlt: 'Novas condições de financiamento',
+                    title: 'NOVAS CONDIÇÕES DE FINANCIAMENTO',
+                    description: 'Saiba mais sobre as recentes atualizações para facilitar a compra do seu imóvel.',
+                    buttonText: 'Ler Mais',
+                    buttonHref: '#'
+                },
+                {
+                    imageUrl: 'https://images.unsplash.com/photo-1549923755-a2c7a6f2b45e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxtYXJyaWVkJTIwY291cGxlfHxlbnwwfDB8fHwxNzA4MzcwODg4fDA&ixlib=rb-4.1.0&q=80&w=400',
+                    imageAlt: 'Casal discutindo',
+                    title: 'Sou casado. Posso financiar um imóvel sozinho?',
+                    description: 'Entenda as regras e possibilidades para o financiamento individual em caso de casamento.',
+                    buttonText: 'Ler Mais',
+                    buttonHref: '#'
+                },
+                {
+                    imageUrl: 'https://images.unsplash.com/photo-1554224155-c474ad691500?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxtb3J0Z2FnZSUyMHByb2JsZW1zfHxlbnwwfDB8fHwxNzA4MzcwODg4fDA&ixlib=rb-4.1.0&q=80&w=400',
+                    imageAlt: 'Pessoa preocupada com contas',
+                    title: 'Não consigo pagar o financiamento da minha casa: o que faço?',
+                    description: 'Opções e soluções para quem está com dificuldades no pagamento do financiamento imobiliário.',
+                    buttonText: 'Ler Mais',
+                    imageAlt: 'Pessoa preocupada com contas',
+                    title: 'Não consigo pagar o financiamento da minha casa: o que faço?',
+                    description: 'Opções e soluções para quem está com dificuldades no pagamento do financiamento imobiliário.',
+                    buttonText: 'Ler Mais',
+                    buttonHref: '#'
+                }
+            ]
+        };
+        
         this.id = data.id || '';
-        this.title = data.title;
-        this.subtitle = data.subtitle || data.description || '';
+        this.title = data.title || defaults.title;
+        this.subtitle = data.subtitle || data.description || defaults.subtitle;
         // Aceita tanto 'cards' quanto 'items'
-        this.items = data.cards || data.items || [];
+        this.items = data.cards || data.items || defaults.items;
 
         // Layout
         this.layout = {
+            columns: 3,
+            aspectRatio: '4/5',
+            gap: '8',
+            ...data.layout
+        };
             columns: 3,
             aspectRatio: '4/5',
             gap: '8',

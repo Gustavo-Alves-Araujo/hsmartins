@@ -2,16 +2,90 @@
 <html lang="pt-BR">
 
 <head>
+  <!-- Encoding & Compatibility -->
   <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="robots" content="noindex">
-  <title>Carregando...</title>
-
-  <!-- Preconnect para recursos externos -->
+  
+  <!-- SEO Meta Tags -->
+  <title>H.S Martins - Imobiliária em Poá e Região | Venda, Aluguel e Financiamento</title>
+  <meta name="description" content="H.S Martins - Imobiliária em Poá e região especializada em compra, venda, aluguel e financiamento de imóveis. Correspondente Caixa autorizado.">
+  <meta name="keywords" content="imobiliária Poá, venda de imóveis, compra de casa, financiamento imobiliário, correspondente caixa, apartamentos, casas, terrenos">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="H.S Martins Empreendimentos Imobiliários">
+  <meta name="theme-color" content="#005CA9">
+  <meta name="revisit-after" content="7 days">
+  
+  <!-- Canonical -->
+  <link rel="canonical" href="https://hsmartins.com.br/">
+  
+  <!-- OpenGraph (Social Media) -->
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="H.S Martins - Imobiliária em Poá e Região">
+  <meta property="og:description" content="Encontre o imóvel dos seus sonhos. Venda, compra, aluguel e financiamento. Correspondente Caixa autorizado.">
+  <meta property="og:url" content="https://hsmartins.com.br/">
+  <meta property="og:site_name" content="H.S Martins">
+  <meta property="og:image" content="https://hsmartins.com.br/img/logo.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="H.S Martins - Imobiliária em Poá e Região">
+  <meta name="twitter:description" content="Encontre o imóvel dos seus sonhos. Venda, compra, aluguel e financiamento.">
+  <meta name="twitter:image" content="https://hsmartins.com.br/img/logo.png">
+  
+  <!-- Local Business Schema (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "H.S Martins Empreendimentos Imobiliários",
+    "image": "https://hsmartins.com.br/img/logo.png",
+    "description": "Imobiliária em Poá e região especializada em compra, venda, aluguel e financiamento de imóveis.",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Av. Leonor Bolsoni Marques da Silva, 230",
+      "addressLocality": "Poá",
+      "addressRegion": "SP",
+      "postalCode": "08550-150",
+      "addressCountry": "BR"
+    },
+    "telephone": "+55 11 4638-2942",
+    "email": "contato@hsmartins.com.br",
+    "url": "https://hsmartins.com.br",
+    "sameAs": [
+      "https://www.facebook.com/hsmartins",
+      "https://www.instagram.com/hsmartins"
+    ],
+    "priceRange": "R$ 200.000 - R$ 2.000.000",
+    "areaServed": ["Poá", "Suzano", "Ferraz de Vasconcelos", "Alto Tietê"],
+    "foundingDate": "2003",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Customer Service",
+      "telephone": "+55 11 4638-2942"
+    }
+  }
+  </script>
+  
+  <!-- Preload & Prefetch -->
+  <link rel="preload" as="image" href="img/logo.png" type="image/png">
+  <link rel="preload" as="script" href="config.js">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
   <link rel="dns-prefetch" href="https://unpkg.com">
+  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="img/logo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="img/logo.png">
+  <link rel="shortcut icon" href="img/logo.png">
+  
+  <!-- Sitemap & RSS -->
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 
   <!-- Scripts críticos - config.js primeiro -->
   <script src="config.js"></script>
@@ -26,6 +100,10 @@
   <script src="templates/components/base-component.js"></script>
   <script src="templates/components/component-registry.js"></script>
   <script src="templates/components/cosmos-template.js"></script>
+  <script src="templates/components/image-optimizer.js"></script>
+  
+  <!-- Performance Monitoring -->
+  <script src="web-vitals-monitor.js"></script>
 </head>
 
 <body class="antialiased">

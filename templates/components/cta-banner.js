@@ -14,17 +14,39 @@ class CtaBannerComponent extends BaseComponent {
      * @param {string} data.colors.background - Cor de fundo base (opcional)
      * @param {string} data.colors.primary - Cor primária para botões e gradiente
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        this.title = data.title;
-        this.subtitle = data.subtitle || data.description || '';
-        this.backgroundPattern = data.backgroundPattern || '';
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            title: 'Sua Próxima Conquista Começa Aqui!',
+            subtitle: 'Entre em contato com nossos especialistas e encontre o imóvel dos seus sonhos em Poá e região.',
+            buttons: [
+                {
+                    text: 'Fale com um Especialista',
+                    href: 'https://wa.me/551146382942?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20imóveis.',
+                    primary: true,
+                    icon: 'fab fa-whatsapp'
+                },
+                {
+                    text: 'Ver Imóveis',
+                    href: '#imoveis',
+                    primary: false,
+                    icon: 'fas fa-arrow-right'
+                }
+            ],
+            backgroundPattern: 'dots'
+        };
+        
+        this.title = data.title || defaults.title;
+        this.subtitle = data.subtitle || data.description || defaults.subtitle;
+        this.backgroundPattern = data.backgroundPattern || defaults.backgroundPattern;
         this.tag = data.tag || 'Novidade';
 
         // Converte ctaPrimary/ctaSecondary para array de buttons se necessário
         if (data.buttons && Array.isArray(data.buttons)) {
             this.buttons = data.buttons;
-        } else {
+        } else if (data.ctaPrimary || data.ctaSecondary) {
             this.buttons = [];
             if (data.ctaPrimary) {
                 this.buttons.push(data.ctaPrimary);
@@ -32,6 +54,8 @@ class CtaBannerComponent extends BaseComponent {
             if (data.ctaSecondary) {
                 this.buttons.push(data.ctaSecondary);
             }
+        } else {
+            this.buttons = defaults.buttons;
         }
 
         // SEMPRE usa a cor primária do tema global - SEM FALLBACK FIXO

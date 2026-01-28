@@ -7,31 +7,48 @@ class StickyHeaderNavigationComponent extends BaseComponent {
     /**
      * @param {Object} data - Dados do componente
      */
-    constructor(data) {
+    constructor(data = {}) {
         super();
-        this.logoUrl = data.logoUrl || '';
-        this.logoAlt = data.logoAlt || '';
-        this.siteName = data.siteName || '';
-        this.established = data.established || '';
+        
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            logoUrl: '',
+            logoAlt: 'Logo HS Martins',
+            siteName: 'HS Martins',
+            established: 'Creci. 21.189',
+            links: {
+                venda: { text: 'Venda', href: '#imoveis' },
+                sobre: { text: 'Sobre Nós', href: '#sobre' },
+                contato: { text: 'Contato', href: '#contato' },
+                cta: { text: 'Fale Conosco', href: 'https://wa.me/551146382942', target: '_blank' }
+            }
+        };
+        
+        this.logoUrl = data.logoUrl !== undefined ? data.logoUrl : defaults.logoUrl;
+        this.logoAlt = data.logoAlt || defaults.logoAlt;
+        this.siteName = data.siteName || defaults.siteName;
+        this.established = data.established || defaults.established;
 
         // Processamento de links/menuItems (Mantendo sua lógica original)
-        if (data.links && typeof data.links === 'object' && !Array.isArray(data.links)) {
+        const linksToUse = data.links || defaults.links;
+        
+        if (linksToUse && typeof linksToUse === 'object' && !Array.isArray(linksToUse)) {
             this.menuItems = [];
-            for (const key in data.links) {
-                if (key !== 'cta' && data.links[key] && typeof data.links[key] === 'object') {
+            for (const key in linksToUse) {
+                if (key !== 'cta' && linksToUse[key] && typeof linksToUse[key] === 'object') {
                     this.menuItems.push({
-                        text: data.links[key].text || key,
-                        href: data.links[key].href || '#',
-                        active: data.links[key].active || false
+                        text: linksToUse[key].text || key,
+                        href: linksToUse[key].href || '#',
+                        active: linksToUse[key].active || false
                     });
                 }
             }
-            if (data.links.cta) {
+            if (linksToUse.cta) {
                 this.clientButton = {
-                    text: data.links.cta.text || 'Contato',
-                    href: data.links.cta.href || '#',
-                    icon: data.links.cta.icon || 'fab fa-whatsapp',
-                    target: data.links.cta.target || null
+                    text: linksToUse.cta.text || 'Contato',
+                    href: linksToUse.cta.href || '#',
+                    icon: linksToUse.cta.icon || 'fab fa-whatsapp',
+                    target: linksToUse.cta.target || null
                 };
             } else {
                 this.clientButton = data.clientButton || null;

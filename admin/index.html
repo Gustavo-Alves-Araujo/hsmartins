@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - HS Martins</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="bg-gray-50">
+    <div id="app"></div>
+
+    <script>
+        // Configuração do Supabase
+        const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
+        
+        // Aguarda o Supabase carregar antes de criar o cliente
+        let supabaseClient;
+        
+        // Inicializa o Supabase quando a biblioteca estiver pronta
+        function initSupabase() {
+            if (typeof supabase !== 'undefined') {
+                supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                return true;
+            }
+            return false;
+        }
+
+        // Estado da aplicação
+        let isAuthenticated = false;
+        let products = [];
+        let editingProduct = null;
+        let uploadedImagesUrls = []; // Array para armazenar URLs das imagens
+
+        // Máscara de preço em Real
+        function formatPriceInput(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value.length === 0) {
+                input.value = '';
+                return;
+            }
+            
+            value = (parseInt(value) / 100).toFixed(2);
+            value = value.replace('.', ',');
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+            input.value = 'R$ ' + value;
+        }
+
+        // Remove formatação do preço para salvar
+        function unformatPrice(priceStr) {
+            if (!priceStr) return null;
+            return priceStr.replace(/[^\d,]/g, '').replace(',', '.');
+        }
+
+        // Aplica máscara aos campos de preço
+        function initPriceMasks() {
+            const priceInputs = ['product-price-current', 'product-price-original'];
+            priceInputs.forEach(id => {
+                const input = document.getElementById(id);
+                if (input) {
+                    input.addEventListener('input', function() {
+                        formatPriceInput(this);
+                    });
+                }
+            });
+        }
+
+        // Verifica autenticação ao carregar
+        function checkAuth() {
+            const authToken = localStorage.getItem('admin_auth');
+            if (authToken === '123123') {
+                isAuthenticated = true;
+                loadProducts();
+                renderDashboard();
+            } else {
+                renderLogin();
+            }
+        }
+
+        // Renderiza tela de login
+        function renderLogin() {
+            document.getElementById('app').innerHTML = `
+                <div class="min-h-screen flex items-center justify-center px-4">
+                    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+                        <div class="text-center mb-8">
+                            <h1 class="text-3xl font-bold text-gray-900">Admin HS Martins</h1>
+                            <p class="text-gray-600 mt-2">Gerenciamento de Imóveis</p>
+                        </div>
+                        
+                        <form onsubmit="handleLogin(event)" class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-2">Senha</label>
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    placeholder="Digite a senha"
+                                    required
+                                >
+                            </div>
+                            
+                            <button 
+                                type="submit"
+                                class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                            >
+                                <i class="fas fa-sign-in-alt mr-2"></i>
+                                Entrar
+                            </button>
+                        </form>
+                        
+                        <div id="login-error" class="mt-4 text-red-600 text-sm text-center hidden"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Handler de login
+        function handleLogin(event) {
+            event.preventDefault();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('login-error');
+            
+            if (password === '123123') {
+                localStorage.setItem('admin_auth', password);
+                isAuthenticated = true;
+                loadProducts();
+                renderDashboard();
+            } else {
+                errorDiv.textContent = 'Senha incorreta!';
+                errorDiv.classList.remove('hidden');
+            }
+        }
+
+        // Logout
+        function handleLogout() {
+            localStorage.removeItem('admin_auth');
+            isAuthenticated = false;
+            renderLogin();
+        }
+
+        // Carrega produtos do Supabase
+        async function loadProducts() {
+            try {
+                // Inicializa o Supabase se ainda não foi inicializado
+                if (!supabaseClient) {
+                    initSupabase();
+                }
+                
+                if (!supabaseClient) {
+                    throw new Error('Supabase não foi inicializado');
+                }
+                
+                const { data, error } = await supabaseClient
+                    .from('Hsmartins_Produtos')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) throw error;
+                products = data || [];
+                renderDashboard();
+            } catch (error) {
+                console.error('Erro ao carregar produtos:', error);
+                alert('Erro ao carregar produtos. Verifique se a tabela existe no Supabase.');
+            }
+        }
+
+        // Renderiza dashboard
+        function renderDashboard() {
+            if (!isAuthenticated) return;
+
+            document.getElementById('app').innerHTML = `
+                <div class="min-h-screen bg-gray-50">
+                    <!-- Header -->
+                    <header class="bg-white shadow-sm">
+                        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <h1 class="text-2xl font-bold text-gray-900">Admin - HS Martins</h1>
+                                    <p class="text-sm text-gray-600">Gerenciamento de Imóveis</p>
+                                </div>
+                                <button 
+                                    onclick="handleLogout()"
+                                    class="px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg transition"
+                                >
+                                    <i class="fas fa-sign-out-alt mr-2"></i>
+                                    Sair
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    <!-- Main Content -->
+                    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                        <!-- Actions -->
+                        <div class="mb-6 flex justify-between items-center">
+                            <h2 class="text-xl font-semibold text-gray-900">Imóveis Cadastrados</h2>
+                            <button 
+                                onclick="openProductModal()"
+                                class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+                            >
+                                <i class="fas fa-plus mr-2"></i>
+                                Novo Imóvel
+                            </button>
+                        </div>
+
+                        <!-- Products Grid -->
+                        <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${products.length === 0 ? `
+                                <div class="col-span-full text-center py-12">
+                                    <i class="fas fa-home text-6xl text-gray-300 mb-4"></i>
+                                    <p class="text-gray-600">Nenhum imóvel cadastrado ainda.</p>
+                                    <button 
+                                        onclick="openProductModal()"
+                                        class="mt-4 text-blue-600 hover:text-blue-700 font-semibold"
+                                    >
+                                        Cadastrar primeiro imóvel
+                                    </button>
+                                </div>
+                            ` : products.map(product => `
+                                <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition">
+                                    <div class="aspect-[4/3] bg-gray-200 relative">
+                                        ${product.image_url ? `
+                                            <img src="${product.image_url}" alt="${product.title}" class="w-full h-full object-cover">
+                                        ` : `
+                                            <div class="w-full h-full flex items-center justify-center">
+                                                <i class="fas fa-image text-4xl text-gray-400"></i>
+                                            </div>
+                                        `}
+                                        ${product.badge_text ? `
+                                            <span class="absolute top-3 left-3 ${product.badge_style === 'new' ? 'bg-gray-900' : 'bg-red-500'} text-white text-xs font-bold px-2 py-1 rounded">
+                                                ${product.badge_text}
+                                            </span>
+                                        ` : ''}
+                                    </div>
+                                    <div class="p-4">
+                                        <p class="text-sm text-gray-500 mb-1">${product.category || ''}</p>
+                                        <h3 class="font-semibold text-lg mb-2">${product.title}</h3>
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class="text-lg font-bold text-gray-900">${product.price_current}</span>
+                                            ${product.price_original ? `<span class="text-sm text-gray-400 line-through">${product.price_original}</span>` : ''}
+                                        </div>
+                                        <div class="flex items-center justify-between text-sm text-gray-600 mb-4">
+                                            <span><i class="fas fa-star text-yellow-400"></i> ${product.rating || 'N/A'}</span>
+                                            <span>${product.installments || ''}</span>
+                                        </div>
+                                        <div class="flex gap-2">
+                                            <button 
+                                                onclick='editProduct(${JSON.stringify(product).replace(/'/g, "&apos;")})'
+                                                class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-100 transition"
+                                            >
+                                                <i class="fas fa-edit"></i> Editar
+                                            </button>
+                                            <button 
+                                                onclick="deleteProduct('${product.id}')"
+                                                class="flex-1 bg-red-50 text-red-600 py-2 rounded-lg font-semibold hover:bg-red-100 transition"
+                                            >
+                                                <i class="fas fa-trash"></i> Excluir
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </main>
+                </div>
+
+                <!-- Modal -->
+                <div id="product-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+                    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                        <div class="p-6">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-2xl font-bold text-gray-900">
+                                    <span id="modal-title">Novo Imóvel</span>
+                                </h2>
+                                <button onclick="closeProductModal()" class="text-gray-400 hover:text-gray-600">
+                                    <i class="fas fa-times text-xl"></i>
+                                </button>
+                            </div>
+
+                            <form id="product-form" onsubmit="handleProductSubmit(event)" class="space-y-4">
+                                <input type="hidden" id="product-id">
+                                
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+                                    <input type="text" id="product-title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                                    <input type="text" id="product-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Preço Atual *</label>
+                                        <input type="text" id="product-price-current" required placeholder="R$ 650.000,00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Preço Original</label>
+                                        <input type="text" id="product-price-original" placeholder="R$ 680.000,00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Avaliação</label>
+                                        <input type="text" id="product-rating" placeholder="4.8" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Parcelamento</label>
+                                        <input type="text" id="product-installments" placeholder="Em até 360x" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Badge (Destaque)</label>
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <input type="text" id="product-badge-text" placeholder="Novo / Desconto" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        <select id="product-badge-style" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <option value="">Sem Badge</option>
+                                            <option value="new">Novo (Preto)</option>
+                                            <option value="discount">Desconto (Vermelho)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                                        Imagens do Imóvel (até 20 fotos)
+                                    </label>
+                                    <input 
+                                        type="file" 
+                                        id="product-images" 
+                                        accept="image/*" 
+                                        multiple 
+                                        onchange="handleMultipleImagePreview(event)" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                    >
+                                    <p class="text-xs text-gray-500 mt-1">
+                                        <i class="fas fa-info-circle"></i> Selecione múltiplas imagens (Ctrl/Cmd + clique)
+                                    </p>
+                                    
+                                    <!-- Preview de múltiplas imagens -->
+                                    <div id="images-preview" class="mt-3 grid grid-cols-4 gap-2"></div>
+                                    
+                                    <!-- URLs das imagens já salvas -->
+                                    <input type="hidden" id="product-images-urls">
+                                </div>
+
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700 mb-1">Características</label>
+                                    <p class="text-xs text-gray-500 mb-2">Uma característica por linha (ex: Documentação em dia, Aceita financiamento)</p>
+                                    <textarea 
+                                        id="product-characteristics" 
+                                        rows="4"
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        placeholder="Característica 1&#10;Característica 2&#10;Característica 3&#10;Característica 4">
+                                    </textarea>
+                                </div>
+
+                                <div class="flex gap-3 pt-4">
+                                    <button type="button" onclick="closeProductModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition">
+                                        Cancelar
+                                    </button>
+                                    <button type="submit" class="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+                                        <i class="fas fa-save mr-2"></i>
+                                        Salvar
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Abre modal de produto
+        function openProductModal(product = null) {
+            editingProduct = product;
+            uploadedImagesUrls = []; // Limpa URLs temporárias
+            const modal = document.getElementById('product-modal');
+            const modalTitle = document.getElementById('modal-title');
+            
+            if (product) {
+                modalTitle.textContent = 'Editar Imóvel';
+                document.getElementById('product-id').value = product.id;
+                document.getElementById('product-title').value = product.title;
+                document.getElementById('product-category').value = product.category || '';
+                document.getElementById('product-price-current').value = product.price_current;
+                document.getElementById('product-price-original').value = product.price_original || '';
+                document.getElementById('product-rating').value = product.rating || '';
+                document.getElementById('product-installments').value = product.installments || '';
+                document.getElementById('product-badge-text').value = product.badge_text || '';
+                document.getElementById('product-badge-style').value = product.badge_style || '';
+                
+                // Carrega características
+                if (product.caracteristicas) {
+                    const chars = Array.isArray(product.caracteristicas) ? product.caracteristicas : JSON.parse(product.caracteristicas || '[]');
+                    document.getElementById('product-characteristics').value = chars.join('\n');
+                } else {
+                    document.getElementById('product-characteristics').value = '';
+                }
+                
+                // Carrega imagens existentes
+                if (product.images_urls) {
+                    uploadedImagesUrls = Array.isArray(product.images_urls) ? product.images_urls : JSON.parse(product.images_urls || '[]');
+                    document.getElementById('product-images-urls').value = JSON.stringify(uploadedImagesUrls);
+                    displayExistingImages(uploadedImagesUrls);
+                }
+
+            } else {
+                modalTitle.textContent = 'Novo Imóvel';
+                document.getElementById('product-form').reset();
+                document.getElementById('images-preview').innerHTML = '';
+                document.getElementById('product-images-urls').value = '';
+            }
+            
+            modal.classList.remove('hidden');
+            
+            // Inicializa máscaras de preço após abrir modal
+            setTimeout(() => initPriceMasks(), 100);
+        }
+
+        // Fecha modal
+        function closeProductModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            editingProduct = null;
+            uploadedImagesUrls = [];
+        }
+
+        // Display de imagens já salvas
+        function displayExistingImages(urls) {
+            const previewContainer = document.getElementById('images-preview');
+            previewContainer.innerHTML = urls.map((url, index) => `
+                <div class="relative group">
+                    <img src="${url}" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200">
+                    <button 
+                        type="button"
+                        onclick="removeExistingImage(${index})"
+                        class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition"
+                    >
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                    ${index === 0 ? '<span class="absolute bottom-1 left-1 bg-blue-500 text-white text-xs px-2 py-0.5 rounded">Principal</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // Remove imagem existente
+        function removeExistingImage(index) {
+            uploadedImagesUrls.splice(index, 1);
+            document.getElementById('product-images-urls').value = JSON.stringify(uploadedImagesUrls);
+            displayExistingImages(uploadedImagesUrls);
+        }
+
+        // Preview de múltiplas imagens
+        function handleMultipleImagePreview(event) {
+            const files = Array.from(event.target.files);
+            const previewContainer = document.getElementById('images-preview');
+            
+            if (files.length > 20) {
+                alert('Máximo de 20 imagens por imóvel!');
+                event.target.value = '';
+                return;
+            }
+
+            // Limpa preview anterior (mas mantém imagens já salvas)
+            const existingCount = uploadedImagesUrls.length;
+            if (existingCount + files.length > 20) {
+                alert(`Você já tem ${existingCount} imagens. Pode adicionar no máximo ${20 - existingCount} novas.`);
+                event.target.value = '';
+                return;
+            }
+
+            previewContainer.innerHTML = '';
+            
+            // Mostra imagens existentes primeiro
+            if (uploadedImagesUrls.length > 0) {
+                displayExistingImages(uploadedImagesUrls);
+            }
+            
+            // Adiciona preview das novas imagens
+            files.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imgDiv = document.createElement('div');
+                    imgDiv.className = 'relative group';
+                    imgDiv.innerHTML = `
+                        <img src="${e.target.result}" class="w-full h-24 object-cover rounded-lg border-2 border-green-300">
+                        <span class="absolute top-1 left-1 bg-green-500 text-white text-xs px-2 py-0.5 rounded">Nova</span>
+                        ${existingCount === 0 && index === 0 ? '<span class="absolute bottom-1 left-1 bg-blue-500 text-white text-xs px-2 py-0.5 rounded">Principal</span>' : ''}
+                    `;
+                    previewContainer.appendChild(imgDiv);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // Preview de imagem (manter para compatibilidade)
+        function handleImagePreview(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('preview-img').src = e.target.result;
+                    document.getElementById('image-preview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Upload de múltiplas imagens para Supabase
+        async function uploadMultipleImages(files) {
+            try {
+                if (!supabaseClient) {
+                    initSupabase();
+                }
+                
+                const uploadPromises = Array.from(files).map(async (file) => {
+                    const fileExt = file.name.split('.').pop();
+                    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+                    const filePath = `produtos/${fileName}`;
+
+                    const { data, error } = await supabaseClient.storage
+                        .from('Hsmartins_Produtos')
+                        .upload(filePath, file);
+
+                    if (error) throw error;
+
+                    const { data: urlData } = supabaseClient.storage
+                        .from('Hsmartins_Produtos')
+                        .getPublicUrl(filePath);
+
+                    return urlData.publicUrl;
+                });
+
+                return await Promise.all(uploadPromises);
+            } catch (error) {
+                console.error('Erro ao fazer upload de imagens:', error);
+                throw error;
+            }
+        }
+
+        // Upload de imagem para Supabase (mantido para compatibilidade)
+        async function uploadImage(file) {
+            try {
+                if (!supabaseClient) {
+                    initSupabase();
+                }
+                
+                const fileExt = file.name.split('.').pop();
+                const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+                const filePath = `produtos/${fileName}`;
+
+                const { data, error } = await supabaseClient.storage
+                    .from('Hsmartins_Produtos')
+                    .upload(filePath, file);
+
+                if (error) throw error;
+
+                const { data: urlData } = supabaseClient.storage
+                    .from('Hsmartins_Produtos')
+                    .getPublicUrl(filePath);
+
+                return urlData.publicUrl;
+            } catch (error) {
+                console.error('Erro ao fazer upload:', error);
+                throw error;
+            }
+        }
+
+        // Submete formulário de produto
+        async function handleProductSubmit(event) {
+            event.preventDefault();
+            
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Salvando...';
+
+            try {
+                // Processa múltiplas imagens
+                let allImagesUrls = [...uploadedImagesUrls]; // Começa com imagens já existentes
+                const newImageFiles = document.getElementById('product-images').files;
+                
+                if (newImageFiles.length > 0) {
+                    submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Enviando imagens...';
+                    const newUrls = await uploadMultipleImages(newImageFiles);
+                    allImagesUrls = [...allImagesUrls, ...newUrls];
+                }
+
+                // Processa características (uma por linha -> array)
+                const characteristicsText = document.getElementById('product-characteristics').value || '';
+                const characteristics = characteristicsText
+                    .split('\n')
+                    .map(c => c.trim())
+                    .filter(c => c.length > 0);
+
+                const productData = {
+                    title: document.getElementById('product-title').value,
+                    category: document.getElementById('product-category').value,
+                    price_current: document.getElementById('product-price-current').value,
+                    price_original: document.getElementById('product-price-original').value || null,
+                    rating: document.getElementById('product-rating').value || null,
+                    installments: document.getElementById('product-installments').value || null,
+                    badge_text: document.getElementById('product-badge-text').value || null,
+                    badge_style: document.getElementById('product-badge-style').value || null,
+                    image_url: allImagesUrls.length > 0 ? allImagesUrls[0] : null, // Primeira imagem como principal
+                    images_urls: JSON.stringify(allImagesUrls), // Todas as imagens em JSON
+                    caracteristicas: JSON.stringify(characteristics) // Características como JSON array
+
+                };
+
+                const productId = document.getElementById('product-id').value;
+
+                if (productId) {
+                    // Atualizar
+                    const { error } = await supabaseClient
+                        .from('Hsmartins_Produtos')
+                        .update(productData)
+                        .eq('id', productId);
+
+                    if (error) throw error;
+                } else {
+                    // Criar
+                    const { error } = await supabaseClient
+                        .from('Hsmartins_Produtos')
+                        .insert([productData]);
+
+                    if (error) throw error;
+                }
+
+                closeProductModal();
+                await loadProducts();
+                alert('Imóvel salvo com sucesso!');
+            } catch (error) {
+                console.error('Erro ao salvar produto:', error);
+                alert('Erro ao salvar imóvel: ' + error.message);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-save mr-2"></i> Salvar';
+            }
+        }
+
+        // Edita produto
+        function editProduct(product) {
+            openProductModal(product);
+        }
+
+        // Deleta produto
+        async function deleteProduct(id) {
+            if (!confirm('Tem certeza que deseja excluir este imóvel?')) return;
+
+            try {
+                const { error } = await supabaseClient
+                    .from('Hsmartins_Produtos')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                await loadProducts();
+                alert('Imóvel excluído com sucesso!');
+            } catch (error) {
+                console.error('Erro ao deletar produto:', error);
+                alert('Erro ao excluir imóvel: ' + error.message);
+            }
+        }
+
+        // Inicializa
+        initSupabase();
+        checkAuth();
+    </script>
+</body>
+</html>

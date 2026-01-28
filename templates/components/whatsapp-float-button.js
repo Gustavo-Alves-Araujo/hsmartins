@@ -11,11 +11,19 @@ class WhatsAppFloatButtonComponent {
      * @param {string} data.href - Link do botão
      * @param {string} data.color - Cor de fundo (opcional, padrão: #25D366 para WhatsApp)
      */
-    constructor(data) {
-        this.icon = data.icon || 'fab fa-whatsapp';
-        this.text = data.text || '';
-        this.href = data.href || '#';
-        this.color = data.color || '#25D366';
+    constructor(data = {}) {
+        // Valores padrão do projeto HS Martins
+        const defaults = {
+            icon: 'fab fa-whatsapp',
+            text: 'Fale Conosco',
+            href: 'https://wa.me/551146382942?text=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20imóveis.',
+            color: '#25D366'
+        };
+        
+        this.icon = data.icon || defaults.icon;
+        this.text = data.text || defaults.text;
+        this.href = data.href || defaults.href;
+        this.color = data.color || defaults.color;
     }
 
     /**
