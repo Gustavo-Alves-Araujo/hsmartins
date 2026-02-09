@@ -42,7 +42,7 @@ class FooterContactComponent extends BaseComponent {
                 label: 'Localização',
                 street: 'Av. Leonor Bolsoni Marques da Silva, 230',
                 city: 'Centro - Poá / SP',
-                zipCode: 'CEP: 08557-000',
+                zipCode: 'CEP: 08550-150',
                 mapQuery: 'Av. Leonor Bolsoni Marques da Silva, 230, Poá'
             },
             contact: {

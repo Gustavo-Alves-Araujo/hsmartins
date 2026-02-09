@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Notícia - H.S Martins</title>
+    <meta id="page-description" name="description" content="Leia a notícia completa.">
+    
+    <script src="config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="templates/components/base-component.js"></script>
+    <script src="templates/components/component-registry.js"></script>
+    <script src="templates/components/cosmos-template.js"></script>
+    <script src="templates/components/sticky-header-navigation.js"></script>
+    <script src="templates/components/footer-contact.js"></script>
+</head>
+<body class="antialiased bg-gray-50">
+    <main class="pt-20 md:pt-24">
+        <div id="noticia-loading" class="max-w-4xl mx-auto px-4 py-16 text-center">
+            <i class="fas fa-spinner fa-spin text-4xl text-gray-400 mb-4"></i>
+            <p class="text-gray-600">Carregando...</p>
+        </div>
+
+        <article id="noticia-content" class="max-w-4xl mx-auto px-4 py-12 hidden">
+            <div class="mb-6">
+                <a href="noticias.html" class="text-blue-600 hover:text-blue-700 text-sm">
+                    <i class="fas fa-arrow-left mr-2"></i> Voltar
+                </a>
+            </div>
+            
+            <div id="noticia-categoria" class="mb-4"></div>
+            <h1 id="noticia-titulo" class="text-3xl md:text-4xl font-extrabold mb-4 text-gray-900"></h1>
+            <div id="noticia-meta" class="flex items-center gap-4 text-sm text-gray-600 mb-6"></div>
+            <div id="noticia-imagem" class="relative aspect-video rounded-xl overflow-hidden bg-gray-100 mb-8"></div>
+            <div id="noticia-conteudo" class="prose prose-lg max-w-none mb-12 text-gray-700"></div>
+        </article>
+
+        <!-- Outras Notícias -->
+        <section class="max-w-7xl mx-auto px-4 py-12">
+            <h2 class="text-2xl font-bold mb-6 text-gray-900">Outras Notícias</h2>
+            <div id="outras-noticias" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12"></div>
+        </section>
+
+        <div id="noticia-notfound" class="max-w-4xl mx-auto px-4 py-16 text-center hidden">
+            <i class="fas fa-exclamation-circle text-6xl text-gray-300 mb-4"></i>
+            <h2 class="text-2xl font-bold mb-2">Notícia não encontrada</h2>
+            <a href="noticias.html" class="inline-block mt-6 px-6 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
+                Ver todas as notícias
+            </a>
+        </div>
+    </main>
+
+    <script>
+        const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
+
+        async function init() {
+            try {
+                const slug = new URLSearchParams(window.location.search).get('slug');
+                if (!slug) {
+                    showNotFound();
+                    return;
+                }
+
+                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                const { data, error } = await client
+                    .from('Hsmartins_Noticias')
+                    .select('*')
+                    .eq('slug', slug)
+                    .eq('status', 'publicado')
+                    .single();
+
+                if (error || !data) {
+                    showNotFound();
+                    return;
+                }
+
+                document.getElementById('page-title').textContent = `${data.titulo} - H.S Martins`;
+                document.getElementById('page-description').content = data.resumo || data.conteudo.substring(0, 150) + '...';
+
+                const loading = document.getElementById('noticia-loading');
+                const content = document.getElementById('noticia-content');
+                loading.classList.add('hidden');
+                content.classList.remove('hidden');
+
+                document.getElementById('noticia-titulo').textContent = data.titulo;
+                
+                if (data.categoria) {
+                    document.getElementById('noticia-categoria').innerHTML = `<span class="inline-block bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full">${data.categoria}</span>`;
+                }
+
+                const date = new Date(data.data_publicacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+                document.getElementById('noticia-meta').innerHTML = `
+                    <div class="flex items-center gap-2"><i class="far fa-calendar"></i> <span>${date}</span></div>
+                    <div class="flex items-center gap-2"><i class="far fa-user"></i> <span>${data.autor || 'H.S Martins'}</span></div>
+                `;
+
+                if (data.imagem_principal) {
+                    document.getElementById('noticia-imagem').innerHTML = `<img src="${data.imagem_principal}" alt="${data.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover">`;
+                }
+
+                document.getElementById('noticia-conteudo').innerHTML = data.conteudo;
+
+                // Carrega outras notícias
+                loadOutrasNoticias(data.id);
+            } catch (error) {
+                console.error('Erro:', error);
+                showNotFound();
+            }
+        }
+
+        async function loadOutrasNoticias(excludeId) {
+            try {
+                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                const { data, error } = await client
+                    .from('Hsmartins_Noticias')
+                    .select('*')
+                    .eq('status', 'publicado')
+                    .neq('id', excludeId)
+                    .order('data_publicacao', { ascending: false });
+
+                if (error || !data || data.length === 0) {
+                    document.getElementById('outras-noticias').innerHTML = '<p class="text-gray-600 col-span-full text-center">Nenhuma outra notícia disponível.</p>';
+                    return;
+                }
+
+                const outrasEl = document.getElementById('outras-noticias');
+                outrasEl.innerHTML = data.map(item => {
+                    const img = item.imagem_principal || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80';
+                    const slug = item.slug || item.titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-');
+                    const url = `noticia.html?slug=${slug}`;
+                    const date = new Date(item.data_publicacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+
+                    return `
+                        <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                            <a href="${url}" class="block">
+                                <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                                    <img src="${img}" alt="${item.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                                    ${item.destacado ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Destaque</span>' : ''}
+                                    ${item.categoria ? `<span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">${item.categoria.replace(/"/g, '&quot;')}</span>` : ''}
+                                </div>
+                                <div class="p-3">
+                                    ${item.categoria ? `<p class="text-gray-500 text-[10px] mb-1">${item.categoria.replace(/"/g, '&quot;')}</p>` : ''}
+                                    <h3 class="font-semibold text-sm leading-tight mb-2 transition group-hover:opacity-90 line-clamp-2" style="color: #005CA9;">${item.titulo.replace(/"/g, '&quot;')}</h3>
+                                    <div class="text-xs text-gray-500">${date}</div>
+                                </div>
+                            </a>
+                        </article>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro ao carregar outras notícias:', error);
+            }
+        }
+
+        function showNotFound() {
+            document.getElementById('noticia-loading').classList.add('hidden');
+            const content = document.getElementById('noticia-content');
+            if (content) content.classList.add('hidden');
+            document.getElementById('noticia-notfound').classList.remove('hidden');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

@@ -36,8 +36,8 @@ class AboutImageFeaturesComponent extends BaseComponent {
                 { icon: 'fas fa-university', text: 'Correspondente Caixa (Financiamento)' },
                 { icon: 'fas fa-user-tie', text: 'Atendimento e Suporte na Documentação' }
             ],
-            imageUrl: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwyfHxyZWFsJTIwZXN0YXRlfGVufDB8MHx8fDE3NjkyNTUyMzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
-            imageAlt: 'Time de profissionais imobiliários'
+            imageUrl: 'img/imobi.jpeg',
+            imageAlt: 'Fachada da Imobiliária H.S Martins'
         };
         
         this.id = data.id || defaults.id;

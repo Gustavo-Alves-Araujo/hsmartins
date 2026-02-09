@@ -2,8 +2,9 @@
 # H5 Martins - Performance & SEO
 # ===================================
 
-# Enable GZIP Compression
+# Enable GZIP Compression (Otimizado)
 <IfModule mod_deflate.c>
+    # HTML, CSS, JavaScript, Text, XML
     AddOutputFilterByType DEFLATE text/html
     AddOutputFilterByType DEFLATE text/plain
     AddOutputFilterByType DEFLATE text/xml
@@ -14,27 +15,32 @@
     AddOutputFilterByType DEFLATE application/rss+xml
     AddOutputFilterByType DEFLATE application/javascript
     AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
     AddOutputFilterByType DEFLATE image/svg+xml
+    
+    # Remove headers desnecessários
+    SetEnvIfNoCase Request_URI \.(?:gif|jpe?g|png|webp|ico)$ no-gzip dont-vary
+    SetEnvIfNoCase Request_URI \.(?:exe|t?gz|zip|bz2|sit|rar)$ no-gzip dont-vary
 </IfModule>
 
-# Browser Caching
+# Browser Caching (Otimizado)
 <IfModule mod_expires.c>
     ExpiresActive On
     
-    # Images (30 days)
-    ExpiresByType image/jpeg "access plus 30 days"
-    ExpiresByType image/gif "access plus 30 days"
-    ExpiresByType image/png "access plus 30 days"
-    ExpiresByType image/webp "access plus 30 days"
-    ExpiresByType image/svg+xml "access plus 30 days"
-    ExpiresByType image/x-icon "access plus 30 days"
+    # Images (1 year - imagens raramente mudam)
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType image/x-icon "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
     
-    # CSS (30 days)
-    ExpiresByType text/css "access plus 30 days"
-    
-    # JavaScript (30 days)
-    ExpiresByType application/javascript "access plus 30 days"
-    ExpiresByType text/javascript "access plus 30 days"
+    # CSS e JavaScript (1 year com versionamento)
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    ExpiresByType application/json "access plus 1 year"
     
     # Fonts (1 year)
     ExpiresByType font/ttf "access plus 1 year"
@@ -42,23 +48,38 @@
     ExpiresByType font/woff "access plus 1 year"
     ExpiresByType font/woff2 "access plus 1 year"
     
-    # HTML (1 hour - force refresh)
-    ExpiresByType text/html "access plus 1 hours"
+    # HTML (1 hour - permite atualizações rápidas)
+    ExpiresByType text/html "access plus 1 hour"
     
-    # Default (1 week)
-    ExpiresDefault "access plus 1 week"
+    # Default (1 month)
+    ExpiresDefault "access plus 1 month"
 </IfModule>
 
-# ETags
-FileETag MTime Size
+# ETags (desabilitado - Cache-Control é mais eficiente)
+FileETag None
 
-# Disable unnecessary headers
+# Headers de Performance e Segurança
 <IfModule mod_headers.c>
+    # Headers de Segurança
     Header set X-UA-Compatible "IE=edge"
     Header set X-Content-Type-Options "nosniff"
     Header set X-Frame-Options "SAMEORIGIN"
     Header set X-XSS-Protection "1; mode=block"
     Header set Referrer-Policy "strict-origin-when-cross-origin"
+    
+    # Cache-Control para recursos estáticos
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|svg|ico|woff|woff2|ttf|otf|css|js|json)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    
+    # Cache-Control para HTML
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
+    </FilesMatch>
+    
+    # Remove ETags (usar Cache-Control é mais eficiente)
+    Header unset ETag
+    FileETag None
 </IfModule>
 
 # Rewrite engine

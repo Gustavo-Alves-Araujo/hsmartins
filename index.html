@@ -70,14 +70,22 @@
   }
   </script>
   
-  <!-- Preload & Prefetch -->
-  <link rel="preload" as="image" href="img/logo.png" type="image/png">
-  <link rel="preload" as="script" href="config.js">
+  <!-- Preload & Prefetch - Recursos Críticos -->
+  <link rel="preload" as="image" href="img/logo.png" type="image/png" fetchpriority="high">
+  <link rel="preload" as="image" href="img/image.png" type="image/png" media="(min-width: 769px)">
+  <link rel="preload" as="image" href="img/image(1).png" type="image/png" media="(max-width: 768px)">
+  <link rel="preload" as="script" href="config.js" fetchpriority="high">
+  
+  <!-- Preconnect para CDNs (conexões críticas) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <link rel="preconnect" href="https://vkwczizdjhsejbpaapea.supabase.co">
+  
+  <!-- DNS Prefetch para recursos secundários -->
   <link rel="dns-prefetch" href="https://unpkg.com">
-  <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
   
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="img/logo.png" sizes="32x32">
@@ -87,23 +95,24 @@
   <!-- Sitemap & RSS -->
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 
-  <!-- Scripts críticos - config.js primeiro -->
+  <!-- Scripts críticos - config.js primeiro (sem defer para carregar imediatamente) -->
   <script src="config.js"></script>
 
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Tailwind CSS (defer para não bloquear renderização) -->
+  <script src="https://cdn.tailwindcss.com" defer></script>
 
-  <!-- Lucide Icons -->
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Lucide Icons (defer - não crítico) -->
+  <script src="https://unpkg.com/lucide@latest" defer></script>
 
-  <!-- Componentes -->
-  <script src="templates/components/base-component.js"></script>
-  <script src="templates/components/component-registry.js"></script>
-  <script src="templates/components/cosmos-template.js"></script>
-  <script src="templates/components/image-optimizer.js"></script>
+  <!-- Componentes (defer - carregam após DOM) -->
+  <script src="templates/components/base-component.js" defer></script>
+  <script src="templates/components/component-registry.js" defer></script>
+  <script src="templates/components/cosmos-template.js" defer></script>
+  <script src="templates/components/image-optimizer.js" defer></script>
+  <script src="templates/components/news-grid.js" defer></script>
   
-  <!-- Performance Monitoring -->
-  <script src="web-vitals-monitor.js"></script>
+  <!-- Performance Monitoring (defer - não crítico) -->
+  <script src="web-vitals-monitor.js" defer></script>
 </head>
 
 <body class="antialiased">

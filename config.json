@@ -39,7 +39,7 @@
       "venda": { "text": "Venda", "href": "#imoveis" },
       "sobre": { "text": "Sobre", "href": "sobre.html" },
       "correspondente": { "text": "Correspondente Caixa", "href": "correspondente.html" },
-
+      "noticias": { "text": "Notícias", "href": "noticias.html" },
       "cta": { "text": "Fale Conosco", "href": "https://wa.me/551146382942", "target": "_blank" }
     }
   },
@@ -51,5 +51,10 @@
   "faq-accordion": {},
   "cta-banner": {},
   "whatsapp-float-button": {},
-  "footer-contact": {}
+  "footer-contact": {},
+  "news-grid": {
+    "title": "Últimas Notícias",
+    "subtitle": "Fique por dentro das novidades do mercado imobiliário",
+    "limit": 6
+  }
 }

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias - H.S Martins</title>
+    <meta name="description" content="Fique por dentro das últimas notícias do mercado imobiliário.">
+    
+    <script src="config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <script src="templates/components/base-component.js"></script>
+    <script src="templates/components/component-registry.js"></script>
+    <script src="templates/components/cosmos-template.js"></script>
+    <script src="templates/components/sticky-header-navigation.js"></script>
+    <script src="templates/components/footer-contact.js"></script>
+</head>
+<body class="antialiased bg-gray-50">
+    <main class="pt-20 md:pt-24">
+        <section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12">
+            <div class="max-w-7xl mx-auto px-4 text-center">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-2">Notícias</h1>
+                <p class="text-lg text-blue-100">Fique por dentro das novidades</p>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 py-12">
+            <div id="noticias-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12"></div>
+            <div id="noticias-loading" class="text-center py-12">
+                <i class="fas fa-spinner fa-spin text-4xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600">Carregando...</p>
+            </div>
+            <div id="noticias-empty" class="text-center py-12 hidden">
+                <p class="text-gray-600">Nenhuma notícia encontrada</p>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
+
+        async function init() {
+            try {
+                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                const { data, error } = await client
+                    .from('Hsmartins_Noticias')
+                    .select('*')
+                    .eq('status', 'publicado')
+                    .order('data_publicacao', { ascending: false });
+
+                if (error) throw error;
+
+                const loading = document.getElementById('noticias-loading');
+                const empty = document.getElementById('noticias-empty');
+                const list = document.getElementById('noticias-list');
+
+                loading.style.display = 'none';
+
+                if (!data || data.length === 0) {
+                    empty.classList.remove('hidden');
+                    return;
+                }
+
+                list.innerHTML = data.map(item => {
+                    const img = item.imagem_principal || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80';
+                    const slug = item.slug || item.titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-');
+                    const url = `noticia.html?slug=${slug}`;
+                    const date = new Date(item.data_publicacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+
+                    return `
+                        <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                            <a href="${url}" class="block">
+                                <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                                    <img src="${img}" alt="${item.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                                    ${item.destacado ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Destaque</span>' : ''}
+                                    ${item.categoria ? `<span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">${item.categoria.replace(/"/g, '&quot;')}</span>` : ''}
+                                </div>
+                                <div class="p-3">
+                                    ${item.categoria ? `<p class="text-gray-500 text-[10px] mb-1">${item.categoria.replace(/"/g, '&quot;')}</p>` : ''}
+                                    <h3 class="font-semibold text-sm leading-tight mb-2 transition group-hover:opacity-90 line-clamp-2" style="color: #005CA9;">${item.titulo.replace(/"/g, '&quot;')}</h3>
+                                    <div class="text-xs text-gray-500">${date}</div>
+                                </div>
+                            </a>
+                        </article>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('noticias-loading').innerHTML = '<p class="text-red-600">Erro ao carregar.</p>';
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+    </script>
+</body>
+</html>

@@ -89,19 +89,19 @@ class HeroComponent extends BaseComponent {
                     <picture class="block w-full h-full">
                         <source media="(max-width: 768px)" srcset="img/image(1).png">
                         <img src="img/image.png"
-                             alt="${this.backgroundAlt}"
+                         alt="${this.backgroundAlt}"
                              class="w-full h-full hero-bg-image"
                              style="object-position: center center; min-height: 100vh; width: 100%; height: 100%;">
                     </picture>
                 </div>
-                
+
                 <!-- Overlay gradiente na esquerda para destacar o conteúdo -->
                 <div class="absolute inset-0 z-[1]" style="background: linear-gradient(to right, ${primaryHex} 0%, ${primaryHex}CC 25%, ${primaryHex}99 40%, ${primaryHex}66 55%, ${primaryHex}33 70%, transparent 85%); pointer-events: none;"></div>
 
                 <div class="w-full relative z-10 pb-8 md:pb-12">
-                    <div class="container mx-auto px-4 md:px-6">
+                    <div class="container mx-auto px-4 md:px-6 pt-8 md:pt-12 lg:pt-16">
                         <!-- Texto na esquerda -->
-                        <div class="max-w-2xl mb-12 md:mb-8 lg:mb-12">
+                        <div class="max-w-2xl mb-12 md:mb-8 lg:mb-12 -mt-8 md:-mt-4 lg:-mt-8">
                             <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
                                 ${this.title.includes('23') || this.title.includes('Há') || this.title.includes('há') ? `
                                     <span class="block">
@@ -110,48 +110,52 @@ class HeroComponent extends BaseComponent {
                                             23
                                         </span>
                                         <span class="text-white"> anos</span>
-                                    </span>
+                        </span>
                                 ` : `
                                     <span class="block">${this.title}</span>
                                 `}
-                            </h1>
+                    </h1>
                             ${this.subtitle ? `
                                 <p class="text-xl md:text-2xl text-white leading-relaxed">
-                                    ${this.subtitle}
-                                </p>
+                        ${this.subtitle}
+                    </p>
                             ` : ''}
                         </div>
-                        
+
                         <!-- Formulário de busca -->
-                        <div class="max-w-5xl mx-auto">
+                    <div class="max-w-5xl mt-0 md:mt-40 mx-auto">
                             <form id="hero-imoveis-search" class="bg-white/95 backdrop-blur-sm border border-white/20 rounded-2xl p-4 md:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
-                                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 items-center">
-                                    <input
-                                        id="hero-search-q"
-                                        type="text"
+                            <div class="grid grid-cols-1 md:grid-cols-6 gap-3 md:gap-4 items-center">
+                                <input
+                                    id="hero-search-q"
+                                    type="text"
                                         placeholder="Buscar por título, tipo, bairro, cidade ou ref..."
                                         class="md:col-span-2 w-full px-4 py-3 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0 border border-gray-200"
-                                        style="--tw-ring-color: ${c.ctaPrimaryBg};"
-                                    />
+                                    style="--tw-ring-color: ${c.ctaPrimaryBg};"
+                                />
 
                                     <select id="hero-search-type" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
-                                        <option value="all">Todos os tipos</option>
-                                    </select>
+                                    <option value="all">Todos os tipos</option>
+                                </select>
 
                                     <select id="hero-search-city" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
-                                        <option value="all">Todas as cidades</option>
-                                    </select>
+                                    <option value="all">Todas as cidades</option>
+                                </select>
 
-                                    <button type="submit" class="w-full px-5 py-3 rounded-xl font-extrabold uppercase tracking-widest text-xs shadow-[0_14px_28px_rgba(0,0,0,0.35)] hover:opacity-95 transition"
-                                            style="background: linear-gradient(135deg, ${accentHex} 0%, ${this.darkenColor(accentHex, 0.12)} 100%); color: ${badgeText};">
-                                        Pesquisar
-                                    </button>
-                                </div>
+                                    <select id="hero-search-bairro" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                    <option value="all">Todos os bairros</option>
+                                </select>
+
+                                <button type="submit" class="w-full px-5 py-3 rounded-xl font-extrabold uppercase tracking-widest text-xs shadow-[0_14px_28px_rgba(0,0,0,0.35)] hover:opacity-95 transition"
+                                        style="background: linear-gradient(135deg, ${accentHex} 0%, ${this.darkenColor(accentHex, 0.12)} 100%); color: ${badgeText};">
+                                    Pesquisar
+                                </button>
+                            </div>
 
                                 <div class="mt-3 text-[11px] md:text-xs opacity-90 text-gray-600">
-                                    Dica: ao digitar na busca, você pode refinar depois nos filtros da lista.
-                                </div>
-                            </form>
+                                Dica: ao digitar na busca, você pode refinar depois nos filtros da lista.
+                            </div>
+                        </form>
                         </div>
                     </div>
                 </div>
@@ -194,13 +198,15 @@ class HeroComponent extends BaseComponent {
         const heroSection = document.querySelector('header.relative.flex.items-end');
         if (!heroSection) return;
 
-        // Recebe opções dinâmicas (tipo/cidade) quando o grid carregar do Supabase
+        // Recebe opções dinâmicas (tipo/cidade/bairro) quando o grid carregar do Supabase
         window.addEventListener('imoveis:options', (evt) => {
             try {
                 const detail = evt?.detail || {};
-                const { tipos = [], cidades = [] } = detail;
+                const { tipos = [], cidades = [], bairros = [] } = detail;
                 const typeSel = document.getElementById('hero-search-type');
                 const citySel = document.getElementById('hero-search-city');
+                const bairroSel = document.getElementById('hero-search-bairro');
+                
                 if (typeSel && Array.isArray(tipos)) {
                     const keepFirst = typeSel.options[0];
                     typeSel.innerHTML = '';
@@ -223,6 +229,17 @@ class HeroComponent extends BaseComponent {
                         citySel.appendChild(opt);
                     });
                 }
+                if (bairroSel && Array.isArray(bairros)) {
+                    const keepFirst = bairroSel.options[0];
+                    bairroSel.innerHTML = '';
+                    bairroSel.appendChild(keepFirst);
+                    bairros.forEach(v => {
+                        const opt = document.createElement('option');
+                        opt.value = v;
+                        opt.textContent = v;
+                        bairroSel.appendChild(opt);
+                    });
+                }
             } catch (e) {
                 // silencioso
             }
@@ -236,7 +253,8 @@ class HeroComponent extends BaseComponent {
                 const payload = {
                     search: document.getElementById('hero-search-q')?.value || '',
                     type: document.getElementById('hero-search-type')?.value || 'all',
-                    city: document.getElementById('hero-search-city')?.value || 'all'
+                    city: document.getElementById('hero-search-city')?.value || 'all',
+                    bairro: document.getElementById('hero-search-bairro')?.value || 'all'
                 };
                 window.dispatchEvent(new CustomEvent('imoveis:hero-search', { detail: payload }));
             });
