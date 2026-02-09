@@ -79,6 +79,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
                         transacao: item.transacao,
                         endereco_cidade: item.endereco_cidade,
                         endereco_bairro: item.endereco_bairro,
+                        ref: item.ref || '',
                         price: { current: item.price_current, original: item.price_original },
                         valor: typeof item.valor === 'number' ? item.valor : parseFloat(item.valor),
                         destacado: item.destacado === true || item.destacado === 'true' || item.destacado === 1,
@@ -88,8 +89,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
                         imageUrl: item.image_url,
                         imagesUrls: item.images_urls ? (Array.isArray(item.images_urls) ? item.images_urls : JSON.parse(item.images_urls)) : [item.image_url]
                     }));
-                this.featuredProducts = products.filter(p => p.destacado).sort((a, b) => a.valor - b.valor);
-                this.normalProducts = products.filter(p => !p.destacado).sort((a, b) => a.valor - b.valor);
+                // Todos os produtos juntos, sem separação por destaque
                 this.products = products;
                 // inicializa filtros com todos os dados
                 this.applyFilters({ renderOnly: true });
@@ -192,9 +192,6 @@ class ProductGridAdvancedComponent extends BaseComponent {
         return `<a href="${detailsLink}" class="group relative bg-white block rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
                 ${badgeHtml}
-                <button onclick="event.preventDefault(); event.stopPropagation();" class="absolute top-3 right-3 w-8 h-8 bg-white/85 backdrop-blur rounded-full flex items-center justify-center text-gray-500 hover:text-red-500 hover:bg-white transition z-30 shadow-sm">
-                    <i class="far fa-heart"></i>
-                </button>
                 ${imagesHtml}
             </div>
             <div class="p-4">
@@ -223,7 +220,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
 
         const filterBar = `
             <div class="mb-8 grid grid-cols-1 md:grid-cols-6 gap-4 items-center">
-                <input type="text" id="imovel-search" value="${this._escapeHtml(fs.search || '')}" placeholder="Pesquisar por título, tipo, bairro ou cidade..." class="w-full md:col-span-2 px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" />
+                <input type="text" id="imovel-search" value="${this._escapeHtml(fs.search || '')}" placeholder="Pesquisar por título, tipo, bairro, cidade ou ref..." class="w-full md:col-span-2 px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" />
 
                 <select id="imovel-type" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};">
                     <option value="all">Todos os tipos</option>
@@ -313,42 +310,35 @@ class ProductGridAdvancedComponent extends BaseComponent {
         `;
 
         // Containers: as grids são atualizadas sem recriar os inputs (evita perder foco ao digitar)
-        return `<section ${this.id ? `id="${this.id}"` : ''} class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">${filterBar}<div id="${this.id}-featured"></div>${caixaSection}<div id="${this.id}-normal"></div></section>`;
+        return `<section ${this.id ? `id="${this.id}"` : ''} class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-20">${filterBar}${caixaSection}<div id="${this.id}-all"></div></section>`;
     }
 
     renderGrids() {
         const c = this.colors;
-        const featuredEl = document.getElementById(`${this.id}-featured`);
-        const normalEl = document.getElementById(`${this.id}-normal`);
-        if (!featuredEl || !normalEl) return;
+        const allEl = document.getElementById(`${this.id}-all`);
+        if (!allEl) return;
 
-        let featuredHtml = '';
-        let normalHtml = '';
+        let allHtml = '';
         
-        if (this.featuredProducts && this.featuredProducts.length > 0) {
-            featuredHtml = `<h2 class="text-2xl font-bold mb-6 text-gray-900">Imóveis em Destaque</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12 mb-12">${this.featuredProducts.map(product => this.renderProductCard(product, c.primary)).join('')}</div>`;
-        } else {
-            featuredHtml = '';
-        }
-
-        if (this.normalProducts && this.normalProducts.length > 0) {
+        // Usa todos os produtos filtrados, sem separação
+        const allProducts = this.filteredProducts || [];
+        
+        if (allProducts.length > 0) {
             // Infinite scroll: mostrar apenas os primeiros N items baseado na página atual
-            const startIdx = 0; // featured já mostra separado
-            const endIdx = Math.min(this.currentPage * this.itemsPerPage + this.itemsPerPage, this.normalProducts.length);
-            const visibleProducts = this.normalProducts.slice(startIdx, endIdx);
+            const endIdx = Math.min(this.currentPage * this.itemsPerPage + this.itemsPerPage, allProducts.length);
+            const visibleProducts = allProducts.slice(0, endIdx);
             
-            normalHtml = `<h2 class="text-xl font-bold mb-6 text-gray-700">Todos os Imóveis</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" id="${this.id}-normal-grid">${visibleProducts.map(product => this.renderProductCard(product, c.primary)).join('')}</div>`;
+            allHtml = `<h2 class="text-2xl font-bold mb-6 text-gray-900">Todos os Imóveis</h2><div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12" id="${this.id}-all-grid">${visibleProducts.map(product => this.renderProductCard(product, c.primary)).join('')}</div>`;
             
             // Se há mais produtos, adiciona sentinel para infinite scroll
-            if (endIdx < this.normalProducts.length) {
-                normalHtml += `<div id="${this.id}-scroll-sentinel" style="height: 1px; margin-top: 40px;"></div>`;
+            if (endIdx < allProducts.length) {
+                allHtml += `<div id="${this.id}-scroll-sentinel" style="height: 1px; margin-top: 40px;"></div>`;
             }
         } else {
-            normalHtml = `<div class="py-10 text-center text-gray-600"><i class="fas fa-search text-3xl text-gray-300 mb-3"></i><div class="font-semibold">Nenhum imóvel encontrado</div><div class="text-sm text-gray-500 mt-1">Tente ajustar os filtros ou a pesquisa.</div></div>`;
+            allHtml = `<div class="py-10 text-center text-gray-600"><i class="fas fa-search text-3xl text-gray-300 mb-3"></i><div class="font-semibold">Nenhum imóvel encontrado</div><div class="text-sm text-gray-500 mt-1">Tente ajustar os filtros ou a pesquisa.</div></div>`;
         }
 
-        featuredEl.innerHTML = featuredHtml;
-        normalEl.innerHTML = normalHtml;
+        allEl.innerHTML = allHtml;
         
         // Setup IntersectionObserver para infinite scroll
         this.setupInfiniteScroll();
@@ -402,7 +392,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
                 const tipo = (p.tipoimovel || '').toLowerCase();
                 const cidade = (p.endereco_cidade || '').toLowerCase();
                 const bairro = (p.endereco_bairro || '').toLowerCase();
-                return title.includes(q) || cat.includes(q) || tipo.includes(q) || cidade.includes(q) || bairro.includes(q);
+                const ref = (p.ref || '').toLowerCase();
+                return title.includes(q) || cat.includes(q) || tipo.includes(q) || cidade.includes(q) || bairro.includes(q) || ref.includes(q);
             });
         }
         // ordenar (após filtros)
@@ -419,9 +410,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
             return byPrice;
         })();
 
-        // separar e ordenar
-        this.featuredProducts = filtered.filter(p => p.destacado).sort(sorter);
-        this.normalProducts = filtered.filter(p => !p.destacado).sort(sorter);
+        // Ordenar todos os produtos juntos, sem separação
+        this.filteredProducts = filtered.sort(sorter);
 
         if (!options.renderOnly) {
             this.renderGrids();
@@ -537,7 +527,11 @@ class ProductGridAdvancedComponent extends BaseComponent {
 
         setTimeout(() => {
             const sentinel = document.getElementById(`${this.id}-scroll-sentinel`);
-            if (!sentinel) return;
+            if (!sentinel) {
+                // Reset flag se não há sentinel (todos os produtos já foram carregados)
+                this._intersectionObserverSet = false;
+                return;
+            }
 
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach((entry) => {

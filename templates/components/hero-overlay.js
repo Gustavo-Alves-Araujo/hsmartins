@@ -14,9 +14,9 @@ class HeroComponent extends BaseComponent {
         // Valores padrão do projeto HS Martins
         const defaults = {
             badge: 'Imobiliária em Poá e Região • Leilões • Venda • Financiamento',
-            title: 'Imobiliária H.S Martins',
+            title: 'Há 23 anos',
             titleHighlight: '',
-            subtitle: 'Encontre apartamentos, casas e terrenos em Poá e região. Conte com apoio completo no financiamento (Correspondente Caixa).',
+            subtitle: 'a H.S. Martins ajuda famílias a realizarem o sonho da casa própria.',
             ctaPrimary: { text: 'Buscar Imóveis', href: '#imoveis', target: '_self' },
             ctaSecondary: { text: 'Negocie seu Imóvel', href: '#negociar', target: '_self' },
             backgroundImage: 'https://images.unsplash.com/photo-1582407947304-fd86f028f716?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w4NTEyODd8MHwxfHNlYXJjaHwxfHxyZWFsJTIwZXN0YXRlfGVufDB8MHx8fDE3NjkyNTUyMzV8MA&ixlib=rb-4.1.0&q=80&w=1080',
@@ -77,77 +77,82 @@ class HeroComponent extends BaseComponent {
      */
     render() {
         const c = this.colors;
+        const primaryHex = this.getThemeColorHex('primary') || '#005CA9';
         const accentHex = this.getThemeColorHex('accent') || '#F39200';
-        const primaryHex = this.getThemeColorHex('primary') || c.ctaPrimaryBg;
         const badgeText = this.getBestTextColor(accentHex);
+        const gradientBg = `linear-gradient(135deg, ${primaryHex}15 0%, ${accentHex}10 50%, ${primaryHex}15 100%)`;
 
         return `
-            <header class="relative min-h-screen flex items-center justify-center overflow-hidden isolate bg-black pt-20 md:pt-12">
+            <header class="relative flex items-end overflow-hidden isolate pt-20 md:pt-12" style="min-height: 100vh; background: ${gradientBg};">
 
-                <div class="absolute inset-0 z-0">
-                    <img src="${this.backgroundImage}"
-                         alt="${this.backgroundAlt}"
-                         class="w-full h-full object-cover scale-100 opacity-20"
-                         style="filter: blur(10px) brightness(1.1) contrast(1.0);">
-
-                    <!-- Blur overlay com cor primária -->
-                    <div class="absolute inset-0 backdrop-blur-sm" style="background-color: ${this.hexToRgba(c.ctaPrimaryBg, 0.3)};"></div>
-
-                    <div class="absolute inset-0 opacity-25 mix-blend-overlay" style="background-color: ${c.overlay};"></div>
-
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-black/40 opacity-60"></div>
-                    <div class="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 opacity-30"></div>
+                <div class="absolute inset-0 z-0 flex items-center justify-center" style="background: ${gradientBg};">
+                    <picture class="block w-full h-full">
+                        <source media="(max-width: 768px)" srcset="img/image(1).png">
+                        <img src="img/image.png"
+                             alt="${this.backgroundAlt}"
+                             class="w-full h-full hero-bg-image"
+                             style="object-position: center center; min-height: 100vh; width: 100%; height: 100%;">
+                    </picture>
                 </div>
+                
+                <!-- Overlay gradiente na esquerda para destacar o conteúdo -->
+                <div class="absolute inset-0 z-[1]" style="background: linear-gradient(to right, ${primaryHex} 0%, ${primaryHex}CC 25%, ${primaryHex}99 40%, ${primaryHex}66 55%, ${primaryHex}33 70%, transparent 85%); pointer-events: none;"></div>
 
-                <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] blur-[150px] rounded-full pointer-events-none mix-blend-screen animate-pulse" style="background-color: ${c.titleHighlight}; opacity: 0.2; animation-duration: 4s;"></div>
-                <div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] blur-[130px] rounded-full pointer-events-none mix-blend-overlay" style="background-color: ${c.ctaPrimaryBg}; opacity: 0.1;"></div>
+                <div class="w-full relative z-10 pb-8 md:pb-12">
+                    <div class="container mx-auto px-4 md:px-6">
+                        <!-- Texto na esquerda -->
+                        <div class="max-w-2xl mb-12 md:mb-8 lg:mb-12">
+                            <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
+                                ${this.title.includes('23') || this.title.includes('Há') || this.title.includes('há') ? `
+                                    <span class="block">
+                                        <span class="text-white">Há </span>
+                                        <span class="inline-block text-6xl md:text-7xl lg:text-8xl relative" style="background: linear-gradient(135deg, ${accentHex} 0%, #60A5FA 50%, #3B82F6 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                                            23
+                                        </span>
+                                        <span class="text-white"> anos</span>
+                                    </span>
+                                ` : `
+                                    <span class="block">${this.title}</span>
+                                `}
+                            </h1>
+                            ${this.subtitle ? `
+                                <p class="text-xl md:text-2xl text-white leading-relaxed">
+                                    ${this.subtitle}
+                                </p>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Formulário de busca -->
+                        <div class="max-w-5xl mx-auto">
+                            <form id="hero-imoveis-search" class="bg-white/95 backdrop-blur-sm border border-white/20 rounded-2xl p-4 md:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
+                                <div class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 items-center">
+                                    <input
+                                        id="hero-search-q"
+                                        type="text"
+                                        placeholder="Buscar por título, tipo, bairro, cidade ou ref..."
+                                        class="md:col-span-2 w-full px-4 py-3 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0 border border-gray-200"
+                                        style="--tw-ring-color: ${c.ctaPrimaryBg};"
+                                    />
 
-                <div class="container mx-auto px-4 md:px-6 relative z-10 text-center">
+                                    <select id="hero-search-type" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                        <option value="all">Todos os tipos</option>
+                                    </select>
 
-                    <div class="inline-flex items-center justify-center mb-6 md:mb-8 mt-4 md:mt-0">
-                        <span class="py-2 px-4 md:py-2.5 md:px-6 rounded-full text-[9px] md:text-xs font-black uppercase tracking-[0.3em] md:tracking-[0.4em] shadow-[0_18px_45px_rgba(0,0,0,0.35)] border"
-                              style="background-color: ${accentHex}; color: ${badgeText}; border-color: ${this.hexToRgba('#FFFFFF', 0.35)};">
-                            ${this.badge}
-                        </span>
-                    </div>
+                                    <select id="hero-search-city" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                        <option value="all">Todas as cidades</option>
+                                    </select>
 
-                    <h1 class="text-5xl md:text-7xl lg:text-8xl font-black leading-[1.05] mb-6 tracking-tighter" style="color: ${c.title};">
-                        ${this.title}
-                    </h1>
+                                    <button type="submit" class="w-full px-5 py-3 rounded-xl font-extrabold uppercase tracking-widest text-xs shadow-[0_14px_28px_rgba(0,0,0,0.35)] hover:opacity-95 transition"
+                                            style="background: linear-gradient(135deg, ${accentHex} 0%, ${this.darkenColor(accentHex, 0.12)} 100%); color: ${badgeText};">
+                                        Pesquisar
+                                    </button>
+                                </div>
 
-                    <p class="max-w-2xl mx-auto text-lg md:text-xl lg:text-2xl mb-10 font-medium leading-relaxed opacity-90 tracking-tight" style="color: ${c.subtitle};">
-                        ${this.subtitle}
-                    </p>
-
-                    <div class="max-w-5xl mx-auto">
-                        <form id="hero-imoveis-search" class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 md:p-5 shadow-[0_20px_50px_rgba(0,0,0,0.35)]">
-                            <div class="grid grid-cols-1 md:grid-cols-5 gap-3 md:gap-4 items-center">
-                                <input
-                                    id="hero-search-q"
-                                    type="text"
-                                    placeholder="Buscar por título, tipo, bairro ou cidade..."
-                                    class="md:col-span-2 w-full px-4 py-3 rounded-xl bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-0"
-                                    style="--tw-ring-color: ${c.ctaPrimaryBg};"
-                                />
-
-                                <select id="hero-search-type" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.ctaPrimaryBg};">
-                                    <option value="all">Todos os tipos</option>
-                                </select>
-
-                                <select id="hero-search-city" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.ctaPrimaryBg};">
-                                    <option value="all">Todas as cidades</option>
-                                </select>
-
-                                <button type="submit" class="w-full px-5 py-3 rounded-xl font-extrabold uppercase tracking-widest text-xs shadow-[0_14px_28px_rgba(0,0,0,0.35)] hover:opacity-95 transition"
-                                        style="background: linear-gradient(135deg, ${accentHex} 0%, ${this.darkenColor(accentHex, 0.12)} 100%); color: ${badgeText};">
-                                    Pesquisar
-                                </button>
-                            </div>
-
-                            <div class="mt-3 text-[11px] md:text-xs opacity-90" style="color: ${c.subtitle};">
-                                Dica: ao digitar na busca, você pode refinar depois nos filtros da lista.
-                            </div>
-                        </form>
+                                <div class="mt-3 text-[11px] md:text-xs opacity-90 text-gray-600">
+                                    Dica: ao digitar na busca, você pode refinar depois nos filtros da lista.
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </header>
@@ -158,6 +163,14 @@ class HeroComponent extends BaseComponent {
                 }
                 .animate-shimmer {
                     animation: shimmer 1.5s infinite;
+                }
+                .hero-bg-image {
+                    object-fit: contain;
+                }
+                @media (min-width: 769px) {
+                    .hero-bg-image {
+                        object-fit: cover;
+                    }
                 }
             </style>
         `;
@@ -178,7 +191,7 @@ class HeroComponent extends BaseComponent {
      * Adiciona event listeners para smooth scroll
      */
     attachEventListeners() {
-        const heroSection = document.querySelector('header.relative.min-h-screen');
+        const heroSection = document.querySelector('header.relative.flex.items-end');
         if (!heroSection) return;
 
         // Recebe opções dinâmicas (tipo/cidade) quando o grid carregar do Supabase

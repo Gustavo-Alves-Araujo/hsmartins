@@ -166,6 +166,93 @@
         let currentImageIndex = 0;
         let allImages = [];
 
+        // Função para formatar a descrição do imóvel
+        function formatDescription(text) {
+            if (!text) return '';
+            
+            let formatted = String(text);
+            
+            // Remove o texto de localizações no final (tudo que começa com "Imóveis em/na/no")
+            formatted = formatted.replace(/Imóveis\s+(?:em|na|no)\s+[^;]+(?:;|,)?\s*/gi, '');
+            
+            // Remove códigos HTML quebrados que possam estar no texto (como "900 m²t-6 m²b-3")
+            formatted = formatted.replace(/\d+\s*m²[a-z0-9\-]+/gi, '');
+            formatted = formatted.replace(/[a-z]+\-[0-9]+\s*m²[^<]*/gi, '');
+            formatted = formatted.replace(/m²[a-z0-9\-]+/gi, 'm²');
+            
+            // Normaliza quebras de linha
+            formatted = formatted.replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+            
+            // Remove múltiplos espaços e quebras de linha excessivas
+            formatted = formatted.replace(/\s{3,}/g, ' ').replace(/\n{3,}/g, '\n\n').trim();
+            
+            // Formata seções principais como títulos (ANTES de quebrar em linhas)
+            formatted = formatted.replace(/(Características do imóvel:)/gi, '\n<h4 class="text-lg font-semibold text-gray-900 mt-6 mb-3">$1</h4>\n');
+            formatted = formatted.replace(/(Diferenciais:)/gi, '\n<h4 class="text-lg font-semibold text-gray-900 mt-6 mb-3">$1</h4>\n');
+            formatted = formatted.replace(/(Valor do imóvel:)/gi, '\n<h4 class="text-lg font-semibold text-gray-900 mt-6 mb-3">$1</h4>\n');
+            formatted = formatted.replace(/(Área construída:)/gi, '\n<h4 class="text-lg font-semibold text-gray-900 mt-6 mb-3">$1</h4>\n');
+            formatted = formatted.replace(/(Área do terreno:)/gi, '\n<h4 class="text-lg font-semibold text-gray-900 mt-6 mb-3">$1</h4>\n');
+            
+            // Quebra em linhas para processar
+            const lines = formatted.split('\n');
+            let result = [];
+            let inList = false;
+            
+            lines.forEach((line) => {
+                line = line.trim();
+                if (!line) return;
+                
+                // Se já é HTML (título), adiciona direto
+                if (line.startsWith('<h4')) {
+                    if (inList) {
+                        result.push('</ul>');
+                        inList = false;
+                    }
+                    result.push(line);
+                    return;
+                }
+                
+                // Detecta características (linhas que começam com número ou palavras-chave específicas)
+                const isFeature = /^(\d+\s*(?:dormitório|banheiro|vaga|suíte|sala|cozinha)|Sala\s+aconchegante|Cozinha\s+funcional|Banheiro\s+social|Lavanderia|Localizado|Condomínio|Aceita\s+financiamento|Água\s+e\s+luz)/i.test(line);
+                
+                if (isFeature) {
+                    if (!inList) {
+                        result.push('<ul class="space-y-2 my-4 list-none">');
+                        inList = true;
+                    }
+                    // Remove pontos finais e limpa
+                    line = line.replace(/\.$/, '').trim();
+                    // Escapa HTML básico mas preserva o texto
+                    const escapedLine = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    result.push(`<li class="flex items-start gap-2"><i class="fas fa-check-circle text-green-600 mt-1 flex-shrink-0 text-sm"></i><span>${escapedLine}</span></li>`);
+                } else {
+                    if (inList) {
+                        result.push('</ul>');
+                        inList = false;
+                    }
+                    // É um parágrafo normal
+                    // Escapa HTML primeiro para evitar problemas
+                    let escapedLine = line.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                    // Formata valores monetários (depois do escape)
+                    escapedLine = escapedLine.replace(/(R\$\s*[\d.,]+)/g, '<span class="font-bold text-blue-600">$1</span>');
+                    // Formata áreas (m²) - apenas números seguidos de m², sem outras letras depois
+                    escapedLine = escapedLine.replace(/(\d+)\s*m²(?![a-z0-9])/gi, '<span class="font-semibold text-gray-900">$1 m²</span>');
+                    result.push(`<p class="mb-4 text-gray-700 leading-relaxed">${escapedLine}</p>`);
+                }
+            });
+            
+            if (inList) {
+                result.push('</ul>');
+            }
+            
+            formatted = result.join('');
+            
+            // Remove tags HTML vazias
+            formatted = formatted.replace(/<[^>]*>\s*<\/[^>]*>/g, '');
+            
+            return formatted;
+        }
+
         // Pega ID do imóvel da URL
         function getPropertyId() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -215,13 +302,12 @@
 
             document.getElementById('app').innerHTML = `
                 <!-- Header -->
-                <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-4">
-                  <div class="container mx-auto px-6">
-                    <nav class="flex items-center justify-between bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 shadow-sm">
-                      <a href="index.html" class="flex items-center gap-3 group transition-transform hover:scale-105">
-                        <img src="img/logo.png" alt="Logo HS Martins" class="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover flex-shrink-0">
-                        <span class="hidden md:block font-black text-slate-800 tracking-tight">HS Martins</span>
-                      </a>
+                <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-2 bg-white" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                  <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12 py-2">
+                    <a href="index.html" class="flex items-center gap-3 group transition-transform hover:scale-105">
+                      <img src="img/logo.png" alt="Logo HS Martins" class="h-12 w-auto md:h-14 object-contain flex-shrink-0">
+                      <span class="hidden md:block font-black text-slate-800 tracking-tight">HS Martins</span>
+                    </a>
 
                       <ul class="hidden lg:flex items-center gap-2">
                         <li><a href="index.html#imoveis" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Venda</a></li>
@@ -230,14 +316,19 @@
                         <li><a href="index.html#contato" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Contato</a></li>
                       </ul>
 
-                      <a href="https://wa.me/551146382942" target="_blank"
-                         class="flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg transition-all hover:scale-105"
-                         style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);">
-                        <i class="fab fa-whatsapp"></i>
-                        <span>Fale Conosco</span>
-                      </a>
+                      <div class="hidden lg:block">
+                        <a href="https://wa.me/551146382942" target="_blank"
+                           class="flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg transition-all hover:scale-105"
+                           style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);">
+                          <i class="fab fa-whatsapp"></i>
+                          <span>Fale Conosco</span>
+                        </a>
+                      </div>
+
+                      <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+                        <i class="fas fa-bars"></i>
+                      </button>
                     </nav>
-                  </div>
                 </header>
 
                 <!-- Content -->
@@ -294,7 +385,7 @@
                             <!-- Informações Principais -->
                             <div class="border-b pb-8">
                                 <div class="flex items-center justify-between mb-4">
-                                    <h2 class="text-2xl font-semibold">${property.category || 'Imóvel'}</h2>
+                                    <h2 class="text-2xl font-semibold">${property.category || property.tipoimovel || 'Imóvel'}</h2>
                                     ${property.badge_text ? `
                                         <span class="px-4 py-1 rounded-full text-sm font-semibold ${property.badge_style === 'new' ? 'bg-gray-900 text-white' : 'bg-red-500 text-white'}">
                                             ${property.badge_text}
@@ -303,25 +394,233 @@
                                 </div>
                                 
                                 <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
+                                    ${property.ref ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-hashtag text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Referência</p>
+                                            <p class="font-semibold text-gray-900">${property.ref}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.tipoimovel ? `
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
                                             <i class="fas fa-home text-gray-700 text-xl"></i>
                                         </div>
                                         <div>
                                             <p class="text-xs text-gray-500">Tipo</p>
-                                            <p class="font-semibold text-gray-900">Casa</p>
+                                            <p class="font-semibold text-gray-900">${property.tipoimovel}</p>
                                         </div>
                                     </div>
+                                    ` : ''}
                                     
+                                    ${property.subtipoimovel ? `
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
-                                            <i class="fas fa-map-marker-alt text-gray-700 text-xl"></i>
+                                            <i class="fas fa-building text-gray-700 text-xl"></i>
                                         </div>
                                         <div>
-                                            <p class="text-xs text-gray-500">Localização</p>
-                                            <p class="font-semibold text-gray-900">Poá, SP</p>
+                                            <p class="text-xs text-gray-500">Subtipo</p>
+                                            <p class="font-semibold text-gray-900">${property.subtipoimovel}</p>
                                         </div>
                                     </div>
+                                    ` : ''}
+                                    
+                                    ${property.transacao ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-handshake text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Transação</p>
+                                            <p class="font-semibold text-gray-900">${property.transacao}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.area_construida ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-ruler text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Área Construída</p>
+                                            <p class="font-semibold text-gray-900">${property.area_construida} m²</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.area_terreno ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-ruler-combined text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Área do Terreno</p>
+                                            <p class="font-semibold text-gray-900">${property.area_terreno} m²</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.dormitorios ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-bed text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Dormitórios</p>
+                                            <p class="font-semibold text-gray-900">${property.dormitorios}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.banheiro ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-bath text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Banheiros</p>
+                                            <p class="font-semibold text-gray-900">${property.banheiro}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.suites ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-door-open text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Suítes</p>
+                                            <p class="font-semibold text-gray-900">${property.suites}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.vagas ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-car text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Vagas</p>
+                                            <p class="font-semibold text-gray-900">${property.vagas}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.mobiliado === true ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-couch text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Mobiliado</p>
+                                            <p class="font-semibold text-gray-900">Sim</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.em_condominio === true ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-building text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Em Condomínio</p>
+                                            <p class="font-semibold text-gray-900">Sim</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.ano_construcao ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-calendar text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Ano de Construção</p>
+                                            <p class="font-semibold text-gray-900">${property.ano_construcao}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.aceitafinanciamento === true ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-university text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Aceita Financiamento</p>
+                                            <p class="font-semibold text-green-600">Sim</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.valor_condominio ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-home text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Condomínio</p>
+                                            <p class="font-semibold text-gray-900">R$ ${parseFloat(property.valor_condominio).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.valor_iptu ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-file-invoice-dollar text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">IPTU</p>
+                                            <p class="font-semibold text-gray-900">R$ ${parseFloat(property.valor_iptu).toLocaleString('pt-BR', {minimumFractionDigits: 2, maximumFractionDigits: 2})}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.empreendimento_nome ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-city text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Empreendimento</p>
+                                            <p class="font-semibold text-gray-900">${property.empreendimento_nome}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.empreendimento_estagio ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-tasks text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Estágio</p>
+                                            <p class="font-semibold text-gray-900">${property.empreendimento_estagio}</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
+                                    
+                                    ${property.video ? `
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                                            <i class="fas fa-video text-gray-700 text-xl"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs text-gray-500">Vídeo</p>
+                                            <p class="font-semibold text-gray-900">Disponível</p>
+                                        </div>
+                                    </div>
+                                    ` : ''}
                                     
                                     <div class="flex items-center gap-3">
                                         <div class="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
@@ -336,15 +635,27 @@
                             </div>
 
                             <!-- Descrição -->
+                            ${property.descricao ? `
                             <div class="border-b pb-8">
                                 <h3 class="text-xl font-semibold mb-4">Sobre este imóvel</h3>
-                                <p class="text-gray-600 leading-relaxed">
-                                    ${property.title} localizado em excelente região. 
-                                    Imóvel com acabamento de qualidade, pronto para morar.
-                                    ${property.category ? `Categoria: ${property.category}.` : ''}
-                                    Entre em contato para mais informações e agendamento de visita.
-                                </p>
+                                <div class="text-gray-700 leading-relaxed prose prose-lg max-w-none">
+                                    ${formatDescription(property.descricao)}
+                                </div>
                             </div>
+                            ` : ''}
+
+                            <!-- Informações do Empreendimento -->
+                            ${property.empreendimento_nome || property.empreendimento_descricao ? `
+                            <div class="border-b pb-8">
+                                <h3 class="text-xl font-semibold mb-4">Sobre o Empreendimento</h3>
+                                ${property.empreendimento_nome ? `
+                                    <h4 class="text-lg font-semibold text-gray-900 mb-2">${property.empreendimento_nome}</h4>
+                                ` : ''}
+                                ${property.empreendimento_descricao ? `
+                                    <p class="text-gray-700 leading-relaxed mb-4">${property.empreendimento_descricao}</p>
+                                ` : ''}
+                            </div>
+                            ` : ''}
 
                             <!-- Características -->
                             ${(() => {
@@ -366,6 +677,45 @@
                                     </div>
                                 `;
                             })()}
+                            
+                            <!-- Vídeo -->
+                            ${property.video ? `
+                            <div class="border-b pb-8">
+                                <h3 class="text-xl font-semibold mb-4">Vídeo do Imóvel</h3>
+                                <div class="relative aspect-video rounded-lg overflow-hidden">
+                                    <iframe 
+                                        class="absolute inset-0 w-full h-full"
+                                        src="${property.video.includes('youtube.com') ? property.video.replace('watch?v=', 'embed/') : property.video}"
+                                        title="Vídeo do imóvel"
+                                        frameborder="0"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen>
+                                    </iframe>
+                                </div>
+                            </div>
+                            ` : ''}
+
+                            <!-- Card de Contato -->
+                            <div class="mb-8">
+                                <a 
+                                    href="https://wa.me/551146382942?text=Olá! Tenho interesse no imóvel: ${encodeURIComponent(property.title)}${property.ref ? ' (Ref: ' + property.ref + ')' : ''}"
+                                    target="_blank"
+                                    class="block bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-2xl p-6 shadow-lg hover:from-blue-700 hover:to-blue-800 transition transform hover:scale-[1.02]"
+                                >
+                                    <div class="flex items-center justify-between">
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center">
+                                                <i class="fab fa-whatsapp text-3xl"></i>
+                                            </div>
+                                            <div>
+                                                <h3 class="text-xl font-bold mb-1">Entrar em contato sobre esse imóvel</h3>
+                                                <p class="text-white/90 text-sm">Fale conosco pelo WhatsApp</p>
+                                            </div>
+                                        </div>
+                                        <i class="fas fa-arrow-right text-2xl"></i>
+                                    </div>
+                                </a>
+                            </div>
 
                             <!-- Localização -->
                             <div>
@@ -378,14 +728,14 @@
 
                         </div>
 
-                        <!-- Coluna Direita - Formulário de Contato -->
+                        <!-- Coluna Direita - Card de Contato -->
                         <div class="lg:col-span-1">
-                            <div class="sticky-booking border rounded-2xl shadow-xl p-6">
+                            <div class="sticky-booking border rounded-2xl shadow-xl p-6 bg-white">
                                 
                                 <!-- Preço -->
                                 <div class="mb-6 pb-6 border-b">
                                     <div class="flex items-baseline gap-2">
-                                        <span class="text-3xl font-bold text-gray-900">${property.price_current}</span>
+                                        <span class="text-3xl font-bold text-gray-900">${property.price_current || 'Consulte'}</span>
                                         ${property.price_original ? `
                                             <span class="text-lg text-gray-400 line-through">${property.price_original}</span>
                                         ` : ''}
@@ -397,68 +747,27 @@
                                     ` : ''}
                                 </div>
 
-                                <!-- Formulário -->
-                                <form onsubmit="handleContactSubmit(event)" class="space-y-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nome Completo</label>
-                                        <input 
-                                            type="text" 
-                                            required 
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            placeholder="Seu nome"
-                                        >
+                                <!-- Card de Contato WhatsApp -->
+                                <div class="text-center">
+                                    <div class="mb-4">
+                                        <i class="fab fa-whatsapp text-5xl text-green-600 mb-3"></i>
+                                        <h3 class="text-xl font-bold text-gray-900 mb-2">Fale Conosco</h3>
+                                        <p class="text-gray-600 text-sm">Tire suas dúvidas e agende uma visita</p>
                                     </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">WhatsApp</label>
-                                        <input 
-                                            type="tel" 
-                                            required 
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            placeholder="(11) 99999-9999"
-                                        >
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                                        <input 
-                                            type="email" 
-                                            required 
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            placeholder="seu@email.com"
-                                        >
-                                    </div>
-
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Mensagem</label>
-                                        <textarea 
-                                            rows="3" 
-                                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                            placeholder="Gostaria de agendar uma visita..."
-                                        ></textarea>
-                                    </div>
-
-                                    <button 
-                                        type="submit"
-                                        class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 rounded-lg font-semibold hover:from-blue-700 hover:to-blue-800 transition shadow-lg"
-                                    >
-                                        <i class="fas fa-paper-plane mr-2"></i>
-                                        Entrar em Contato
-                                    </button>
 
                                     <a 
-                                        href="https://wa.me/5511999999999?text=Olá! Tenho interesse no imóvel: ${encodeURIComponent(property.title)}"
+                                        href="https://wa.me/551146382942?text=Olá! Tenho interesse no imóvel: ${encodeURIComponent(property.title)}${property.ref ? ' (Ref: ' + property.ref + ')' : ''}"
                                         target="_blank"
-                                        class="w-full bg-green-600 text-white py-4 rounded-lg font-semibold hover:bg-green-700 transition flex items-center justify-center gap-2 mt-3"
+                                        class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-lg font-bold text-lg hover:from-green-600 hover:to-green-700 transition shadow-lg flex items-center justify-center gap-3"
                                     >
-                                        <i class="fab fa-whatsapp text-xl"></i>
-                                        Chamar no WhatsApp
+                                        <i class="fab fa-whatsapp text-2xl"></i>
+                                        Falar no WhatsApp
                                     </a>
-                                </form>
 
-                                <p class="text-xs text-gray-500 text-center mt-4">
-                                    <i class="fas fa-shield-alt"></i> Seus dados estão seguros
-                                </p>
+                                    <p class="text-xs text-gray-500 mt-4">
+                                        <i class="fas fa-clock"></i> Atendimento de Segunda a Sexta, 9h às 17h
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
@@ -467,7 +776,7 @@
                     <!-- Imóveis Relacionados -->
                     <div class="mt-16 border-t pt-16">
                         <h2 class="text-2xl font-bold mb-8">Imóveis Relacionados</h2>
-                        <div id="related-properties" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div id="related-properties" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             <!-- Carregado dinamicamente -->
                         </div>
                     </div>
@@ -494,51 +803,78 @@
                 </footer>
             `;
 
-            // Efeito scroll no header
-            const headerScroll = () => {
-                const header = document.getElementById('main-header');
-                if (window.scrollY > 50) {
-                    header.style.backgroundColor = 'rgba(255,255,255,0.8)';
-                    header.style.boxShadow = '0 10px 30px -10px rgba(0,0,0,0.08)';
-                } else {
-                    header.style.backgroundColor = 'transparent';
-                    header.style.boxShadow = 'none';
-                }
-            };
-            if (!window._headerScrollAttached) {
-                window.addEventListener('scroll', headerScroll);
-                window._headerScrollAttached = true;
+            // Header sempre com fundo branco
+            const header = document.getElementById('main-header');
+            if (header) {
+                header.style.backgroundColor = '#ffffff';
+                header.style.boxShadow = '0 2px 4px rgba(0,0,0,0.1)';
             }
 
             loadRelatedProperties(property.id);
         }
 
-        // Carrega imóveis relacionados
+        // Função para embaralhar array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+
+        // Carrega 6 imóveis relacionados aleatórios
         async function loadRelatedProperties(currentId) {
+            const container = document.getElementById('related-properties');
+            if (!container) return;
+
             try {
+                // Busca todos os imóveis (igual ao index)
                 const { data, error } = await supabaseClient
                     .from('Hsmartins_Produtos')
-                    .select('*')
-                    .neq('id', currentId)
-                    .limit(3);
+                    .select('*');
 
-                if (error) throw error;
+                if (error) {
+                    console.error('Erro ao carregar relacionados:', error);
+                    return;
+                }
 
-                const container = document.getElementById('related-properties');
                 if (data && data.length > 0) {
-                    container.innerHTML = data.map(property => `
-                        <a href="imovel.html?id=${property.id}" class="group">
-                            <div class="relative aspect-[4/3] overflow-hidden rounded-xl mb-3">
-                                <img src="${property.image_url}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title}">
-                            </div>
-                            <h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition">${property.title}</h3>
-                            <p class="text-gray-600 text-sm mb-2">${property.category || ''}</p>
-                            <p class="text-xl font-bold text-gray-900">${property.price_current}</p>
-                        </a>
-                    `).join('');
+                    // Filtra no JavaScript (igual ao index)
+                    const activeProperties = data
+                        .filter(item => 
+                            item.id !== currentId && 
+                            item.imovel_status !== 'Inativo' && 
+                            item.imovel_status !== 'inativo'
+                        );
+
+                    if (activeProperties.length > 0) {
+                        // Aleatoriza os resultados
+                        const shuffled = shuffleArray(activeProperties);
+                        // Pega apenas 6 aleatórios
+                        const selected = shuffled.slice(0, Math.min(6, shuffled.length));
+                        
+                        container.innerHTML = selected.map(property => `
+                            <a href="imovel.html?id=${property.id}" class="group">
+                                <div class="relative aspect-[4/3] overflow-hidden rounded-xl mb-3">
+                                    <img src="${property.image_url || 'https://via.placeholder.com/400x300'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title || 'Imóvel'}">
+                                </div>
+                                <h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition">${property.title || 'Imóvel'}</h3>
+                                <p class="text-gray-600 text-sm mb-2">${property.category || property.tipoimovel || ''}</p>
+                                <p class="text-xl font-bold text-gray-900">${property.price_current || 'Consulte'}</p>
+                            </a>
+                        `).join('');
+                    } else {
+                        container.innerHTML = '<p class="text-gray-500 col-span-full">Nenhum imóvel relacionado encontrado.</p>';
+                    }
+                } else {
+                    container.innerHTML = '<p class="text-gray-500 col-span-full">Nenhum imóvel relacionado encontrado.</p>';
                 }
             } catch (error) {
                 console.error('Erro ao carregar relacionados:', error);
+                if (container) {
+                    container.innerHTML = '<p class="text-gray-500 col-span-full">Erro ao carregar imóveis relacionados.</p>';
+                }
             }
         }
 
@@ -593,12 +929,6 @@
             `).join('');
         }
 
-        // Handler de contato
-        function handleContactSubmit(event) {
-            event.preventDefault();
-            alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
-            event.target.reset();
-        }
 
         // Teclas do teclado
         document.addEventListener('keydown', (e) => {
@@ -614,3 +944,4 @@
     </script>
 </body>
 </html>
+

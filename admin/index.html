@@ -268,7 +268,7 @@
 
                 <!-- Modal -->
                 <div id="product-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-6">
                                 <h2 class="text-2xl font-bold text-gray-900">
@@ -279,88 +279,375 @@
                                 </button>
                             </div>
 
-                            <form id="product-form" onsubmit="handleProductSubmit(event)" class="space-y-4">
+                            <form id="product-form" onsubmit="handleProductSubmit(event)" class="space-y-6">
                                 <input type="hidden" id="product-id">
                                 
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Título *</label>
-                                    <input type="text" id="product-title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                <!-- Tabs de Navegação -->
+                                <div class="border-b border-gray-200 mb-6">
+                                    <nav class="flex space-x-4 overflow-x-auto" id="form-tabs">
+                                        <button type="button" onclick="switchTab('basico')" class="tab-btn active px-4 py-2 text-sm font-medium border-b-2 border-blue-600 text-blue-600 whitespace-nowrap">
+                                            Básico
+                                        </button>
+                                        <button type="button" onclick="switchTab('caracteristicas')" class="tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                                            Características
+                                        </button>
+                                        <button type="button" onclick="switchTab('valores')" class="tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                                            Valores
+                                        </button>
+                                        <button type="button" onclick="switchTab('endereco')" class="tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                                            Endereço
+                                        </button>
+                                        <button type="button" onclick="switchTab('empreendimento')" class="tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                                            Empreendimento
+                                        </button>
+                                        <button type="button" onclick="switchTab('midia')" class="tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                                            Mídia
+                                        </button>
+                                        <button type="button" onclick="switchTab('status')" class="tab-btn px-4 py-2 text-sm font-medium text-gray-500 hover:text-gray-700 whitespace-nowrap">
+                                            Status
+                                        </button>
+                                    </nav>
                                 </div>
 
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
-                                    <input type="text" id="product-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                </div>
+                                <!-- Tab: Básico -->
+                                <div id="tab-basico" class="tab-content space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Título *</label>
+                                        <input type="text" id="product-title" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
 
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Preço Atual *</label>
-                                        <input type="text" id="product-price-current" required placeholder="R$ 650.000,00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Preço Original</label>
-                                        <input type="text" id="product-price-original" placeholder="R$ 680.000,00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    </div>
-                                </div>
-
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Avaliação</label>
-                                        <input type="text" id="product-rating" placeholder="4.8" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    </div>
-                                    <div>
-                                        <label class="block text-sm font-medium text-gray-700 mb-1">Parcelamento</label>
-                                        <input type="text" id="product-installments" placeholder="Em até 360x" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    </div>
-                                </div>
-
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Badge (Destaque)</label>
                                     <div class="grid grid-cols-2 gap-4">
-                                        <input type="text" id="product-badge-text" placeholder="Novo / Desconto" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                        <select id="product-badge-style" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                            <option value="">Sem Badge</option>
-                                            <option value="new">Novo (Preto)</option>
-                                            <option value="discount">Desconto (Vermelho)</option>
-                                        </select>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Referência (Ref)</label>
+                                            <input type="text" id="product-ref" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Old ID</label>
+                                            <input type="number" id="product-old-id" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Tipo de Imóvel</label>
+                                            <select id="product-tipoimovel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                                <option value="">Selecione</option>
+                                                <option value="Apartamento">Apartamento</option>
+                                                <option value="Casa">Casa</option>
+                                                <option value="Sobrado">Sobrado</option>
+                                                <option value="Terreno">Terreno</option>
+                                                <option value="Chácara">Chácara</option>
+                                                <option value="Sala Comercial">Sala Comercial</option>
+                                                <option value="Loja">Loja</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Subtipo</label>
+                                            <input type="text" id="product-subtipoimovel" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Transação</label>
+                                            <select id="product-transacao" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                                <option value="">Selecione</option>
+                                                <option value="Venda">Venda</option>
+                                                <option value="Aluguel">Aluguel</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Categoria</label>
+                                        <input type="text" id="product-category" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Descrição</label>
+                                        <textarea id="product-descricao" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Descrição completa do imóvel..."></textarea>
                                     </div>
                                 </div>
 
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                                        Imagens do Imóvel (até 20 fotos)
-                                    </label>
-                                    <input 
-                                        type="file" 
-                                        id="product-images" 
-                                        accept="image/*" 
-                                        multiple 
-                                        onchange="handleMultipleImagePreview(event)" 
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                    >
-                                    <p class="text-xs text-gray-500 mt-1">
-                                        <i class="fas fa-info-circle"></i> Selecione múltiplas imagens (Ctrl/Cmd + clique)
-                                    </p>
-                                    
-                                    <!-- Preview de múltiplas imagens -->
-                                    <div id="images-preview" class="mt-3 grid grid-cols-4 gap-2"></div>
-                                    
-                                    <!-- URLs das imagens já salvas -->
-                                    <input type="hidden" id="product-images-urls">
+                                <!-- Tab: Características -->
+                                <div id="tab-caracteristicas" class="tab-content hidden space-y-4">
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Dormitórios</label>
+                                            <input type="number" id="product-dormitorios" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Banheiros</label>
+                                            <input type="number" id="product-banheiro" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Suítes</label>
+                                            <input type="number" id="product-suites" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Vagas</label>
+                                            <input type="number" id="product-vagas" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Área Construída (m²)</label>
+                                            <input type="number" id="product-area-construida" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Área do Terreno (m²)</label>
+                                            <input type="number" id="product-area-terreno" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Área Privativa (m²)</label>
+                                            <input type="number" id="product-area-privativa" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Área Total (m²)</label>
+                                            <input type="number" id="product-area-total" step="0.01" min="0" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="product-mobiliado" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="product-mobiliado" class="ml-2 text-sm text-gray-700">Mobiliado</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="product-em-condominio" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="product-em-condominio" class="ml-2 text-sm text-gray-700">Em Condomínio</label>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="product-aceita-financiamento" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="product-aceita-financiamento" class="ml-2 text-sm text-gray-700">Aceita Financiamento</label>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Ano de Construção</label>
+                                            <input type="number" id="product-ano-construcao" min="1900" max="2100" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Características</label>
+                                        <p class="text-xs text-gray-500 mb-2">Uma característica por linha</p>
+                                        <textarea id="product-characteristics" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Documentação em dia&#10;Aceita financiamento&#10;Pronto para morar"></textarea>
+                                    </div>
                                 </div>
 
-                                <div>
-                                    <label class="block text-sm font-medium text-gray-700 mb-1">Características</label>
-                                    <p class="text-xs text-gray-500 mb-2">Uma característica por linha (ex: Documentação em dia, Aceita financiamento)</p>
-                                    <textarea 
-                                        id="product-characteristics" 
-                                        rows="4"
-                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                                        placeholder="Característica 1&#10;Característica 2&#10;Característica 3&#10;Característica 4">
-                                    </textarea>
+                                <!-- Tab: Valores -->
+                                <div id="tab-valores" class="tab-content hidden space-y-4">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Preço Atual *</label>
+                                            <input type="text" id="product-price-current" required placeholder="R$ 650.000,00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Preço Original</label>
+                                            <input type="text" id="product-price-original" placeholder="R$ 680.000,00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Valor (Numérico)</label>
+                                            <input type="number" id="product-valor" step="0.01" min="0" placeholder="650000.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Valor Condomínio</label>
+                                            <input type="number" id="product-valor-condominio" step="0.01" min="0" placeholder="500.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Valor IPTU</label>
+                                            <input type="number" id="product-valor-iptu" step="0.01" min="0" placeholder="300.00" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Parcelamento</label>
+                                            <input type="text" id="product-installments" placeholder="Em até 360x" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
                                 </div>
 
-                                <div class="flex gap-3 pt-4">
+                                <!-- Tab: Endereço -->
+                                <div id="tab-endereco" class="tab-content hidden space-y-4">
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div class="col-span-2">
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Logradouro</label>
+                                            <input type="text" id="product-endereco-logradouro" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Número</label>
+                                            <input type="text" id="product-endereco-numero" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Complemento</label>
+                                        <input type="text" id="product-endereco-complemento" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">CEP</label>
+                                            <input type="text" id="product-endereco-cep" placeholder="08550-150" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Bairro</label>
+                                            <input type="text" id="product-endereco-bairro" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Cidade</label>
+                                            <input type="text" id="product-endereco-cidade" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
+                                            <input type="text" id="product-endereco-estado" placeholder="SP" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">País</label>
+                                            <input type="text" id="product-endereco-pais" value="Brasil" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Zona</label>
+                                            <input type="text" id="product-endereco-zona" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Região</label>
+                                            <input type="text" id="product-endereco-regiao" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Ponto de Referência</label>
+                                            <input type="text" id="product-endereco-pontoreferencia" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Condomínio</label>
+                                        <input type="text" id="product-endereco-nome-condominio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+                                </div>
+
+                                <!-- Tab: Empreendimento -->
+                                <div id="tab-empreendimento" class="tab-content hidden space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Nome do Empreendimento</label>
+                                        <input type="text" id="product-empreendimento-nome" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Descrição do Empreendimento</label>
+                                        <textarea id="product-empreendimento-descricao" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Estágio</label>
+                                            <select id="product-empreendimento-estagio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                                <option value="">Selecione</option>
+                                                <option value="Lançamento">Lançamento</option>
+                                                <option value="Em Construção">Em Construção</option>
+                                                <option value="Pronto">Pronto</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Data Início</label>
+                                            <input type="date" id="product-empreendimento-inicio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Data Término</label>
+                                            <input type="date" id="product-empreendimento-terminio" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tab: Mídia -->
+                                <div id="tab-midia" class="tab-content hidden space-y-4">
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                                            Imagens do Imóvel (até 20 fotos)
+                                        </label>
+                                        <input 
+                                            type="file" 
+                                            id="product-images" 
+                                            accept="image/*" 
+                                            multiple 
+                                            onchange="handleMultipleImagePreview(event)" 
+                                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                                        >
+                                        <p class="text-xs text-gray-500 mt-1">
+                                            <i class="fas fa-info-circle"></i> Selecione múltiplas imagens (Ctrl/Cmd + clique)
+                                        </p>
+                                        
+                                        <!-- Preview de múltiplas imagens -->
+                                        <div id="images-preview" class="mt-3 grid grid-cols-4 gap-2"></div>
+                                        
+                                        <!-- URLs das imagens já salvas -->
+                                        <input type="hidden" id="product-images-urls">
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">URL do Vídeo (YouTube)</label>
+                                        <input type="url" id="product-video" placeholder="https://www.youtube.com/watch?v=..." class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                    </div>
+                                </div>
+
+                                <!-- Tab: Status -->
+                                <div id="tab-status" class="tab-content hidden space-y-4">
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Status do Imóvel</label>
+                                            <select id="product-imovel-status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                                <option value="">Selecione</option>
+                                                <option value="Ativo">Ativo</option>
+                                                <option value="Inativo">Inativo</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Situação</label>
+                                            <select id="product-imovel-situacao" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                                <option value="">Selecione</option>
+                                                <option value="Disponível">Disponível</option>
+                                                <option value="Vendido">Vendido</option>
+                                                <option value="Alugado">Alugado</option>
+                                                <option value="Reservado">Reservado</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div class="flex items-center">
+                                            <input type="checkbox" id="product-destacado" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                                            <label for="product-destacado" class="ml-2 text-sm text-gray-700">Imóvel em Destaque</label>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-sm font-medium text-gray-700 mb-1">Badge</label>
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <input type="text" id="product-badge-text" placeholder="Novo / Desconto" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                            <select id="product-badge-style" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                                <option value="">Sem Badge</option>
+                                                <option value="new">Novo (Preto)</option>
+                                                <option value="discount">Desconto (Vermelho)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label class="block text-sm font-medium text-gray-700 mb-1">Avaliação (Rating)</label>
+                                            <input type="text" id="product-rating" placeholder="4.8" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="flex gap-3 pt-4 border-t">
                                     <button type="button" onclick="closeProductModal()" class="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition">
                                         Cancelar
                                     </button>
@@ -385,17 +672,35 @@
             
             if (product) {
                 modalTitle.textContent = 'Editar Imóvel';
-                document.getElementById('product-id').value = product.id;
-                document.getElementById('product-title').value = product.title;
-                document.getElementById('product-category').value = product.category || '';
-                document.getElementById('product-price-current').value = product.price_current;
-                document.getElementById('product-price-original').value = product.price_original || '';
-                document.getElementById('product-rating').value = product.rating || '';
-                document.getElementById('product-installments').value = product.installments || '';
-                document.getElementById('product-badge-text').value = product.badge_text || '';
-                document.getElementById('product-badge-style').value = product.badge_style || '';
                 
-                // Carrega características
+                // Identificação
+                document.getElementById('product-id').value = product.id || '';
+                document.getElementById('product-ref').value = product.ref || '';
+                document.getElementById('product-old-id').value = product.old_id || '';
+                
+                // Básico
+                document.getElementById('product-title').value = product.title || '';
+                document.getElementById('product-tipoimovel').value = product.tipoimovel || '';
+                document.getElementById('product-subtipoimovel').value = product.subtipoimovel || '';
+                document.getElementById('product-transacao').value = product.transacao || '';
+                document.getElementById('product-category').value = product.category || '';
+                document.getElementById('product-descricao').value = product.descricao || '';
+                
+                // Características
+                document.getElementById('product-dormitorios').value = product.dormitorios || '';
+                document.getElementById('product-banheiro').value = product.banheiro || '';
+                document.getElementById('product-suites').value = product.suites || '';
+                document.getElementById('product-vagas').value = product.vagas || '';
+                document.getElementById('product-area-construida').value = product.area_construida || '';
+                document.getElementById('product-area-terreno').value = product.area_terreno || '';
+                document.getElementById('product-area-privativa').value = product.area_privativa || '';
+                document.getElementById('product-area-total').value = product.area_total || '';
+                document.getElementById('product-mobiliado').checked = product.mobiliado === true || product.mobiliado === 'true' || product.mobiliado === 1;
+                document.getElementById('product-em-condominio').checked = product.em_condominio === true || product.em_condominio === 'true' || product.em_condominio === 1;
+                document.getElementById('product-aceita-financiamento').checked = product.aceitafinanciamento === true || product.aceitafinanciamento === 'true' || product.aceitafinanciamento === 1;
+                document.getElementById('product-ano-construcao').value = product.ano_construcao || '';
+                
+                // Características (array)
                 if (product.caracteristicas) {
                     const chars = Array.isArray(product.caracteristicas) ? product.caracteristicas : JSON.parse(product.caracteristicas || '[]');
                     document.getElementById('product-characteristics').value = chars.join('\n');
@@ -403,24 +708,97 @@
                     document.getElementById('product-characteristics').value = '';
                 }
                 
+                // Valores
+                document.getElementById('product-price-current').value = product.price_current || '';
+                document.getElementById('product-price-original').value = product.price_original || '';
+                document.getElementById('product-valor').value = product.valor || '';
+                document.getElementById('product-valor-condominio').value = product.valor_condominio || '';
+                document.getElementById('product-valor-iptu').value = product.valor_iptu || '';
+                document.getElementById('product-installments').value = product.installments || '';
+                
+                // Endereço
+                document.getElementById('product-endereco-logradouro').value = product.endereco_logradouro || '';
+                document.getElementById('product-endereco-numero').value = product.endereco_numero || '';
+                document.getElementById('product-endereco-complemento').value = product.endereco_complemento || '';
+                document.getElementById('product-endereco-cep').value = product.endereco_cep || '';
+                document.getElementById('product-endereco-bairro').value = product.endereco_bairro || '';
+                document.getElementById('product-endereco-cidade').value = product.endereco_cidade || '';
+                document.getElementById('product-endereco-estado').value = product.endereco_estado || '';
+                document.getElementById('product-endereco-pais').value = product.endereco_pais || 'Brasil';
+                document.getElementById('product-endereco-zona').value = product.endereco_zona || '';
+                document.getElementById('product-endereco-regiao').value = product.endereco_regiao || '';
+                document.getElementById('product-endereco-pontoreferencia').value = product.endereco_pontoreferencia || '';
+                document.getElementById('product-endereco-nome-condominio').value = product.endereco_nome_condominio || '';
+                
+                // Empreendimento
+                document.getElementById('product-empreendimento-nome').value = product.empreendimento_nome || '';
+                document.getElementById('product-empreendimento-descricao').value = product.empreendimento_descricao || '';
+                document.getElementById('product-empreendimento-estagio').value = product.empreendimento_estagio || '';
+                document.getElementById('product-empreendimento-inicio').value = product.empreendimento_inicio ? product.empreendimento_inicio.split('T')[0] : '';
+                document.getElementById('product-empreendimento-terminio').value = product.empreendimento_terminio ? product.empreendimento_terminio.split('T')[0] : '';
+                
+                // Mídia
+                document.getElementById('product-video').value = product.video || '';
+                
                 // Carrega imagens existentes
                 if (product.images_urls) {
                     uploadedImagesUrls = Array.isArray(product.images_urls) ? product.images_urls : JSON.parse(product.images_urls || '[]');
                     document.getElementById('product-images-urls').value = JSON.stringify(uploadedImagesUrls);
                     displayExistingImages(uploadedImagesUrls);
                 }
+                
+                // Status
+                document.getElementById('product-imovel-status').value = product.imovel_status || '';
+                document.getElementById('product-imovel-situacao').value = product.imovel_situacao || '';
+                document.getElementById('product-destacado').checked = product.destacado === true || product.destacado === 'true' || product.destacado === 1;
+                document.getElementById('product-badge-text').value = product.badge_text || '';
+                document.getElementById('product-badge-style').value = product.badge_style || '';
+                document.getElementById('product-rating').value = product.rating || '';
 
             } else {
                 modalTitle.textContent = 'Novo Imóvel';
                 document.getElementById('product-form').reset();
                 document.getElementById('images-preview').innerHTML = '';
                 document.getElementById('product-images-urls').value = '';
+                document.getElementById('product-endereco-pais').value = 'Brasil';
             }
             
             modal.classList.remove('hidden');
             
-            // Inicializa máscaras de preço após abrir modal
-            setTimeout(() => initPriceMasks(), 100);
+            // Reseta para a primeira aba
+            setTimeout(() => {
+                switchTab('basico');
+                // Inicializa máscaras de preço após abrir modal
+                initPriceMasks();
+            }, 100);
+        }
+
+        // Navegação entre abas
+        function switchTab(tabName) {
+            // Esconde todas as abas
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.add('hidden');
+            });
+            
+            // Remove classe active de todos os botões
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'border-blue-600', 'text-blue-600');
+                btn.classList.add('text-gray-500');
+            });
+            
+            // Mostra a aba selecionada
+            const tabContent = document.getElementById(`tab-${tabName}`);
+            if (tabContent) {
+                tabContent.classList.remove('hidden');
+            }
+            
+            // Ativa o botão correspondente - encontra pelo onclick
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                if (btn.getAttribute('onclick') === `switchTab('${tabName}')`) {
+                    btn.classList.add('active', 'border-blue-600', 'text-blue-600');
+                    btn.classList.remove('text-gray-500');
+                }
+            });
         }
 
         // Fecha modal
@@ -428,6 +806,8 @@
             document.getElementById('product-modal').classList.add('hidden');
             editingProduct = null;
             uploadedImagesUrls = [];
+            // Reseta para a primeira aba
+            switchTab('basico');
         }
 
         // Display de imagens já salvas
@@ -597,19 +977,100 @@
                     .map(c => c.trim())
                     .filter(c => c.length > 0);
 
-                const productData = {
-                    title: document.getElementById('product-title').value,
-                    category: document.getElementById('product-category').value,
-                    price_current: document.getElementById('product-price-current').value,
-                    price_original: document.getElementById('product-price-original').value || null,
-                    rating: document.getElementById('product-rating').value || null,
-                    installments: document.getElementById('product-installments').value || null,
-                    badge_text: document.getElementById('product-badge-text').value || null,
-                    badge_style: document.getElementById('product-badge-style').value || null,
-                    image_url: allImagesUrls.length > 0 ? allImagesUrls[0] : null, // Primeira imagem como principal
-                    images_urls: JSON.stringify(allImagesUrls), // Todas as imagens em JSON
-                    caracteristicas: JSON.stringify(characteristics) // Características como JSON array
+                // Helper para converter valores vazios em null
+                const getValue = (id) => {
+                    const el = document.getElementById(id);
+                    return el && el.value ? el.value : null;
+                };
 
+                const getNumberValue = (id) => {
+                    const el = document.getElementById(id);
+                    return el && el.value ? parseFloat(el.value) : null;
+                };
+
+                const getIntValue = (id) => {
+                    const el = document.getElementById(id);
+                    return el && el.value ? parseInt(el.value) : null;
+                };
+
+                const getBoolValue = (id) => {
+                    const el = document.getElementById(id);
+                    return el ? el.checked : false;
+                };
+
+                const productData = {
+                    // Identificação
+                    ref: getValue('product-ref'),
+                    old_id: getIntValue('product-old-id'),
+                    
+                    // Informações Básicas
+                    title: document.getElementById('product-title').value,
+                    tipoimovel: getValue('product-tipoimovel'),
+                    subtipoimovel: getValue('product-subtipoimovel'),
+                    transacao: getValue('product-transacao'),
+                    category: getValue('product-category'),
+                    descricao: getValue('product-descricao'),
+                    
+                    // Valores
+                    valor: getNumberValue('product-valor'),
+                    price_current: document.getElementById('product-price-current').value,
+                    price_original: getValue('product-price-original'),
+                    valor_condominio: getNumberValue('product-valor-condominio'),
+                    valor_iptu: getNumberValue('product-valor-iptu'),
+                    installments: getValue('product-installments'),
+                    
+                    // Áreas
+                    area_privativa: getNumberValue('product-area-privativa'),
+                    area_construida: getNumberValue('product-area-construida'),
+                    area_total: getNumberValue('product-area-total'),
+                    area_terreno: getNumberValue('product-area-terreno'),
+                    
+                    // Características do Imóvel
+                    dormitorios: getIntValue('product-dormitorios'),
+                    banheiro: getIntValue('product-banheiro'),
+                    suites: getIntValue('product-suites'),
+                    vagas: getIntValue('product-vagas'),
+                    mobiliado: getBoolValue('product-mobiliado'),
+                    em_condominio: getBoolValue('product-em-condominio'),
+                    ano_construcao: getIntValue('product-ano-construcao'),
+                    aceitafinanciamento: getBoolValue('product-aceita-financiamento'),
+                    
+                    // Endereço
+                    endereco_logradouro: getValue('product-endereco-logradouro'),
+                    endereco_numero: getValue('product-endereco-numero'),
+                    endereco_complemento: getValue('product-endereco-complemento'),
+                    endereco_cep: getValue('product-endereco-cep'),
+                    endereco_bairro: getValue('product-endereco-bairro'),
+                    endereco_nome_condominio: getValue('product-endereco-nome-condominio'),
+                    endereco_zona: getValue('product-endereco-zona'),
+                    endereco_regiao: getValue('product-endereco-regiao'),
+                    endereco_pontoreferencia: getValue('product-endereco-pontoreferencia'),
+                    endereco_cidade: getValue('product-endereco-cidade'),
+                    endereco_estado: getValue('product-endereco-estado'),
+                    endereco_pais: getValue('product-endereco-pais'),
+                    
+                    // Empreendimento
+                    empreendimento_nome: getValue('product-empreendimento-nome'),
+                    empreendimento_descricao: getValue('product-empreendimento-descricao'),
+                    empreendimento_estagio: getValue('product-empreendimento-estagio'),
+                    empreendimento_inicio: getValue('product-empreendimento-inicio') || null,
+                    empreendimento_terminio: getValue('product-empreendimento-terminio') || null,
+                    
+                    // Mídia
+                    video: getValue('product-video'),
+                    image_url: allImagesUrls.length > 0 ? allImagesUrls[0] : null,
+                    images_urls: JSON.stringify(allImagesUrls),
+                    
+                    // Características (array)
+                    caracteristicas: JSON.stringify(characteristics),
+                    
+                    // Status e Controle
+                    destacado: getBoolValue('product-destacado'),
+                    imovel_status: getValue('product-imovel-status'),
+                    imovel_situacao: getValue('product-imovel-situacao'),
+                    badge_text: getValue('product-badge-text'),
+                    badge_style: getValue('product-badge-style'),
+                    rating: getValue('product-rating')
                 };
 
                 const productId = document.getElementById('product-id').value;

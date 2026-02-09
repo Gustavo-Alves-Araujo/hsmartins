@@ -72,13 +72,15 @@ class StickyHeaderNavigationComponent extends BaseComponent {
         const style = document.createElement('style');
         style.id = 'sticky-header-runtime-styles';
         style.textContent = `
+            #main-header {
+                background-color: #ffffff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            }
             #main-header.scrolled {
-                background-color: rgba(255, 255, 255, 0.8);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                box-shadow: 0 10px 30px -10px rgba(0,0,0,0.08);
-                padding-top: 0.5rem;
-                padding-bottom: 0.5rem;
+                background-color: #ffffff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                padding-top: 0.25rem;
+                padding-bottom: 0.25rem;
             }
             #navMenu.mobile-active {
                 opacity: 1;
@@ -125,19 +127,18 @@ class StickyHeaderNavigationComponent extends BaseComponent {
         ` : '';
 
         return `
-            <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-4">
-                <div class="container mx-auto px-6">
-                    <nav class="flex items-center justify-between bg-white/40 backdrop-blur-md border border-white/20 rounded-3xl px-6 py-3 shadow-sm">
-                        <a href="#" class="flex items-center gap-3 group transition-transform hover:scale-105">
-                            ${this.logoUrl && this.logoUrl.trim() !== '' ? `
-                                <img src="${this.logoUrl}" 
-                                     alt="${this.logoAlt || 'Logo'}" 
-                                     class="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover flex-shrink-0"
-                                     loading="eager"
-                                     onerror="console.error('Erro ao carregar logo:', this.src); this.style.display='none';">
-                            ` : ''}
-                            ${this.siteName ? `<span class="hidden md:block font-black text-slate-800 tracking-tight">${this.siteName}</span>` : ''}
-                        </a>
+            <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-2 bg-white" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12 py-2">
+                    <a href="#" class="flex items-center gap-3 group transition-transform hover:scale-105">
+                        ${this.logoUrl && this.logoUrl.trim() !== '' ? `
+                            <img src="${this.logoUrl}" 
+                                 alt="${this.logoAlt || 'Logo'}" 
+                                 class="h-12 w-auto md:h-14 object-contain flex-shrink-0"
+                                 loading="eager"
+                                 onerror="console.error('Erro ao carregar logo:', this.src); this.style.display='none';">
+                        ` : ''}
+                        ${this.siteName ? `<span class="hidden md:block font-black text-slate-800 tracking-tight">${this.siteName}</span>` : ''}
+                    </a>
 
                         <ul class="hidden lg:flex items-center gap-2">
                             ${menuItemsHtml}
@@ -147,11 +148,10 @@ class StickyHeaderNavigationComponent extends BaseComponent {
                             ${clientButtonHtml}
                         </div>
 
-                        <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600">
-                            <i class="fas fa-bars"></i>
-                        </button>
-                    </nav>
-                </div>
+                    <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </nav>
 
                 <div id="navMenu" class="absolute top-full left-0 w-full px-6 py-4 opacity-0 -translate-y-4 pointer-events-none transition-all duration-300 lg:hidden">
                     <ul class="bg-white/95 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
