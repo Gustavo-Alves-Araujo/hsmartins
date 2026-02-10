@@ -164,7 +164,20 @@
 
                 if (error) throw error;
                 products = data || [];
-                renderDashboard();
+                
+                // Verifica se modal está aberto antes de renderizar
+                const productModal = document.getElementById('product-modal');
+                const noticiaModal = document.getElementById('noticia-modal');
+                const productModalOpen = productModal && !productModal.classList.contains('hidden');
+                const noticiaModalOpen = noticiaModal && !noticiaModal.classList.contains('hidden');
+                
+                if (productModalOpen || noticiaModalOpen) {
+                    // Se modal está aberto, apenas atualiza o conteúdo
+                    updateDashboardContent();
+                } else {
+                    // Se modal está fechado, renderiza normalmente
+                    renderDashboard();
+                }
             } catch (error) {
                 console.error('Erro ao carregar produtos:', error);
                 alert('Erro ao carregar produtos. Verifique se a tabela existe no Supabase.');
@@ -175,7 +188,20 @@
         function renderDashboard() {
             if (!isAuthenticated) return;
 
-            document.getElementById('app').innerHTML = `
+            // Não recria o dashboard se um modal estiver aberto
+            const productModal = document.getElementById('product-modal');
+            const noticiaModal = document.getElementById('noticia-modal');
+            const productModalOpen = productModal && !productModal.classList.contains('hidden');
+            const noticiaModalOpen = noticiaModal && !noticiaModal.classList.contains('hidden');
+            
+            if (productModalOpen || noticiaModalOpen) {
+                // Apenas atualiza o conteúdo sem recriar tudo
+                updateDashboardContent();
+                return;
+            }
+
+            const appEl = document.getElementById('app');
+            appEl.innerHTML = `
                 <div class="min-h-screen bg-gray-50">
                     <!-- Header -->
                     <header class="bg-white shadow-sm">
@@ -369,8 +395,8 @@
                 </div>
 
                 <!-- Modal -->
-                <div id="product-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                <div id="product-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onclick="if(event.target === this) closeProductModal()">
+                    <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
                         <div class="p-6">
                             <div class="flex justify-between items-center mb-6">
                                 <h2 class="text-2xl font-bold text-gray-900">
@@ -765,6 +791,87 @@
             `;
         }
 
+        // Atualiza apenas o conteúdo do dashboard sem recriar modais
+        function updateDashboardContent() {
+            if (!isAuthenticated) return;
+            
+            // Atualiza apenas os grids de produtos e notícias
+            const productsGrid = document.getElementById('products-grid');
+            const newsGrid = document.getElementById('news-grid');
+            
+            if (productsGrid && currentTab === 'imoveis') {
+                productsGrid.innerHTML = products.length === 0 ? `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-home text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-600">Nenhum imóvel cadastrado ainda.</p>
+                        <button onclick="openProductModal()" class="mt-4 text-blue-600 hover:text-blue-700 font-semibold">
+                            Cadastrar primeiro imóvel
+                        </button>
+                    </div>
+                ` : products.map(product => `
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition">
+                        <div class="aspect-[4/3] bg-gray-200 relative">
+                            ${product.image_url ? `<img src="${product.image_url}" alt="${product.title}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center"><i class="fas fa-image text-4xl text-gray-400"></i></div>`}
+                            ${product.badge_text ? `<span class="absolute top-3 left-3 ${product.badge_style === 'new' ? 'bg-gray-900' : 'bg-red-500'} text-white text-xs font-bold px-2 py-1 rounded">${product.badge_text}</span>` : ''}
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm text-gray-500 mb-1">${product.category || ''}</p>
+                            <h3 class="font-semibold text-lg mb-2">${product.title}</h3>
+                            <div class="flex justify-between items-center mb-2">
+                                <span class="text-lg font-bold text-gray-900">${product.price_current}</span>
+                                ${product.price_original ? `<span class="text-sm text-gray-400 line-through">${product.price_original}</span>` : ''}
+                            </div>
+                            <div class="flex items-center justify-between text-sm text-gray-600 mb-4">
+                                <span><i class="fas fa-star text-yellow-400"></i> ${product.rating || 'N/A'}</span>
+                                <span>${product.installments || ''}</span>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick="editProduct('${product.id}')" class="flex-1 bg-blue-50 text-blue-600 py-2 rounded-lg font-semibold hover:bg-blue-100 transition">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="deleteProduct('${product.id}')" class="flex-1 bg-red-50 text-red-600 py-2 rounded-lg font-semibold hover:bg-red-100 transition">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            
+            if (newsGrid && currentTab === 'noticias') {
+                newsGrid.innerHTML = noticias.length === 0 ? `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fas fa-newspaper text-6xl text-gray-300 mb-4"></i>
+                        <p class="text-gray-600">Nenhuma notícia cadastrada ainda.</p>
+                        <button onclick="openNoticiaModal()" class="mt-4 text-green-600 hover:text-green-700 font-semibold">
+                            Cadastrar primeira notícia
+                        </button>
+                    </div>
+                ` : noticias.map(noticia => `
+                    <div class="bg-white rounded-xl shadow-sm overflow-hidden hover:shadow-md transition">
+                        <div class="aspect-video bg-gray-200 relative">
+                            ${noticia.imagem_principal ? `<img src="${noticia.imagem_principal}" alt="${noticia.titulo}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center"><i class="fas fa-image text-4xl text-gray-400"></i></div>`}
+                            ${noticia.destacado ? `<span class="absolute top-3 left-3 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded">Destaque</span>` : ''}
+                            <span class="absolute top-3 right-3 bg-white/90 text-gray-900 text-xs font-semibold px-2 py-1 rounded">${noticia.status || 'rascunho'}</span>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm text-gray-500 mb-1">${noticia.categoria || 'Geral'}</p>
+                            <h3 class="font-semibold text-lg mb-2">${noticia.titulo}</h3>
+                            <p class="text-sm text-gray-600 line-clamp-2">${noticia.resumo || ''}</p>
+                            <div class="flex gap-2 mt-4">
+                                <button onclick="editNoticiaById('${noticia.id}')" class="flex-1 bg-green-50 text-green-600 py-2 rounded-lg font-semibold hover:bg-green-100 transition">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                                <button onclick="deleteNoticia('${noticia.id}')" class="flex-1 bg-red-50 text-red-600 py-2 rounded-lg font-semibold hover:bg-red-100 transition">
+                                    <i class="fas fa-trash"></i> Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
         // Abre modal de produto
         function openProductModal(product = null) {
             editingProduct = product;
@@ -875,28 +982,46 @@
             }, 100);
         }
 
-        // Navegação entre abas
+        // Navegação entre abas do modal
         function switchTab(tabName) {
-            // Esconde todas as abas
-            document.querySelectorAll('.tab-content').forEach(tab => {
+            // Verifica se é uma aba do dashboard (imoveis/noticias)
+            if (tabName === 'imoveis' || tabName === 'noticias') {
+                currentTab = tabName;
+                renderDashboard();
+                return;
+            }
+            
+            // Se não é dashboard, é aba do modal
+            const modal = document.getElementById('product-modal');
+            if (!modal || modal.classList.contains('hidden')) {
+                return; // Modal não está aberto
+            }
+            
+            // Busca apenas dentro do modal
+            const modalContent = modal.querySelector('.bg-white');
+            if (!modalContent) return;
+            
+            // Esconde todas as abas do modal
+            modalContent.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.add('hidden');
             });
             
-            // Remove classe active de todos os botões
-            document.querySelectorAll('.tab-btn').forEach(btn => {
+            // Remove classe active de todos os botões do modal
+            modalContent.querySelectorAll('.tab-btn').forEach(btn => {
                 btn.classList.remove('active', 'border-blue-600', 'text-blue-600');
                 btn.classList.add('text-gray-500');
             });
             
             // Mostra a aba selecionada
-            const tabContent = document.getElementById(`tab-${tabName}`);
+            const tabContent = modalContent.querySelector(`#tab-${tabName}`);
             if (tabContent) {
                 tabContent.classList.remove('hidden');
             }
             
-            // Ativa o botão correspondente - encontra pelo onclick
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                if (btn.getAttribute('onclick') === `switchTab('${tabName}')`) {
+            // Ativa o botão correspondente
+            modalContent.querySelectorAll('.tab-btn').forEach(btn => {
+                const onclickAttr = btn.getAttribute('onclick');
+                if (onclickAttr && onclickAttr.includes(`switchTab('${tabName}')`)) {
                     btn.classList.add('active', 'border-blue-600', 'text-blue-600');
                     btn.classList.remove('text-gray-500');
                 }
@@ -1253,16 +1378,29 @@
 
                 if (error) throw error;
                 noticias = data || [];
-                if (currentTab === 'noticias') {
-                    renderDashboard();
+                
+                // Verifica se modal está aberto antes de renderizar
+                const productModal = document.getElementById('product-modal');
+                const noticiaModal = document.getElementById('noticia-modal');
+                const productModalOpen = productModal && !productModal.classList.contains('hidden');
+                const noticiaModalOpen = noticiaModal && !noticiaModal.classList.contains('hidden');
+                
+                if (productModalOpen || noticiaModalOpen) {
+                    // Se modal está aberto, apenas atualiza o conteúdo
+                    updateDashboardContent();
+                } else {
+                    // Se modal está fechado, renderiza normalmente
+                    if (currentTab === 'noticias') {
+                        renderDashboard();
+                    }
                 }
             } catch (error) {
                 console.error('Erro ao carregar notícias:', error);
             }
         }
 
-        // Troca de aba
-        function switchTab(tab) {
+        // Troca de aba do dashboard (mantida para compatibilidade)
+        function switchDashboardTab(tab) {
             currentTab = tab;
             renderDashboard();
         }
@@ -1291,8 +1429,8 @@
             if (!modal) {
                 // Cria modal se não existir
                 document.body.insertAdjacentHTML('beforeend', `
-                    <div id="noticia-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-                        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+                    <div id="noticia-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50" onclick="if(event.target === this) closeNoticiaModal()">
+                        <div class="bg-white rounded-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
                             <div class="p-6">
                                 <div class="flex justify-between items-center mb-6">
                                     <h2 class="text-2xl font-bold text-gray-900">
