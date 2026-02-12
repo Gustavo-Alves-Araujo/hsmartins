@@ -194,25 +194,8 @@ class StickyHeaderNavigationComponent extends BaseComponent {
             });
         }
 
-        // Scroll Effects com throttle para iOS
-        let scrollThrottle;
-        const handleScroll = () => {
-            if (scrollThrottle) return;
-            scrollThrottle = setTimeout(() => {
-                try {
-                    if (window.scrollY > 50) {
-                        header.classList.add('scrolled');
-                    } else {
-                        header.classList.remove('scrolled');
-                    }
-                } catch (e) {
-                    console.warn('Error handling scroll:', e);
-                }
-                scrollThrottle = null;
-            }, 100);
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
+        // SCROLL DESABILITADO - causava problemas no iOS
+        // Header fica sempre com mesma aparência, sem mudanças no scroll
 
         // Fechar ao clicar em link (mobile)
         if (navMenu) {
@@ -223,34 +206,8 @@ class StickyHeaderNavigationComponent extends BaseComponent {
             });
         }
 
-        // Smooth scroll para links de navegação (anchor links)
-        const allNavLinks = document.querySelectorAll('#main-header a[href^="#"]');
-        allNavLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                try {
-                    const href = link.getAttribute('href');
-                    if (href && href !== '#') {
-                        e.preventDefault();
-                        const targetSection = document.querySelector(href);
-                        if (targetSection) {
-                            // Fecha menu mobile se estiver aberto
-                            if (navMenu) {
-                                navMenu.classList.remove('mobile-active');
-                            }
-                            // Calcula offset para compensar header fixo
-                            const headerHeight = header ? header.offsetHeight : 80;
-                            const targetPosition = targetSection.offsetTop - headerHeight;
-                            window.scrollTo({
-                                top: targetPosition,
-                                behavior: 'smooth'
-                            });
-                        }
-                    }
-                } catch (err) {
-                    console.warn('Error on smooth scroll:', err);
-                }
-            });
-        });
+        // Links de navegação SEM smooth scroll (iOS não gosta)
+        // Deixa o navegador fazer scroll nativo
     }
 
     static create(data, targetId) {

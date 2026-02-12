@@ -581,7 +581,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
             if (!el) return;
             const dir = prevBtn ? -1 : 1;
             const width = el.clientWidth || 300;
-            el.scrollBy({ left: dir * width, behavior: 'smooth' });
+            // SEM behavior smooth - iOS não gosta
+            el.scrollBy({ left: dir * width });
         });
     }
 
@@ -617,13 +618,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
 
                 this.applyFilters();
 
-                const section = document.getElementById(this.id) || document.getElementById(this.targetId);
-                if (section) {
-                    const header = document.getElementById('main-header');
-                    const headerHeight = header ? header.offsetHeight : 80;
-                    const y = section.getBoundingClientRect().top + window.scrollY - headerHeight;
-                    window.scrollTo({ top: y, behavior: 'smooth' });
-                }
+                // Scroll DESABILITADO - causava problemas no iOS
+                // O navegador faz scroll nativo automaticamente
             } catch (err) {
                 console.warn('Error in hero integration:', err);
             }
