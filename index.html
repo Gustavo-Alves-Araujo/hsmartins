@@ -110,8 +110,8 @@
   <script src="templates/components/cosmos-template.js" defer></script>
   <script src="templates/components/news-grid.js" defer></script>
   
-  <!-- Performance Monitoring (defer - não crítico) -->
-  <script src="web-vitals-monitor.js" defer></script>
+  <!-- Performance Monitoring REMOVIDO - causava crash no iOS Safari -->
+  <!-- web-vitals-monitor.js REMOVIDO: 3 PerformanceObservers (CLS layout-shift) travava o Safari -->
 </head>
 
 <body class="antialiased">

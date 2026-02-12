@@ -194,7 +194,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
 
         const imagesHtml = `
             <div class="relative w-full h-full">
-                <div id="${carouselId}" class="hs-scrollbar-hide w-full h-full flex overflow-x-auto snap-x snap-mandatory scroll-smooth"
+                <div id="${carouselId}" class="hs-scrollbar-hide w-full h-full flex overflow-x-auto snap-x snap-mandatory"
                      data-carousel
                      data-carousel-id="${carouselId}"
                      data-carousel-count="${images.length}">

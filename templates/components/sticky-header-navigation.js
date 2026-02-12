@@ -127,7 +127,7 @@ class StickyHeaderNavigationComponent extends BaseComponent {
         ` : '';
 
         return `
-            <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-2 bg-white" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] py-2 bg-white" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                 <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12 py-2">
                         <a href="#" class="flex items-center gap-3 group transition-transform hover:scale-105">
                             ${this.logoUrl && this.logoUrl.trim() !== '' ? `

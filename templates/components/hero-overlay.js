@@ -83,7 +83,7 @@ class HeroComponent extends BaseComponent {
         const gradientBg = `linear-gradient(135deg, ${primaryHex}15 0%, ${accentHex}10 50%, ${primaryHex}15 100%)`;
 
         return `
-            <header class="relative flex items-end overflow-hidden isolate pt-20 md:pt-12" style="min-height: 100vh; background: ${gradientBg};">
+            <header class="relative flex items-end overflow-hidden isolate pt-20 md:pt-12" style="min-height: 100svh; min-height: -webkit-fill-available; background: ${gradientBg};">
 
                 <div class="absolute inset-0 z-0 flex items-center justify-center" style="background: ${gradientBg};">
                     <picture class="block w-full h-full">
@@ -91,7 +91,7 @@ class HeroComponent extends BaseComponent {
                         <img src="img/image.png"
                          alt="${this.backgroundAlt}"
                              class="w-full h-full hero-bg-image"
-                             style="object-position: center center; min-height: 100vh; width: 100%; height: 100%;">
+                             style="object-position: center center; min-height: 100svh; min-height: -webkit-fill-available; width: 100%; height: 100%;">
                     </picture>
                 </div>
 

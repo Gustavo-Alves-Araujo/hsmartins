@@ -23,11 +23,8 @@
             fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
             head.appendChild(fontAwesome);
 
-            // AOS CSS
-            const aosCss = document.createElement('link');
-            aosCss.rel = 'stylesheet';
-            aosCss.href = 'https://unpkg.com/aos@2.3.1/dist/aos.css';
-            head.appendChild(aosCss);
+            // AOS CSS REMOVIDO - causava crash no iOS Safari
+            // AOS usa scroll listeners + IntersectionObserver constantemente
 
             console.log('✅ CSS injetado');
         }
@@ -36,16 +33,9 @@
          * Injeta scripts necessários
          */
         async injectScripts() {
-            // AOS JS
-            return new Promise((resolve) => {
-                const aosScript = document.createElement('script');
-                aosScript.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
-                aosScript.onload = () => {
-                    console.log('✅ AOS carregado');
-                    resolve();
-                };
-                document.head.appendChild(aosScript);
-            });
+            // AOS JS REMOVIDO - causava crash no iOS Safari
+            // AOS monitora scroll events para animações, trava Safari mobile
+            return Promise.resolve();
         }
 
         /**
@@ -273,18 +263,11 @@
             // 5. Define título da página
             this.setPageTitle();
 
-            // 6. Injeta e aguarda scripts
+            // 6. Scripts extras (AOS removido)
             await this.injectScripts();
 
-            // 7. Inicializa AOS
-            if (typeof AOS !== 'undefined') {
-                AOS.init({
-                    duration: 800,
-                    once: true,
-                    offset: 100
-                });
-                console.log('✅ AOS inicializado');
-            }
+            // 7. AOS REMOVIDO - causava crash no iOS Safari
+            // AOS usa scroll event listeners continuamente para detectar elementos na tela
 
             // 8. Inicializa componentes
             await this.initializeComponents();
