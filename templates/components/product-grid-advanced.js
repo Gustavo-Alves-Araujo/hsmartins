@@ -406,14 +406,14 @@ class ProductGridAdvancedComponent extends BaseComponent {
     }
 
     optimizeImages() {
-        // Otimiza todas as imagens com lazy loading
+        // Versão simplificada - usa apenas lazy loading nativo
         const images = document.querySelectorAll(`#${this.id}-all-grid img[data-product-image]`);
-        images.forEach((img, idx) => {
-            if (idx > this.itemsPerPage - 1) {
-                // Imagens além das primeiras 20 recebem lazy loading
-                if (!img.hasAttribute('loading')) {
-                    img.setAttribute('loading', 'lazy');
-                }
+        images.forEach((img) => {
+            if (!img.hasAttribute('loading')) {
+                img.setAttribute('loading', 'lazy');
+            }
+            if (!img.hasAttribute('decoding')) {
+                img.setAttribute('decoding', 'async');
             }
         });
     }
@@ -570,93 +570,26 @@ class ProductGridAdvancedComponent extends BaseComponent {
         if (this._carouselListenersAttached) return;
         this._carouselListenersAttached = true;
 
-        // Click nas setas (desktop)
+        // Click nas setas (desktop) - VERSÃO SIMPLIFICADA
         document.addEventListener('click', (e) => {
             const prevBtn = e.target?.closest?.('[data-carousel-prev]');
             const nextBtn = e.target?.closest?.('[data-carousel-next]');
             const id = prevBtn?.getAttribute('data-carousel-prev') || nextBtn?.getAttribute('data-carousel-next');
             if (!id) return;
 
-            e.preventDefault();
-            e.stopPropagation();
-
             const el = document.getElementById(id);
             if (!el) return;
             const dir = prevBtn ? -1 : 1;
             const width = el.clientWidth || 300;
             el.scrollBy({ left: dir * width, behavior: 'smooth' });
-        }, { passive: false });
-
-        // Atualiza indicador (1/N) conforme scroll - com proteção para iOS
-        const rafMap = new Map();
-        const scrollHandler = (e) => {
-            try {
-                const el = e.target;
-                if (!el || !(el instanceof HTMLElement)) return;
-                if (!el.hasAttribute('data-carousel')) return;
-
-                const id = el.getAttribute('data-carousel-id');
-                if (!id) return;
-                if (rafMap.get(id)) return;
-                rafMap.set(id, true);
-
-                requestAnimationFrame(() => {
-                    try {
-                        rafMap.delete(id);
-                        const count = parseInt(el.getAttribute('data-carousel-count') || '1', 10) || 1;
-                        const idx = Math.min(count, Math.max(1, Math.round(el.scrollLeft / Math.max(1, el.clientWidth)) + 1));
-                        const indicator = document.querySelector(`[data-carousel-indicator="${id}"]`);
-                        if (indicator) indicator.textContent = `${idx}/${count}`;
-                    } catch (err) {
-                        console.warn('Error updating carousel indicator:', err);
-                        rafMap.delete(id);
-                    }
-                });
-            } catch (err) {
-                console.warn('Error in scroll handler:', err);
-            }
-        };
-        
-        document.addEventListener('scroll', scrollHandler, { passive: true, capture: true });
+        });
     }
 
     setupInfiniteScroll() {
-        // Limpa observer anterior
-        if (this._intersectionObserverSet) return;
-        this._intersectionObserverSet = true;
-
-        setTimeout(() => {
-            try {
-                const sentinel = document.getElementById(`${this.id}-scroll-sentinel`);
-                if (!sentinel) {
-                    // Reset flag se não há sentinel (todos os produtos já foram carregados)
-                    this._intersectionObserverSet = false;
-                    return;
-                }
-
-                const observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
-                        try {
-                            if (entry.isIntersecting && !this._isLoadingMore) {
-                                this._isLoadingMore = true;
-                                this.currentPage++;
-                                this.renderGrids();
-                                this._isLoadingMore = false;
-                                this.attachCarouselListeners();
-                            }
-                        } catch (err) {
-                            console.warn('Error loading more items:', err);
-                            this._isLoadingMore = false;
-                        }
-                    });
-                }, { rootMargin: '200px', threshold: 0.01 });
-
-                observer.observe(sentinel);
-            } catch (err) {
-                console.error('Error setting up infinite scroll:', err);
-                this._intersectionObserverSet = false;
-            }
-        }, 100);
+        // DESABILITADO - Causava problemas no iOS
+        // Carrega todos os produtos de uma vez (mais simples e estável)
+        console.log('Infinite scroll disabled - loading all products at once');
+        return;
     }
 
     attachHeroIntegration() {

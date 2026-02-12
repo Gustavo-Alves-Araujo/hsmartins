@@ -95,9 +95,6 @@
   <!-- Sitemap & RSS -->
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 
-  <!-- iOS Compatibility Layer - DEVE CARREGAR PRIMEIRO (sem defer) -->
-  <script src="templates/components/ios-compatibility.js"></script>
-
   <!-- Scripts críticos - config.js (sem defer para carregar imediatamente) -->
   <script src="config.js"></script>
 
@@ -111,7 +108,6 @@
   <script src="templates/components/base-component.js" defer></script>
   <script src="templates/components/component-registry.js" defer></script>
   <script src="templates/components/cosmos-template.js" defer></script>
-  <script src="templates/components/image-optimizer.js" defer></script>
   <script src="templates/components/news-grid.js" defer></script>
   
   <!-- Performance Monitoring (defer - não crítico) -->
