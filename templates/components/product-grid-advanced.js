@@ -587,26 +587,37 @@ class ProductGridAdvancedComponent extends BaseComponent {
             el.scrollBy({ left: dir * width, behavior: 'smooth' });
         }, { passive: false });
 
-        // Atualiza indicador (1/N) conforme scroll
+        // Atualiza indicador (1/N) conforme scroll - com proteção para iOS
         const rafMap = new Map();
-        document.addEventListener('scroll', (e) => {
-            const el = e.target;
-            if (!el || !(el instanceof HTMLElement)) return;
-            if (!el.hasAttribute('data-carousel')) return;
+        const scrollHandler = (e) => {
+            try {
+                const el = e.target;
+                if (!el || !(el instanceof HTMLElement)) return;
+                if (!el.hasAttribute('data-carousel')) return;
 
-            const id = el.getAttribute('data-carousel-id');
-            if (!id) return;
-            if (rafMap.get(id)) return;
-            rafMap.set(id, true);
+                const id = el.getAttribute('data-carousel-id');
+                if (!id) return;
+                if (rafMap.get(id)) return;
+                rafMap.set(id, true);
 
-            requestAnimationFrame(() => {
-                rafMap.delete(id);
-                const count = parseInt(el.getAttribute('data-carousel-count') || '1', 10) || 1;
-                const idx = Math.min(count, Math.max(1, Math.round(el.scrollLeft / Math.max(1, el.clientWidth)) + 1));
-                const indicator = document.querySelector(`[data-carousel-indicator="${id}"]`);
-                if (indicator) indicator.textContent = `${idx}/${count}`;
-            });
-        }, true);
+                requestAnimationFrame(() => {
+                    try {
+                        rafMap.delete(id);
+                        const count = parseInt(el.getAttribute('data-carousel-count') || '1', 10) || 1;
+                        const idx = Math.min(count, Math.max(1, Math.round(el.scrollLeft / Math.max(1, el.clientWidth)) + 1));
+                        const indicator = document.querySelector(`[data-carousel-indicator="${id}"]`);
+                        if (indicator) indicator.textContent = `${idx}/${count}`;
+                    } catch (err) {
+                        console.warn('Error updating carousel indicator:', err);
+                        rafMap.delete(id);
+                    }
+                });
+            } catch (err) {
+                console.warn('Error in scroll handler:', err);
+            }
+        };
+        
+        document.addEventListener('scroll', scrollHandler, { passive: true, capture: true });
     }
 
     setupInfiniteScroll() {
@@ -615,26 +626,36 @@ class ProductGridAdvancedComponent extends BaseComponent {
         this._intersectionObserverSet = true;
 
         setTimeout(() => {
-            const sentinel = document.getElementById(`${this.id}-scroll-sentinel`);
-            if (!sentinel) {
-                // Reset flag se não há sentinel (todos os produtos já foram carregados)
+            try {
+                const sentinel = document.getElementById(`${this.id}-scroll-sentinel`);
+                if (!sentinel) {
+                    // Reset flag se não há sentinel (todos os produtos já foram carregados)
+                    this._intersectionObserverSet = false;
+                    return;
+                }
+
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        try {
+                            if (entry.isIntersecting && !this._isLoadingMore) {
+                                this._isLoadingMore = true;
+                                this.currentPage++;
+                                this.renderGrids();
+                                this._isLoadingMore = false;
+                                this.attachCarouselListeners();
+                            }
+                        } catch (err) {
+                            console.warn('Error loading more items:', err);
+                            this._isLoadingMore = false;
+                        }
+                    });
+                }, { rootMargin: '200px', threshold: 0.01 });
+
+                observer.observe(sentinel);
+            } catch (err) {
+                console.error('Error setting up infinite scroll:', err);
                 this._intersectionObserverSet = false;
-                return;
             }
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting && !this._isLoadingMore) {
-                        this._isLoadingMore = true;
-                        this.currentPage++;
-                        this.renderGrids();
-                        this._isLoadingMore = false;
-                        this.attachCarouselListeners();
-                    }
-                });
-            }, { rootMargin: '200px' });
-
-            observer.observe(sentinel);
         }, 100);
     }
 
@@ -644,30 +665,34 @@ class ProductGridAdvancedComponent extends BaseComponent {
 
         // Recebe busca do hero, aplica filtros e faz scroll até a seção
         window.addEventListener('imoveis:hero-search', (evt) => {
-            const d = evt?.detail || {};
-            this.filterState.search = d.search || '';
-            this.filterState.type = d.type || 'all';
-            this.filterState.city = d.city || 'all';
-            this.filterState.bairro = d.bairro || 'all';
+            try {
+                const d = evt?.detail || {};
+                this.filterState.search = d.search || '';
+                this.filterState.type = d.type || 'all';
+                this.filterState.city = d.city || 'all';
+                this.filterState.bairro = d.bairro || 'all';
 
-            // sincroniza UI dos selects sem recriar DOM
-            const search = document.getElementById('imovel-search');
-            const typeSel = document.getElementById('imovel-type');
-            const citySel = document.getElementById('imovel-city');
-            const bairroSel = document.getElementById('imovel-bairro');
-            if (search) search.value = this.filterState.search;
-            if (typeSel) typeSel.value = this.filterState.type;
-            if (citySel) citySel.value = this.filterState.city;
-            if (bairroSel) bairroSel.value = this.filterState.bairro;
+                // sincroniza UI dos selects sem recriar DOM
+                const search = document.getElementById('imovel-search');
+                const typeSel = document.getElementById('imovel-type');
+                const citySel = document.getElementById('imovel-city');
+                const bairroSel = document.getElementById('imovel-bairro');
+                if (search) search.value = this.filterState.search;
+                if (typeSel) typeSel.value = this.filterState.type;
+                if (citySel) citySel.value = this.filterState.city;
+                if (bairroSel) bairroSel.value = this.filterState.bairro;
 
-            this.applyFilters();
+                this.applyFilters();
 
-            const section = document.getElementById(this.id) || document.getElementById(this.targetId);
-            if (section) {
-                const header = document.getElementById('main-header');
-                const headerHeight = header ? header.offsetHeight : 80;
-                const y = section.getBoundingClientRect().top + window.scrollY - headerHeight;
-                window.scrollTo({ top: y, behavior: 'smooth' });
+                const section = document.getElementById(this.id) || document.getElementById(this.targetId);
+                if (section) {
+                    const header = document.getElementById('main-header');
+                    const headerHeight = header ? header.offsetHeight : 80;
+                    const y = section.getBoundingClientRect().top + window.scrollY - headerHeight;
+                    window.scrollTo({ top: y, behavior: 'smooth' });
+                }
+            } catch (err) {
+                console.warn('Error in hero integration:', err);
             }
         });
     }

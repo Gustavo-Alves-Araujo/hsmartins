@@ -95,7 +95,10 @@
   <!-- Sitemap & RSS -->
   <link rel="sitemap" type="application/xml" href="/sitemap.xml">
 
-  <!-- Scripts críticos - config.js primeiro (sem defer para carregar imediatamente) -->
+  <!-- iOS Compatibility Layer - DEVE CARREGAR PRIMEIRO (sem defer) -->
+  <script src="templates/components/ios-compatibility.js"></script>
+
+  <!-- Scripts críticos - config.js (sem defer para carregar imediatamente) -->
   <script src="config.js"></script>
 
   <!-- Tailwind CSS (defer para não bloquear renderização) -->
