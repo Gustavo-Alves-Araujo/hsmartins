@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Solicite seu financiamento imobiliário com a H.S Martins. Preencha o formulário e envie sua documentação de forma rápida e segura.">
+  <title>Solicitação de Financiamento | H.S Martins</title>
+
+  <!-- Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://vkwczizdjhsejbpaapea.supabase.co">
+
+  <!-- Scripts críticos -->
+  <script src="config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    .file-upload-label {
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .file-upload-label:hover {
+      transform: translateY(-2px);
+    }
+    .file-uploaded {
+      background-color: #10b981 !important;
+      border-color: #10b981 !important;
+    }
+  </style>
+</head>
+
+<body class="antialiased bg-gray-50">
+  <!-- Header Simples -->
+  <header class="fixed top-0 left-0 w-full z-[1000] py-3 bg-white shadow-sm">
+    <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12">
+      <a href="index.html" class="flex items-center gap-3 group transition-transform hover:scale-105">
+        <img src="img/logo.png" alt="Logo HS Martins" class="h-12 w-auto object-contain">
+        <span class="font-black text-slate-800 tracking-tight">HS Martins</span>
+      </a>
+      <a href="index.html" class="text-sm font-bold text-slate-700 hover:text-slate-900 transition">
+        <i class="fas fa-arrow-left mr-2"></i>Voltar ao site
+      </a>
+    </nav>
+  </header>
+
+  <main class="pt-24 pb-16">
+    <!-- Hero -->
+    <section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12 mb-12">
+      <div class="max-w-4xl mx-auto px-4 text-center">
+        <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-bold mb-4">
+          <i class="fas fa-university"></i>
+          Correspondente Caixa Autorizado
+        </div>
+        <h1 class="text-4xl md:text-5xl font-black mb-4">Solicitação de Financiamento</h1>
+        <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">
+          Preencha o formulário abaixo e envie sua documentação. Nossa equipe entrará em contato em breve.
+        </p>
+      </div>
+    </section>
+
+    <!-- Formulário -->
+    <section class="max-w-4xl mx-auto px-4">
+      <div class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-10">
+        <form id="financiamentoForm" class="space-y-8">
+          <!-- Informações de Contato -->
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center text-blue-600">
+                <i class="fas fa-user"></i>
+              </div>
+              Informações de Contato
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Nome Completo <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="nome" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Telefone <span class="text-red-500">*</span>
+                </label>
+                <input type="tel" name="telefone" required placeholder="(11) 99999-9999"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  E-mail <span class="text-red-500">*</span>
+                </label>
+                <input type="email" name="email" required
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Grau de Instrução <span class="text-red-500">*</span>
+                </label>
+                <select name="grau_instrucao" required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  <option value="">Selecione...</option>
+                  <option value="Ensino Fundamental Incompleto">Ensino Fundamental Incompleto</option>
+                  <option value="Ensino Fundamental Completo">Ensino Fundamental Completo</option>
+                  <option value="Ensino Médio Incompleto">Ensino Médio Incompleto</option>
+                  <option value="Ensino Médio Completo">Ensino Médio Completo</option>
+                  <option value="Ensino Superior Incompleto">Ensino Superior Incompleto</option>
+                  <option value="Ensino Superior Completo">Ensino Superior Completo</option>
+                  <option value="Pós-graduação">Pós-graduação</option>
+                  <option value="Mestrado">Mestrado</option>
+                  <option value="Doutorado">Doutorado</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Documentação -->
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+              <div class="w-10 h-10 rounded-lg bg-orange-100 flex items-center justify-center text-orange-600">
+                <i class="fas fa-file-pdf"></i>
+              </div>
+              Documentação Necessária
+            </h2>
+            <div class="space-y-4">
+              <!-- RG/CPF ou CNH -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  RG e CPF ou CNH (PDF) <span class="text-red-500">*</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_rg_cpf').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">Clique para selecionar o arquivo PDF</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_rg_cpf">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_rg_cpf" name="doc_rg_cpf" accept=".pdf" required class="hidden">
+                </div>
+              </div>
+
+              <!-- Certidão -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Certidão de Casamento ou Nascimento (PDF) <span class="text-red-500">*</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_certidao').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">Clique para selecionar o arquivo PDF</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_certidao">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_certidao" name="doc_certidao" accept=".pdf" required class="hidden">
+                </div>
+              </div>
+
+              <!-- Comprovante de Endereço -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Comprovante de Endereço Atualizado (PDF) <span class="text-red-500">*</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_endereco').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">Água, luz ou telefone (PDF)</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_endereco">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_endereco" name="doc_endereco" accept=".pdf" required class="hidden">
+                </div>
+              </div>
+
+              <!-- Carteira de Trabalho -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Carteira de Trabalho (PDF) <span class="text-red-500">*</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_ctps').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">Digital ou física (com foto, qualificação, contrato, FGTS)</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_ctps">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_ctps" name="doc_ctps" accept=".pdf" required class="hidden">
+                </div>
+              </div>
+
+              <!-- Holerite -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Último Holerite (PDF) <span class="text-red-500">*</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_holerite').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">Comprovante de rendimentos</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_holerite">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_holerite" name="doc_holerite" accept=".pdf" required class="hidden">
+                </div>
+              </div>
+
+              <!-- Imposto de Renda -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Declaração de Imposto de Renda Completa (PDF) <span class="text-red-500">*</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_ir').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">PF completa com recibo de entrega</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_ir">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_ir" name="doc_ir" accept=".pdf" required class="hidden">
+                </div>
+              </div>
+
+              <!-- FGTS -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Extratos do FGTS (PDF) <span class="text-gray-500 text-xs">(Opcional)</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_fgts').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">Caso pretenda utilizar o FGTS</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_fgts">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_fgts" name="doc_fgts" accept=".pdf" class="hidden">
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Botão de Envio -->
+          <div class="pt-6 border-t border-gray-200">
+            <button type="submit" id="submitBtn"
+                    class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3">
+              <i class="fas fa-paper-plane"></i>
+              <span id="submitText">Enviar Solicitação</span>
+            </button>
+            <p class="text-xs text-gray-500 text-center mt-4">
+              <i class="fas fa-lock mr-1"></i>
+              Seus dados estão protegidos e serão utilizados apenas para análise do financiamento.
+            </p>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Modal de Sucesso -->
+    <div id="successModal" class="hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+      <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-8 text-center">
+        <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+          <i class="fas fa-check text-4xl text-green-600"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-gray-900 mb-2">Solicitação Enviada!</h3>
+        <p class="text-gray-600 mb-6">
+          Recebemos sua documentação. Nossa equipe entrará em contato em breve para dar continuidade ao seu financiamento.
+        </p>
+        <button onclick="window.location.href='index.html'"
+                class="bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition">
+          Voltar ao Site
+        </button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Atualiza nome do arquivo quando selecionado
+    const fileInputs = [
+      { input: 'doc_rg_cpf', label: 'filename_rg_cpf' },
+      { input: 'doc_certidao', label: 'filename_certidao' },
+      { input: 'doc_endereco', label: 'filename_endereco' },
+      { input: 'doc_ctps', label: 'filename_ctps' },
+      { input: 'doc_holerite', label: 'filename_holerite' },
+      { input: 'doc_ir', label: 'filename_ir' },
+      { input: 'doc_fgts', label: 'filename_fgts' }
+    ];
+
+    fileInputs.forEach(({ input, label }) => {
+      const inputEl = document.getElementById(input);
+      const labelEl = document.getElementById(label);
+      inputEl.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+          labelEl.textContent = e.target.files[0].name;
+          labelEl.classList.add('text-green-600', 'font-bold');
+          e.target.parentElement.classList.add('file-uploaded', 'border-green-500');
+        } else {
+          labelEl.textContent = 'Nenhum arquivo selecionado';
+          labelEl.classList.remove('text-green-600', 'font-bold');
+          e.target.parentElement.classList.remove('file-uploaded', 'border-green-500');
+        }
+      });
+    });
+
+    // Submissão do formulário
+    document.getElementById('financiamentoForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const submitBtn = document.getElementById('submitBtn');
+      const submitText = document.getElementById('submitText');
+      
+      // Desabilita botão
+      submitBtn.disabled = true;
+      submitText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Enviando...';
+      
+      try {
+        const formData = new FormData(e.target);
+        
+        // Extrai dados do formulário
+        const dados = {
+          nome: formData.get('nome'),
+          telefone: formData.get('telefone'),
+          email: formData.get('email'),
+          grau_instrucao: formData.get('grau_instrucao'),
+          data_envio: new Date().toISOString(),
+          status: 'Pendente'
+        };
+
+        // Upload dos arquivos para o Supabase Storage
+        const uploads = [];
+        const timestamp = Date.now();
+        const nomeSlug = dados.nome.toLowerCase().replace(/\s+/g, '-');
+
+        for (const { input } of fileInputs) {
+          const file = formData.get(input);
+          if (file && file.size > 0) {
+            const fileName = `${nomeSlug}-${timestamp}-${input}.pdf`;
+            const { data, error } = await supabaseClient.storage
+              .from('financiamento-docs')
+              .upload(fileName, file);
+
+            if (error) throw error;
+            
+            // Pega URL pública
+            const { data: urlData } = supabaseClient.storage
+              .from('financiamento-docs')
+              .getPublicUrl(fileName);
+            
+            dados[input] = urlData.publicUrl;
+          }
+        }
+
+        // Salva no banco de dados
+        const { data, error } = await supabaseClient
+          .from('Hsmartins_Financiamentos')
+          .insert([dados]);
+
+        if (error) throw error;
+
+        // Mostra modal de sucesso
+        document.getElementById('successModal').classList.remove('hidden');
+        
+      } catch (error) {
+        console.error('Erro ao enviar:', error);
+        alert('Erro ao enviar solicitação. Por favor, tente novamente ou entre em contato conosco.');
+        
+        // Reabilita botão
+        submitBtn.disabled = false;
+        submitText.innerHTML = '<i class="fas fa-paper-plane mr-2"></i>Enviar Solicitação';
+      }
+    });
+  </script>
+</body>
+
+</html>

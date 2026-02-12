@@ -61,8 +61,16 @@
     <!-- Hero Temático -->
     <section class="relative min-h-[500px] md:min-h-[600px] flex items-center justify-center overflow-hidden isolate bg-black py-20 md:py-32">
       <div class="absolute inset-0 z-0">
-        <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/40"></div>
-        <div style="background: linear-gradient(135deg, rgba(0,92,169,0.15), rgba(243,146,0,0.1)); position: absolute; inset: 0;"></div>
+        <!-- Background Image com Blur -->
+        <div class="absolute inset-0">
+          <img src="img/image copy.png" 
+               alt="H.S Martins" 
+               class="w-full h-full object-cover"
+               style="filter: blur(8px); transform: scale(1.1);">
+        </div>
+        <!-- Overlays -->
+        <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+        <div style="background: linear-gradient(135deg, rgba(0,92,169,0.25), rgba(243,146,0,0.15)); position: absolute; inset: 0;"></div>
       </div>
 
       <div class="absolute top-[-10%] left-[-10%] w-[50%] h-[50%] blur-[150px] rounded-full pointer-events-none mix-blend-screen opacity-20" style="background-color: #005CA9; animation: pulse 4s infinite;"></div>
