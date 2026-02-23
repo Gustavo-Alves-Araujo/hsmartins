@@ -401,7 +401,7 @@
                         <div class="gallery-grid">
                             ${finalImages.slice(0, 5).map((img, index) => `
                                 <div onclick="openGalleryModal(${index})" class="relative group">
-                                    <img src="${img}" alt="${property.title} - Foto ${index + 1}" loading="lazy" decoding="async" onerror="this.src='img/placeholder.jpg'">
+                                    <img src="${img}" alt="${property.title} - Foto ${index + 1}" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" onerror="this.src='img/placeholder.jpg'" style="background-color: #f3f4f6;">
                                     ${index === 4 && finalImages.length > 5 ? `
                                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                                             <span class="text-white text-xl font-semibold">
@@ -902,8 +902,8 @@
                         
                         container.innerHTML = selected.map(property => `
                         <a href="imovel.html?id=${property.id}" class="group">
-                            <div class="relative aspect-[4/3] overflow-hidden rounded-xl mb-3">
-                                    <img src="${property.image_url || 'https://via.placeholder.com/400x300'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title || 'Imóvel'}">
+                            <div class="relative aspect-[4/3] overflow-hidden rounded-xl mb-3 bg-gray-100">
+                                    <img src="${property.image_url || 'img/placeholder.jpg'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title || 'Imóvel'}" loading="lazy" decoding="async" onerror="this.src='img/placeholder.jpg'">
                             </div>
                                 <h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition">${property.title || 'Imóvel'}</h3>
                                 <p class="text-gray-600 text-sm mb-2">${property.category || property.tipoimovel || ''}</p>
@@ -973,19 +973,32 @@
                 counter.textContent = `${currentImageIndex + 1} / ${allImages.length}`;
             }
             
-            // Atualiza thumbnails
+            // Atualiza thumbnails - limita a 20 para evitar crash no iOS
             const thumbnailsContainer = document.querySelector('#thumbnails > div');
             if (thumbnailsContainer && allImages.length > 0) {
-                thumbnailsContainer.innerHTML = allImages.map((img, index) => `
-                    <img 
-                        src="${img}" 
-                        onclick="currentImageIndex = ${index}; updateGalleryImage();"
-                        class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${index === currentImageIndex ? 'border-white' : 'border-transparent'} hover:border-gray-300 transition"
-                        alt="Thumbnail ${index + 1}"
-                        loading="lazy"
-                        onerror="this.src='img/placeholder.jpg'"
-                    >
-                `).join('');
+                // Só recria thumbnails se ainda não foram criados ou se o total mudou
+                const existingThumbs = thumbnailsContainer.querySelectorAll('img');
+                const maxThumbs = Math.min(allImages.length, 20);
+                
+                if (existingThumbs.length !== maxThumbs) {
+                    thumbnailsContainer.innerHTML = allImages.slice(0, maxThumbs).map((img, index) => `
+                        <img 
+                            src="${img}" 
+                            onclick="currentImageIndex = ${index}; updateGalleryImage();"
+                            class="w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${index === currentImageIndex ? 'border-white' : 'border-transparent'} hover:border-gray-300 transition"
+                            alt="Thumbnail ${index + 1}"
+                            loading="lazy"
+                            decoding="async"
+                            onerror="this.src='img/placeholder.jpg'"
+                            style="background-color: #374151;"
+                        >
+                    `).join('');
+                } else {
+                    // Apenas atualiza bordas (sem recriar DOM)
+                    existingThumbs.forEach((thumb, index) => {
+                        thumb.className = `w-20 h-20 object-cover rounded-lg cursor-pointer border-2 ${index === currentImageIndex ? 'border-white' : 'border-transparent'} hover:border-gray-300 transition`;
+                    });
+                }
             }
         }
 

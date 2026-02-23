@@ -43,7 +43,6 @@ class ProductGridAdvancedComponent extends BaseComponent {
             sort: 'relevance'
         };
         this._searchDebounce = null;
-        this._runtimeStylesInjected = false;
         this._carouselListenersAttached = false;
         
         // Renderização progressiva para performance
@@ -148,21 +147,6 @@ class ProductGridAdvancedComponent extends BaseComponent {
             .replace(/'/g, '&#039;');
     }
 
-    injectRuntimeStyles() {
-        if (this._runtimeStylesInjected) return;
-        this._runtimeStylesInjected = true;
-        if (typeof document === 'undefined') return;
-        if (document.getElementById('product-grid-advanced-runtime-styles')) return;
-
-        const style = document.createElement('style');
-        style.id = 'product-grid-advanced-runtime-styles';
-        style.textContent = `
-            .hs-scrollbar-hide::-webkit-scrollbar { display: none; }
-            .hs-scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-        `;
-        document.head.appendChild(style);
-    }
-
     async loadSupabaseScript() {
         return new Promise((resolve, reject) => {
             const script = document.createElement('script');
@@ -174,54 +158,34 @@ class ProductGridAdvancedComponent extends BaseComponent {
     }
 
     renderProductCard(product, primaryColor) {
-        this.injectRuntimeStyles();
         const badgeHtml = product.badge ? `<span class="absolute top-3 left-3 ${product.badge.style === 'new' ? 'bg-gray-900' : 'bg-red-500'} text-white text-[10px] font-bold px-2 py-1 rounded uppercase z-10">${product.badge.text}</span>` : '';
-        const images = Array.isArray(product.imagesUrls) && product.imagesUrls.length > 0
-            ? product.imagesUrls.filter(Boolean)
-            : [(product.imageUrl || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80')];
-        const carouselId = product.id ? `carousel-${product.id}` : `carousel-${Math.random().toString(36).slice(2)}`;
-        const slidesHtml = images.map((url, idx) => `
-            <div class="w-full h-full flex-shrink-0 snap-start relative">
-                <img src="${url}" 
-                     class="object-cover w-full h-full" 
-                     alt="${this._escapeHtml(product.title)} - foto ${idx + 1}"
-                     loading="${idx === 0 ? 'eager' : 'lazy'}"
-                     decoding="async"
-                     fetchpriority="${idx === 0 ? 'high' : 'low'}"
-                     data-product-image>
-            </div>
-        `).join('');
+        
+        // SIMPLIFICADO: Apenas 1 imagem por card para evitar crash no iOS
+        // O carrossel com todas as imagens estava causando crash no Safari/iOS
+        // pois carregava centenas de imagens no DOM simultaneamente
+        const firstImage = (Array.isArray(product.imagesUrls) && product.imagesUrls.length > 0 && product.imagesUrls[0])
+            ? product.imagesUrls[0]
+            : (product.imageUrl || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80');
+        
+        const totalImages = Array.isArray(product.imagesUrls) ? product.imagesUrls.filter(Boolean).length : 1;
 
-        const imagesHtml = `
+        const imageHtml = `
             <div class="relative w-full h-full">
-                <div id="${carouselId}" class="hs-scrollbar-hide w-full h-full flex overflow-x-auto snap-x snap-mandatory"
-                     data-carousel
-                     data-carousel-id="${carouselId}"
-                     data-carousel-count="${images.length}">
-                    ${slidesHtml}
-                </div>
-
-                ${images.length > 1 ? `
-                    <button type="button"
-                            class="hidden md:flex absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 backdrop-blur border border-white/60 shadow-sm items-center justify-center text-gray-800 hover:bg-white transition z-20"
-                            data-carousel-prev="${carouselId}"
-                            aria-label="Imagem anterior">
-                        <i class="fas fa-chevron-left text-xs"></i>
-                    </button>
-                    <button type="button"
-                            class="hidden md:flex absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/85 backdrop-blur border border-white/60 shadow-sm items-center justify-center text-gray-800 hover:bg-white transition z-20"
-                            data-carousel-next="${carouselId}"
-                            aria-label="Próxima imagem">
-                        <i class="fas fa-chevron-right text-xs"></i>
-                    </button>
-
-                    <div class="absolute bottom-2 left-1/2 -translate-x-1/2 px-2 py-1 rounded-full bg-black/45 text-white text-[10px] font-semibold tracking-wide z-20"
-                         data-carousel-indicator="${carouselId}">
-                        1/${images.length}
+                <img src="${firstImage}" 
+                     class="object-cover w-full h-full" 
+                     alt="${this._escapeHtml(product.title)}"
+                     loading="lazy"
+                     decoding="async"
+                     onerror="this.src='img/placeholder.jpg'"
+                     data-product-image>
+                ${totalImages > 1 ? `
+                    <div class="absolute bottom-2 right-2 px-2 py-1 rounded-full bg-black/50 text-white text-[10px] font-semibold z-10">
+                        <i class="fas fa-images mr-1"></i>${totalImages} fotos
                     </div>
                 ` : ''}
             </div>
         `;
+
         const priceHtml = product.price ? `<div>${product.price.current ? `<span class="text-gray-900 font-bold">${product.price.current}</span>` : ''}${product.price.original ? `<span class="text-gray-400 text-sm line-through ml-2">${product.price.original}</span>` : ''}</div>` : '';
         const ratingHtml = product.rating ? `<div class="flex text-yellow-400 text-xs"><i class="fas fa-star"></i><span class="text-gray-400 ml-1">${product.rating}</span></div>` : '';
         const detailsLink = product.id ? `imovel.html?id=${product.id}` : '#';
@@ -229,7 +193,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
         return `<a href="${detailsLink}" class="group relative bg-white block rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">
                 ${badgeHtml}
-                ${imagesHtml}
+                ${imageHtml}
             </div>
             <div class="p-4">
                 ${product.tipoimovel || product.category ? `<p class="text-gray-500 text-xs mb-1">${this._escapeHtml(product.tipoimovel || product.category)}</p>` : ''}
@@ -567,23 +531,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
     }
 
     attachCarouselListeners() {
-        if (this._carouselListenersAttached) return;
-        this._carouselListenersAttached = true;
-
-        // Click nas setas (desktop) - VERSÃO SIMPLIFICADA
-        document.addEventListener('click', (e) => {
-            const prevBtn = e.target?.closest?.('[data-carousel-prev]');
-            const nextBtn = e.target?.closest?.('[data-carousel-next]');
-            const id = prevBtn?.getAttribute('data-carousel-prev') || nextBtn?.getAttribute('data-carousel-next');
-            if (!id) return;
-
-            const el = document.getElementById(id);
-            if (!el) return;
-            const dir = prevBtn ? -1 : 1;
-            const width = el.clientWidth || 300;
-            // SEM behavior smooth - iOS não gosta
-            el.scrollBy({ left: dir * width });
-        });
+        // Carrossel removido dos cards para evitar crash no iOS
+        // As imagens completas são exibidas na página individual (imovel.html)
     }
 
     setupInfiniteScroll() {
