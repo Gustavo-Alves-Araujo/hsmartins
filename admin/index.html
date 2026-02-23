@@ -463,63 +463,7 @@
 
                             <!-- Cards View -->
                             <div id="financiamentos-cards" class="${window.financiamentoViewMode === 'table' ? 'hidden' : ''} grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                ${getFilteredFinanciamentos().map(fin => `
-                                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition overflow-hidden">
-                                        <div class="p-6">
-                                            <div class="flex items-start justify-between mb-4">
-                                                <div>
-                                                    <h3 class="font-bold text-lg text-gray-900">${fin.nome}</h3>
-                                                    <p class="text-sm text-gray-600"><i class="fas fa-envelope mr-1"></i>${fin.email}</p>
-                                                    <p class="text-sm text-gray-600"><i class="fas fa-phone mr-1"></i>${fin.telefone}</p>
-                                                </div>
-                                                <span class="px-3 py-1 rounded-full text-xs font-bold ${
-                                                    fin.status === 'Pendente' ? 'bg-yellow-100 text-yellow-800' :
-                                                    fin.status === 'Em Análise' ? 'bg-blue-100 text-blue-800' :
-                                                    fin.status === 'Aprovado' ? 'bg-green-100 text-green-800' :
-                                                    'bg-red-100 text-red-800'
-                                                }">
-                                                    ${fin.status}
-                                                </span>
-                                            </div>
-                                            
-                                            <div class="mb-4 space-y-2 text-sm">
-                                                <p><strong>Grau de Instrução:</strong> ${fin.grau_instrucao}</p>
-                                                <p><strong>Data de Envio:</strong> ${formatDateAdmin(fin.data_envio)}</p>
-                                            </div>
-
-                                            <div class="mb-4">
-                                                <p class="text-xs font-bold text-gray-700 mb-2">Documentos:</p>
-                                                <div class="grid grid-cols-2 gap-2 text-xs">
-                                                    ${fin.doc_rg_cpf ? '<a href="' + fin.doc_rg_cpf + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> RG/CPF</a>' : '<span class="text-gray-400">RG/CPF</span>'}
-                                                    ${fin.doc_certidao ? '<a href="' + fin.doc_certidao + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> Certidão</a>' : '<span class="text-gray-400">Certidão</span>'}
-                                                    ${fin.doc_endereco ? '<a href="' + fin.doc_endereco + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> Endereço</a>' : '<span class="text-gray-400">Endereço</span>'}
-                                                    ${fin.doc_ctps ? '<a href="' + fin.doc_ctps + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> CTPS</a>' : '<span class="text-gray-400">CTPS</span>'}
-                                                    ${fin.doc_holerite ? '<a href="' + fin.doc_holerite + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> Holerite</a>' : '<span class="text-gray-400">Holerite</span>'}
-                                                    ${fin.doc_ir ? '<a href="' + fin.doc_ir + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> IR</a>' : '<span class="text-gray-400">IR</span>'}
-                                                    ${fin.doc_fgts ? '<a href="' + fin.doc_fgts + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> FGTS</a>' : '<span class="text-gray-400">FGTS</span>'}
-                                                </div>
-                                            </div>
-
-                                            <div class="space-y-2">
-                                                <select 
-                                                    onchange="updateFinanciamentoStatus('${fin.id}', this.value)"
-                                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                                >
-                                                    <option value="Pendente" ${fin.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
-                                                    <option value="Em Análise" ${fin.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
-                                                    <option value="Aprovado" ${fin.status === 'Aprovado' ? 'selected' : ''}>Aprovado</option>
-                                                    <option value="Recusado" ${fin.status === 'Recusado' ? 'selected' : ''}>Recusado</option>
-                                                </select>
-                                                <button 
-                                                    onclick="deleteFinanciamento('${fin.id}')"
-                                                    class="w-full bg-red-50 text-red-600 py-2 rounded-lg font-semibold hover:bg-red-100 transition text-sm"
-                                                >
-                                                    <i class="fas fa-trash"></i> Excluir
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                `).join('')}
+                                ${getFilteredFinanciamentos().map(fin => renderFinanciamentoCard(fin)).join('')}
                             </div>
 
                             <!-- Table View -->
@@ -538,58 +482,7 @@
                                             </tr>
                                         </thead>
                                         <tbody class="bg-white divide-y divide-gray-200">
-                                            ${getFilteredFinanciamentos().map(fin => `
-                                                <tr class="hover:bg-gray-50 transition">
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <div class="font-bold text-gray-900">${fin.nome}</div>
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        <div class="text-sm text-gray-600"><i class="fas fa-envelope mr-1"></i>${fin.email}</div>
-                                                        <div class="text-sm text-gray-600"><i class="fas fa-phone mr-1"></i>${fin.telefone}</div>
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                        ${fin.grau_instrucao}
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                                        ${formatDateAdmin(fin.data_envio)}
-                                                    </td>
-                                                    <td class="px-6 py-4">
-                                                        <div class="flex flex-wrap gap-1">
-                                                            ${fin.doc_rg_cpf ? '<a href="' + fin.doc_rg_cpf + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="RG/CPF"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                                            ${fin.doc_certidao ? '<a href="' + fin.doc_certidao + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="Certidão"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                                            ${fin.doc_endereco ? '<a href="' + fin.doc_endereco + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="Endereço"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                                            ${fin.doc_ctps ? '<a href="' + fin.doc_ctps + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="CTPS"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                                            ${fin.doc_holerite ? '<a href="' + fin.doc_holerite + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="Holerite"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                                            ${fin.doc_ir ? '<a href="' + fin.doc_ir + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="IR"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                                            ${fin.doc_fgts ? '<a href="' + fin.doc_fgts + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="FGTS"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                                        </div>
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <select 
-                                                            onchange="updateFinanciamentoStatus('${fin.id}', this.value)"
-                                                            class="px-3 py-1 rounded-full text-xs font-bold border-0 ${
-                                                                fin.status === 'Pendente' ? 'bg-yellow-100 text-yellow-800' :
-                                                                fin.status === 'Em Análise' ? 'bg-blue-100 text-blue-800' :
-                                                                fin.status === 'Aprovado' ? 'bg-green-100 text-green-800' :
-                                                                'bg-red-100 text-red-800'
-                                                            }"
-                                                        >
-                                                            <option value="Pendente" ${fin.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
-                                                            <option value="Em Análise" ${fin.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
-                                                            <option value="Aprovado" ${fin.status === 'Aprovado' ? 'selected' : ''}>Aprovado</option>
-                                                            <option value="Recusado" ${fin.status === 'Recusado' ? 'selected' : ''}>Recusado</option>
-                                                        </select>
-                                                    </td>
-                                                    <td class="px-6 py-4 whitespace-nowrap">
-                                                        <button 
-                                                            onclick="deleteFinanciamento('${fin.id}')"
-                                                            class="text-red-600 hover:text-red-800 font-semibold text-sm"
-                                                        >
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
-                                            `).join('')}
+                                            ${getFilteredFinanciamentos().map(fin => renderFinanciamentoRow(fin)).join('')}
                                         </tbody>
                                     </table>
                                 </div>
@@ -1718,63 +1611,7 @@
             
             // Atualiza cards
             if (window.financiamentoViewMode === 'cards' || !window.financiamentoViewMode) {
-                cardsContainer.innerHTML = filtered.map(fin => `
-                    <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition overflow-hidden">
-                        <div class="p-6">
-                            <div class="flex items-start justify-between mb-4">
-                                <div>
-                                    <h3 class="font-bold text-lg text-gray-900">${fin.nome}</h3>
-                                    <p class="text-sm text-gray-600"><i class="fas fa-envelope mr-1"></i>${fin.email}</p>
-                                    <p class="text-sm text-gray-600"><i class="fas fa-phone mr-1"></i>${fin.telefone}</p>
-                                </div>
-                                <span class="px-3 py-1 rounded-full text-xs font-bold ${
-                                    fin.status === 'Pendente' ? 'bg-yellow-100 text-yellow-800' :
-                                    fin.status === 'Em Análise' ? 'bg-blue-100 text-blue-800' :
-                                    fin.status === 'Aprovado' ? 'bg-green-100 text-green-800' :
-                                    'bg-red-100 text-red-800'
-                                }">
-                                    ${fin.status}
-                                </span>
-                            </div>
-                            
-                            <div class="mb-4 space-y-2 text-sm">
-                                <p><strong>Grau de Instrução:</strong> ${fin.grau_instrucao}</p>
-                                <p><strong>Data de Envio:</strong> ${formatDateAdmin(fin.data_envio)}</p>
-                            </div>
-
-                            <div class="mb-4">
-                                <p class="text-xs font-bold text-gray-700 mb-2">Documentos:</p>
-                                <div class="grid grid-cols-2 gap-2 text-xs">
-                                    ${fin.doc_rg_cpf ? '<a href="' + fin.doc_rg_cpf + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> RG/CPF</a>' : '<span class="text-gray-400">RG/CPF</span>'}
-                                    ${fin.doc_certidao ? '<a href="' + fin.doc_certidao + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> Certidão</a>' : '<span class="text-gray-400">Certidão</span>'}
-                                    ${fin.doc_endereco ? '<a href="' + fin.doc_endereco + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> Endereço</a>' : '<span class="text-gray-400">Endereço</span>'}
-                                    ${fin.doc_ctps ? '<a href="' + fin.doc_ctps + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> CTPS</a>' : '<span class="text-gray-400">CTPS</span>'}
-                                    ${fin.doc_holerite ? '<a href="' + fin.doc_holerite + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> Holerite</a>' : '<span class="text-gray-400">Holerite</span>'}
-                                    ${fin.doc_ir ? '<a href="' + fin.doc_ir + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> IR</a>' : '<span class="text-gray-400">IR</span>'}
-                                    ${fin.doc_fgts ? '<a href="' + fin.doc_fgts + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> FGTS</a>' : '<span class="text-gray-400">FGTS</span>'}
-                                </div>
-                            </div>
-
-                            <div class="space-y-2">
-                                <select 
-                                    onchange="updateFinanciamentoStatus('${fin.id}', this.value)"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
-                                >
-                                    <option value="Pendente" ${fin.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
-                                    <option value="Em Análise" ${fin.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
-                                    <option value="Aprovado" ${fin.status === 'Aprovado' ? 'selected' : ''}>Aprovado</option>
-                                    <option value="Recusado" ${fin.status === 'Recusado' ? 'selected' : ''}>Recusado</option>
-                                </select>
-                                <button 
-                                    onclick="deleteFinanciamento('${fin.id}')"
-                                    class="w-full bg-red-50 text-red-600 py-2 rounded-lg font-semibold hover:bg-red-100 transition text-sm"
-                                >
-                                    <i class="fas fa-trash"></i> Excluir
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('');
+                cardsContainer.innerHTML = filtered.map(fin => renderFinanciamentoCard(fin)).join('');
                 
                 if (filtered.length === 0) {
                     cardsContainer.innerHTML = `
@@ -1790,58 +1627,7 @@
             if (window.financiamentoViewMode === 'table') {
                 const tbody = tableContainer.querySelector('tbody');
                 if (tbody) {
-                    tbody.innerHTML = filtered.map(fin => `
-                        <tr class="hover:bg-gray-50 transition">
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="font-bold text-gray-900">${fin.nome}</div>
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm text-gray-600"><i class="fas fa-envelope mr-1"></i>${fin.email}</div>
-                                <div class="text-sm text-gray-600"><i class="fas fa-phone mr-1"></i>${fin.telefone}</div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                ${fin.grau_instrucao}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                                ${formatDateAdmin(fin.data_envio)}
-                            </td>
-                            <td class="px-6 py-4">
-                                <div class="flex flex-wrap gap-1">
-                                    ${fin.doc_rg_cpf ? '<a href="' + fin.doc_rg_cpf + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="RG/CPF"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                    ${fin.doc_certidao ? '<a href="' + fin.doc_certidao + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="Certidão"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                    ${fin.doc_endereco ? '<a href="' + fin.doc_endereco + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="Endereço"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                    ${fin.doc_ctps ? '<a href="' + fin.doc_ctps + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="CTPS"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                    ${fin.doc_holerite ? '<a href="' + fin.doc_holerite + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="Holerite"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                    ${fin.doc_ir ? '<a href="' + fin.doc_ir + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="IR"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                    ${fin.doc_fgts ? '<a href="' + fin.doc_fgts + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="FGTS"><i class="fas fa-file-pdf"></i></a>' : ''}
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <select 
-                                    onchange="updateFinanciamentoStatus('${fin.id}', this.value)"
-                                    class="px-3 py-1 rounded-full text-xs font-bold border-0 ${
-                                        fin.status === 'Pendente' ? 'bg-yellow-100 text-yellow-800' :
-                                        fin.status === 'Em Análise' ? 'bg-blue-100 text-blue-800' :
-                                        fin.status === 'Aprovado' ? 'bg-green-100 text-green-800' :
-                                        'bg-red-100 text-red-800'
-                                    }"
-                                >
-                                    <option value="Pendente" ${fin.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
-                                    <option value="Em Análise" ${fin.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
-                                    <option value="Aprovado" ${fin.status === 'Aprovado' ? 'selected' : ''}>Aprovado</option>
-                                    <option value="Recusado" ${fin.status === 'Recusado' ? 'selected' : ''}>Recusado</option>
-                                </select>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <button 
-                                    onclick="deleteFinanciamento('${fin.id}')"
-                                    class="text-red-600 hover:text-red-800 font-semibold text-sm"
-                                >
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    `).join('');
+                    tbody.innerHTML = filtered.map(fin => renderFinanciamentoRow(fin)).join('');
                     
                     if (filtered.length === 0) {
                         tbody.innerHTML = `
@@ -1880,6 +1666,181 @@
             if (!dateString) return 'Não publicado';
             const date = new Date(dateString);
             return date.toLocaleDateString('pt-BR');
+        }
+
+        // Helper: renderiza links de documentos de uma pessoa
+        function renderDocLinks(fin, suffix = '') {
+            const s = suffix; // '' para pessoa 1, '_2' para pessoa 2
+            const docs = [
+                { key: 'doc_rg_cpf' + s, label: 'RG/CPF' },
+                { key: 'doc_certidao' + s, label: 'Certidão' },
+                { key: 'doc_endereco' + s, label: 'Endereço' },
+                { key: 'doc_ctps' + s, label: 'CTPS' },
+                { key: 'doc_holerite' + s, label: 'Holerite' },
+                { key: 'doc_ir' + s, label: 'IR' },
+                { key: 'doc_fgts' + s, label: 'FGTS' }
+            ];
+            return docs.map(d => 
+                fin[d.key] 
+                    ? '<a href="' + fin[d.key] + '" target="_blank" class="flex items-center gap-1 text-blue-600 hover:underline"><i class="fas fa-file-pdf"></i> ' + d.label + '</a>' 
+                    : '<span class="text-gray-400">' + d.label + '</span>'
+            ).join('');
+        }
+
+        // Helper: renderiza ícones de docs para tabela
+        function renderDocIcons(fin, suffix = '') {
+            const s = suffix;
+            const docs = [
+                { key: 'doc_rg_cpf' + s, label: 'RG/CPF' },
+                { key: 'doc_certidao' + s, label: 'Certidão' },
+                { key: 'doc_endereco' + s, label: 'Endereço' },
+                { key: 'doc_ctps' + s, label: 'CTPS' },
+                { key: 'doc_holerite' + s, label: 'Holerite' },
+                { key: 'doc_ir' + s, label: 'IR' },
+                { key: 'doc_fgts' + s, label: 'FGTS' }
+            ];
+            return docs.filter(d => fin[d.key]).map(d =>
+                '<a href="' + fin[d.key] + '" target="_blank" class="inline-flex items-center px-2 py-1 bg-blue-100 text-blue-700 text-xs rounded hover:bg-blue-200" title="' + d.label + '"><i class="fas fa-file-pdf"></i></a>'
+            ).join('');
+        }
+
+        // Helper: renderiza seção da Pessoa 2 (se existir)
+        function renderPerson2Card(fin) {
+            if (!fin.nome_2) return '';
+            return `
+                <div class="mt-4 pt-4 border-t border-purple-200 bg-purple-50 -mx-6 -mb-6 px-6 pb-6 rounded-b-xl">
+                    <div class="flex items-center gap-2 mb-3">
+                        <i class="fas fa-user-friends text-purple-600"></i>
+                        <span class="font-bold text-sm text-purple-800">2ª Pessoa</span>
+                    </div>
+                    <div class="mb-3 space-y-1 text-sm">
+                        <p class="font-semibold text-gray-900">${fin.nome_2}</p>
+                        <p class="text-gray-600"><i class="fas fa-envelope mr-1"></i>${fin.email_2 || '-'}</p>
+                        <p class="text-gray-600"><i class="fas fa-phone mr-1"></i>${fin.telefone_2 || '-'}</p>
+                        <p><strong>Instrução:</strong> ${fin.grau_instrucao_2 || '-'}</p>
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-700 mb-2">Documentos 2ª Pessoa:</p>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            ${renderDocLinks(fin, '_2')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper: renderiza card completo de financiamento
+        function renderFinanciamentoCard(fin) {
+            return `
+                <div class="bg-white rounded-xl border border-gray-200 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <div class="p-6">
+                        <div class="flex items-start justify-between mb-4">
+                            <div>
+                                <h3 class="font-bold text-lg text-gray-900">${fin.nome}</h3>
+                                <p class="text-sm text-gray-600"><i class="fas fa-envelope mr-1"></i>${fin.email}</p>
+                                <p class="text-sm text-gray-600"><i class="fas fa-phone mr-1"></i>${fin.telefone}</p>
+                            </div>
+                            <div class="flex flex-col items-end gap-1">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold ${
+                                    fin.status === 'Pendente' ? 'bg-yellow-100 text-yellow-800' :
+                                    fin.status === 'Em Análise' ? 'bg-blue-100 text-blue-800' :
+                                    fin.status === 'Aprovado' ? 'bg-green-100 text-green-800' :
+                                    'bg-red-100 text-red-800'
+                                }">
+                                    ${fin.status}
+                                </span>
+                                ${fin.nome_2 ? '<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-purple-100 text-purple-700"><i class="fas fa-user-friends mr-1"></i>2 pessoas</span>' : ''}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-4 space-y-2 text-sm">
+                            <p><strong>Grau de Instrução:</strong> ${fin.grau_instrucao}</p>
+                            <p><strong>Data de Envio:</strong> ${formatDateAdmin(fin.data_envio)}</p>
+                        </div>
+
+                        <div class="mb-4">
+                            <p class="text-xs font-bold text-gray-700 mb-2">Documentos:</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                ${renderDocLinks(fin)}
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <select 
+                                onchange="updateFinanciamentoStatus('${fin.id}', this.value)"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                            >
+                                <option value="Pendente" ${fin.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                                <option value="Em Análise" ${fin.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
+                                <option value="Aprovado" ${fin.status === 'Aprovado' ? 'selected' : ''}>Aprovado</option>
+                                <option value="Recusado" ${fin.status === 'Recusado' ? 'selected' : ''}>Recusado</option>
+                            </select>
+                            <button 
+                                onclick="deleteFinanciamento('${fin.id}')"
+                                class="w-full bg-red-50 text-red-600 py-2 rounded-lg font-semibold hover:bg-red-100 transition text-sm"
+                            >
+                                <i class="fas fa-trash"></i> Excluir
+                            </button>
+                        </div>
+
+                        ${renderPerson2Card(fin)}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Helper: renderiza linha da tabela de financiamento
+        function renderFinanciamentoRow(fin) {
+            return `
+                <tr class="hover:bg-gray-50 transition">
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="font-bold text-gray-900">${fin.nome}</div>
+                        ${fin.nome_2 ? '<div class="text-xs text-purple-600 mt-1"><i class="fas fa-user-friends mr-1"></i>' + fin.nome_2 + '</div>' : ''}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="text-sm text-gray-600"><i class="fas fa-envelope mr-1"></i>${fin.email}</div>
+                        <div class="text-sm text-gray-600"><i class="fas fa-phone mr-1"></i>${fin.telefone}</div>
+                        ${fin.nome_2 ? '<div class="text-xs text-purple-500 mt-1"><i class="fas fa-envelope mr-1"></i>' + (fin.email_2||'-') + '</div>' : ''}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        ${fin.grau_instrucao}
+                        ${fin.grau_instrucao_2 ? '<div class="text-xs text-purple-500 mt-1">' + fin.grau_instrucao_2 + '</div>' : ''}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                        ${formatDateAdmin(fin.data_envio)}
+                    </td>
+                    <td class="px-6 py-4">
+                        <div class="flex flex-wrap gap-1">
+                            ${renderDocIcons(fin)}
+                        </div>
+                        ${fin.nome_2 ? '<div class="flex flex-wrap gap-1 mt-1 pt-1 border-t border-purple-200"><span class="text-[10px] text-purple-600 mr-1">P2:</span>' + renderDocIcons(fin, '_2') + '</div>' : ''}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <select 
+                            onchange="updateFinanciamentoStatus('${fin.id}', this.value)"
+                            class="px-3 py-1 rounded-full text-xs font-bold border-0 ${
+                                fin.status === 'Pendente' ? 'bg-yellow-100 text-yellow-800' :
+                                fin.status === 'Em Análise' ? 'bg-blue-100 text-blue-800' :
+                                fin.status === 'Aprovado' ? 'bg-green-100 text-green-800' :
+                                'bg-red-100 text-red-800'
+                            }"
+                        >
+                            <option value="Pendente" ${fin.status === 'Pendente' ? 'selected' : ''}>Pendente</option>
+                            <option value="Em Análise" ${fin.status === 'Em Análise' ? 'selected' : ''}>Em Análise</option>
+                            <option value="Aprovado" ${fin.status === 'Aprovado' ? 'selected' : ''}>Aprovado</option>
+                            <option value="Recusado" ${fin.status === 'Recusado' ? 'selected' : ''}>Recusado</option>
+                        </select>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <button 
+                            onclick="deleteFinanciamento('${fin.id}')"
+                            class="text-red-600 hover:text-red-800 font-semibold text-sm"
+                        >
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
         }
 
         // Abre modal de notícia

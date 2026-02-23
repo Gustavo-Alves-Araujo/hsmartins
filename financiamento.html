@@ -231,6 +231,158 @@
 
           <!-- Botão de Envio -->
           <div class="pt-6 border-t border-gray-200">
+
+            <!-- Botão Adicionar Pessoa -->
+            <div id="addPersonSection" class="mb-6">
+              <button type="button" id="addPersonBtn" onclick="togglePerson2()"
+                      class="w-full bg-gray-100 border-2 border-dashed border-gray-300 text-gray-700 font-bold py-4 px-8 rounded-lg hover:bg-gray-200 hover:border-gray-400 transition flex items-center justify-center gap-3">
+                <i class="fas fa-user-plus text-xl"></i>
+                <span>Adicionar Cadastro de Outra Pessoa (Cônjuge / Composição de Renda)</span>
+              </button>
+            </div>
+
+            <!-- Formulário Pessoa 2 (inicialmente escondido) -->
+            <div id="person2Section" class="hidden mb-8 bg-blue-50 border border-blue-200 rounded-2xl p-6 md:p-8">
+              <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                  <div class="w-10 h-10 rounded-lg bg-purple-100 flex items-center justify-center text-purple-600">
+                    <i class="fas fa-user-friends"></i>
+                  </div>
+                  Dados da 2ª Pessoa
+                </h2>
+                <button type="button" onclick="togglePerson2()" class="text-gray-500 hover:text-red-500 transition font-bold text-sm flex items-center gap-2">
+                  <i class="fas fa-times"></i> Remover
+                </button>
+              </div>
+
+              <!-- Informações de Contato Pessoa 2 -->
+              <div class="mb-8">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <i class="fas fa-user text-blue-500"></i> Informações de Contato
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                      Nome Completo <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="nome_2" id="nome_2"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                      Telefone <span class="text-red-500">*</span>
+                    </label>
+                    <input type="tel" name="telefone_2" id="telefone_2" placeholder="(11) 99999-9999"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                      E-mail <span class="text-red-500">*</span>
+                    </label>
+                    <input type="email" name="email_2" id="email_2"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                      Grau de Instrução <span class="text-red-500">*</span>
+                    </label>
+                    <select name="grau_instrucao_2" id="grau_instrucao_2"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                      <option value="">Selecione...</option>
+                      <option value="Ensino Fundamental Incompleto">Ensino Fundamental Incompleto</option>
+                      <option value="Ensino Fundamental Completo">Ensino Fundamental Completo</option>
+                      <option value="Ensino Médio Incompleto">Ensino Médio Incompleto</option>
+                      <option value="Ensino Médio Completo">Ensino Médio Completo</option>
+                      <option value="Ensino Superior Incompleto">Ensino Superior Incompleto</option>
+                      <option value="Ensino Superior Completo">Ensino Superior Completo</option>
+                      <option value="Pós-graduação">Pós-graduação</option>
+                      <option value="Mestrado">Mestrado</option>
+                      <option value="Doutorado">Doutorado</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Documentação Pessoa 2 -->
+              <div>
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                  <i class="fas fa-file-pdf text-orange-500"></i> Documentação da 2ª Pessoa
+                </h3>
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">RG e CPF ou CNH (PDF) <span class="text-red-500">*</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_rg_cpf_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">Clique para selecionar o arquivo PDF</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_rg_cpf_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_rg_cpf_2" name="doc_rg_cpf_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Certidão de Casamento ou Nascimento (PDF) <span class="text-red-500">*</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_certidao_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">Clique para selecionar o arquivo PDF</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_certidao_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_certidao_2" name="doc_certidao_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Comprovante de Endereço Atualizado (PDF) <span class="text-red-500">*</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_endereco_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">Água, luz ou telefone (PDF)</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_endereco_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_endereco_2" name="doc_endereco_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Carteira de Trabalho (PDF) <span class="text-red-500">*</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_ctps_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">Digital ou física (com foto, qualificação, contrato, FGTS)</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_ctps_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_ctps_2" name="doc_ctps_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Último Holerite (PDF) <span class="text-red-500">*</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_holerite_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">Comprovante de rendimentos</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_holerite_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_holerite_2" name="doc_holerite_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Declaração de Imposto de Renda Completa (PDF) <span class="text-red-500">*</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_ir_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">PF completa com recibo de entrega</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_ir_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_ir_2" name="doc_ir_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Extratos do FGTS (PDF) <span class="text-gray-500 text-xs">(Opcional)</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_fgts_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">Caso pretenda utilizar o FGTS</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_fgts_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_fgts_2" name="doc_fgts_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <button type="submit" id="submitBtn"
                     class="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white font-bold py-4 px-8 rounded-lg shadow-lg hover:shadow-xl transition-all hover:scale-[1.02] active:scale-[0.98] flex items-center justify-center gap-3">
               <i class="fas fa-paper-plane"></i>
@@ -268,7 +420,54 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Atualiza nome do arquivo quando selecionado
+    // Estado do formulário
+    let person2Active = false;
+
+    // Toggle Pessoa 2
+    function togglePerson2() {
+      person2Active = !person2Active;
+      const section = document.getElementById('person2Section');
+      const addBtn = document.getElementById('addPersonSection');
+      
+      if (person2Active) {
+        section.classList.remove('hidden');
+        addBtn.classList.add('hidden');
+        // Torna campos obrigatórios
+        ['nome_2', 'telefone_2', 'email_2', 'grau_instrucao_2'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.required = true;
+        });
+        ['doc_rg_cpf_2', 'doc_certidao_2', 'doc_endereco_2', 'doc_ctps_2', 'doc_holerite_2', 'doc_ir_2'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.required = true;
+        });
+        // Scroll suave até a seção
+        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      } else {
+        section.classList.add('hidden');
+        addBtn.classList.remove('hidden');
+        // Remove obrigatório e limpa campos
+        ['nome_2', 'telefone_2', 'email_2', 'grau_instrucao_2'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.required = false; el.value = ''; }
+        });
+        ['doc_rg_cpf_2', 'doc_certidao_2', 'doc_endereco_2', 'doc_ctps_2', 'doc_holerite_2', 'doc_ir_2', 'doc_fgts_2'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) { el.required = false; el.value = ''; }
+          // Reset visual
+          const labelEl = document.getElementById('filename_' + id.replace('doc_', ''));
+          if (labelEl) {
+            labelEl.textContent = 'Nenhum arquivo selecionado';
+            labelEl.classList.remove('text-green-600', 'font-bold');
+          }
+          if (el) {
+            el.parentElement.classList.remove('file-uploaded', 'border-green-500');
+          }
+        });
+      }
+    }
+
+    // Todos os file inputs (pessoa 1 + pessoa 2)
     const fileInputs = [
       { input: 'doc_rg_cpf', label: 'filename_rg_cpf' },
       { input: 'doc_certidao', label: 'filename_certidao' },
@@ -279,9 +478,21 @@
       { input: 'doc_fgts', label: 'filename_fgts' }
     ];
 
-    fileInputs.forEach(({ input, label }) => {
+    const fileInputs2 = [
+      { input: 'doc_rg_cpf_2', label: 'filename_rg_cpf_2' },
+      { input: 'doc_certidao_2', label: 'filename_certidao_2' },
+      { input: 'doc_endereco_2', label: 'filename_endereco_2' },
+      { input: 'doc_ctps_2', label: 'filename_ctps_2' },
+      { input: 'doc_holerite_2', label: 'filename_holerite_2' },
+      { input: 'doc_ir_2', label: 'filename_ir_2' },
+      { input: 'doc_fgts_2', label: 'filename_fgts_2' }
+    ];
+
+    // Registra listeners de file change
+    [...fileInputs, ...fileInputs2].forEach(({ input, label }) => {
       const inputEl = document.getElementById(input);
       const labelEl = document.getElementById(label);
+      if (!inputEl || !labelEl) return;
       inputEl.addEventListener('change', (e) => {
         if (e.target.files.length > 0) {
           labelEl.textContent = e.target.files[0].name;
@@ -309,7 +520,7 @@
       try {
         const formData = new FormData(e.target);
         
-        // Extrai dados do formulário
+        // Extrai dados do formulário - Pessoa 1
         const dados = {
           nome: formData.get('nome'),
           telefone: formData.get('telefone'),
@@ -319,8 +530,15 @@
           status: 'Pendente'
         };
 
-        // Upload dos arquivos para o Supabase Storage
-        const uploads = [];
+        // Pessoa 2 (se ativa)
+        if (person2Active) {
+          dados.nome_2 = formData.get('nome_2');
+          dados.telefone_2 = formData.get('telefone_2');
+          dados.email_2 = formData.get('email_2');
+          dados.grau_instrucao_2 = formData.get('grau_instrucao_2');
+        }
+
+        // Upload dos arquivos para o Supabase Storage - Pessoa 1
         const timestamp = Date.now();
         const nomeSlug = dados.nome.toLowerCase().replace(/\s+/g, '-');
 
@@ -334,12 +552,33 @@
 
             if (error) throw error;
             
-            // Pega URL pública
             const { data: urlData } = supabaseClient.storage
               .from('financiamento-docs')
               .getPublicUrl(fileName);
             
             dados[input] = urlData.publicUrl;
+          }
+        }
+
+        // Upload dos arquivos - Pessoa 2 (se ativa)
+        if (person2Active) {
+          const nomeSlug2 = (dados.nome_2 || 'pessoa2').toLowerCase().replace(/\s+/g, '-');
+          for (const { input } of fileInputs2) {
+            const file = formData.get(input);
+            if (file && file.size > 0) {
+              const fileName = `${nomeSlug2}-${timestamp}-${input}.pdf`;
+              const { data, error } = await supabaseClient.storage
+                .from('financiamento-docs')
+                .upload(fileName, file);
+
+              if (error) throw error;
+              
+              const { data: urlData } = supabaseClient.storage
+                .from('financiamento-docs')
+                .getPublicUrl(fileName);
+              
+              dados[input] = urlData.publicUrl;
+            }
           }
         }
 

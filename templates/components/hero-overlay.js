@@ -83,7 +83,7 @@ class HeroComponent extends BaseComponent {
         const gradientBg = `linear-gradient(135deg, ${primaryHex}15 0%, ${accentHex}10 50%, ${primaryHex}15 100%)`;
 
         return `
-            <header class="relative flex items-end overflow-hidden isolate pt-32 md:pt-20" style="min-height: 100svh; min-height: -webkit-fill-available; background: ${gradientBg};">
+            <header class="relative flex items-end overflow-hidden isolate" style="min-height: 100svh; min-height: -webkit-fill-available; padding-top: 150px; background: ${gradientBg};">
 
                 <div class="absolute inset-0 z-0 flex items-center justify-center" style="background: ${gradientBg};">
                     <picture class="block w-full h-full">
@@ -101,7 +101,7 @@ class HeroComponent extends BaseComponent {
                 <div class="w-full relative z-10 pb-8 md:pb-12">
                     <div class="container mx-auto px-4 md:px-6 pt-8 md:pt-12 lg:pt-16">
                         <!-- Texto na esquerda -->
-                        <div class="max-w-2xl mb-12 md:mb-8 lg:mb-12 -mt-8 md:-mt-4 lg:-mt-8">
+                        <div class="max-w-2xl mb-12 md:mb-8 lg:mb-12">
                             <h1 class="text-5xl md:text-6xl lg:text-7xl font-extrabold text-white leading-tight mb-4">
                                 ${this.title.includes('23') || this.title.includes('Há') || this.title.includes('há') ? `
                                     <span class="block">
@@ -257,6 +257,14 @@ class HeroComponent extends BaseComponent {
                     bairro: document.getElementById('hero-search-bairro')?.value || 'all'
                 };
                 window.dispatchEvent(new CustomEvent('imoveis:hero-search', { detail: payload }));
+                
+                // Scroll suave até a seção de imóveis
+                setTimeout(() => {
+                    const imoveisSection = document.getElementById('imoveis');
+                    if (imoveisSection) {
+                        imoveisSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             });
         }
     }
