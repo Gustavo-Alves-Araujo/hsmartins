@@ -102,7 +102,12 @@
                     document.getElementById('noticia-imagem').innerHTML = `<img src="${data.imagem_principal}" alt="${data.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover" decoding="async" onerror="this.src='img/placeholder.jpg'">`;
                 }
 
-                document.getElementById('noticia-conteudo').innerHTML = data.conteudo;
+                // Preserva quebras de linha de texto puro; se já tiver HTML usa direto
+                const rawContent = data.conteudo || '';
+                const isHtml = /<[a-z][\s\S]*>/i.test(rawContent);
+                document.getElementById('noticia-conteudo').innerHTML = isHtml
+                    ? rawContent
+                    : rawContent.replace(/\n/g, '<br>');
 
                 // Carrega outras notícias
                 loadOutrasNoticias(data.id);
