@@ -188,7 +188,11 @@ class ProductGridAdvancedComponent extends BaseComponent {
 
         const priceHtml = product.price ? `<div>${product.price.current ? `<span class="text-gray-900 font-bold">${product.price.current}</span>` : ''}${product.price.original ? `<span class="text-gray-400 text-sm line-through ml-2">${product.price.original}</span>` : ''}</div>` : '';
         const ratingHtml = product.rating ? `<div class="flex text-yellow-400 text-xs"><i class="fas fa-star"></i><span class="text-gray-400 ml-1">${product.rating}</span></div>` : '';
-        const detailsLink = product.id ? `imovel.html?id=${product.id}` : '#';
+        // Gera link limpo /imovel/{ref}/{slug}
+        const _slugify = (t) => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        const _ref = product.ref || '';
+        const _slug = `${_slugify(product.tipoimovel)}-venda-${_slugify(product.endereco_cidade)}-${_slugify('SP')}-${_slugify(product.endereco_bairro)}`;
+        const detailsLink = _ref ? `/imovel/${_ref}/${_slug}` : (product.id ? `/imovel.html?id=${product.id}` : '#');
 
         return `<a href="${detailsLink}" class="group relative bg-white block rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
             <div class="relative aspect-[3/4] overflow-hidden bg-gray-100">

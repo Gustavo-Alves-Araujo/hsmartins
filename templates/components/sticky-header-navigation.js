@@ -17,9 +17,11 @@ class StickyHeaderNavigationComponent extends BaseComponent {
             siteName: 'H.S. Martins',
             established: 'Creci. 21.189',
             links: {
-                venda: { text: 'Venda', href: '#imoveis' },
-                sobre: { text: 'Sobre Nós', href: '#sobre' },
-                contato: { text: 'Contato', href: '#contato' },
+                venda: { text: 'Imóveis à Venda', href: '/imovel/venda' },
+                sobre: { text: 'Sobre Nós', href: '/sobre' },
+                correspondente: { text: 'Correspondente Caixa', href: '/correspondente' },
+                noticias: { text: 'Notícias', href: '/noticias' },
+                contato: { text: 'Contato', href: '/contato' },
                 cta: { text: 'Fale Conosco', href: 'https://wa.me/551146382942', target: '_blank' }
             }
         };

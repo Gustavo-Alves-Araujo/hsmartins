@@ -67,7 +67,7 @@
                 list.innerHTML = data.map(item => {
                     const img = item.imagem_principal || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80';
                     const slug = item.slug || item.titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-');
-                    const url = `noticia.html?slug=${slug}`;
+                    const url = `/noticia.html?slug=${slug}`;
                     const date = new Date(item.data_publicacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
 
                     return `

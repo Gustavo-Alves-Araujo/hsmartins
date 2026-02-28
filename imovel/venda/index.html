@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO Meta Tags -->
+  <title>Imóveis à Venda em Poá e Região | H.S Martins Imobiliária</title>
+  <meta name="description" content="Encontre imóveis à venda em Poá, Suzano, Ferraz de Vasconcelos e região do Alto Tietê. Casas, apartamentos, sobrados e terrenos com financiamento facilitado. H.S Martins Imobiliária.">
+  <meta name="keywords" content="imóveis à venda Poá, casas à venda, apartamentos Suzano, terrenos Alto Tietê, comprar casa Poá, imobiliária Poá, financiamento imobiliário">
+  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+  <meta name="author" content="H.S Martins Empreendimentos Imobiliários">
+  <meta name="theme-color" content="#005CA9">
+
+  <!-- Canonical -->
+  <link rel="canonical" href="https://hsmartins.com.br/imovel/venda">
+
+  <!-- OpenGraph -->
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Imóveis à Venda em Poá e Região | H.S Martins">
+  <meta property="og:description" content="Encontre imóveis à venda em Poá, Suzano, Ferraz de Vasconcelos e região do Alto Tietê. Casas, apartamentos, sobrados e terrenos.">
+  <meta property="og:url" content="https://hsmartins.com.br/imovel/venda">
+  <meta property="og:site_name" content="H.S Martins">
+  <meta property="og:image" content="https://hsmartins.com.br/img/logo.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Imóveis à Venda | H.S Martins">
+  <meta name="twitter:description" content="Encontre imóveis à venda em Poá e região do Alto Tietê.">
+  <meta name="twitter:image" content="https://hsmartins.com.br/img/logo.png">
+
+  <!-- Schema.org - ItemList -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "Imóveis à Venda",
+    "description": "Lista de imóveis à venda em Poá e região do Alto Tietê",
+    "url": "https://hsmartins.com.br/imovel/venda",
+    "isPartOf": {
+      "@type": "WebSite",
+      "name": "H.S Martins",
+      "url": "https://hsmartins.com.br"
+    },
+    "breadcrumb": {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://hsmartins.com.br/" },
+        { "@type": "ListItem", "position": 2, "name": "Imóveis", "item": "https://hsmartins.com.br/imovel/venda" }
+      ]
+    }
+  }
+  </script>
+
+  <!-- Preload & Preconnect -->
+  <link rel="preload" as="image" href="../../img/logo.png" type="image/png" fetchpriority="high">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.tailwindcss.com">
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  <link rel="preconnect" href="https://vkwczizdjhsejbpaapea.supabase.co">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="../../img/logo.png" sizes="32x32">
+  <link rel="apple-touch-icon" href="../../img/logo.png">
+
+  <!-- Sitemap -->
+  <link rel="sitemap" type="application/xml" href="/sitemap.xml">
+
+  <!-- Scripts -->
+  <script src="../../config.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script src="../../templates/components/base-component.js"></script>
+  <script src="../../templates/components/component-registry.js"></script>
+
+  <style>
+    #navMenu.mobile-active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+  </style>
+</head>
+
+<body class="antialiased bg-gray-50">
+  <!-- Header -->
+  <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] py-2 bg-white" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+    <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12 py-2">
+      <a href="/" class="flex items-center gap-3 group transition-transform hover:scale-105">
+        <img src="../../img/logo.png" alt="Logo H.S Martins - Imobiliária em Poá" class="h-12 w-auto md:h-14 object-contain flex-shrink-0">
+        <span class="hidden md:block font-black tracking-tight" style="color: #1B2160; font-style: italic;">H.S Martins</span>
+      </a>
+      <ul class="hidden lg:flex items-center gap-2">
+        <li><a href="/imovel/venda" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all" style="color: #005CA9; border-bottom: 2px solid #005CA9;">Imóveis à Venda</a></li>
+        <li><a href="/sobre" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Sobre</a></li>
+        <li><a href="/correspondente" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Correspondente Caixa</a></li>
+        <li><a href="/noticias" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Notícias</a></li>
+        <li><a href="/contato" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Contato</a></li>
+      </ul>
+      <a href="https://wa.me/551146382942" target="_blank"
+         class="hidden lg:flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg transition-all hover:scale-105"
+         style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);">
+        <i class="fab fa-whatsapp"></i> Fale Conosco
+      </a>
+      <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600">
+        <i class="fas fa-bars"></i>
+      </button>
+    </nav>
+    <div id="navMenu" class="absolute top-full left-0 w-full px-6 py-4 opacity-0 -translate-y-4 pointer-events-none transition-all duration-300 lg:hidden">
+      <ul class="bg-white/95 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+        <li><a href="/imovel/venda" class="block text-base font-bold text-blue-600">Imóveis à Venda</a></li>
+        <li><a href="/sobre" class="block text-base font-bold text-slate-700 hover:text-blue-600 transition-colors">Sobre</a></li>
+        <li><a href="/correspondente" class="block text-base font-bold text-slate-700 hover:text-blue-600 transition-colors">Correspondente Caixa</a></li>
+        <li><a href="/noticias" class="block text-base font-bold text-slate-700 hover:text-blue-600 transition-colors">Notícias</a></li>
+        <li><a href="/contato" class="block text-base font-bold text-slate-700 hover:text-blue-600 transition-colors">Contato</a></li>
+        <li class="pt-2 border-t border-slate-100">
+          <a href="https://wa.me/551146382942" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 rounded-full text-white text-sm font-bold shadow-lg" style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);"><i class="fab fa-whatsapp"></i> Fale Conosco</a>
+        </li>
+      </ul>
+    </div>
+  </header>
+
+  <main class="pt-20 md:pt-24">
+    <!-- Breadcrumb -->
+    <nav class="max-w-7xl mx-auto px-4 pt-4 pb-2" aria-label="Breadcrumb">
+      <ol class="flex items-center text-sm text-slate-500 gap-2">
+        <li><a href="/" class="hover:text-blue-600 transition">Home</a></li>
+        <li><i class="fas fa-chevron-right text-xs"></i></li>
+        <li class="font-semibold text-slate-800">Imóveis à Venda</li>
+      </ol>
+    </nav>
+
+    <!-- Hero -->
+    <section class="bg-gradient-to-br from-blue-600 to-blue-800 text-white py-12 mb-8">
+      <div class="max-w-7xl mx-auto px-4 text-center">
+        <h1 class="text-3xl md:text-5xl font-black mb-3">Imóveis à Venda</h1>
+        <p class="text-lg text-blue-100 max-w-2xl mx-auto">Encontre o imóvel dos seus sonhos em Poá, Suzano, Ferraz de Vasconcelos e toda região do Alto Tietê. Financiamento facilitado via Caixa Econômica Federal.</p>
+      </div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="max-w-7xl mx-auto px-4 mb-8">
+      <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-4 md:p-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Buscar</label>
+            <input type="text" id="filter-search" placeholder="Ex: Sobrado, 3 quartos..."
+                   class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Tipo</label>
+            <select id="filter-type" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+              <option value="all">Todos os tipos</option>
+              <option value="Casa">Casa</option>
+              <option value="Sobrado">Sobrado</option>
+              <option value="Apartamento">Apartamento</option>
+              <option value="Terreno">Terreno</option>
+              <option value="Comercial">Comercial</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Cidade</label>
+            <select id="filter-city" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+              <option value="all">Todas as cidades</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold text-gray-600 mb-1">Ordenar</label>
+            <select id="filter-sort" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+              <option value="relevance">Relevância</option>
+              <option value="price-asc">Menor preço</option>
+              <option value="price-desc">Maior preço</option>
+              <option value="newest">Mais recentes</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contador de resultados -->
+    <section class="max-w-7xl mx-auto px-4 mb-4">
+      <p id="results-count" class="text-sm text-gray-600 font-medium"></p>
+    </section>
+
+    <!-- Grid de Imóveis -->
+    <section class="max-w-7xl mx-auto px-4 pb-16">
+      <div id="imoveis-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+      <div id="imoveis-loading" class="text-center py-16">
+        <i class="fas fa-spinner fa-spin text-4xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500">Carregando imóveis...</p>
+      </div>
+      <div id="imoveis-empty" class="text-center py-16 hidden">
+        <i class="fas fa-home text-5xl text-gray-300 mb-4"></i>
+        <p class="text-gray-500 text-lg font-semibold">Nenhum imóvel encontrado</p>
+        <p class="text-gray-400 text-sm mt-2">Tente alterar os filtros de busca</p>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="max-w-7xl mx-auto px-4 pb-16">
+      <div class="rounded-2xl p-8 md:p-12 text-center text-white" style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);">
+        <h2 class="text-2xl md:text-3xl font-extrabold mb-3">Não encontrou o imóvel ideal?</h2>
+        <p class="text-lg opacity-90 mb-6 max-w-xl mx-auto">Fale com um dos nossos corretores especializados. Temos opções exclusivas que podem não estar no site.</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="https://wa.me/551146382942?text=Olá! Estou procurando um imóvel e gostaria de ajuda." target="_blank"
+             class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-extrabold text-lg shadow-lg hover:opacity-95 transition" style="background-color: #F39200; color: white;">
+            <i class="fab fa-whatsapp"></i> Falar com Corretor
+          </a>
+          <a href="/correspondente"
+             class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-extrabold text-lg shadow-lg hover:opacity-95 transition bg-white/20 backdrop-blur border border-white/30 text-white">
+            <i class="fas fa-university"></i> Simular Financiamento
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Links internos SEO -->
+    <section class="max-w-7xl mx-auto px-4 pb-16">
+      <div class="bg-white rounded-2xl border border-gray-100 p-8">
+        <h2 class="text-xl font-bold text-slate-900 mb-4">Navegue pelo nosso site</h2>
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+          <a href="/" class="text-blue-600 hover:underline"><i class="fas fa-home mr-1"></i> Página Inicial</a>
+          <a href="/sobre" class="text-blue-600 hover:underline"><i class="fas fa-info-circle mr-1"></i> Sobre Nós</a>
+          <a href="/correspondente" class="text-blue-600 hover:underline"><i class="fas fa-university mr-1"></i> Correspondente Caixa</a>
+          <a href="/noticias" class="text-blue-600 hover:underline"><i class="fas fa-newspaper mr-1"></i> Notícias</a>
+          <a href="/contato" class="text-blue-600 hover:underline"><i class="fas fa-envelope mr-1"></i> Contato</a>
+          <a href="/pagina/depoimentos" class="text-blue-600 hover:underline"><i class="fas fa-star mr-1"></i> Depoimentos</a>
+          <a href="/pagina/aprovacao-de-renda" class="text-blue-600 hover:underline"><i class="fas fa-check-circle mr-1"></i> Aprovação de Renda</a>
+          <a href="/pagina/pre-cadastro-minha-casa-minha-vida" class="text-blue-600 hover:underline"><i class="fas fa-house-user mr-1"></i> Minha Casa Minha Vida</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="border-t border-slate-100 bg-white">
+    <div class="max-w-7xl mx-auto px-6 py-8">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div>
+          <h3 class="font-bold text-slate-900 mb-3">H.S Martins</h3>
+          <p class="text-sm text-slate-600">Imobiliária em Poá e região. Venda, compra, aluguel e financiamento de imóveis desde 2003.</p>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-900 mb-3">Links</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a href="/" class="text-slate-600 hover:text-blue-600 transition">Home</a></li>
+            <li><a href="/imovel/venda" class="text-slate-600 hover:text-blue-600 transition">Imóveis à Venda</a></li>
+            <li><a href="/sobre" class="text-slate-600 hover:text-blue-600 transition">Sobre</a></li>
+            <li><a href="/correspondente" class="text-slate-600 hover:text-blue-600 transition">Correspondente Caixa</a></li>
+            <li><a href="/contato" class="text-slate-600 hover:text-blue-600 transition">Contato</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold text-slate-900 mb-3">Contato</h3>
+          <ul class="space-y-2 text-sm text-slate-600">
+            <li><i class="fas fa-phone mr-2"></i>(11) 4638-2942</li>
+            <li><i class="fas fa-envelope mr-2"></i>contato@hsmartins.com.br</li>
+            <li><i class="fas fa-map-marker-alt mr-2"></i>Av. Leonor Bolsoni Marques da Silva, 230, Poá - SP</li>
+          </ul>
+        </div>
+      </div>
+      <div class="text-center text-sm text-slate-500 border-t border-slate-100 pt-6">
+        <p>&copy; 2026 H.S Martins Empreendimentos Imobiliários Ltda. Todos os direitos reservados.</p>
+        <p class="mt-1 text-xs">Creci. 21.189 | Correspondente Caixa Aqui</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
+
+    let allProducts = [];
+    let filteredProducts = [];
+
+    async function init() {
+      try {
+        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const { data, error } = await client.from('Hsmartins_Produtos').select('*');
+
+        if (error) throw error;
+
+        const loading = document.getElementById('imoveis-loading');
+        const empty = document.getElementById('imoveis-empty');
+        const grid = document.getElementById('imoveis-grid');
+
+        loading.style.display = 'none';
+
+        if (!data || data.length === 0) {
+          empty.classList.remove('hidden');
+          return;
+        }
+
+        // Filter active and venda
+        allProducts = data.filter(item => item.imovel_status !== 'Inativo' && item.imovel_status !== 'inativo');
+
+        // Populate city filter
+        const cities = [...new Set(allProducts.map(p => p.endereco_cidade).filter(Boolean))].sort();
+        const citySelect = document.getElementById('filter-city');
+        cities.forEach(city => {
+          const opt = document.createElement('option');
+          opt.value = city;
+          opt.textContent = city;
+          citySelect.appendChild(opt);
+        });
+
+        applyFilters();
+        attachFilterListeners();
+
+      } catch (error) {
+        console.error('Erro:', error);
+        document.getElementById('imoveis-loading').innerHTML = '<p class="text-red-500">Erro ao carregar imóveis.</p>';
+      }
+    }
+
+    function applyFilters() {
+      const search = document.getElementById('filter-search').value.toLowerCase().trim();
+      const type = document.getElementById('filter-type').value;
+      const city = document.getElementById('filter-city').value;
+      const sort = document.getElementById('filter-sort').value;
+
+      filteredProducts = allProducts.filter(p => {
+        if (search && !(`${p.title || ''} ${p.endereco_cidade || ''} ${p.endereco_bairro || ''} ${p.tipoimovel || ''} ${p.ref || ''}`).toLowerCase().includes(search)) return false;
+        if (type !== 'all' && p.tipoimovel !== type) return false;
+        if (city !== 'all' && p.endereco_cidade !== city) return false;
+        return true;
+      });
+
+      // Sort
+      if (sort === 'price-asc') filteredProducts.sort((a, b) => parsePrice(a.price) - parsePrice(b.price));
+      else if (sort === 'price-desc') filteredProducts.sort((a, b) => parsePrice(b.price) - parsePrice(a.price));
+      else if (sort === 'newest') filteredProducts.sort((a, b) => new Date(b.created_at || 0) - new Date(a.created_at || 0));
+
+      renderGrid();
+    }
+
+    function parsePrice(priceStr) {
+      if (!priceStr) return 0;
+      return parseFloat(String(priceStr).replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('imoveis-grid');
+      const empty = document.getElementById('imoveis-empty');
+      const count = document.getElementById('results-count');
+
+      count.textContent = `${filteredProducts.length} imóvel(is) encontrado(s)`;
+
+      if (filteredProducts.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+
+      grid.innerHTML = filteredProducts.map(item => {
+        // Parse images_urls (pode ser string JSON ou array)
+        let parsedImages = [];
+        try {
+          parsedImages = item.images_urls
+            ? (Array.isArray(item.images_urls) ? item.images_urls : JSON.parse(item.images_urls))
+            : [];
+        } catch(e) { parsedImages = []; }
+        const img = (parsedImages.length > 0 && parsedImages[0] && parsedImages[0].startsWith('http'))
+          ? parsedImages[0]
+          : (item.image_url || item.image || item.imagem_principal || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80');
+        const title = item.title || 'Imóvel';
+        const price = item.price || 'Consulte';
+        const city = item.endereco_cidade || '';
+        const bairro = item.endereco_bairro || '';
+        const tipo = item.tipoimovel || '';
+        const quartos = item.quartos || '';
+        const area = item.area_util || item.area_total || '';
+        const ref = item.ref || '';
+        // Gera URL limpa /imovel/{ref}/{slug}
+        const _slugify = (t) => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+        const _tipo = _slugify(item.tipoimovel);
+        const _cidade = _slugify(item.endereco_cidade);
+        const _estado = _slugify(item.endereco_estado) || 'sp';
+        const _bairro = _slugify(item.endereco_bairro);
+        const urlSlug = `${_tipo}-venda-${_cidade}-${_estado}-${_bairro}`;
+        const url = ref ? `/imovel/${ref}/${urlSlug}` : `/imovel.html?id=${item.id}`;
+
+        return `
+          <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+            <a href="${url}" class="block" title="${title}">
+              <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                <img src="${img}" alt="${title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" loading="lazy" decoding="async" onerror="this.src='https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80'">
+                ${tipo ? `<span class="absolute top-3 left-3 bg-white/90 backdrop-blur-sm text-gray-800 text-[11px] font-bold px-3 py-1 rounded-full">${tipo}</span>` : ''}
+                ${item.imovel_status === 'destaque' ? '<span class="absolute top-3 right-3 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full uppercase">Destaque</span>' : ''}
+              </div>
+              <div class="p-4">
+                <h3 class="font-bold text-sm text-slate-900 leading-tight mb-2 line-clamp-2 group-hover:text-blue-700 transition">${title}</h3>
+                ${city || bairro ? `<p class="text-xs text-gray-500 mb-2"><i class="fas fa-map-marker-alt mr-1"></i>${bairro ? bairro + ', ' : ''}${city}</p>` : ''}
+                <div class="flex items-center gap-3 text-xs text-gray-400 mb-3">
+                  ${quartos ? `<span><i class="fas fa-bed mr-1"></i>${quartos} quartos</span>` : ''}
+                  ${area ? `<span><i class="fas fa-ruler-combined mr-1"></i>${area} m²</span>` : ''}
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="font-black text-lg" style="color: #005CA9;">${price}</span>
+                  ${ref ? `<span class="text-[10px] text-gray-400">Ref: ${ref}</span>` : ''}
+                </div>
+              </div>
+            </a>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function attachFilterListeners() {
+      let debounce;
+      document.getElementById('filter-search').addEventListener('input', () => {
+        clearTimeout(debounce);
+        debounce = setTimeout(applyFilters, 300);
+      });
+      document.getElementById('filter-type').addEventListener('change', applyFilters);
+      document.getElementById('filter-city').addEventListener('change', applyFilters);
+      document.getElementById('filter-sort').addEventListener('change', applyFilters);
+    }
+
+    // Mobile menu
+    document.addEventListener('DOMContentLoaded', () => {
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const navMenu = document.getElementById('navMenu');
+      if (mobileBtn && navMenu) {
+        mobileBtn.addEventListener('click', () => {
+          navMenu.classList.toggle('mobile-active');
+          const icon = mobileBtn.querySelector('i');
+          icon.classList.toggle('fa-bars');
+          icon.classList.toggle('fa-times');
+        });
+        navMenu.querySelectorAll('a').forEach(link => {
+          link.addEventListener('click', () => navMenu.classList.remove('mobile-active'));
+        });
+      }
+    });
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+  </script>
+</body>
+</html>

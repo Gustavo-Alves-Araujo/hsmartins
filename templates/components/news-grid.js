@@ -102,7 +102,7 @@ class NewsGridComponent extends BaseComponent {
     renderNewsCard(newsItem) {
         const c = this.colors;
         const imageUrl = newsItem.imagem_principal || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80';
-        const newsUrl = `noticia.html?slug=${newsItem.slug}`;
+        const newsUrl = `/noticia.html?slug=${newsItem.slug}`;
         const date = this.formatDate(newsItem.data_publicacao);
 
         return `

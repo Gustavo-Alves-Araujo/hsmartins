@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias do Mercado Imobiliário | H.S Martins - Poá e Região</title>
+    <meta name="description" content="Fique por dentro das últimas notícias do mercado imobiliário em Poá e região do Alto Tietê. Dicas, tendências e novidades sobre compra, venda e financiamento de imóveis.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://hsmartins.com.br/noticias">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:title" content="Notícias | H.S Martins Imobiliária">
+    <meta property="og:description" content="Últimas notícias do mercado imobiliário em Poá e região.">
+    <meta property="og:url" content="https://hsmartins.com.br/noticias">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="H.S Martins">
+    
+    <script src="../config.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="icon" type="image/png" href="../img/logo.png">
+    <style>#navMenu.mobile-active{opacity:1;transform:translateY(0);pointer-events:auto;}</style>
+</head>
+<body class="antialiased bg-gray-50">
+    <!-- Header -->
+    <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] py-2 bg-white" style="box-shadow:0 2px 4px rgba(0,0,0,0.1);">
+      <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12 py-2">
+        <a href="/" class="flex items-center gap-3 group transition-transform hover:scale-105">
+          <img src="../img/logo.png" alt="Logo H.S Martins" class="h-12 w-auto md:h-14 object-contain flex-shrink-0">
+          <span class="hidden md:block font-black tracking-tight" style="color:#1B2160;font-style:italic;">H.S Martins</span>
+        </a>
+        <ul class="hidden lg:flex items-center gap-2">
+          <li><a href="/imovel/venda" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900">Imóveis à Venda</a></li>
+          <li><a href="/sobre" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900">Sobre</a></li>
+          <li><a href="/correspondente" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900">Correspondente Caixa</a></li>
+          <li><a href="/noticias" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900" style="color:#005CA9;border-bottom:2px solid #005CA9;">Notícias</a></li>
+          <li><a href="/contato" class="px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900">Contato</a></li>
+        </ul>
+        <a href="https://wa.me/551146382942" target="_blank" class="hidden lg:flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg hover:scale-105 transition-all" style="background:linear-gradient(135deg,#005CA9,#003d7a);"><i class="fab fa-whatsapp"></i> Fale Conosco</a>
+        <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600"><i class="fas fa-bars"></i></button>
+      </nav>
+      <div id="navMenu" class="absolute top-full left-0 w-full px-6 py-4 opacity-0 -translate-y-4 pointer-events-none transition-all duration-300 lg:hidden">
+        <ul class="bg-white/95 backdrop-blur-xl border border-slate-100 rounded-2xl p-6 shadow-2xl flex flex-col gap-4">
+          <li><a href="/imovel/venda" class="block text-base font-bold text-slate-700">Imóveis à Venda</a></li>
+          <li><a href="/sobre" class="block text-base font-bold text-slate-700">Sobre</a></li>
+          <li><a href="/correspondente" class="block text-base font-bold text-slate-700">Correspondente Caixa</a></li>
+          <li><a href="/noticias" class="block text-base font-bold text-blue-600">Notícias</a></li>
+          <li><a href="/contato" class="block text-base font-bold text-slate-700">Contato</a></li>
+          <li class="pt-2 border-t border-slate-100"><a href="https://wa.me/551146382942" target="_blank" class="flex items-center justify-center gap-2 w-full py-3 rounded-full text-white text-sm font-bold shadow-lg" style="background:linear-gradient(135deg,#005CA9,#003d7a);"><i class="fab fa-whatsapp"></i> Fale Conosco</a></li>
+        </ul>
+      </div>
+    </header>
+
+    <main class="pt-20 md:pt-24">
+        <!-- Breadcrumb -->
+        <nav class="max-w-7xl mx-auto px-4 pt-4 pb-2" aria-label="Breadcrumb">
+          <ol class="flex items-center text-sm text-slate-500 gap-2">
+            <li><a href="/" class="hover:text-blue-600">Home</a></li>
+            <li><i class="fas fa-chevron-right text-xs"></i></li>
+            <li class="font-semibold text-slate-800">Notícias</li>
+          </ol>
+        </nav>
+
+        <!-- Hero -->
+        <section class="relative overflow-hidden py-12 md:py-16" style="background: linear-gradient(135deg, #005CA9 0%, #003d7a 100%);">
+            <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at bottom right, rgba(243,146,0,0.2), transparent 70%);"></div>
+            <div class="relative max-w-7xl mx-auto px-4 text-center text-white">
+                <h1 class="text-3xl md:text-4xl font-extrabold mb-2">Notícias</h1>
+                <p class="text-lg text-blue-100">Fique por dentro das novidades do mercado imobiliário</p>
+            </div>
+        </section>
+
+        <!-- Notícias do Supabase -->
+        <section class="max-w-7xl mx-auto px-4 py-12">
+            <div id="noticias-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12"></div>
+            <div id="noticias-loading" class="text-center py-8">
+                <i class="fas fa-spinner fa-spin text-3xl text-gray-400 mb-4"></i>
+                <p class="text-gray-600">Carregando notícias...</p>
+            </div>
+        </section>
+
+        <!-- Artigos Estáticos -->
+        <section class="max-w-7xl mx-auto px-4 pb-16">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                <!-- 1 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/novas-condicoes-de-financiamento-24331" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202307051035537667.jpg" alt="Novas condições de financiamento" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Minha Casa Minha Vida</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Minha Casa Minha Vida</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">NOVAS CONDIÇÕES DE FINANCIAMENTO</h3>
+                            <div class="text-xs text-gray-500">05 jul. 2023</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 2 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/sou-casado-posso-financiar-um-imovel-sozinho-23197" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202205271317589922.jpg" alt="Sou casado posso financiar um imóvel sozinho" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Financiamento</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Financiamento</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Sou casado. Posso financiar um imóvel sozinho?</h3>
+                            <div class="text-xs text-gray-500">27 mai. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 3 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/nao-consigo-pagar-o-financiamento-da-minha-casa-o-que-faco-23097" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204221554336532.jpg" alt="Não consigo pagar o financiamento" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Financiamento</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Financiamento</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Não consigo pagar o financiamento da minha casa: o que faço?</h3>
+                            <div class="text-xs text-gray-500">22 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 4 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/casa-propria-fgts-podera-ser-usado-para-quitar-ate-12-parcelas-de-financiamento-atrasado-23096" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204221518345287.jpg" alt="FGTS parcelas financiamento atrasado" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">FGTS</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">FGTS</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Casa própria: FGTS poderá quitar até 12 parcelas atrasadas</h3>
+                            <div class="text-xs text-gray-500">20 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 5 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/tenho-um-imovel-quitado-posso-financiar-outro-23066" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204121118244504.jpg" alt="Imóvel quitado financiar outro" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Financiamento</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Financiamento</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Tenho um imóvel quitado, posso financiar outro?</h3>
+                            <div class="text-xs text-gray-500">12 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 6 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/dicas-para-comprar-um-imovel-antes-dos-30-23060" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204071524453257.jpg" alt="Dicas comprar imóvel antes dos 30" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Dicas</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Dicas</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Dicas para comprar um imóvel antes dos 30</h3>
+                            <div class="text-xs text-gray-500">07 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 7 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/4-dicas-para-recemcasados-conquistarem-o-1o-imovel-23059" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/20220407151011900.jpg" alt="Dicas recém-casados primeiro imóvel" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Dicas</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Dicas</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">4 Dicas Para Recém-Casados Conquistarem o 1º Imóvel</h3>
+                            <div class="text-xs text-gray-500">07 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 8 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/novo-conceito-de-moradia-e-aposta-para-reaquecer-o-mercado-imobiliario-23058" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204071505454010.jpg" alt="Novo conceito de moradia studio" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Mercado Imobiliário</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Mercado Imobiliário</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Novo Conceito de Moradia é aposta para Reaquecer o Mercado</h3>
+                            <div class="text-xs text-gray-500">07 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 9 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/10-fatores-que-valorizam-o-imovel-23057" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204071457359901.jpg" alt="10 fatores que valorizam o imóvel" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Investimento</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Investimento</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">10 fatores que valorizam o imóvel</h3>
+                            <div class="text-xs text-gray-500">07 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 10 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/3-dicas-para-valorizar-seu-imovel-e-ter-sucesso-na-hora-da-venda-23056" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/20220407144411719.jpg" alt="Dicas valorizar imóvel venda" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Dicas</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Dicas</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">3 dicas para valorizar seu imóvel na hora da venda</h3>
+                            <div class="text-xs text-gray-500">07 abr. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 11 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/credito-imobiliario-o-que-e-e-como-funciona-23055" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204071436218618.jpg" alt="Crédito imobiliário como funciona" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Financiamento</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Financiamento</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Crédito imobiliário: o que é e como funciona?</h3>
+                            <div class="text-xs text-gray-500">03 fev. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 12 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/como-organizar-seu-orcamento-para-comprar-o-imovel-dos-seus-sonhos-23054" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/20220407135202519.jpg" alt="Organizar orçamento comprar imóvel" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Planejamento</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Planejamento</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Como organizar seu orçamento para comprar o imóvel dos sonhos</h3>
+                            <div class="text-xs text-gray-500">02 fev. 2022</div>
+                        </div>
+                    </a>
+                </article>
+                <!-- 13 -->
+                <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                    <a href="/noticias/casa-ou-apartamento-saiba-qual-e-o-melhor-lugar-para-comecar-uma-familia-23053" class="block">
+                        <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                            <img src="https://www.hsmartins.com.br/imagens/noticias/202204221507525342.jpg" alt="Casa ou apartamento para família" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy">
+                            <span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">Dicas</span>
+                        </div>
+                        <div class="p-3">
+                            <p class="text-gray-500 text-[10px] mb-1">Dicas</p>
+                            <h3 class="font-semibold text-sm leading-tight mb-2 line-clamp-2" style="color:#005CA9;">Casa ou Apartamento? O melhor lugar para começar uma família</h3>
+                            <div class="text-xs text-gray-500">01 jan. 2022</div>
+                        </div>
+                    </a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100">
+      <div class="max-w-7xl mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+          <div><img src="../img/logo.png" alt="H.S Martins" class="h-10 mb-3"><p class="text-sm text-slate-600">Imobiliária em Poá e região. Venda, compra e financiamento de imóveis desde 2003.</p></div>
+          <div><h3 class="font-bold text-slate-900 mb-3">Links</h3><ul class="space-y-2 text-sm"><li><a href="/" class="text-slate-600 hover:text-blue-600">Home</a></li><li><a href="/imovel/venda" class="text-slate-600 hover:text-blue-600">Imóveis à Venda</a></li><li><a href="/sobre" class="text-slate-600 hover:text-blue-600">Sobre</a></li><li><a href="/noticias" class="text-slate-600 hover:text-blue-600">Notícias</a></li><li><a href="/contato" class="text-slate-600 hover:text-blue-600">Contato</a></li></ul></div>
+          <div><h3 class="font-bold text-slate-900 mb-3">Contato</h3><ul class="space-y-2 text-sm text-slate-600"><li><i class="fas fa-phone mr-2"></i>(11) 4638-2942</li><li><i class="fas fa-envelope mr-2"></i>contato@hsmartins.com.br</li><li><i class="fas fa-map-marker-alt mr-2"></i>Av. Leonor Bolsoni Marques da Silva, 230, Poá - SP</li></ul></div>
+        </div>
+        <div class="text-center text-sm text-slate-500 border-t border-slate-100 pt-6"><p>&copy; 2026 H.S Martins Empreendimentos Imobiliários Ltda. Todos os direitos reservados.</p><p class="mt-1 text-xs">Creci. 21.189 | Correspondente Caixa Aqui</p></div>
+      </div>
+    </footer>
+
+    <script>
+        const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
+
+        async function init() {
+            try {
+                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                const { data, error } = await client
+                    .from('Hsmartins_Noticias')
+                    .select('*')
+                    .eq('status', 'publicado')
+                    .order('data_publicacao', { ascending: false });
+
+                if (error) throw error;
+
+                const loading = document.getElementById('noticias-loading');
+                const list = document.getElementById('noticias-list');
+
+                loading.style.display = 'none';
+
+                if (!data || data.length === 0) return;
+
+                list.innerHTML = data.map(item => {
+                    const img = item.imagem_principal || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=400&q=80';
+                    const slug = item.slug || item.titulo.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-');
+                    const url = `/noticia.html?slug=${slug}`;
+                    const date = new Date(item.data_publicacao).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+
+                    return `
+                        <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
+                            <a href="${url}" class="block">
+                                <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                                    <img src="${img}" alt="${item.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.src='../img/placeholder.jpg'">
+                                    ${item.destacado ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Destaque</span>' : ''}
+                                    ${item.categoria ? `<span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">${item.categoria.replace(/"/g, '&quot;')}</span>` : ''}
+                                </div>
+                                <div class="p-3">
+                                    ${item.categoria ? `<p class="text-gray-500 text-[10px] mb-1">${item.categoria.replace(/"/g, '&quot;')}</p>` : ''}
+                                    <h3 class="font-semibold text-sm leading-tight mb-2 transition group-hover:opacity-90 line-clamp-2" style="color: #005CA9;">${item.titulo.replace(/"/g, '&quot;')}</h3>
+                                    <div class="text-xs text-gray-500">${date}</div>
+                                </div>
+                            </a>
+                        </article>
+                    `;
+                }).join('');
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('noticias-loading').style.display = 'none';
+            }
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        // Mobile menu
+        document.addEventListener('DOMContentLoaded', () => {
+          const b = document.getElementById('mobileMenuBtn'), m = document.getElementById('navMenu');
+          if (b && m) {
+            b.addEventListener('click', () => { m.classList.toggle('mobile-active'); const i = b.querySelector('i'); i.classList.toggle('fa-bars'); i.classList.toggle('fa-times'); });
+            m.querySelectorAll('a').forEach(l => l.addEventListener('click', () => m.classList.remove('mobile-active')));
+          }
+        });
+    </script>
+</body>
+</html>

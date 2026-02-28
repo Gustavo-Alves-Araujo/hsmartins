@@ -25,7 +25,7 @@
     <meta property="og:site_name" content="H.S Martins">
     
     <!-- Preload & Performance -->
-    <link rel="preload" as="image" href="img/logo.png" type="image/png">
+    <link rel="preload" as="image" href="/img/logo.png" type="image/png">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -33,11 +33,11 @@
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="img/logo.png" sizes="32x32">
-    <link rel="apple-touch-icon" href="img/logo.png">
+    <link rel="icon" type="image/png" href="/img/logo.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="/img/logo.png">
     
     <!-- Config (sem defer - crítico) -->
-    <script src="config.js"></script>
+    <script src="/config.js"></script>
     
     <!-- Tailwind CSS (defer) -->
     <script src="https://cdn.tailwindcss.com" defer></script>
@@ -51,8 +51,8 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     
     <!-- Componentes (defer) -->
-    <script src="templates/components/base-component.js" defer></script>
-    <script src="templates/components/component-registry.js" defer></script>
+    <script src="/templates/components/base-component.js" defer></script>
+    <script src="/templates/components/component-registry.js" defer></script>
     
     <style>
         .gallery-grid {
@@ -145,7 +145,7 @@
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 
-                <img id="modal-image" class="max-w-full max-h-[80vh] object-contain rounded-lg" src="" alt="" loading="lazy" onerror="this.src='img/placeholder.jpg'">
+                <img id="modal-image" class="max-w-full max-h-[80vh] object-contain rounded-lg" src="" alt="" loading="lazy" onerror="this.src='/img/placeholder.jpg'">
                 
                 <button onclick="nextImage()" class="image-navigation right-4 bg-white hover:bg-gray-100 text-gray-900 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition">
                     <i class="fas fa-chevron-right"></i>
@@ -273,27 +273,92 @@
             return formatted;
         }
 
-        // Pega ID do imóvel da URL
-        function getPropertyId() {
+        // Slugify helper (mesmo algoritmo usado no sitemap)
+        function slugify(text) {
+            return (text || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+        }
+
+        // Gera URL canônica para o imóvel
+        function buildCanonicalUrl(property) {
+            const ref = property.ref || '';
+            const tipo = slugify(property.tipoimovel);
+            const cidade = slugify(property.endereco_cidade);
+            const estado = slugify(property.endereco_estado) || 'sp';
+            const bairro = slugify(property.endereco_bairro);
+            const slug = `${tipo}-venda-${cidade}-${estado}-${bairro}`;
+            return `https://hsmartins.com.br/imovel/${ref}/${slug}`;
+        }
+
+        // Atualiza meta tags dinamicamente para SEO
+        function updateMetaTags(property) {
+            const title = `${property.title} | H.S Martins Imobiliária`;
+            const desc = `${property.tipoimovel || 'Imóvel'} à venda em ${property.endereco_bairro || ''}, ${property.endereco_cidade || 'Poá'}/SP. ${property.area_util ? property.area_util + ' m². ' : ''}${property.quartos ? property.quartos + ' quartos. ' : ''}Ref: ${property.ref || ''}. H.S Martins - Creci 21.189`;
+            const canonicalUrl = buildCanonicalUrl(property);
+            const firstImage = (function() {
+                let imgs = property.images_urls;
+                if (typeof imgs === 'string') { try { imgs = JSON.parse(imgs); } catch(e) { imgs = []; } }
+                if (Array.isArray(imgs) && imgs.length > 0 && imgs[0] && imgs[0].startsWith('http')) return imgs[0];
+                return property.image_url || 'https://hsmartins.com.br/img/logo.png';
+            })();
+
+            document.title = title;
+            const setMeta = (id, attr, val) => { const el = document.getElementById(id); if (el) el.setAttribute(attr, val); };
+            setMeta('page-description', 'content', desc);
+            setMeta('canonical-tag', 'href', canonicalUrl);
+            setMeta('og-title', 'content', title);
+            setMeta('og-description', 'content', desc);
+            setMeta('og-image', 'content', firstImage);
+            // og:url also update
+            const ogUrl = document.querySelector('meta[property="og:url"]');
+            if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
+
+            // Inject JSON-LD structured data
+            const jsonLd = {
+                '@context': 'https://schema.org',
+                '@type': 'RealEstateListing',
+                'name': property.title,
+                'description': desc,
+                'url': canonicalUrl,
+                'image': firstImage,
+                'address': {
+                    '@type': 'PostalAddress',
+                    'addressLocality': property.endereco_cidade || 'Poá',
+                    'addressRegion': 'SP',
+                    'addressCountry': 'BR',
+                    'streetAddress': property.endereco_bairro || ''
+                }
+            };
+            const script = document.createElement('script');
+            script.type = 'application/ld+json';
+            script.textContent = JSON.stringify(jsonLd);
+            document.head.appendChild(script);
+        }
+
+        // Pega ID ou Ref do imóvel da URL (suporta /imovel/{ref}/{slug} e ?id=)
+        function getPropertyIdentifier() {
             const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get('id');
+            const id = urlParams.get('id');
+            const ref = urlParams.get('ref');
+            return { id, ref };
         }
 
         // Carrega dados do imóvel
         async function loadProperty() {
-            const propertyId = getPropertyId();
+            const { id, ref } = getPropertyIdentifier();
             
-            if (!propertyId) {
+            if (!id && !ref) {
                 renderError('Imóvel não encontrado');
                 return;
             }
 
             try {
-                const { data, error } = await supabaseClient
-                    .from('Hsmartins_Produtos')
-                    .select('*')
-                    .eq('id', propertyId)
-                    .single();
+                let query = supabaseClient.from('Hsmartins_Produtos').select('*');
+                if (id) {
+                    query = query.eq('id', id);
+                } else {
+                    query = query.eq('ref', ref);
+                }
+                const { data, error } = await query.single();
 
                 if (error) throw error;
                 
@@ -303,6 +368,9 @@
                 }
 
                 currentProperty = data;
+
+                // Atualiza meta tags para SEO
+                updateMetaTags(data);
                 
                 // Filtra URLs inválidas e garante array válido
                 let rawImages = data.images_urls;
@@ -319,7 +387,7 @@
                 const validImages = (Array.isArray(rawImages) ? rawImages : [data.image_url])
                     .filter(url => url && typeof url === 'string' && url.trim() !== '' && url.startsWith('http'));
                 
-                allImages = validImages.length > 0 ? validImages : ['img/placeholder.jpg'];
+                allImages = validImages.length > 0 ? validImages : ['/img/placeholder.jpg'];
                 
                 renderProperty(data);
             } catch (error) {
@@ -344,22 +412,23 @@
                 .filter(url => url && typeof url === 'string' && url.trim() !== '' && url.startsWith('http'));
             
             // Se não houver imagens válidas, usa placeholder
-            const finalImages = images.length > 0 ? images : ['img/placeholder.jpg'];
+            const finalImages = images.length > 0 ? images : ['/img/placeholder.jpg'];
 
             document.getElementById('app').innerHTML = `
                 <!-- Header -->
                 <header id="main-header" class="fixed top-0 left-0 w-full z-[1000] transition-all duration-300 py-2 bg-white" style="box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                   <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12 py-2">
-                      <a href="index.html" class="flex items-center gap-3 group transition-transform hover:scale-105">
-                      <img src="img/logo.png" alt="Logo HS Martins" class="h-12 w-auto md:h-14 object-contain flex-shrink-0" loading="eager">
-                        <span class="hidden md:block font-black text-slate-800 tracking-tight">HS Martins</span>
+                      <a href="/" class="flex items-center gap-3 group transition-transform hover:scale-105">
+                      <img src="/img/logo.png" alt="Logo H.S Martins" class="h-12 w-auto md:h-14 object-contain flex-shrink-0" loading="eager">
+                        <span class="hidden md:block font-black tracking-tight" style="color:#1B2160;font-style:italic;">H.S Martins</span>
                       </a>
 
                       <ul class="hidden lg:flex items-center gap-2">
-                        <li><a href="index.html#imoveis" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Venda</a></li>
-                        <li><a href="sobre.html" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Sobre</a></li>
-                        <li><a href="correspondente.html" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Correspondente Caixa</a></li>
-                        <li><a href="index.html#contato" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Contato</a></li>
+                        <li><a href="/imovel/venda" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Imóveis à Venda</a></li>
+                        <li><a href="/sobre" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Sobre</a></li>
+                        <li><a href="/correspondente" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Correspondente Caixa</a></li>
+                        <li><a href="/noticias" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Notícias</a></li>
+                        <li><a href="/contato" class="nav-link px-4 py-2 text-sm font-bold text-slate-700 hover:text-slate-900 transition-all">Contato</a></li>
                       </ul>
 
                       <div class="hidden lg:block">
@@ -401,7 +470,7 @@
                         <div class="gallery-grid">
                             ${finalImages.slice(0, 5).map((img, index) => `
                                 <div onclick="openGalleryModal(${index})" class="relative group">
-                                    <img src="${img}" alt="${property.title} - Foto ${index + 1}" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" onerror="this.src='img/placeholder.jpg'" style="background-color: #f3f4f6;">
+                                    <img src="${img}" alt="${property.title} - Foto ${index + 1}" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" onerror="this.src='/img/placeholder.jpg'" style="background-color: #f3f4f6;">
                                     ${index === 4 && finalImages.length > 5 ? `
                                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                                             <span class="text-white text-xl font-semibold">
@@ -900,16 +969,25 @@
                         // Pega apenas 6 aleatórios
                         const selected = shuffled.slice(0, Math.min(6, shuffled.length));
                         
-                        container.innerHTML = selected.map(property => `
-                        <a href="imovel.html?id=${property.id}" class="group">
+                        container.innerHTML = selected.map(property => {
+                            const _s = (t) => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
+                            const _ref = property.ref || '';
+                            const _slug = `${_s(property.tipoimovel)}-venda-${_s(property.endereco_cidade)}-${_s(property.endereco_estado)||'sp'}-${_s(property.endereco_bairro)}`;
+                            const _href = _ref ? `/imovel/${_ref}/${_slug}` : `/imovel.html?id=${property.id}`;
+                            // Use first image from images_urls if available
+                            let _imgs = property.images_urls;
+                            if (typeof _imgs === 'string') { try { _imgs = JSON.parse(_imgs); } catch(e) { _imgs = []; } }
+                            const _img = (Array.isArray(_imgs) && _imgs.length > 0 && _imgs[0] && _imgs[0].startsWith('http')) ? _imgs[0] : (property.image_url || '/img/placeholder.jpg');
+                            return `
+                        <a href="${_href}" class="group">
                             <div class="relative aspect-[4/3] overflow-hidden rounded-xl mb-3 bg-gray-100">
-                                    <img src="${property.image_url || 'img/placeholder.jpg'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title || 'Imóvel'}" loading="lazy" decoding="async" onerror="this.src='img/placeholder.jpg'">
+                                    <img src="${_img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title || 'Imóvel'}" loading="lazy" decoding="async" onerror="this.src='/img/placeholder.jpg'">
                             </div>
                                 <h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition">${property.title || 'Imóvel'}</h3>
                                 <p class="text-gray-600 text-sm mb-2">${property.category || property.tipoimovel || ''}</p>
                                 <p class="text-xl font-bold text-gray-900">${property.price_current || 'Consulte'}</p>
                         </a>
-                    `).join('');
+                    `}).join('');
                     } else {
                         container.innerHTML = '<p class="text-gray-500 col-span-full">Nenhum imóvel relacionado encontrado.</p>';
                     }
@@ -965,7 +1043,7 @@
             
             if (modalImg && currentImg) {
                 modalImg.src = currentImg;
-                modalImg.onerror = function() { this.src = 'img/placeholder.jpg'; };
+                modalImg.onerror = function() { this.src = '/img/placeholder.jpg'; };
             }
             
             const counter = document.getElementById('image-counter');
@@ -989,7 +1067,7 @@
                             alt="Thumbnail ${index + 1}"
                             loading="lazy"
                             decoding="async"
-                            onerror="this.src='img/placeholder.jpg'"
+                            onerror="this.src='/img/placeholder.jpg'"
                             style="background-color: #374151;"
                         >
                     `).join('');

@@ -1,0 +1,36 @@
+{
+  "rewrites": [
+    { "source": "/imovel/venda", "destination": "/imovel/venda/index.html" },
+    { "source": "/imovel/:ref/:slug", "destination": "/imovel.html?ref=:ref" },
+    { "source": "/sobre", "destination": "/sobre/index.html" },
+    { "source": "/correspondente", "destination": "/correspondente/index.html" },
+    { "source": "/contato", "destination": "/contato/index.html" },
+    { "source": "/noticias", "destination": "/noticias/index.html" },
+    { "source": "/noticias/:slug", "destination": "/noticias/:slug/index.html" },
+    { "source": "/pagina/depoimentos", "destination": "/pagina/depoimentos/index.html" },
+    { "source": "/pagina/pre-cadastro-minha-casa-minha-vida", "destination": "/pagina/pre-cadastro-minha-casa-minha-vida/index.html" },
+    { "source": "/pagina/aprovacao-de-renda", "destination": "/pagina/aprovacao-de-renda/index.html" }
+  ],
+  "redirects": [
+    { "source": "/sobre.html", "destination": "/sobre", "permanent": true },
+    { "source": "/correspondente.html", "destination": "/correspondente", "permanent": true },
+    { "source": "/noticias.html", "destination": "/noticias", "permanent": true },
+    { "source": "/noticia.html", "destination": "/noticias", "permanent": true },
+    { "source": "/diagnostico.html", "destination": "/", "permanent": true },
+    { "source": "/index.html", "destination": "/", "permanent": true },
+    { "source": "/financiamento.html", "destination": "/correspondente", "permanent": true },
+    { "source": "/imovel.html", "destination": "/imovel/venda", "permanent": true },
+
+    { "source": "/imovel/", "destination": "/imovel/venda", "permanent": true }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-XSS-Protection", "value": "1; mode=block" }
+      ]
+    }
+  ]
+}
