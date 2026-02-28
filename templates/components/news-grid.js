@@ -196,7 +196,7 @@ class NewsGridComponent extends BaseComponent {
                 </div>
                 
                 <div class="text-center">
-                    <a href="noticias.html" 
+                    <a href="/noticias" 
                        class="inline-flex items-center gap-2 px-6 py-3 rounded-lg font-bold uppercase tracking-wide text-sm shadow-md hover:shadow-lg transition-all transform hover:scale-[1.02]"
                        style="background: linear-gradient(135deg, ${c.accent} 0%, ${this.darkenColor(c.accent, 0.12)} 100%); color: ${this.getBestTextColor(c.accent)};">
                         <span>Ver todas as notícias</span>

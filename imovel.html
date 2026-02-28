@@ -334,11 +334,18 @@
             document.head.appendChild(script);
         }
 
-        // Pega ID ou Ref do imóvel da URL (suporta /imovel/{ref}/{slug} e ?id=)
+        // Pega ID ou Ref do imóvel da URL (suporta /imovel/{ref}/{slug}, ?ref= e ?id=)
         function getPropertyIdentifier() {
             const urlParams = new URLSearchParams(window.location.search);
-            const id = urlParams.get('id');
-            const ref = urlParams.get('ref');
+            let id = urlParams.get('id');
+            let ref = urlParams.get('ref');
+            
+            // Tenta extrair ref do path: /imovel/{ref}/{slug}
+            if (!id && !ref) {
+                const pathMatch = window.location.pathname.match(/\/imovel\/(\d+)\//);
+                if (pathMatch) ref = pathMatch[1];
+            }
+            
             return { id, ref };
         }
 

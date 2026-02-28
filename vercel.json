@@ -15,11 +15,9 @@
     { "source": "/sobre.html", "destination": "/sobre", "permanent": true },
     { "source": "/correspondente.html", "destination": "/correspondente", "permanent": true },
     { "source": "/noticias.html", "destination": "/noticias", "permanent": true },
-    { "source": "/noticia.html", "destination": "/noticias", "permanent": true },
     { "source": "/diagnostico.html", "destination": "/", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/financiamento.html", "destination": "/correspondente", "permanent": true },
-    { "source": "/imovel.html", "destination": "/imovel/venda", "permanent": true },
 
     { "source": "/imovel/", "destination": "/imovel/venda", "permanent": true }
   ],
