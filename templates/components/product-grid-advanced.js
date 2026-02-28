@@ -191,7 +191,11 @@ class ProductGridAdvancedComponent extends BaseComponent {
         // Gera link limpo /imovel/{ref}/{slug}
         const _slugify = (t) => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
         const _ref = product.ref || '';
-        const _slug = `${_slugify(product.tipoimovel)}-venda-${_slugify(product.endereco_cidade)}-${_slugify('SP')}-${_slugify(product.endereco_bairro)}`;
+        const _tipo = _slugify(product.tipoimovel) || 'imovel';
+        const _cidade = _slugify(product.endereco_cidade) || 'poa';
+        const _estado = _slugify(product.endereco_estado) || 'sp';
+        const _bairro = _slugify(product.endereco_bairro);
+        const _slug = _bairro ? `${_tipo}-venda-${_cidade}-${_estado}-${_bairro}` : `${_tipo}-venda-${_cidade}-${_estado}`;
         const detailsLink = _ref ? `/imovel/${_ref}/${_slug}` : (product.id ? `/imovel.html?id=${product.id}` : '#');
 
         return `<a href="${detailsLink}" class="group relative bg-white block rounded-2xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">

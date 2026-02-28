@@ -18,6 +18,13 @@
     { "source": "/diagnostico.html", "destination": "/", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true },
     { "source": "/financiamento.html", "destination": "/correspondente", "permanent": true },
+    { "source": "/financiamento", "destination": "/correspondente", "permanent": true },
+
+    { "source": "/buscar", "destination": "/imovel/venda", "permanent": true },
+    { "source": "/seu-imovel", "destination": "/correspondente", "permanent": true },
+    { "source": "/links", "destination": "/", "permanent": true },
+    { "source": "/parceiros", "destination": "/", "permanent": true },
+    { "source": "/pagina/a-nossa-historia", "destination": "/sobre", "permanent": true },
 
     { "source": "/imovel/", "destination": "/imovel/venda", "permanent": true }
   ],

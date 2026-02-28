@@ -281,11 +281,11 @@
         // Gera URL canônica para o imóvel
         function buildCanonicalUrl(property) {
             const ref = property.ref || '';
-            const tipo = slugify(property.tipoimovel);
-            const cidade = slugify(property.endereco_cidade);
+            const tipo = slugify(property.tipoimovel) || 'imovel';
+            const cidade = slugify(property.endereco_cidade) || 'poa';
             const estado = slugify(property.endereco_estado) || 'sp';
             const bairro = slugify(property.endereco_bairro);
-            const slug = `${tipo}-venda-${cidade}-${estado}-${bairro}`;
+            const slug = bairro ? `${tipo}-venda-${cidade}-${estado}-${bairro}` : `${tipo}-venda-${cidade}-${estado}`;
             return `https://hsmartins.com.br/imovel/${ref}/${slug}`;
         }
 
@@ -979,7 +979,11 @@
                         container.innerHTML = selected.map(property => {
                             const _s = (t) => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
                             const _ref = property.ref || '';
-                            const _slug = `${_s(property.tipoimovel)}-venda-${_s(property.endereco_cidade)}-${_s(property.endereco_estado)||'sp'}-${_s(property.endereco_bairro)}`;
+                            const _tipo = _s(property.tipoimovel) || 'imovel';
+                            const _cidade = _s(property.endereco_cidade) || 'poa';
+                            const _estado = _s(property.endereco_estado) || 'sp';
+                            const _bairro = _s(property.endereco_bairro);
+                            const _slug = _bairro ? `${_tipo}-venda-${_cidade}-${_estado}-${_bairro}` : `${_tipo}-venda-${_cidade}-${_estado}`;
                             const _href = _ref ? `/imovel/${_ref}/${_slug}` : `/imovel.html?id=${property.id}`;
                             // Use first image from images_urls if available
                             let _imgs = property.images_urls;

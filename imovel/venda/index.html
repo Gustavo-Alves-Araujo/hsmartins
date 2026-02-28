@@ -383,11 +383,11 @@
         const ref = item.ref || '';
         // Gera URL limpa /imovel/{ref}/{slug}
         const _slugify = (t) => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
-        const _tipo = _slugify(item.tipoimovel);
-        const _cidade = _slugify(item.endereco_cidade);
+        const _tipo = _slugify(item.tipoimovel) || 'imovel';
+        const _cidade = _slugify(item.endereco_cidade) || 'poa';
         const _estado = _slugify(item.endereco_estado) || 'sp';
         const _bairro = _slugify(item.endereco_bairro);
-        const urlSlug = `${_tipo}-venda-${_cidade}-${_estado}-${_bairro}`;
+        const urlSlug = _bairro ? `${_tipo}-venda-${_cidade}-${_estado}-${_bairro}` : `${_tipo}-venda-${_cidade}-${_estado}`;
         const url = ref ? `/imovel/${ref}/${urlSlug}` : `/imovel.html?id=${item.id}`;
 
         return `

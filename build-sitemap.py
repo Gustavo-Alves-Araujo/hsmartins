@@ -185,11 +185,11 @@ sitemap = '''<?xml version="1.0" encoding="UTF-8"?>
 
 for item in active:
     ref = item.get('ref', '')
-    tipo = slugify(item.get('tipoimovel', ''))
-    cidade = slugify(item.get('endereco_cidade', ''))
+    tipo = slugify(item.get('tipoimovel', '')) or 'imovel'
+    cidade = slugify(item.get('endereco_cidade', '')) or 'poa'
     estado = slugify(item.get('endereco_estado', '')) or 'sp'
     bairro = slugify(item.get('endereco_bairro', ''))
-    slug = f'{tipo}-venda-{cidade}-{estado}-{bairro}'
+    slug = f'{tipo}-venda-{cidade}-{estado}-{bairro}' if bairro else f'{tipo}-venda-{cidade}-{estado}'
     prop_url = f'https://hsmartins.com.br/imovel/{ref}/{slug}'
     sitemap += f'''    <url>
         <loc>{prop_url}</loc>

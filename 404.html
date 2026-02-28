@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Página não encontrada | H.S Martins</title>
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="/img/logo.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        // Redirecionamento inteligente para URLs antigas
+        (function() {
+            const path = window.location.pathname;
+            
+            // URLs antigas de imóveis com IDs numéricos (7 dígitos) → lista de imóveis
+            // Ex: /imovel/2320988/apartamento-venda-poa-sp-biritiba
+            if (/^\/imovel\/\d{5,}\//.test(path)) {
+                window.location.replace('/imovel/venda');
+                return;
+            }
+            
+            // /imovel/ com qualquer sub-rota não encontrada → lista de imóveis
+            if (path.startsWith('/imovel/') && path !== '/imovel/venda') {
+                window.location.replace('/imovel/venda');
+                return;
+            }
+
+            // Páginas antigas do site que não existem mais
+            const redirectMap = {
+                '/buscar': '/imovel/venda',
+                '/seu-imovel': '/correspondente',
+                '/links': '/',
+                '/parceiros': '/',
+                '/financiamento': '/correspondente',
+                '/pagina/a-nossa-historia': '/sobre'
+            };
+
+            const target = redirectMap[path];
+            if (target) {
+                window.location.replace(target);
+                return;
+            }
+        })();
+    </script>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center">
+    <div class="max-w-lg mx-auto px-6 py-16 text-center">
+        <div class="mb-8">
+            <a href="/" class="inline-block">
+                <img src="/img/logo.png" alt="H.S Martins" class="h-16 mx-auto mb-4" onerror="this.style.display='none'">
+            </a>
+        </div>
+        
+        <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
+            <div class="text-6xl mb-4">
+                <i class="fas fa-search text-gray-300"></i>
+            </div>
+            <h1 class="text-3xl font-extrabold text-gray-900 mb-3">Página não encontrada</h1>
+            <p class="text-gray-600 mb-8">
+                A página que você procura pode ter sido movida ou não existe mais. 
+                Mas não se preocupe, temos muitas opções para você!
+            </p>
+            
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <a href="/imovel/venda" 
+                   class="flex items-center justify-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition shadow-md hover:shadow-lg">
+                    <i class="fas fa-home"></i>
+                    <span>Ver Imóveis</span>
+                </a>
+                <a href="/" 
+                   class="flex items-center justify-center gap-2 px-5 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold hover:bg-gray-50 transition">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Página Inicial</span>
+                </a>
+                <a href="/correspondente" 
+                   class="flex items-center justify-center gap-2 px-5 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold hover:bg-gray-50 transition">
+                    <i class="fas fa-file-signature"></i>
+                    <span>Financiamento</span>
+                </a>
+                <a href="/contato" 
+                   class="flex items-center justify-center gap-2 px-5 py-3 bg-white text-gray-700 border border-gray-200 rounded-xl font-semibold hover:bg-gray-50 transition">
+                    <i class="fab fa-whatsapp"></i>
+                    <span>Fale Conosco</span>
+                </a>
+            </div>
+        </div>
+        
+        <p class="text-gray-400 text-sm mt-6">
+            <i class="fas fa-info-circle mr-1"></i>
+            Se você chegou aqui através de um link antigo, estamos redirecionando automaticamente.
+        </p>
+    </div>
+</body>
+</html>
