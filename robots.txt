@@ -1,16 +1,8 @@
 # Robots.txt for HS Martins
-# Imobiliária em Poá e região
+# Imobiliária em Poá e região - hsmartins.com.br
 
 User-agent: *
 Allow: /
-Allow: /index.html
-Allow: /sobre.html
-Allow: /correspondente.html
-Allow: /imovel.html
-Allow: /templates/
-Allow: /img/
-
-# Desallow crawlers de bots maliciosos
 Disallow: /admin/
 Disallow: /admin/*
 Disallow: /.git
@@ -19,7 +11,7 @@ Disallow: /*.js.map
 Disallow: /*.css.map
 
 # Arquivo de sitemap
-Sitemap: http://localhost:5500/sitemap.xml
+Sitemap: https://hsmartins.com.br/sitemap.xml
 
 # Crawl delay
 Crawl-delay: 1

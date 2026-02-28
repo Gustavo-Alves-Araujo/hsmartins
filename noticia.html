@@ -4,7 +4,35 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title id="page-title">Notícia - H.S Martins</title>
-    <meta id="page-description" name="description" content="Leia a notícia completa.">
+    <meta id="page-description" name="description" content="Leia a notícia completa sobre o mercado imobiliário. H.S Martins - Imobiliária em Poá e região.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <meta name="author" content="H.S Martins">
+    <meta name="theme-color" content="#005CA9">
+    
+    <!-- Canonical (dinâmico) -->
+    <link id="canonical-tag" rel="canonical" href="https://hsmartins.com.br/noticia.html">
+    
+    <!-- OpenGraph (dinâmico) -->
+    <meta id="og-title" property="og:title" content="Notícia | H.S Martins">
+    <meta id="og-description" property="og:description" content="Leia a notícia completa sobre o mercado imobiliário.">
+    <meta id="og-image" property="og:image" content="https://hsmartins.com.br/img/logo.png">
+    <meta property="og:locale" content="pt_BR">
+    <meta property="og:type" content="article">
+    <meta id="og-url" property="og:url" content="https://hsmartins.com.br/noticia.html">
+    <meta property="og:site_name" content="H.S Martins">
+    
+    <!-- Twitter Card (dinâmico) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta id="tw-title" name="twitter:title" content="Notícia | H.S Martins">
+    <meta id="tw-description" name="twitter:description" content="Leia a notícia completa.">
+    <meta id="tw-image" name="twitter:image" content="https://hsmartins.com.br/img/logo.png">
+    
+    <!-- Geo Meta Tags -->
+    <meta name="geo.region" content="BR-SP">
+    <meta name="geo.placename" content="Poá">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/img/logo.png">
     
     <script src="/config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -78,8 +106,45 @@
                     return;
                 }
 
-                document.getElementById('page-title').textContent = `${data.titulo} - H.S Martins`;
-                document.getElementById('page-description').content = data.resumo || data.conteudo.substring(0, 150) + '...';
+                document.getElementById('page-title').textContent = `${data.titulo} | H.S Martins - Imobiliária em Poá`;
+                const descText = data.resumo || (data.conteudo ? data.conteudo.replace(/<[^>]*>/g, '').substring(0, 155) + '...' : '');
+                document.getElementById('page-description').content = descText;
+                
+                // Update canonical, OG && Twitter
+                const slug = new URLSearchParams(window.location.search).get('slug');
+                const canonUrl = `https://hsmartins.com.br/noticia.html?slug=${slug}`;
+                const imgUrl = data.imagem_principal || 'https://hsmartins.com.br/img/logo.png';
+                const setAttr = (id, attr, val) => { const el = document.getElementById(id); if(el) el.setAttribute(attr, val); };
+                setAttr('canonical-tag', 'href', canonUrl);
+                setAttr('og-title', 'content', `${data.titulo} | H.S Martins`);
+                setAttr('og-description', 'content', descText);
+                setAttr('og-image', 'content', imgUrl);
+                setAttr('og-url', 'content', canonUrl);
+                setAttr('tw-title', 'content', `${data.titulo} | H.S Martins`);
+                setAttr('tw-description', 'content', descText);
+                setAttr('tw-image', 'content', imgUrl);
+                
+                // JSON-LD Article
+                const jsonLd = document.createElement('script');
+                jsonLd.type = 'application/ld+json';
+                jsonLd.textContent = JSON.stringify({
+                    "@context": "https://schema.org",
+                    "@type": "NewsArticle",
+                    "headline": data.titulo,
+                    "description": descText,
+                    "image": imgUrl,
+                    "url": canonUrl,
+                    "datePublished": data.data_publicacao,
+                    "dateModified": data.updated_at || data.data_publicacao,
+                    "author": { "@type": "Organization", "name": "H.S Martins" },
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "H.S Martins Empreendimentos Imobiliários",
+                        "logo": { "@type": "ImageObject", "url": "https://hsmartins.com.br/img/logo.png" }
+                    },
+                    "mainEntityOfPage": { "@type": "WebPage", "@id": canonUrl }
+                });
+                document.head.appendChild(jsonLd);
 
                 const loading = document.getElementById('noticia-loading');
                 const content = document.getElementById('noticia-content');

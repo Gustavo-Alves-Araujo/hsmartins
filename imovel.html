@@ -17,12 +17,25 @@
     <link id="canonical-tag" rel="canonical" href="https://hsmartins.com.br/imovel.html">
     
     <!-- OpenGraph (dinâmico via JavaScript) -->
-    <meta id="og-title" property="og:title" content="Imóvel - H.S Martins">
-    <meta id="og-description" property="og:description" content="Encontre este imóvel em H.S Martins">
+    <meta property="og:locale" content="pt_BR">
+    <meta id="og-title" property="og:title" content="Imóvel à Venda - H.S Martins Imobiliária em Poá">
+    <meta id="og-description" property="og:description" content="Encontre este imóvel à venda em Poá e região. H.S Martins Imobiliária.">
     <meta id="og-image" property="og:image" content="https://hsmartins.com.br/img/logo.png">
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://hsmartins.com.br/imovel.html">
+    <meta id="og-url" property="og:url" content="https://hsmartins.com.br/imovel/venda">
     <meta property="og:site_name" content="H.S Martins">
+    
+    <!-- Twitter Card (dinâmico) -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta id="tw-title" name="twitter:title" content="Imóvel à Venda - H.S Martins">
+    <meta id="tw-description" name="twitter:description" content="Imóvel à venda em Poá e região.">
+    <meta id="tw-image" name="twitter:image" content="https://hsmartins.com.br/img/logo.png">
+    
+    <!-- Geo Meta Tags - SEO Local -->
+    <meta name="geo.region" content="BR-SP">
+    <meta name="geo.placename" content="Poá">
+    <meta name="geo.position" content="-23.5286;-46.3469">
+    <meta name="ICBM" content="-23.5286, -46.3469">
     
     <!-- Preload & Performance -->
     <link rel="preload" as="image" href="/img/logo.png" type="image/png">
@@ -308,11 +321,14 @@
             setMeta('og-title', 'content', title);
             setMeta('og-description', 'content', desc);
             setMeta('og-image', 'content', firstImage);
-            // og:url also update
-            const ogUrl = document.querySelector('meta[property="og:url"]');
-            if (ogUrl) ogUrl.setAttribute('content', canonicalUrl);
+            setMeta('og-url', 'content', canonicalUrl);
+            // Twitter cards
+            setMeta('tw-title', 'content', title);
+            setMeta('tw-description', 'content', desc);
+            setMeta('tw-image', 'content', firstImage);
 
             // Inject JSON-LD structured data
+            const priceVal = property.price_current ? parseFloat(property.price_current.replace(/[^\d,]/g, '').replace(',', '.')) : null;
             const jsonLd = {
                 '@context': 'https://schema.org',
                 '@type': 'RealEstateListing',
@@ -320,6 +336,7 @@
                 'description': desc,
                 'url': canonicalUrl,
                 'image': firstImage,
+                'datePosted': property.created_at || '2026-02-28',
                 'address': {
                     '@type': 'PostalAddress',
                     'addressLocality': property.endereco_cidade || 'Poá',
@@ -328,6 +345,16 @@
                     'streetAddress': property.endereco_bairro || ''
                 }
             };
+            if (priceVal) {
+                jsonLd['offers'] = {
+                    '@type': 'Offer',
+                    'price': priceVal,
+                    'priceCurrency': 'BRL',
+                    'availability': 'https://schema.org/InStock'
+                };
+            }
+            if (property.area_util) jsonLd['floorSize'] = { '@type': 'QuantitativeValue', 'value': property.area_util, 'unitCode': 'MTK' };
+            if (property.quartos) jsonLd['numberOfRooms'] = property.quartos;
             const script = document.createElement('script');
             script.type = 'application/ld+json';
             script.textContent = JSON.stringify(jsonLd);
