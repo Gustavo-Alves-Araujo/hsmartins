@@ -37,7 +37,7 @@ class FooterContactComponent extends BaseComponent {
         // Valores padrão do projeto HS Martins
         const defaults = {
             id: 'contato',
-            title: 'HS Martins Empreendimentos Imobiliários Ltda.',
+            title: 'H.S. Martins Empreendimentos Imobiliários Ltda.',
             address: {
                 label: 'Localização',
                 street: 'Av. Leonor Bolsoni Marques da Silva, 230',

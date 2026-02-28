@@ -23,8 +23,8 @@
     }
   },
   "site": {
-    "title": "HS Martins - Imobiliária em Poá e Região | Venda e Financiamento",
-    "name": "HS Martins",
+    "title": "H.S. Martins - Imobiliária em Poá e Região | Venda e Financiamento",
+    "name": "H.S. Martins",
     "established": "Creci. 21.189",
     "logoAlt": "Logo HS Martins",
     "logoUrl": ""
@@ -33,7 +33,7 @@
   "sticky-header-navigation": {
     "logoUrl": "img/logo.png",
     "logoAlt": "Logo Imobiliária H.S Martins",
-    "siteName": "HS Martins",
+    "siteName": "H.S. MARTINS",
     "established": "Creci. 21.189",
     "links": {
       "venda": { "text": "Venda", "href": "#imoveis" },

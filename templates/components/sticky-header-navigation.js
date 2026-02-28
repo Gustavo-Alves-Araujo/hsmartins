@@ -13,8 +13,8 @@ class StickyHeaderNavigationComponent extends BaseComponent {
         // Valores padrão do projeto HS Martins
         const defaults = {
             logoUrl: '',
-            logoAlt: 'Logo HS Martins',
-            siteName: 'HS Martins',
+            logoAlt: 'Logo H.S. Martins',
+            siteName: 'H.S. Martins',
             established: 'Creci. 21.189',
             links: {
                 venda: { text: 'Venda', href: '#imoveis' },
@@ -137,7 +137,7 @@ class StickyHeaderNavigationComponent extends BaseComponent {
                                      loading="eager"
                                      onerror="console.error('Erro ao carregar logo:', this.src); this.style.display='none';">
                             ` : ''}
-                            ${this.siteName ? `<span class="hidden md:block font-black text-slate-800 tracking-tight">${this.siteName}</span>` : ''}
+                            ${this.siteName ? `<span class="hidden md:block font-black tracking-tight" style="color: #1B2160; font-style: italic;">${this.siteName}</span>` : ''}
                         </a>
 
                         <ul class="hidden lg:flex items-center gap-2">
