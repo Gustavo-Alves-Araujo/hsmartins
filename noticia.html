@@ -164,7 +164,7 @@
                 `;
 
                 if (data.imagem_principal) {
-                    document.getElementById('noticia-imagem').innerHTML = `<img src="${data.imagem_principal}" alt="${data.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover" decoding="async" onerror="this.src='/img/placeholder.jpg'">`;
+                    document.getElementById('noticia-imagem').innerHTML = `<img src="${data.imagem_principal}" alt="${data.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover" decoding="async" onerror="this.onerror=null;this.src='/img/placeholder.svg'">`;
                 }
 
                 // Preserva quebras de linha de texto puro; se já tiver HTML usa direto
@@ -208,7 +208,7 @@
                         <article class="group bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition overflow-hidden">
                             <a href="${url}" class="block">
                                 <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
-                                    <img src="${img}" alt="${item.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.src='/img/placeholder.jpg'">
+                                    <img src="${img}" alt="${item.titulo.replace(/"/g, '&quot;')}" class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/img/placeholder.svg'">
                                     ${item.destacado ? '<span class="absolute top-2 left-2 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded uppercase">Destaque</span>' : ''}
                                     ${item.categoria ? `<span class="absolute top-2 right-2 bg-white/90 text-gray-900 text-[10px] font-semibold px-2 py-1 rounded-full">${item.categoria.replace(/"/g, '&quot;')}</span>` : ''}
                                 </div>

@@ -1,5 +1,6 @@
 {
   "rewrites": [
+    { "source": "/img/placeholder.jpg", "destination": "/img/placeholder.svg" },
     { "source": "/imovel/venda", "destination": "/imovel/venda/index.html" },
     { "source": "/imovel/:ref/:slug", "destination": "/imovel.html?ref=:ref" },
     { "source": "/sobre", "destination": "/sobre/index.html" },
