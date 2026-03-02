@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="533" viewBox="0 0 400 533">
+  <rect width="400" height="533" fill="#f3f4f6"/>
+  <!-- House icon -->
+  <g transform="translate(200,230)">
+    <!-- Roof -->
+    <polygon points="-60,-50 0,-100 60,-50" fill="#d1d5db"/>
+    <!-- Walls -->
+    <rect x="-48" y="-50" width="96" height="70" fill="#e5e7eb"/>
+    <!-- Door -->
+    <rect x="-16" y="-10" width="32" height="30" rx="4" fill="#d1d5db"/>
+    <!-- Window left -->
+    <rect x="-40" y="-38" width="22" height="20" rx="3" fill="#d1d5db"/>
+    <!-- Window right -->
+    <rect x="18" y="-38" width="22" height="20" rx="3" fill="#d1d5db"/>
+  </g>
+  <!-- Text -->
+  <text x="200" y="340" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="15" fill="#9ca3af" letter-spacing="0.5">Foto não disponível</text>
+  <text x="200" y="362" text-anchor="middle" font-family="Arial,Helvetica,sans-serif" font-size="12" fill="#d1d5db">Imagem indisponível no momento</text>
+</svg>

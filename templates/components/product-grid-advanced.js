@@ -198,7 +198,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
                      width="400" height="533"
                      loading="lazy"
                      decoding="async"
-                     onerror="this.src='img/placeholder.jpg'"
+                     onerror="this.onerror=null;this.src='/img/placeholder.svg'"
                      data-product-image>
                 ${totalImages > 1 ? `
                     <div class="absolute bottom-2 right-2 px-2 py-1 rounded-full bg-black/50 text-white text-[10px] font-semibold z-10">

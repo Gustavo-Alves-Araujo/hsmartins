@@ -69,6 +69,6 @@ class ContactTopBarComponent extends BaseComponent {
 }
 
 // Registro do componente
-if (typeof window !== 'undefined' && window.ComponentRegistry) {
-    window.ComponentRegistry.register('contact-top-bar', ContactTopBarComponent);
+if (typeof window !== 'undefined' && window.componentRegistry) {
+    window.componentRegistry.register('contact-top-bar', ContactTopBarComponent);
 }

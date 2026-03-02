@@ -26,8 +26,11 @@
             fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
                 .then(r => r.text())
                 .then(css => {
-                    // Inject font-display: swap into every @font-face block
-                    const patched = css.replace(/@font-face\s*\{/g, '@font-face{font-display:swap;');
+                    // Inject font-display: swap + rewrite relative webfont URLs to absolute CDN URLs
+                    const FA_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0';
+                    const patched = css
+                        .replace(/@font-face\s*\{/g, '@font-face{font-display:swap;')
+                        .replace(/url\(\.\.\/webfonts\//g, `url(${FA_BASE}/webfonts/`);
                     const style = document.createElement('style');
                     style.textContent = patched;
                     head.appendChild(style);

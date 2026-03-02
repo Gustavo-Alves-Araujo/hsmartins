@@ -76,11 +76,6 @@ class CardGridComponent extends BaseComponent {
             gap: '8',
             ...data.layout
         };
-            columns: 3,
-            aspectRatio: '4/5',
-            gap: '8',
-            ...data.layout
-        };
 
         // Resolve cores base (override > tema > fallback)
         const bgBase = this.resolveColor(data.colors?.background, 'background', 'brand-cream');

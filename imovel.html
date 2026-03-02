@@ -60,7 +60,7 @@
     fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
         .then(r=>r.text()).then(css=>{
             const s=document.createElement('style');
-            s.textContent=css.replace(/@font-face\s*\{/g,'@font-face{font-display:swap;');
+            s.textContent=css.replace(/@font-face\s*\{/g,'@font-face{font-display:swap;').replace(/url\(\.\.\/webfonts\//g,'url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/');
             document.head.appendChild(s);
         }).catch(()=>{
             const l=document.createElement('link');l.rel='stylesheet';
@@ -170,7 +170,7 @@
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 
-                <img id="modal-image" class="max-w-full max-h-[80vh] object-contain rounded-lg" src="" alt="" loading="lazy" onerror="this.src='/img/placeholder.jpg'">
+                <img id="modal-image" class="max-w-full max-h-[80vh] object-contain rounded-lg" src="" alt="" loading="lazy" onerror="this.src='/img/placeholder.svg'">
                 
                 <button onclick="nextImage()" class="image-navigation right-4 bg-white hover:bg-gray-100 text-gray-900 w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition">
                     <i class="fas fa-chevron-right"></i>
@@ -433,7 +433,7 @@
                 const validImages = (Array.isArray(rawImages) ? rawImages : [data.image_url])
                     .filter(url => url && typeof url === 'string' && url.trim() !== '' && url.startsWith('http'));
                 
-                allImages = validImages.length > 0 ? validImages : ['/img/placeholder.jpg'];
+                allImages = validImages.length > 0 ? validImages : ['/img/placeholder.svg'];
                 
                 renderProperty(data);
             } catch (error) {
@@ -467,7 +467,7 @@
                 });
             
             // Se não houver imagens válidas, usa placeholder
-            const finalImages = images.length > 0 ? images : ['/img/placeholder.jpg'];
+            const finalImages = images.length > 0 ? images : ['/img/placeholder.svg'];
 
             document.getElementById('app').innerHTML = `
                 <!-- Header -->
@@ -526,7 +526,7 @@
                         <div class="gallery-grid">
                             ${finalImages.slice(0, 5).map((img, index) => `
                                 <div onclick="openGalleryModal(${index})" class="relative group">
-                                    <img src="${img}" alt="${property.title} - Foto ${index + 1}" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" onerror="this.src='/img/placeholder.jpg'" style="background-color: #f3f4f6;">
+                                    <img src="${img}" alt="${property.title} - Foto ${index + 1}" loading="${index === 0 ? 'eager' : 'lazy'}" decoding="async" onerror="this.src='/img/placeholder.svg'" style="background-color: #f3f4f6;">
                                     ${index === 4 && finalImages.length > 5 ? `
                                         <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
                                             <span class="text-white text-xl font-semibold">
@@ -1037,11 +1037,11 @@
                             // Use first image from images_urls if available
                             let _imgs = property.images_urls;
                             if (typeof _imgs === 'string') { try { _imgs = JSON.parse(_imgs); } catch(e) { _imgs = []; } }
-                            const _img = (Array.isArray(_imgs) && _imgs.length > 0 && _imgs[0] && _imgs[0].startsWith('http')) ? _imgs[0] : (property.image_url || '/img/placeholder.jpg');
+                            const _img = (Array.isArray(_imgs) && _imgs.length > 0 && _imgs[0] && _imgs[0].startsWith('http')) ? _imgs[0] : (property.image_url || '/img/placeholder.svg');
                             return `
                         <a href="${_href}" class="group">
                             <div class="relative aspect-[4/3] overflow-hidden rounded-xl mb-3 bg-gray-100">
-                                    <img src="${_img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title || 'Imóvel'}" loading="lazy" decoding="async" onerror="this.src='/img/placeholder.jpg'">
+                                    <img src="${_img}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" alt="${property.title || 'Imóvel'}" loading="lazy" decoding="async" onerror="this.src='/img/placeholder.svg'">
                             </div>
                                 <h3 class="font-semibold text-lg mb-1 group-hover:text-blue-600 transition">${property.title || 'Imóvel'}</h3>
                                 <p class="text-gray-600 text-sm mb-2">${property.category || property.tipoimovel || ''}</p>
@@ -1103,7 +1103,7 @@
             
             if (modalImg && currentImg) {
                 modalImg.src = currentImg;
-                modalImg.onerror = function() { this.src = '/img/placeholder.jpg'; };
+                modalImg.onerror = function() { this.src = '/img/placeholder.svg'; };
             }
             
             const counter = document.getElementById('image-counter');
@@ -1127,7 +1127,7 @@
                             alt="Thumbnail ${index + 1}"
                             loading="lazy"
                             decoding="async"
-                            onerror="this.src='/img/placeholder.jpg'"
+                            onerror="this.src='/img/placeholder.svg'"
                             style="background-color: #374151;"
                         >
                     `).join('');

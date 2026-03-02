@@ -85,7 +85,7 @@
   fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
       .then(r=>r.text()).then(css=>{
           const s=document.createElement('style');
-          s.textContent=css.replace(/@font-face\s*\{/g,'@font-face{font-display:swap;');
+          s.textContent=css.replace(/@font-face\s*\{/g,'@font-face{font-display:swap;').replace(/url\(\.\.\/webfonts\//g,'url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/');
           document.head.appendChild(s);
       }).catch(()=>{
           const l=document.createElement('link');l.rel='stylesheet';
