@@ -17,31 +17,28 @@
         injectCSS() {
             const head = document.head;
 
-            // Font Awesome - with async loading
-            const fontAwesomePreload = document.createElement('link');
-            fontAwesomePreload.rel = 'preload';
-            fontAwesomePreload.as = 'style';
-            fontAwesomePreload.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-            head.appendChild(fontAwesomePreload);
+            // Utility CSS (sr-only)
+            const utilStyle = document.createElement('style');
+            utilStyle.textContent = `.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }`;
+            head.appendChild(utilStyle);
 
-            const fontAwesome = document.createElement('link');
-            fontAwesome.rel = 'stylesheet';
-            fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-            fontAwesome.media = 'print';
-            fontAwesome.onload = function() { this.media = 'all'; };
-            head.appendChild(fontAwesome);
-
-            // Override font-display for Font Awesome to prevent FOIT
-            const fontDisplayOverride = document.createElement('style');
-            fontDisplayOverride.textContent = `
-                @font-face { font-family: "Font Awesome 6 Free"; font-display: swap; }
-                @font-face { font-family: "Font Awesome 6 Brands"; font-display: swap; }
-                @font-face { font-family: "fa-brands-400"; font-display: swap; }
-                @font-face { font-family: "fa-solid-900"; font-display: swap; }
-                @font-face { font-family: "fa-regular-400"; font-display: swap; }
-                .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
-            `;
-            head.appendChild(fontDisplayOverride);
+            // Font Awesome - fetch CSS, inject font-display:swap into @font-face blocks
+            fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
+                .then(r => r.text())
+                .then(css => {
+                    // Inject font-display: swap into every @font-face block
+                    const patched = css.replace(/@font-face\s*\{/g, '@font-face{font-display:swap;');
+                    const style = document.createElement('style');
+                    style.textContent = patched;
+                    head.appendChild(style);
+                })
+                .catch(() => {
+                    // Fallback: load normally if fetch fails
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+                    head.appendChild(link);
+                });
 
             // AOS CSS REMOVIDO - causava crash no iOS Safari
             // AOS usa scroll listeners + IntersectionObserver constantemente

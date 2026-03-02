@@ -94,7 +94,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
                                 installments: item.installments,
                                 badge: item.badge_text ? { text: item.badge_text, style: item.badge_style } : null,
                                 imageUrl: item.image_url,
-                                imagesUrls: item.images_urls ? (Array.isArray(item.images_urls) ? item.images_urls : JSON.parse(item.images_urls)) : [item.image_url]
+                                imagesUrls: (item.images_urls ? (Array.isArray(item.images_urls) ? item.images_urls : JSON.parse(item.images_urls)) : [item.image_url]).map(u => u && typeof u === 'string' ? u.replace(/^http:\/\//i, 'https://') : u)
                             });
                         }
                     });
@@ -179,9 +179,14 @@ class ProductGridAdvancedComponent extends BaseComponent {
         // SIMPLIFICADO: Apenas 1 imagem por card para evitar crash no iOS
         // O carrossel com todas as imagens estava causando crash no Safari/iOS
         // pois carregava centenas de imagens no DOM simultaneamente
-        const firstImage = (Array.isArray(product.imagesUrls) && product.imagesUrls.length > 0 && product.imagesUrls[0])
+        let firstImage = (Array.isArray(product.imagesUrls) && product.imagesUrls.length > 0 && product.imagesUrls[0])
             ? product.imagesUrls[0]
             : (product.imageUrl || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80');
+        // Optimize Supabase images: resize to 600px width and convert to webp
+        if (firstImage && firstImage.includes('supabase.co/storage/')) {
+            const separator = firstImage.includes('?') ? '&' : '?';
+            firstImage = firstImage + separator + 'width=600&quality=75';
+        }
         
         const totalImages = Array.isArray(product.imagesUrls) ? product.imagesUrls.filter(Boolean).length : 1;
 
@@ -203,8 +208,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
             </div>
         `;
 
-        const priceHtml = product.price ? `<div>${product.price.current ? `<span class="text-gray-900 font-bold">${product.price.current}</span>` : ''}${product.price.original ? `<span class="text-gray-400 text-sm line-through ml-2">${product.price.original}</span>` : ''}</div>` : '';
-        const ratingHtml = product.rating ? `<div class="flex text-yellow-400 text-xs"><i class="fas fa-star"></i><span class="text-gray-400 ml-1">${product.rating}</span></div>` : '';
+        const priceHtml = product.price ? `<div>${product.price.current ? `<span class="text-gray-900 font-bold">${product.price.current}</span>` : ''}${product.price.original ? `<span class="text-gray-500 text-sm line-through ml-2">${product.price.original}</span>` : ''}</div>` : '';
+        const ratingHtml = product.rating ? `<div class="flex text-yellow-400 text-xs"><i class="fas fa-star" aria-hidden="true"></i><span class="text-gray-600 ml-1">${product.rating}</span></div>` : '';
         // Gera link limpo /imovel/{ref}/{slug}
         const _slugify = (t) => (t||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'');
         const _ref = product.ref || '';

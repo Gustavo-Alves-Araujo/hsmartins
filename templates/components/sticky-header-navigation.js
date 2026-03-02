@@ -122,8 +122,9 @@ class StickyHeaderNavigationComponent extends BaseComponent {
             <a href="${this.clientButton.href}"
                ${this.clientButton.target ? `target="${this.clientButton.target}"` : ''}
                class="flex items-center gap-2 px-6 py-2.5 rounded-full text-white text-sm font-bold shadow-lg transition-all hover:scale-105 active:scale-95"
-               style="background: linear-gradient(135deg, ${this.primaryHex} 0%, ${this.primaryDarkHex} 100%);">
-                ${this.clientButton.icon ? `<i class="${this.clientButton.icon}"></i> ` : ''}
+               style="background: linear-gradient(135deg, ${this.primaryHex} 0%, ${this.primaryDarkHex} 100%);"
+               aria-label="${this.clientButton.text} - Entrar em contato">
+                ${this.clientButton.icon ? `<i class="${this.clientButton.icon}" aria-hidden="true"></i> ` : ''}
                 ${this.clientButton.text}
             </a>
         ` : '';

@@ -122,7 +122,7 @@ class FooterContactComponent extends BaseComponent {
             return `${separator}<span>${tag}</span>`;
         }).join('');
 
-        // Gera URL do mapa do Google Maps
+        // Gera URL do mapa do Google Maps (lazy-loaded via IntersectionObserver)
         const mapEmbedUrl = `https://maps.google.com/maps?q=${encodeURIComponent(this.address.mapQuery || this.address.street)}&t=&z=15&ie=UTF8&iwloc=&output=embed`;
 
         return `
@@ -177,7 +177,7 @@ class FooterContactComponent extends BaseComponent {
                                aria-label="Ver localização no Google Maps: ${this.address.street || this.address.mapQuery}"
                                class="block h-80 w-full bg-gray-200 rounded-2xl overflow-hidden relative group shadow-inner">
                                 <iframe
-                                    src="${mapEmbedUrl}"
+                                    data-src="${mapEmbedUrl}"
                                     width="100%"
                                     height="100%"
                                     frameborder="0"
@@ -226,6 +226,31 @@ class FooterContactComponent extends BaseComponent {
         const target = document.getElementById(targetId);
         if (target) {
             target.innerHTML = this.render();
+            // Lazy-load Google Maps iframe with IntersectionObserver
+            this._lazyLoadMap(target);
+        }
+    }
+
+    /**
+     * Uses IntersectionObserver to load the map iframe only when visible
+     */
+    _lazyLoadMap(container) {
+        const iframe = container.querySelector('iframe[data-src]');
+        if (!iframe) return;
+        
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        iframe.src = iframe.dataset.src;
+                        observer.unobserve(iframe);
+                    }
+                });
+            }, { rootMargin: '200px' });
+            observer.observe(iframe);
+        } else {
+            // Fallback for old browsers
+            iframe.src = iframe.dataset.src;
         }
     }
 

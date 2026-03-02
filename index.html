@@ -148,8 +148,7 @@
   
   <!-- Preload & Prefetch - Recursos Críticos -->
   <link rel="preload" as="image" href="img/logo.webp" type="image/webp" fetchpriority="high">
-  <link rel="preload" as="image" href="img/image.webp" type="image/webp" media="(min-width: 769px)">
-  <link rel="preload" as="image" href="img/image-mobile.webp" type="image/webp" media="(max-width: 768px)">
+  <link rel="preload" as="image" href="img/image-mobile.webp" type="image/webp" imagesrcset="img/image-mobile.webp 768w, img/image.webp 1440w" imagesizes="100vw" fetchpriority="high">
   <link rel="preload" as="script" href="config.js" fetchpriority="high">
   
   <!-- Preconnect para CDNs (conexões críticas) -->

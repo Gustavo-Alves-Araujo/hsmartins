@@ -134,7 +134,7 @@ class AboutImageFeaturesComponent extends BaseComponent {
                                         <i class="fas fa-check text-base"></i>
                                     </div>
                                     <div class="pr-2">
-                                        <h4 class="text-xs font-extrabold text-slate-900 whitespace-nowrap">Qualidade Garantida</h4>
+                                        <span class="text-xs font-extrabold text-slate-900 whitespace-nowrap" role="text">Qualidade Garantida</span>
                                     </div>
                                 </div>
                             </div>

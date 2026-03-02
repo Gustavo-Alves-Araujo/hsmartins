@@ -179,8 +179,8 @@ class WhatsAppFloatButtonComponent {
         const iconStyle = this.icon.includes('whatsapp') ? 'font-size: 1.5rem;' : '';
 
         return `
-            <a href="${this.href}" class="float-btn" style="background-color: ${this.color};">
-                <i class="${this.icon}" style="${iconStyle}"></i>
+            <a href="${this.href}" class="float-btn" style="background-color: ${this.color};" aria-label="${this.text} pelo WhatsApp">
+                <i class="${this.icon}" style="${iconStyle}" aria-hidden="true"></i>
                 ${this.text ? `<span>${this.text}</span>` : ''}
             </a>
         `;
