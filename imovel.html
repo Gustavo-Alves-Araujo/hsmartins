@@ -38,7 +38,7 @@
     <meta name="ICBM" content="-23.5286, -46.3469">
     
     <!-- Preload & Performance -->
-    <link rel="preload" as="image" href="/img/logo.png" type="image/png">
+    <link rel="preload" as="image" href="/img/logo.webp" type="image/webp">
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
@@ -68,6 +68,11 @@
     <script src="/templates/components/component-registry.js" defer></script>
     
     <style>
+        /* Font-display override for Font Awesome */
+        @font-face { font-family: "Font Awesome 6 Free"; font-display: swap; }
+        @font-face { font-family: "Font Awesome 6 Brands"; font-display: swap; }
+        .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
+        
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);

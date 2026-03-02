@@ -148,13 +148,29 @@ class ProductGridAdvancedComponent extends BaseComponent {
     }
 
     async loadSupabaseScript() {
-        return new Promise((resolve, reject) => {
+        // Reuse shared promise to prevent duplicate loading
+        if (window.__supabaseLoadPromise) return window.__supabaseLoadPromise;
+        // Check if already loaded
+        if (typeof supabase !== 'undefined') return Promise.resolve();
+        // Check if script tag already exists
+        const existing = document.querySelector('script[src*="supabase-js@2"]');
+        if (existing) {
+            window.__supabaseLoadPromise = new Promise((resolve) => {
+                if (typeof supabase !== 'undefined') return resolve();
+                existing.addEventListener('load', () => setTimeout(resolve, 100));
+                // If already loaded but event missed
+                setTimeout(() => { if (typeof supabase !== 'undefined') resolve(); }, 500);
+            });
+            return window.__supabaseLoadPromise;
+        }
+        window.__supabaseLoadPromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
             script.onload = () => setTimeout(() => resolve(), 100);
             script.onerror = () => reject();
             document.head.appendChild(script);
         });
+        return window.__supabaseLoadPromise;
     }
 
     renderProductCard(product, primaryColor) {
@@ -174,6 +190,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
                 <img src="${firstImage}" 
                      class="object-cover w-full h-full" 
                      alt="${this._escapeHtml(product.title)}"
+                     width="400" height="533"
                      loading="lazy"
                      decoding="async"
                      onerror="this.src='img/placeholder.jpg'"
@@ -230,19 +247,23 @@ class ProductGridAdvancedComponent extends BaseComponent {
         const filterBar = `
             <div class="mb-8">
                 <div class="grid grid-cols-1 md:grid-cols-6 gap-4 items-end">
-                    <input type="text" id="imovel-search" value="${this._escapeHtml(fs.search || '')}" placeholder="Pesquisar por título, tipo, bairro, cidade ou ref..." class="w-full md:col-span-2 px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" />
+                    <label for="imovel-search" class="sr-only">Pesquisar imóveis</label>
+                    <input type="text" id="imovel-search" value="${this._escapeHtml(fs.search || '')}" placeholder="Pesquisar por título, tipo, bairro, cidade ou ref..." class="w-full md:col-span-2 px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-gray-900 bg-white placeholder-gray-400 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" aria-label="Pesquisar imóveis" />
 
-                    <select id="imovel-type" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};">
+                    <label for="imovel-type" class="sr-only">Tipo de imóvel</label>
+                    <select id="imovel-type" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" aria-label="Tipo de imóvel">
                         <option value="all">Todos os tipos</option>
                         ${renderOptions(tipos)}
                     </select>
 
-                    <select id="imovel-city" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};">
+                    <label for="imovel-city" class="sr-only">Cidade</label>
+                    <select id="imovel-city" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" aria-label="Cidade">
                         <option value="all">Todas as cidades</option>
                         ${renderOptions(cidades)}
                     </select>
 
-                    <select id="imovel-bairro" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};">
+                    <label for="imovel-bairro" class="sr-only">Bairro</label>
+                    <select id="imovel-bairro" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" aria-label="Bairro">
                         <option value="all">Todos os bairros</option>
                         ${renderOptions(bairros)}
                     </select>
@@ -254,7 +275,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
                 </div>
                 
                 <div class="grid grid-cols-2 gap-3 mt-4">
-                    <select id="imovel-price" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};">
+                    <label for="imovel-price" class="sr-only">Faixa de preço</label>
+                    <select id="imovel-price" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" aria-label="Faixa de preço">
                         <option value="any">Qualquer preço</option>
                         <option value="0-100000">Até R$100.000</option>
                         <option value="100000-300000">R$100.000 - R$300.000</option>
@@ -262,7 +284,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
                         <option value="600000-1000000">R$600.000 - R$1.000.000</option>
                         <option value="1000000-999999999">Acima de R$1.000.000</option>
                     </select>
-                    <select id="imovel-sort" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};">
+                    <label for="imovel-sort" class="sr-only">Ordenar por</label>
+                    <select id="imovel-sort" class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm bg-white text-gray-900 focus:outline-none focus:ring-2" style="--tw-ring-color: ${c.primary};" aria-label="Ordenar por">
                         <option value="relevance">Ordenar: Relevância</option>
                         <option value="price-asc">Menor preço</option>
                         <option value="price-desc">Maior preço</option>

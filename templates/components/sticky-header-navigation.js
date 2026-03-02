@@ -133,11 +133,16 @@ class StickyHeaderNavigationComponent extends BaseComponent {
                 <nav class="flex items-center justify-between w-full px-6 md:px-8 lg:px-12 py-2">
                         <a href="#" class="flex items-center gap-3 group transition-transform hover:scale-105">
                             ${this.logoUrl && this.logoUrl.trim() !== '' ? `
-                                <img src="${this.logoUrl}" 
-                                     alt="${this.logoAlt || 'Logo'}" 
-                                 class="h-12 w-auto md:h-14 object-contain flex-shrink-0"
-                                     loading="eager"
-                                     onerror="console.error('Erro ao carregar logo:', this.src); this.style.display='none';">
+                                <picture>
+                                    <source srcset="${this.logoUrl.replace(/\.(png|jpe?g)$/i, '.webp')}" type="image/webp">
+                                    <img src="${this.logoUrl}" 
+                                         alt="${this.logoAlt || 'Logo'}" 
+                                     class="h-12 w-auto md:h-14 object-contain flex-shrink-0"
+                                         width="90" height="84"
+                                         loading="eager"
+                                         fetchpriority="high"
+                                         onerror="console.error('Erro ao carregar logo:', this.src); this.style.display='none';">
+                                </picture>
                             ` : ''}
                             ${this.siteName ? `<span class="hidden md:block font-black tracking-tight" style="color: #1B2160; font-style: italic;">${this.siteName}</span>` : ''}
                         </a>
@@ -150,8 +155,8 @@ class StickyHeaderNavigationComponent extends BaseComponent {
                             ${clientButtonHtml}
                         </div>
 
-                        <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600">
-                            <i class="fas fa-bars"></i>
+                        <button id="mobileMenuBtn" class="lg:hidden w-10 h-10 flex items-center justify-center rounded-xl bg-slate-100 text-slate-600" aria-label="Abrir menu de navegação" aria-expanded="false">
+                            <i class="fas fa-bars" aria-hidden="true"></i>
                         </button>
                     </nav>
 
@@ -193,6 +198,8 @@ class StickyHeaderNavigationComponent extends BaseComponent {
                 const icon = mobileBtn.querySelector('i');
                 icon.classList.toggle('fa-bars');
                 icon.classList.toggle('fa-times');
+                const isExpanded = navMenu.classList.contains('mobile-active');
+                mobileBtn.setAttribute('aria-expanded', isExpanded);
             });
         }
 

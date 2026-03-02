@@ -119,9 +119,15 @@ class AboutImageFeaturesComponent extends BaseComponent {
                                  style="background-color: ${this.hexToRgba(accentHex, 0.18)};"></div>
 
                             <div class="relative inline-block">
-                                <img src="${this.imageUrl}" alt="${this.imageAlt}"
-                                     class="w-full max-w-[460px] h-auto object-cover shadow-xl border-4 border-white"
-                                     style="border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;">
+                                <picture>
+                                    <source srcset="${this.imageUrl.replace(/\.(jpe?g|png)$/i, '.webp')}" type="image/webp">
+                                    <img src="${this.imageUrl}" alt="${this.imageAlt}"
+                                         class="w-full max-w-[460px] h-auto object-cover shadow-xl border-4 border-white"
+                                         width="460" height="460"
+                                         loading="lazy"
+                                         decoding="async"
+                                         style="border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;">
+                                </picture>
 
                                 <div class="absolute bottom-6 -right-4 md:right-4 bg-white p-3 md:p-4 rounded-2xl shadow-[0_15px_35px_rgba(0,0,0,0.12)] border border-slate-50 flex items-center gap-3 animate-float">
                                     <div class="w-10 h-10 rounded-xl flex items-center justify-center text-white ${c.useHex ? '' : `bg-${c.badgeIconBg} shadow-lg shadow-${c.badgeIconBg}/30`}" ${c.useHex ? `style="background-color: ${c.badgeIconBgHex}; box-shadow: 0 10px 15px -3px ${c.badgeIconBgShadowHex}, 0 4px 6px -2px ${c.badgeIconBgShadowHex};"` : ''}>

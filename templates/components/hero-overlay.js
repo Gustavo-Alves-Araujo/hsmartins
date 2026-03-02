@@ -87,10 +87,14 @@ class HeroComponent extends BaseComponent {
 
                 <div class="absolute inset-0 z-0 flex items-center justify-center" style="background: ${gradientBg};">
                     <picture class="block w-full h-full">
-                        <source media="(max-width: 768px)" srcset="img/image(1).png">
+                        <source media="(max-width: 768px)" srcset="img/image-mobile.webp" type="image/webp">
+                        <source media="(max-width: 768px)" srcset="img/image(1).png" type="image/png">
+                        <source srcset="img/image.webp" type="image/webp">
                         <img src="img/image.png"
                          alt="${this.backgroundAlt}"
                              class="w-full h-full hero-bg-image"
+                             width="1440" height="960"
+                             fetchpriority="high"
                              style="object-position: center center; min-height: 100svh; min-height: -webkit-fill-available; width: 100%; height: 100%;">
                     </picture>
                 </div>
@@ -134,20 +138,23 @@ class HeroComponent extends BaseComponent {
                                     style="--tw-ring-color: ${c.ctaPrimaryBg};"
                                 />
 
-                                    <select id="hero-search-type" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                    <label for="hero-search-type" class="sr-only">Tipo de imóvel</label>
+                                    <select id="hero-search-type" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};" aria-label="Tipo de imóvel">
                                     <option value="all">Todos os tipos</option>
                                 </select>
 
-                                    <select id="hero-search-city" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                    <label for="hero-search-city" class="sr-only">Cidade</label>
+                                    <select id="hero-search-city" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};" aria-label="Cidade">
                                     <option value="all">Todas as cidades</option>
                                 </select>
 
-                                    <select id="hero-search-bairro" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};">
+                                    <label for="hero-search-bairro" class="sr-only">Bairro</label>
+                                    <select id="hero-search-bairro" class="w-full px-4 py-3 rounded-xl bg-white text-gray-900 focus:outline-none focus:ring-2 border border-gray-200" style="--tw-ring-color: ${c.ctaPrimaryBg};" aria-label="Bairro">
                                     <option value="all">Todos os bairros</option>
                                 </select>
 
-                                <button type="submit" class="w-full px-5 py-3 rounded-xl font-extrabold uppercase tracking-widest text-xs shadow-[0_14px_28px_rgba(0,0,0,0.35)] hover:opacity-95 transition"
-                                        style="background: linear-gradient(135deg, ${accentHex} 0%, ${this.darkenColor(accentHex, 0.12)} 100%); color: ${badgeText};">
+                                <button type="submit" class="w-full px-5 py-3 rounded-xl font-extrabold uppercase tracking-widest text-xs shadow-[0_14px_28px_rgba(0,0,0,0.35)] hover:opacity-95 transition min-h-[48px]"
+                                        style="background: linear-gradient(135deg, ${accentHex} 0%, ${this.darkenColor(accentHex, 0.12)} 100%); color: ${badgeText}; min-height: 48px;">
                                     Pesquisar
                                 </button>
                             </div>

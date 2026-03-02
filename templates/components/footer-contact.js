@@ -173,6 +173,8 @@ class FooterContactComponent extends BaseComponent {
                         ${this.address.mapQuery ? `
                             <a href="https://maps.google.com/?q=${encodeURIComponent(this.address.mapQuery)}"
                                target="_blank"
+                               rel="noopener noreferrer"
+                               aria-label="Ver localização no Google Maps: ${this.address.street || this.address.mapQuery}"
                                class="block h-80 w-full bg-gray-200 rounded-2xl overflow-hidden relative group shadow-inner">
                                 <iframe
                                     src="${mapEmbedUrl}"
@@ -182,6 +184,8 @@ class FooterContactComponent extends BaseComponent {
                                     scrolling="no"
                                     marginheight="0"
                                     marginwidth="0"
+                                    title="Mapa da localização: ${this.address.street || this.address.mapQuery}"
+                                    loading="lazy"
                                     style="filter: grayscale(100%); transition: filter 0.5s;"
                                     onmouseover="this.style.filter='grayscale(0%)';"
                                     onmouseout="this.style.filter='grayscale(100%)';">

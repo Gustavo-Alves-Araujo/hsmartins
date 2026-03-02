@@ -64,7 +64,7 @@
   </script>
 
   <!-- Preload & Preconnect -->
-  <link rel="preload" as="image" href="../../img/logo.png" type="image/png" fetchpriority="high">
+  <link rel="preload" as="image" href="../../img/logo.webp" type="image/webp" fetchpriority="high">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.tailwindcss.com">
@@ -81,13 +81,20 @@
   <!-- Scripts -->
   <script src="../../config.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script src="../../templates/components/base-component.js"></script>
   <script src="../../templates/components/component-registry.js"></script>
 
   <style>
+    /* Font-display override for Font Awesome */
+    @font-face { font-family: "Font Awesome 6 Free"; font-display: swap; }
+    @font-face { font-family: "Font Awesome 6 Brands"; font-display: swap; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
+    
     #navMenu.mobile-active {
       opacity: 1;
       transform: translateY(0);

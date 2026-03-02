@@ -17,11 +17,31 @@
         injectCSS() {
             const head = document.head;
 
-            // Font Awesome
+            // Font Awesome - with async loading
+            const fontAwesomePreload = document.createElement('link');
+            fontAwesomePreload.rel = 'preload';
+            fontAwesomePreload.as = 'style';
+            fontAwesomePreload.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+            head.appendChild(fontAwesomePreload);
+
             const fontAwesome = document.createElement('link');
             fontAwesome.rel = 'stylesheet';
             fontAwesome.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+            fontAwesome.media = 'print';
+            fontAwesome.onload = function() { this.media = 'all'; };
             head.appendChild(fontAwesome);
+
+            // Override font-display for Font Awesome to prevent FOIT
+            const fontDisplayOverride = document.createElement('style');
+            fontDisplayOverride.textContent = `
+                @font-face { font-family: "Font Awesome 6 Free"; font-display: swap; }
+                @font-face { font-family: "Font Awesome 6 Brands"; font-display: swap; }
+                @font-face { font-family: "fa-brands-400"; font-display: swap; }
+                @font-face { font-family: "fa-solid-900"; font-display: swap; }
+                @font-face { font-family: "fa-regular-400"; font-display: swap; }
+                .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
+            `;
+            head.appendChild(fontDisplayOverride);
 
             // AOS CSS REMOVIDO - causava crash no iOS Safari
             // AOS usa scroll listeners + IntersectionObserver constantemente

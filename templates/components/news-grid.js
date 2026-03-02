@@ -90,13 +90,26 @@ class NewsGridComponent extends BaseComponent {
     }
 
     async loadSupabaseScript() {
-        return new Promise((resolve, reject) => {
+        // Reuse shared promise to prevent duplicate loading
+        if (window.__supabaseLoadPromise) return window.__supabaseLoadPromise;
+        if (typeof supabase !== 'undefined') return Promise.resolve();
+        const existing = document.querySelector('script[src*="supabase-js@2"]');
+        if (existing) {
+            window.__supabaseLoadPromise = new Promise((resolve) => {
+                if (typeof supabase !== 'undefined') return resolve();
+                existing.addEventListener('load', () => setTimeout(resolve, 100));
+                setTimeout(() => { if (typeof supabase !== 'undefined') resolve(); }, 500);
+            });
+            return window.__supabaseLoadPromise;
+        }
+        window.__supabaseLoadPromise = new Promise((resolve, reject) => {
             const script = document.createElement('script');
             script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
             script.onload = () => setTimeout(() => resolve(), 100);
             script.onerror = () => reject();
             document.head.appendChild(script);
         });
+        return window.__supabaseLoadPromise;
     }
 
     renderNewsCard(newsItem) {
