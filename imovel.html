@@ -42,8 +42,16 @@
     <link rel="preconnect" href="https://cdn.tailwindcss.com">
     <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://vkwczizdjhsejbpaapea.supabase.co">
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
     <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+    <!-- Preload FontAwesome woff2 fontes críticas -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2">
+    <!-- Preload config.json antes do config.js executar -->
+    <link rel="preload" as="fetch" href="/config.json" crossorigin="anonymous">
     
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/img/logo.png" sizes="32x32">
@@ -52,23 +60,21 @@
     <!-- Config (sem defer - crítico) -->
     <script src="/config.js"></script>
     
-    <!-- Tailwind CSS (defer) -->
-    <script src="https://cdn.tailwindcss.com" defer></script>
-    
-    <!-- Font Awesome (fetch + inject with font-display:swap) -->
-    <script>
-    fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
-        .then(r=>r.text()).then(css=>{
-            const s=document.createElement('style');
-            s.textContent=css.replace(/@font-face\s*\{/g,'@font-face{font-display:swap;').replace(/url\(\.\.\/webfonts\//g,'url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/');
-            document.head.appendChild(s);
-        }).catch(()=>{
-            const l=document.createElement('link');l.rel='stylesheet';
-            l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-            document.head.appendChild(l);
-        });
-    </script>
+    <!-- Tailwind CSS (async - não bloqueia scripts defer de renderização) -->
+    <script src="https://cdn.tailwindcss.com" async></script>
+
+    <!-- Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap">
+
+    <!-- Font Awesome - carregado assincronamente, sem bloquear render -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
     <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <style>
+      @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2) format('woff2')}
+      @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2) format('woff2')}
+      @font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2) format('woff2')}
+      body{margin:0;padding:0;font-family:'Poppins',sans-serif;background:#F8FAFB}
+    </style>
     
     <!-- Supabase (defer) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
@@ -458,10 +464,11 @@
                 .filter(url => url && typeof url === 'string' && url.trim() !== '' && url.startsWith('http'))
                 .map(url => {
                     let u = url.replace(/^http:\/\//i, 'https://');
-                    // Optimize Supabase images: resize for gallery thumbnails
+                    // Optimize Supabase images: use render/image endpoint (transformação real)
                     if (u.includes('supabase.co/storage/')) {
-                        const sep = u.includes('?') ? '&' : '?';
-                        u = u + sep + 'width=800&quality=75';
+                        u = u.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
+                        const baseUrl = u.split('?')[0];
+                        u = `${baseUrl}?width=800&quality=80&format=webp&resize=cover`;
                     }
                     return u;
                 });

@@ -18,33 +18,16 @@
             const head = document.head;
 
             // Utility CSS (sr-only)
-            const utilStyle = document.createElement('style');
-            utilStyle.textContent = `.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }`;
-            head.appendChild(utilStyle);
+            if (!document.getElementById('cosmos-util-styles')) {
+                const utilStyle = document.createElement('style');
+                utilStyle.id = 'cosmos-util-styles';
+                utilStyle.textContent = `.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }`;
+                head.appendChild(utilStyle);
+            }
 
-            // Font Awesome - fetch CSS, inject font-display:swap into @font-face blocks
-            fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
-                .then(r => r.text())
-                .then(css => {
-                    // Inject font-display: swap + rewrite relative webfont URLs to absolute CDN URLs
-                    const FA_BASE = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0';
-                    const patched = css
-                        .replace(/@font-face\s*\{/g, '@font-face{font-display:swap;')
-                        .replace(/url\(\.\.\/webfonts\//g, `url(${FA_BASE}/webfonts/`);
-                    const style = document.createElement('style');
-                    style.textContent = patched;
-                    head.appendChild(style);
-                })
-                .catch(() => {
-                    // Fallback: load normally if fetch fails
-                    const link = document.createElement('link');
-                    link.rel = 'stylesheet';
-                    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-                    head.appendChild(link);
-                });
-
-            // AOS CSS REMOVIDO - causava crash no iOS Safari
-            // AOS usa scroll listeners + IntersectionObserver constantemente
+            // Font Awesome e Google Fonts são carregados diretamente no HTML (index.html)
+            // com font-display:swap e preload dos woff2 - não precisa de fetch aqui.
+            // Isso elimina os 90ms de bloqueio de fonte e reduz o CLS.
 
             console.log('✅ CSS injetado');
         }
@@ -146,12 +129,20 @@
                 return;
             }
 
+            // Verifica se já existe um link de Google Fonts no DOM (carregado via HTML head)
+            const existing = document.querySelector('link[href*="fonts.googleapis.com"]');
+            if (existing) {
+                console.log('✅ Google Fonts já carregado via HTML head - pulando injeção');
+                return;
+            }
+
+            // Fallback: injeta via JS se não estiver no HTML (páginas sem o link no head)
             const fontLink = document.createElement('link');
             fontLink.rel = 'stylesheet';
             fontLink.href = window.config.theme.fonts.urls.google;
             document.head.appendChild(fontLink);
 
-            console.log('✅ Google Fonts injetado');
+            console.log('✅ Google Fonts injetado via JS (fallback)');
         }
 
         /**

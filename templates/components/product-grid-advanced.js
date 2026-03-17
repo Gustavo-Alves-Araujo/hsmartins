@@ -182,10 +182,17 @@ class ProductGridAdvancedComponent extends BaseComponent {
         let firstImage = (Array.isArray(product.imagesUrls) && product.imagesUrls.length > 0 && product.imagesUrls[0])
             ? product.imagesUrls[0]
             : (product.imageUrl || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80');
-        // Optimize Supabase images: resize to 600px width and convert to webp
+        // Optimize Supabase images: use the render/image endpoint (real transformation)
+        // /object/public/ ignora query params de resize - precisa de /render/image/public/
         if (firstImage && firstImage.includes('supabase.co/storage/')) {
-            const separator = firstImage.includes('?') ? '&' : '?';
-            firstImage = firstImage + separator + 'width=600&quality=75';
+            // Troca o endpoint de object para render/image (suporta transformação real)
+            firstImage = firstImage.replace(
+                '/storage/v1/object/public/',
+                '/storage/v1/render/image/public/'
+            );
+            // Remove qualquer query string existente e aplica os parâmetros de transformação
+            const baseUrl = firstImage.split('?')[0];
+            firstImage = `${baseUrl}?width=400&quality=80&format=webp&resize=cover`;
         }
         
         const totalImages = Array.isArray(product.imagesUrls) ? product.imagesUrls.filter(Boolean).length : 1;
@@ -611,38 +618,83 @@ class ProductGridAdvancedComponent extends BaseComponent {
         });
     }
 
+    /**
+     * Atualiza os selects de filtro com as opções carregadas do Supabase
+     * sem recriar o DOM (evita reflow forçado)
+     */
+    _updateFilterSelects() {
+        const all = this.products || [];
+        const tipos = this._uniqSorted(all.map(p => p.tipoimovel || p.category).filter(Boolean));
+        const cidades = this._uniqSorted(all.map(p => p.endereco_cidade).filter(Boolean));
+        const bairros = this._uniqSorted(all.map(p => p.endereco_bairro).filter(Boolean));
+
+        const populate = (selId, values) => {
+            const sel = document.getElementById(selId);
+            if (!sel) return;
+            const firstOpt = sel.options[0];
+            // Usa DocumentFragment para mínimo de reflow
+            const frag = document.createDocumentFragment();
+            values.forEach(v => {
+                const opt = document.createElement('option');
+                opt.value = v;
+                opt.textContent = v;
+                frag.appendChild(opt);
+            });
+            // Remove todas exceto a primeira, depois adiciona novas (1 reflow)
+            while (sel.options.length > 1) sel.remove(1);
+            sel.appendChild(frag);
+        };
+
+        populate('imovel-type', tipos);
+        populate('imovel-city', cidades);
+        populate('imovel-bairro', bairros);
+
+        // Hero selects também
+        const heroTypeSel = document.getElementById('hero-search-type');
+        const heroCitySel = document.getElementById('hero-search-city');
+        const heroBairroSel = document.getElementById('hero-search-bairro');
+        if (heroTypeSel || heroCitySel || heroBairroSel) {
+            window.dispatchEvent(new CustomEvent('imoveis:options', { detail: { tipos, cidades, bairros } }));
+        } else {
+            // Hero ainda não montado - dispatch de qualquer forma, o hero captura quando montar
+            window.dispatchEvent(new CustomEvent('imoveis:options', { detail: { tipos, cidades, bairros } }));
+        }
+    }
+
     async mount(targetId) {
         this.targetId = targetId;
         const target = document.getElementById(targetId);
-        if (target) {
-            if (this.useSupabase) {
-                this.isLoading = true;
-                target.innerHTML = this.render();
-                this.attachFilterListeners();
-                this.attachHeroIntegration();
-                const loaded = await this.loadFromSupabase();
-                this.isLoading = false;
-                target.innerHTML = this.render();
-                this.attachFilterListeners();
-                this.attachHeroIntegration();
-                this.renderGrids();
-                // envia opções pro hero (para popular selects dinamicamente)
-                try {
-                    const all = this.products || [];
-                    const tipos = this._uniqSorted(all.map(p => p.tipoimovel || p.category).filter(Boolean));
-                    const cidades = this._uniqSorted(all.map(p => p.endereco_cidade).filter(Boolean));
-                    const bairros = this._uniqSorted(all.map(p => p.endereco_bairro).filter(Boolean));
-                    window.dispatchEvent(new CustomEvent('imoveis:options', { detail: { tipos, cidades, bairros } }));
-                } catch (e) {
-                    // silencioso
-                }
-                if (!loaded) console.warn('⚠️ Usando produtos padrão');
-            } else {
-                target.innerHTML = this.render();
-                this.attachFilterListeners();
-                this.attachHeroIntegration();
-                this.renderGrids();
+        if (!target) return;
+
+        if (this.useSupabase) {
+            // Renderiza UMA VEZ com o layout final (barra de filtros + divs de grid vazios)
+            // Evita o double innerHTML que forçava reflow e causava perda de estado dos inputs
+            this.isLoading = false;
+            target.innerHTML = this.render();
+            this.attachFilterListeners();
+            this.attachHeroIntegration();
+
+            // Mostra loading APENAS no container do grid (não destrói a barra de filtros)
+            const allEl = document.getElementById(`${this.id}-all`);
+            if (allEl) {
+                allEl.innerHTML = `<div class="text-center py-12"><div class="inline-block w-8 h-8 border-4 border-gray-200 rounded-full animate-spin" style="border-top-color:${this.colors.primary}"></div><p class="text-gray-500 mt-3 text-sm">Carregando imóveis...</p></div>`;
             }
+
+            // Carrega dados
+            const loaded = await this.loadFromSupabase();
+
+            // Atualiza selects em-place (sem recriar o DOM inteiro → zero reflow)
+            this._updateFilterSelects();
+
+            // Renderiza os grids de produtos
+            this.renderGrids();
+
+            if (!loaded) console.warn('⚠️ Usando produtos padrão');
+        } else {
+            target.innerHTML = this.render();
+            this.attachFilterListeners();
+            this.attachHeroIntegration();
+            this.renderGrids();
         }
     }
 

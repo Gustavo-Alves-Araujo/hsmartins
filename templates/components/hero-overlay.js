@@ -195,6 +195,12 @@ class HeroComponent extends BaseComponent {
         if (target) {
             target.innerHTML = this.render();
             this.attachEventListeners();
+            // Remove o placeholder estático de LCP (img colocada no HTML para adiantar o LCP)
+            // Agora a imagem real já está no DOM via o hero renderizado acima
+            const lcpPicture = document.getElementById('lcp-hero-picture');
+            if (lcpPicture) lcpPicture.remove();
+            const lcpImg = document.getElementById('lcp-hero-img');
+            if (lcpImg) lcpImg.remove();
         }
     }
 
