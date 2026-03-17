@@ -83,7 +83,6 @@
   <!-- Font Awesome self-hosted (sem cookies __cf_bm) -->
   <link rel="stylesheet" href="/fonts/fa-all.min.css" media="print" onload="this.media='all'">
   <noscript><link rel="stylesheet" href="/fonts/fa-all.min.css"></noscript>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
   <script src="../../templates/components/base-component.min.js"></script>
   <script src="../../templates/components/component-registry.min.js"></script>
@@ -292,10 +291,12 @@
 
     async function init() {
       try {
-        const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const { data, error } = await client.from('Hsmartins_Produtos').select('*');
-
-        if (error) throw error;
+        const _resp = await fetch(
+          `${SUPABASE_URL}/rest/v1/Hsmartins_Produtos?select=*`,
+          { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+        );
+        if (!_resp.ok) throw new Error(`HTTP ${_resp.status}`);
+        const data = await _resp.json();
 
         const loading = document.getElementById('imoveis-loading');
         const empty = document.getElementById('imoveis-empty');

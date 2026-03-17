@@ -31,22 +31,13 @@ class NewsGridComponent extends BaseComponent {
 
     async loadFromSupabase() {
         try {
-            if (typeof supabase === 'undefined') {
-                await this.loadSupabaseScript();
-            }
-
             const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
-            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            
-            const { data, error } = await supabaseClient
-                .from('Hsmartins_Noticias')
-                .select('*')
-                .eq('status', 'publicado')
-                .order('data_publicacao', { ascending: false })
-                .limit(this.limit);
-
-            if (error) throw error;
+            const _headers = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
+            const url = `${SUPABASE_URL}/rest/v1/Hsmartins_Noticias?select=*&status=eq.publicado&order=data_publicacao.desc&limit=${this.limit}`;
+            const resp = await fetch(url, { headers: _headers });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
 
             if (data && data.length > 0) {
                 this.news = data.map(item => ({
@@ -89,28 +80,7 @@ class NewsGridComponent extends BaseComponent {
         });
     }
 
-    async loadSupabaseScript() {
-        // Reuse shared promise to prevent duplicate loading
-        if (window.__supabaseLoadPromise) return window.__supabaseLoadPromise;
-        if (typeof supabase !== 'undefined') return Promise.resolve();
-        const existing = document.querySelector('script[src*="supabase-js@2"]');
-        if (existing) {
-            window.__supabaseLoadPromise = new Promise((resolve) => {
-                if (typeof supabase !== 'undefined') return resolve();
-                existing.addEventListener('load', () => setTimeout(resolve, 100));
-                setTimeout(() => { if (typeof supabase !== 'undefined') resolve(); }, 500);
-            });
-            return window.__supabaseLoadPromise;
-        }
-        window.__supabaseLoadPromise = new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-            script.onload = () => setTimeout(() => resolve(), 100);
-            script.onerror = () => reject();
-            document.head.appendChild(script);
-        });
-        return window.__supabaseLoadPromise;
-    }
+
 
     renderNewsCard(newsItem) {
         const c = this.colors;

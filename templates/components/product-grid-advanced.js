@@ -55,16 +55,12 @@ class ProductGridAdvancedComponent extends BaseComponent {
 
     async loadFromSupabase() {
         try {
-            if (typeof supabase === 'undefined') {
-                await this.loadSupabaseScript();
-            }
-
             const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
             const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
-            const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            const { data, error } = await supabaseClient.from('Hsmartins_Produtos').select('*');
-
-            if (error) throw error;
+            const _headers = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
+            const resp = await fetch(`${SUPABASE_URL}/rest/v1/Hsmartins_Produtos?select=*`, { headers: _headers });
+            if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+            const data = await resp.json();
 
             if (data && data.length > 0) {
                 // Padroniza e separa
@@ -147,31 +143,7 @@ class ProductGridAdvancedComponent extends BaseComponent {
             .replace(/'/g, '&#039;');
     }
 
-    async loadSupabaseScript() {
-        // Reuse shared promise to prevent duplicate loading
-        if (window.__supabaseLoadPromise) return window.__supabaseLoadPromise;
-        // Check if already loaded
-        if (typeof supabase !== 'undefined') return Promise.resolve();
-        // Check if script tag already exists
-        const existing = document.querySelector('script[src*="supabase-js@2"]');
-        if (existing) {
-            window.__supabaseLoadPromise = new Promise((resolve) => {
-                if (typeof supabase !== 'undefined') return resolve();
-                existing.addEventListener('load', () => setTimeout(resolve, 100));
-                // If already loaded but event missed
-                setTimeout(() => { if (typeof supabase !== 'undefined') resolve(); }, 500);
-            });
-            return window.__supabaseLoadPromise;
-        }
-        window.__supabaseLoadPromise = new Promise((resolve, reject) => {
-            const script = document.createElement('script');
-            script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
-            script.onload = () => setTimeout(() => resolve(), 100);
-            script.onerror = () => reject();
-            document.head.appendChild(script);
-        });
-        return window.__supabaseLoadPromise;
-    }
+
 
     renderProductCard(product, primaryColor) {
         const badgeHtml = product.badge ? `<span class="absolute top-3 left-3 ${product.badge.style === 'new' ? 'bg-gray-900' : 'bg-red-500'} text-white text-[10px] font-bold px-2 py-1 rounded uppercase z-10">${product.badge.text}</span>` : '';

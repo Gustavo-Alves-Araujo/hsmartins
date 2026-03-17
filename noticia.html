@@ -37,7 +37,6 @@
     <script src="/config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/fonts/fa-all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script src="/templates/components/base-component.min.js"></script>
     <script src="/templates/components/component-registry.min.js"></script>
@@ -93,15 +92,14 @@
                     return;
                 }
 
-                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                const { data, error } = await client
-                    .from('Hsmartins_Noticias')
-                    .select('*')
-                    .eq('slug', slug)
-                    .eq('status', 'publicado')
-                    .single();
+                const _resp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/Hsmartins_Noticias?select=*&slug=eq.${encodeURIComponent(slug)}&status=eq.publicado&limit=1`,
+                    { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+                );
+                const _rows = await _resp.json();
+                const data = (_resp.ok && _rows.length > 0) ? _rows[0] : null;
 
-                if (error || !data) {
+                if (!data) {
                     showNotFound();
                     return;
                 }
@@ -184,15 +182,13 @@
 
         async function loadOutrasNoticias(excludeId) {
             try {
-                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                const { data, error } = await client
-                    .from('Hsmartins_Noticias')
-                    .select('*')
-                    .eq('status', 'publicado')
-                    .neq('id', excludeId)
-                    .order('data_publicacao', { ascending: false });
+                const _rResp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/Hsmartins_Noticias?select=*&status=eq.publicado&id=neq.${excludeId}&order=data_publicacao.desc`,
+                    { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+                );
+                const data = _rResp.ok ? await _rResp.json() : [];
 
-                if (error || !data || data.length === 0) {
+                if (!data || data.length === 0) {
                     document.getElementById('outras-noticias').innerHTML = '<p class="text-gray-600 col-span-full text-center">Nenhuma outra notícia disponível.</p>';
                     return;
                 }

@@ -9,7 +9,6 @@
     <script src="config.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="/fonts/fa-all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script src="templates/components/base-component.min.js"></script>
     <script src="templates/components/component-registry.min.js"></script>
@@ -44,14 +43,12 @@
 
         async function init() {
             try {
-                const client = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-                const { data, error } = await client
-                    .from('Hsmartins_Noticias')
-                    .select('*')
-                    .eq('status', 'publicado')
-                    .order('data_publicacao', { ascending: false });
-
-                if (error) throw error;
+                const _resp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/Hsmartins_Noticias?select=*&status=eq.publicado&order=data_publicacao.desc`,
+                    { headers: { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` } }
+                );
+                if (!_resp.ok) throw new Error(`HTTP ${_resp.status}`);
+                const data = await _resp.json();
 
                 const loading = document.getElementById('noticias-loading');
                 const empty = document.getElementById('noticias-empty');

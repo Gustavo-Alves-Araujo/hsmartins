@@ -76,9 +76,6 @@
       body{margin:0;padding:0;font-family:'Poppins',sans-serif;background:#F8FAFB}
     </style>
     
-    <!-- Supabase (defer) -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
-    
     <!-- Componentes (defer) - .min.js: ~77% menor, sem console.* overhead -->
     <script src="/templates/components/base-component.min.js" defer></script>
     <script src="/templates/components/component-registry.min.js" defer></script>
@@ -195,25 +192,13 @@
         let currentProperty = null;
         let currentImageIndex = 0;
         let allImages = [];
-        let supabaseClient = null;
 
-        // Aguarda Supabase carregar antes de executar
+        // Configuração Supabase (REST API - sem biblioteca externa)
+        const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
+        const SUPABASE_HEADERS = { apikey: SUPABASE_ANON_KEY, Authorization: `Bearer ${SUPABASE_ANON_KEY}` };
+
         function initPage() {
-            // Verifica se Supabase está disponível
-            if (typeof supabase === 'undefined') {
-                console.log('Aguardando Supabase carregar...');
-                setTimeout(initPage, 100);
-                return;
-            }
-
-            // Configuração Supabase
-            const SUPABASE_URL = 'https://vkwczizdjhsejbpaapea.supabase.co';
-            const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZrd2N6aXpkamhzZWpicGFhcGVhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njc4NDU0MzAsImV4cCI6MjA4MzQyMTQzMH0.qvWHxNAhefq253JaoVYG19izClKgLGc4ZkW5y8ladmM';
-            supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            
-            console.log('Supabase inicializado, carregando produto...');
-            
-            // Carrega o produto
             loadProperty();
         }
 
@@ -404,16 +389,15 @@
             }
 
             try {
-                let query = supabaseClient.from('Hsmartins_Produtos').select('*');
-                if (id) {
-                    query = query.eq('id', id);
-                } else {
-                    query = query.eq('ref', ref);
-                }
-                const { data, error } = await query.single();
+                const _param = id ? `id=eq.${encodeURIComponent(id)}` : `ref=eq.${encodeURIComponent(ref)}`;
+                const _resp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/Hsmartins_Produtos?select=*&${_param}&limit=1`,
+                    { headers: SUPABASE_HEADERS }
+                );
+                if (!_resp.ok) throw new Error(`HTTP ${_resp.status}`);
+                const _rows = await _resp.json();
+                const data = _rows[0];
 
-                if (error) throw error;
-                
                 if (!data) {
                     renderError('Imóvel não encontrado');
                     return;
@@ -1008,14 +992,15 @@
 
             try {
                 // Busca todos os imóveis (igual ao index)
-                const { data, error } = await supabaseClient
-                    .from('Hsmartins_Produtos')
-                    .select('*');
-
-                if (error) {
-                    console.error('Erro ao carregar relacionados:', error);
+                const _rResp = await fetch(
+                    `${SUPABASE_URL}/rest/v1/Hsmartins_Produtos?select=*`,
+                    { headers: SUPABASE_HEADERS }
+                );
+                if (!_rResp.ok) {
+                    console.error('Erro ao carregar relacionados: HTTP', _rResp.status);
                     return;
                 }
+                const data = await _rResp.json();
 
                 if (data && data.length > 0) {
                     // Filtra no JavaScript (igual ao index)
