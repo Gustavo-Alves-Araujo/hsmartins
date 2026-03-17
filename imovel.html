@@ -39,17 +39,16 @@
     
     <!-- Preload & Performance -->
     <link rel="preload" as="image" href="/img/logo.webp" type="image/webp">
-    <link rel="preconnect" href="https://cdn.tailwindcss.com">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <!-- Preconnect: máx 4 origens críticas -->
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://vkwczizdjhsejbpaapea.supabase.co">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net">
+    <!-- DNS prefetch para origens secundárias -->
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
     <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <!-- Preload FontAwesome woff2 fontes críticas -->
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2">
-    <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2">
+    <!-- Preload FontAwesome woff2 fontes críticas (self-hosted) -->
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/webfonts/fa-solid-900.woff2">
+    <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/webfonts/fa-brands-400.woff2">
     <!-- Preload config.json antes do config.js executar -->
     <link rel="preload" as="fetch" href="/config.json" crossorigin="anonymous">
     
@@ -63,25 +62,26 @@
     <!-- Tailwind CSS (async - não bloqueia scripts defer de renderização) -->
     <script src="https://cdn.tailwindcss.com" async></script>
 
-    <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap">
+    <!-- Google Fonts - não-bloqueante -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"></noscript>
 
-    <!-- Font Awesome - carregado assincronamente, sem bloquear render -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <!-- Font Awesome self-hosted - sem cookies __cf_bm -->
+    <link rel="stylesheet" href="/fonts/fa-all.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/fonts/fa-all.min.css"></noscript>
     <style>
-      @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2) format('woff2')}
-      @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2) format('woff2')}
-      @font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2) format('woff2')}
+      @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:swap;src:url(/fonts/webfonts/fa-solid-900.woff2) format('woff2')}
+      @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/webfonts/fa-regular-400.woff2) format('woff2')}
+      @font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/webfonts/fa-brands-400.woff2) format('woff2')}
       body{margin:0;padding:0;font-family:'Poppins',sans-serif;background:#F8FAFB}
     </style>
     
     <!-- Supabase (defer) -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2" defer></script>
     
-    <!-- Componentes (defer) -->
-    <script src="/templates/components/base-component.js" defer></script>
-    <script src="/templates/components/component-registry.js" defer></script>
+    <!-- Componentes (defer) - .min.js: ~77% menor, sem console.* overhead -->
+    <script src="/templates/components/base-component.min.js" defer></script>
+    <script src="/templates/components/component-registry.min.js" defer></script>
     
     <style>
         .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border-width: 0; }
@@ -464,11 +464,11 @@
                 .filter(url => url && typeof url === 'string' && url.trim() !== '' && url.startsWith('http'))
                 .map(url => {
                     let u = url.replace(/^http:\/\//i, 'https://');
-                    // Optimize Supabase images: use render/image endpoint (transformação real)
+                    // Supabase /render/image/ é pago (Pro plan) - causa NS_BINDING_ABORTED no free tier.
+                    // Usa URL original /object/public/ sem params de transformação.
+                    // Remove apenas query params anteriores para URL limpa.
                     if (u.includes('supabase.co/storage/')) {
-                        u = u.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
-                        const baseUrl = u.split('?')[0];
-                        u = `${baseUrl}?width=800&quality=80&format=webp&resize=cover`;
+                        u = u.split('?')[0];
                     }
                     return u;
                 });

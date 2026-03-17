@@ -93,8 +93,8 @@ class ProductGridAdvancedComponent extends BaseComponent {
                                 rating: item.rating,
                                 installments: item.installments,
                                 badge: item.badge_text ? { text: item.badge_text, style: item.badge_style } : null,
-                                imageUrl: item.image_url,
-                                imagesUrls: (item.images_urls ? (Array.isArray(item.images_urls) ? item.images_urls : JSON.parse(item.images_urls)) : [item.image_url]).map(u => u && typeof u === 'string' ? u.replace(/^http:\/\//i, 'https://') : u)
+                                imageUrl: (item.image_url && typeof item.image_url === 'string' && item.image_url.startsWith('http')) ? item.image_url.replace(/^http:\/\//i, 'https://') : null,
+                                imagesUrls: (item.images_urls ? (Array.isArray(item.images_urls) ? item.images_urls : JSON.parse(item.images_urls)) : [item.image_url]).map(u => u && typeof u === 'string' && u.startsWith('http') ? u.replace(/^http:\/\//i, 'https://') : null).filter(Boolean)
                             });
                         }
                     });
@@ -179,20 +179,16 @@ class ProductGridAdvancedComponent extends BaseComponent {
         // SIMPLIFICADO: Apenas 1 imagem por card para evitar crash no iOS
         // O carrossel com todas as imagens estava causando crash no Safari/iOS
         // pois carregava centenas de imagens no DOM simultaneamente
-        let firstImage = (Array.isArray(product.imagesUrls) && product.imagesUrls.length > 0 && product.imagesUrls[0])
-            ? product.imagesUrls[0]
-            : (product.imageUrl || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80');
-        // Optimize Supabase images: use the render/image endpoint (real transformation)
-        // /object/public/ ignora query params de resize - precisa de /render/image/public/
+        const _isValidUrl = u => u && typeof u === 'string' && u.startsWith('http');
+        const _validFirst = Array.isArray(product.imagesUrls) && product.imagesUrls.find(_isValidUrl);
+        let firstImage = _validFirst || (_isValidUrl(product.imageUrl) ? product.imageUrl : null)
+            || 'https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80';
+        // Optimize Supabase images: o endpoint /render/image/ é pago (Pro plan).
+        // No free tier causa NS_BINDING_ABORTED. Usamos a URL original /object/public/
+        // e convertemos para HTTPS. O browser carrega o formato original (PNG/JPEG/WebP).
         if (firstImage && firstImage.includes('supabase.co/storage/')) {
-            // Troca o endpoint de object para render/image (suporta transformação real)
-            firstImage = firstImage.replace(
-                '/storage/v1/object/public/',
-                '/storage/v1/render/image/public/'
-            );
-            // Remove qualquer query string existente e aplica os parâmetros de transformação
-            const baseUrl = firstImage.split('?')[0];
-            firstImage = `${baseUrl}?width=400&quality=80&format=webp&resize=cover`;
+            // Garante HTTPS e remove query params extras
+            firstImage = firstImage.replace(/^http:\/\//i, 'https://').split('?')[0];
         }
         
         const totalImages = Array.isArray(product.imagesUrls) ? product.imagesUrls.filter(Boolean).length : 1;

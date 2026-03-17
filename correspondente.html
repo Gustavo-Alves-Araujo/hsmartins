@@ -19,24 +19,13 @@
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Font Awesome Icons (with font-display:swap) -->
-  <script>
-  fetch('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css')
-      .then(r=>r.text()).then(css=>{
-          const s=document.createElement('style');
-          s.textContent=css.replace(/@font-face\s*\{/g,'@font-face{font-display:swap;').replace(/url\(\.\.\/webfonts\//g,'url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/');
-          document.head.appendChild(s);
-      }).catch(()=>{
-          const l=document.createElement('link');l.rel='stylesheet';
-          l.href='https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
-          document.head.appendChild(l);
-      });
-  </script>
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+  <!-- Font Awesome self-hosted (sem cookies __cf_bm) -->
+  <link rel="stylesheet" href="/fonts/fa-all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="/fonts/fa-all.min.css"></noscript>
 
   <!-- Componentes -->
-  <script src="templates/components/base-component.js"></script>
-  <script src="templates/components/component-registry.js"></script>
+  <script src="templates/components/base-component.min.js"></script>
+  <script src="templates/components/component-registry.min.js"></script>
   <script src="templates/components/sticky-header-navigation.js"></script>
 </head>
 

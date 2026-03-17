@@ -125,7 +125,7 @@ class FaqAccordionComponent extends BaseComponent {
                         ${item.question}
                     </span>
                     <div class="faq-chevron-container flex-shrink-0 w-8 h-8 rounded-full bg-white shadow-sm border border-slate-100 flex items-center justify-center text-slate-400">
-                        <i data-lucide="chevron-down" class="faq-chevron w-4 h-4"></i>
+                        <i class="fas fa-chevron-down faq-chevron" style="font-size:12px;"></i>
                     </div>
                 </button>
 
@@ -219,8 +219,7 @@ class FaqAccordionComponent extends BaseComponent {
             });
         });
 
-        // Inicializa ícones
-        if (typeof lucide !== 'undefined') lucide.createIcons();
+        // Lucide removido - ícones FA não precisam de inicialização
     }
 
     static create(data, targetId) {

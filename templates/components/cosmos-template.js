@@ -44,81 +44,55 @@
         /**
          * Configura o Tailwind CSS baseado no config.js
          */
+        /**
+         * Configura o Tailwind CSS baseado no config.js
+         * O config já foi declarado globalmente em tailwindConfig (ver index.html head)
+         * Aqui apenas fazemos o fallback se o CDN ainda não carregou
+         */
         configureTailwind() {
-            if (!window.config) {
-                console.error('❌ config.js não encontrado');
-                return;
-            }
+            if (!window.config) return;
 
-            // Verifica se há script do Tailwind CDN na página
-            const tailwindScript = document.querySelector('script[src*="tailwindcss"]');
-            if (!tailwindScript) {
-                console.warn('⚠️ Tailwind CSS não encontrado na página. A configuração será pulada.');
-                return;
-            }
-
-            // Verifica se Tailwind está disponível (com timeout)
-            let attempts = 0;
-            const maxAttempts = 50; // 5 segundos máximo
-
-            const checkTailwind = () => {
-                attempts++;
-
-                if (typeof tailwind !== 'undefined') {
-                    // Cria script de configuração do Tailwind
-                    const tailwindConfig = document.createElement('script');
-                    tailwindConfig.textContent = `
-                        tailwind.config = {
-                            theme: {
-                                extend: {
-                                    colors: {
-                                        brand: {
-                                            dark: '${window.config.theme.colors.primary}',
-                                            light: '${window.config.theme.colors.primaryLight || window.config.theme.colors.secondary}',
-                                            cream: '${window.config.theme.colors.background}',
-                                            gold: '${window.config.theme.colors.accent}',
-                                            black: '#111111',
-                                            gray: '#F5F5F5'
-                                        },
-                                        'brand-black': '#111111',
-                                        'brand-gray': '#F5F5F5',
-                                        accent: '${window.config.theme.colors.accent || '#00F0FF'}'
-                                    },
-                                    fontFamily: {
-                                        serif: [${JSON.stringify(window.config.theme.fonts.primary)}],
-                                        sans: [${JSON.stringify(window.config.theme.fonts.secondary)}],
-                                        display: [${JSON.stringify(window.config.theme.fonts.secondary || window.config.theme.fonts.primary)}]
-                                    },
-                                    animation: {
-                                        'slide-up': 'slideUp 0.5s ease-out forwards',
-                                        'fade-in': 'fadeIn 0.3s ease-out forwards',
-                                    },
-                                    keyframes: {
-                                        slideUp: {
-                                            '0%': { transform: 'translateY(20px)', opacity: '0' },
-                                            '100%': { transform: 'translateY(0)', opacity: '1' },
-                                        },
-                                        fadeIn: {
-                                            '0%': { opacity: '0' },
-                                            '100%': { opacity: '1' },
-                                        }
-                                    }
-                                }
-                            }
+            const configObj = {
+                theme: {
+                    extend: {
+                        colors: {
+                            brand: {
+                                dark: window.config.theme.colors.primary,
+                                light: window.config.theme.colors.primaryLight || window.config.theme.colors.secondary,
+                                cream: window.config.theme.colors.background,
+                                gold: window.config.theme.colors.accent,
+                                black: '#111111',
+                                gray: '#F5F5F5'
+                            },
+                            'brand-black': '#111111',
+                            'brand-gray': '#F5F5F5',
+                            accent: window.config.theme.colors.accent || '#00F0FF'
+                        },
+                        fontFamily: {
+                            serif: [window.config.theme.fonts.primary],
+                            sans: [window.config.theme.fonts.secondary],
+                            display: [window.config.theme.fonts.secondary || window.config.theme.fonts.primary]
                         }
-                    `;
-                    document.head.appendChild(tailwindConfig);
-                    console.log('✅ Tailwind configurado');
-                } else if (attempts < maxAttempts) {
-                    // Tenta novamente após um pequeno delay
-                    setTimeout(checkTailwind, 100);
-                } else {
-                    console.warn('⚠️ Tailwind CSS não carregou a tempo. A configuração será pulada.');
+                    }
                 }
             };
 
-            // Inicia a verificação
-            checkTailwind();
+            if (typeof tailwind !== 'undefined') {
+                tailwind.config = configObj;
+            } else {
+                // Tailwind ainda não carregou (async) - expoe no window para o CDN usar
+                window.__tailwindConfig = configObj;
+                // Polling rápido: máx 2s, intervalo 50ms
+                let attempts = 0;
+                const check = () => {
+                    if (typeof tailwind !== 'undefined') {
+                        tailwind.config = configObj;
+                    } else if (++attempts < 40) {
+                        setTimeout(check, 50);
+                    }
+                };
+                setTimeout(check, 50);
+            }
         }
 
         /**
@@ -220,74 +194,71 @@
         }
 
         /**
-         * Inicializa os componentes
+         * Inicializa os componentes em 3 ondas para minimizar trabalho da thread principal:
+         * - Onda 1 (imediata): cabeçalho + hero (críticos para LCP)
+         * - Onda 2 (próximo tick): grid de imóveis (acima da dobra, mas não LCP)
+         * - Onda 3 (requestIdleCallback): todos os demais (abaixo da dobra)
          */
         async initializeComponents() {
-            if (!window.componentRegistry) {
-                console.error('❌ Component Registry não encontrado');
-                return;
-            }
-
-            // Aguarda o config ser carregado
+            if (!window.componentRegistry) return;
             await this.waitForConfig();
+            if (!window.config) return;
 
-            if (!window.config) {
-                console.error('❌ config.js não encontrado');
-                return;
+            const registry = window.componentRegistry;
+            const body = document.body;
+            const allComponents = registry.detectComponents(window.config);
+
+            // Define prioridades
+            const CRITICAL   = new Set(['sticky-header-navigation', 'hero-overlay']);
+            const DEFERRED   = new Set(['product-grid-advanced']);
+            // Todo o resto é IDLE
+
+            const critical  = allComponents.filter(c =>  CRITICAL.has(c.type));
+            const deferred  = allComponents.filter(c =>  DEFERRED.has(c.type));
+            const idle      = allComponents.filter(c => !CRITICAL.has(c.type) && !DEFERRED.has(c.type));
+
+            // --- Onda 1: críticos ---
+            if (critical.length) {
+                await registry.loadComponents(critical.map(c => c.type));
+                for (const { type, props } of critical) registry.mount(type, props, body);
             }
 
-            // Pega o body diretamente, sem necessidade de ID
-            const body = document.body;
+            // --- Onda 2: deferred (após próximo frame) ---
+            if (deferred.length) {
+                await new Promise(r => setTimeout(r, 0));
+                await registry.loadComponents(deferred.map(c => c.type));
+                for (const { type, props } of deferred) registry.mount(type, props, body);
+            }
 
-            console.log('🚀 Inicializando componentes...');
-            // O component-registry carrega o BaseComponent automaticamente quando necessário
-            await window.componentRegistry.initFromConfig(window.config, body);
-            console.log('✅ Componentes inicializados');
+            // --- Onda 3: idle (quando o browser tiver tempo) ---
+            if (idle.length) {
+                const rIC = window.requestIdleCallback || (fn => setTimeout(fn, 200));
+                rIC(async () => {
+                    await registry.loadComponents(idle.map(c => c.type));
+                    for (const { type, props } of idle) registry.mount(type, props, body);
+                    window.dispatchEvent(new CustomEvent('cosmos-template-ready'));
+                });
+            } else {
+                window.dispatchEvent(new CustomEvent('cosmos-template-ready'));
+            }
         }
 
         /**
          * Inicializa o template completo
          */
         async init() {
-            if (this.initialized) {
-                console.warn('⚠️ Template já inicializado');
-                return;
-            }
+            if (this.initialized) return;
 
-            console.log('🎨 Cosmos Template - Inicializando...');
-
-            // 0. Aguarda config ser carregado
             await this.waitForConfig();
-
-            // 1. Aplica tema (background, cores e fontes)
             this.applyTheme();
-
-            // 2. Injeta CSS
             this.injectCSS();
-
-            // 3. Injeta Google Fonts
             this.injectGoogleFonts();
-
-            // 4. Configura Tailwind
             this.configureTailwind();
-
-            // 5. Define título da página
             this.setPageTitle();
-
-            // 6. Scripts extras (AOS removido)
             await this.injectScripts();
-
-            // 7. AOS REMOVIDO - causava crash no iOS Safari
-            // AOS usa scroll event listeners continuamente para detectar elementos na tela
-
-            // 8. Inicializa componentes
             await this.initializeComponents();
 
             this.initialized = true;
-            console.log('🎉 Cosmos Template pronto!');
-
-            // Dispara evento customizado
-            window.dispatchEvent(new CustomEvent('cosmos-template-ready'));
         }
     }
 

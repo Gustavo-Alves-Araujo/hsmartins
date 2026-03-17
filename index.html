@@ -152,33 +152,38 @@
   <link rel="preload" as="script" href="config.js" fetchpriority="high">
   <!-- Preload config.json before config.js even runs -->
   <link rel="preload" as="fetch" href="config.json" crossorigin="anonymous">
-  <!-- Preload FontAwesome woff2 fonts (eliminates 90ms blocking delay) -->
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2">
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2">
+  <!-- Preload FontAwesome woff2 fonts (self-hosted - sem cookies Cloudflare) -->
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/webfonts/fa-brands-400.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="/fonts/webfonts/fa-regular-400.woff2">
   
-  <!-- Preconnect para CDNs (conexões críticas) -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <!-- Preconnect: máx 4 origens mais críticas (mais que isso penaliza no Lighthouse) -->
+  <!-- FontAwesome agora é self-hosted (/fonts/) - cdnjs removido daqui -->
+  <!-- fonts.gstatic.com: download real dos glyphs das Google Fonts -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://cdn.tailwindcss.com">
-  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
-  <link rel="preconnect" href="https://cdn.jsdelivr.net">
+  <!-- supabase: imagens dos imóveis (crítico para visibilidade acima da dobra) -->
   <link rel="preconnect" href="https://vkwczizdjhsejbpaapea.supabase.co">
+  <!-- jsdelivr: supabase-js carregado pelo product-grid -->
+  <link rel="preconnect" href="https://cdn.jsdelivr.net">
   
-  <!-- DNS Prefetch para recursos secundários -->
+  <!-- DNS Prefetch para origens secundárias -->
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+  <link rel="dns-prefetch" href="https://cdn.tailwindcss.com">
   <link rel="dns-prefetch" href="https://unpkg.com">
 
-  <!-- Google Fonts - carregado no HTML (não via JS) para evitar CLS e atrasar FCP -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap">
+  <!-- Google Fonts - não-bloqueante (media=print trick, igual ao FontAwesome) -->
+  <!-- ANTES: render-blocking 750ms. AGORA: carrega após paint, sem bloquear LCP/FCP -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Poppins:wght@400;500;600;700&display=swap"></noscript>
 
-  <!-- FontAwesome - carregado assincronamente para não bloquear renderização -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" media="print" onload="this.media='all'">
-  <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
-  <!-- Garante font-display:swap para FA (evita bloqueio de texto) -->
+  <!-- FontAwesome self-hosted - sem requests cross-origin, sem cookies __cf_bm -->
+  <link rel="stylesheet" href="/fonts/fa-all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="/fonts/fa-all.min.css"></noscript>
+  <!-- font-display:swap para FA - texto visível durante carregamento -->
   <style>
-    @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2) format('woff2')}
-    @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-regular-400.woff2) format('woff2')}
-    @font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:swap;src:url(https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2) format('woff2')}
+    @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:900;font-display:swap;src:url(/fonts/webfonts/fa-solid-900.woff2) format('woff2')}
+    @font-face{font-family:'Font Awesome 6 Free';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/webfonts/fa-regular-400.woff2) format('woff2')}
+    @font-face{font-family:'Font Awesome 6 Brands';font-style:normal;font-weight:400;font-display:swap;src:url(/fonts/webfonts/fa-brands-400.woff2) format('woff2')}
     /* Fallback metrics para Poppins/Inter - reduz CLS do font-swap */
     @font-face{font-family:'Poppins-fallback';src:local('Arial');size-adjust:105%;ascent-override:95%;descent-override:25%;line-gap-override:0%}
     @font-face{font-family:'Inter-fallback';src:local('Arial');size-adjust:100%;ascent-override:90%;descent-override:22%;line-gap-override:0%}
@@ -198,18 +203,23 @@
   <!-- Scripts críticos - config.js (sem defer para carregar imediatamente) -->
   <script src="config.js"></script>
 
+  <!-- Tailwind config declarado ANTES do CDN - o CDN usa window.tailwind = {config:{...}} quando encontra -->
+  <!-- Isso evita 100% o polling de cosmos-template.js para esperar Tailwind estar pronto -->
+  <script>window.tailwind={config:{theme:{extend:{colors:{brand:{dark:'#005CA9',light:'#2D7FC1',cream:'#F8FAFB',gold:'#F39200',black:'#111111',gray:'#F5F5F5'},'brand-black':'#111111','brand-gray':'#F5F5F5',accent:'#F39200'},fontFamily:{serif:['"Poppins"','sans-serif'],sans:['"Inter"','sans-serif'],display:['"Inter"','sans-serif']}}}}};
+  </script>
+
   <!-- Tailwind CSS (async - não bloqueia DOMContentLoaded nem scripts defer seguintes) -->
   <!-- ANTES: defer aguardava Tailwind ANTES de executar cosmos-template (causava 4s+ de atraso no LCP) -->
   <script src="https://cdn.tailwindcss.com" async></script>
 
-  <!-- Lucide Icons (defer - não crítico) -->
-  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <!-- Lucide REMOVIDO: 260ms de parse/eval, era usado apenas para 1 ícone (chevron-down)
+       Substituído por FontAwesome fas fa-chevron-down (já carregado) -->
 
   <!-- Componentes (defer - carregam após DOM) -->
-  <script src="templates/components/base-component.js" defer></script>
-  <script src="templates/components/component-registry.js" defer></script>
-  <script src="templates/components/cosmos-template.js" defer></script>
-  <script src="templates/components/news-grid.js" defer></script>
+  <!-- news-grid carregado por requestIdleCallback (abaixo da dobra - não é crítico) -->
+  <script src="templates/components/base-component.min.js" defer></script>
+  <script src="templates/components/component-registry.min.js" defer></script>
+  <script src="templates/components/cosmos-template.min.js" defer></script>
   
   <!-- Performance Monitoring REMOVIDO - causava crash no iOS Safari -->
   <!-- web-vitals-monitor.js REMOVIDO: 3 PerformanceObservers (CLS layout-shift) travava o Safari -->

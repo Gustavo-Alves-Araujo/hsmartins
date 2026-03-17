@@ -68,6 +68,18 @@ class ContactTopBarComponent extends BaseComponent {
     }
 }
 
+// Adiciona método mount e create estático (necessários para o Component Registry)
+ContactTopBarComponent.prototype.mount = function(targetId) {
+    const target = document.getElementById(targetId);
+    if (target) target.innerHTML = this.render();
+};
+
+ContactTopBarComponent.create = function(data, targetId) {
+    const component = new ContactTopBarComponent(data);
+    component.mount(targetId);
+    return component;
+};
+
 // Registro do componente
 if (typeof window !== 'undefined' && window.componentRegistry) {
     window.componentRegistry.register('contact-top-bar', ContactTopBarComponent);

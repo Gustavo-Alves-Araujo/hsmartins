@@ -141,7 +141,7 @@
             }
 
             // Verifica se o script já está sendo carregado ou já foi adicionado ao DOM
-            const existingScript = document.querySelector(`script[src="${this.componentsPath}base-component.js"]`);
+            const existingScript = document.querySelector(`script[src*="base-component"]`);
             if (existingScript) {
                 // Script já existe, aguarda ele carregar
                 return new Promise((resolve) => {
@@ -165,7 +165,7 @@
 
             return new Promise((resolve) => {
                 const baseScript = document.createElement('script');
-                baseScript.src = `${this.componentsPath}base-component.js`;
+                baseScript.src = `${this.componentsPath}base-component.min.js`;
                 baseScript.onload = () => {
                     console.log('✅ Base Component carregado');
                     resolve(true);
@@ -196,7 +196,7 @@
             // Garante que BaseComponent está carregado antes de carregar outros componentes
             await this.ensureBaseComponent();
 
-            const scriptPath = `${this.componentsPath}${type}.js`;
+            const scriptPath = `${this.componentsPath}${type}.min.js`;
 
             return new Promise((resolve, reject) => {
                 console.log(`⏳ Carregando '${type}'...`);
@@ -387,16 +387,6 @@
                 console.groupEnd();
             } else {
                 console.log(`✅ Todos os ${successful} componentes foram montados com sucesso!`);
-            }
-
-            // Inicializa ícones Lucide após todos os componentes serem montados
-            if (typeof lucide !== 'undefined') {
-                try {
-                    lucide.createIcons();
-                    console.log('✅ Ícones Lucide inicializados');
-                } catch (error) {
-                    console.warn('⚠️ Erro ao inicializar ícones Lucide:', error);
-                }
             }
         }
 
