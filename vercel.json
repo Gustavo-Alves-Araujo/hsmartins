@@ -10,7 +10,8 @@
     { "source": "/noticias/:slug", "destination": "/noticias/:slug/index.html" },
     { "source": "/pagina/depoimentos", "destination": "/pagina/depoimentos/index.html" },
     { "source": "/pagina/pre-cadastro-minha-casa-minha-vida", "destination": "/pagina/pre-cadastro-minha-casa-minha-vida/index.html" },
-    { "source": "/pagina/aprovacao-de-renda", "destination": "/pagina/aprovacao-de-renda/index.html" }
+    { "source": "/pagina/aprovacao-de-renda", "destination": "/pagina/aprovacao-de-renda/index.html" },
+    { "source": "/financiamento", "destination": "/financiamento.html" }
   ],
   "redirects": [
     { "source": "/sobre.html", "destination": "/sobre", "permanent": true },
@@ -18,8 +19,7 @@
     { "source": "/noticias.html", "destination": "/noticias", "permanent": true },
     { "source": "/diagnostico.html", "destination": "/", "permanent": true },
     { "source": "/index.html", "destination": "/", "permanent": true },
-    { "source": "/financiamento.html", "destination": "/correspondente", "permanent": true },
-    { "source": "/financiamento", "destination": "/correspondente", "permanent": true },
+    { "source": "/financiamento.html", "destination": "/financiamento", "permanent": true },
 
     { "source": "/buscar", "destination": "/imovel/venda", "permanent": true },
     { "source": "/seu-imovel", "destination": "/correspondente", "permanent": true },
