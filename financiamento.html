@@ -117,6 +117,13 @@
                   <option value="Doutorado">Doutorado</option>
                 </select>
               </div>
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Número do PIS <span class="text-red-500">*</span>
+                </label>
+                <input type="text" name="pis" required placeholder="000.00000.00-0"
+                       class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              </div>
             </div>
           </div>
 
@@ -174,42 +181,56 @@
               <!-- Carteira de Trabalho -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">
-                  Carteira de Trabalho (PDF) <span class="text-red-500">*</span>
+                  Carteira de Trabalho (PDF) <span class="text-gray-500 text-xs">(Opcional)</span>
                 </label>
                 <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
                      onclick="document.getElementById('doc_ctps').click()">
                   <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
                   <p class="text-sm text-gray-600">Digital ou física (com foto, qualificação, contrato, FGTS)</p>
                   <p class="text-xs text-gray-500 mt-1" id="filename_ctps">Nenhum arquivo selecionado</p>
-                  <input type="file" id="doc_ctps" name="doc_ctps" accept=".pdf" required class="hidden">
+                  <input type="file" id="doc_ctps" name="doc_ctps" accept=".pdf" class="hidden">
                 </div>
               </div>
 
               <!-- Holerite -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">
-                  Último Holerite (PDF) <span class="text-red-500">*</span>
+                  Último Holerite (PDF) <span class="text-gray-500 text-xs">(Opcional)</span>
                 </label>
                 <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
                      onclick="document.getElementById('doc_holerite').click()">
                   <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
                   <p class="text-sm text-gray-600">Comprovante de rendimentos</p>
                   <p class="text-xs text-gray-500 mt-1" id="filename_holerite">Nenhum arquivo selecionado</p>
-                  <input type="file" id="doc_holerite" name="doc_holerite" accept=".pdf" required class="hidden">
+                  <input type="file" id="doc_holerite" name="doc_holerite" accept=".pdf" class="hidden">
                 </div>
               </div>
 
               <!-- Imposto de Renda -->
               <div>
                 <label class="block text-sm font-bold text-gray-700 mb-2">
-                  Declaração de Imposto de Renda Completa (PDF) <span class="text-red-500">*</span>
+                  Declaração de Imposto de Renda Completa (PDF) <span class="text-gray-500 text-xs">(Opcional)</span>
                 </label>
                 <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
                      onclick="document.getElementById('doc_ir').click()">
                   <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                  <p class="text-sm text-gray-600">PF completa com recibo de entrega</p>
+                  <p class="text-sm text-gray-600">PF completa</p>
                   <p class="text-xs text-gray-500 mt-1" id="filename_ir">Nenhum arquivo selecionado</p>
-                  <input type="file" id="doc_ir" name="doc_ir" accept=".pdf" required class="hidden">
+                  <input type="file" id="doc_ir" name="doc_ir" accept=".pdf" class="hidden">
+                </div>
+              </div>
+
+              <!-- Recibo da Declaração de Imposto de Renda -->
+              <div>
+                <label class="block text-sm font-bold text-gray-700 mb-2">
+                  Recibo da Declaração de Imposto de Renda (PDF) <span class="text-gray-500 text-xs">(Opcional)</span>
+                </label>
+                <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition"
+                     onclick="document.getElementById('doc_recibo_ir').click()">
+                  <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-600">Recibo de entrega da declaração</p>
+                  <p class="text-xs text-gray-500 mt-1" id="filename_recibo_ir">Nenhum arquivo selecionado</p>
+                  <input type="file" id="doc_recibo_ir" name="doc_recibo_ir" accept=".pdf" class="hidden">
                 </div>
               </div>
 
@@ -300,6 +321,13 @@
                       <option value="Doutorado">Doutorado</option>
                     </select>
                   </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">
+                      Número do PIS <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" name="pis_2" id="pis_2" placeholder="000.00000.00-0"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                  </div>
                 </div>
               </div>
 
@@ -340,7 +368,7 @@
                     </div>
                   </div>
                   <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Carteira de Trabalho (PDF) <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Carteira de Trabalho (PDF) <span class="text-gray-500 text-xs">(Opcional)</span></label>
                     <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
                          onclick="document.getElementById('doc_ctps_2').click()">
                       <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
@@ -350,7 +378,7 @@
                     </div>
                   </div>
                   <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Último Holerite (PDF) <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Último Holerite (PDF) <span class="text-gray-500 text-xs">(Opcional)</span></label>
                     <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
                          onclick="document.getElementById('doc_holerite_2').click()">
                       <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
@@ -360,13 +388,23 @@
                     </div>
                   </div>
                   <div>
-                    <label class="block text-sm font-bold text-gray-700 mb-2">Declaração de Imposto de Renda Completa (PDF) <span class="text-red-500">*</span></label>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Declaração de Imposto de Renda Completa (PDF) <span class="text-gray-500 text-xs">(Opcional)</span></label>
                     <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
                          onclick="document.getElementById('doc_ir_2').click()">
                       <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
-                      <p class="text-sm text-gray-600">PF completa com recibo de entrega</p>
+                      <p class="text-sm text-gray-600">PF completa</p>
                       <p class="text-xs text-gray-500 mt-1" id="filename_ir_2">Nenhum arquivo selecionado</p>
                       <input type="file" id="doc_ir_2" name="doc_ir_2" accept=".pdf" class="hidden">
+                    </div>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-bold text-gray-700 mb-2">Recibo da Declaração de Imposto de Renda (PDF) <span class="text-gray-500 text-xs">(Opcional)</span></label>
+                    <div class="file-upload-label border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-500 transition bg-white"
+                         onclick="document.getElementById('doc_recibo_ir_2').click()">
+                      <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                      <p class="text-sm text-gray-600">Recibo de entrega da declaração</p>
+                      <p class="text-xs text-gray-500 mt-1" id="filename_recibo_ir_2">Nenhum arquivo selecionado</p>
+                      <input type="file" id="doc_recibo_ir_2" name="doc_recibo_ir_2" accept=".pdf" class="hidden">
                     </div>
                   </div>
                   <div>
@@ -433,11 +471,11 @@
         section.classList.remove('hidden');
         addBtn.classList.add('hidden');
         // Torna campos obrigatórios
-        ['nome_2', 'telefone_2', 'email_2', 'grau_instrucao_2'].forEach(id => {
+        ['nome_2', 'telefone_2', 'email_2', 'grau_instrucao_2', 'pis_2'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.required = true;
         });
-        ['doc_rg_cpf_2', 'doc_certidao_2', 'doc_endereco_2', 'doc_ctps_2', 'doc_holerite_2', 'doc_ir_2'].forEach(id => {
+        ['doc_rg_cpf_2', 'doc_certidao_2', 'doc_endereco_2'].forEach(id => {
           const el = document.getElementById(id);
           if (el) el.required = true;
         });
@@ -447,11 +485,11 @@
         section.classList.add('hidden');
         addBtn.classList.remove('hidden');
         // Remove obrigatório e limpa campos
-        ['nome_2', 'telefone_2', 'email_2', 'grau_instrucao_2'].forEach(id => {
+        ['nome_2', 'telefone_2', 'email_2', 'grau_instrucao_2', 'pis_2'].forEach(id => {
           const el = document.getElementById(id);
           if (el) { el.required = false; el.value = ''; }
         });
-        ['doc_rg_cpf_2', 'doc_certidao_2', 'doc_endereco_2', 'doc_ctps_2', 'doc_holerite_2', 'doc_ir_2', 'doc_fgts_2'].forEach(id => {
+        ['doc_rg_cpf_2', 'doc_certidao_2', 'doc_endereco_2', 'doc_ctps_2', 'doc_holerite_2', 'doc_ir_2', 'doc_recibo_ir_2', 'doc_fgts_2'].forEach(id => {
           const el = document.getElementById(id);
           if (el) { el.required = false; el.value = ''; }
           // Reset visual
@@ -475,6 +513,7 @@
       { input: 'doc_ctps', label: 'filename_ctps' },
       { input: 'doc_holerite', label: 'filename_holerite' },
       { input: 'doc_ir', label: 'filename_ir' },
+      { input: 'doc_recibo_ir', label: 'filename_recibo_ir' },
       { input: 'doc_fgts', label: 'filename_fgts' }
     ];
 
@@ -485,6 +524,7 @@
       { input: 'doc_ctps_2', label: 'filename_ctps_2' },
       { input: 'doc_holerite_2', label: 'filename_holerite_2' },
       { input: 'doc_ir_2', label: 'filename_ir_2' },
+      { input: 'doc_recibo_ir_2', label: 'filename_recibo_ir_2' },
       { input: 'doc_fgts_2', label: 'filename_fgts_2' }
     ];
 
@@ -526,6 +566,7 @@
           telefone: formData.get('telefone'),
           email: formData.get('email'),
           grau_instrucao: formData.get('grau_instrucao'),
+          pis: formData.get('pis'),
           data_envio: new Date().toISOString(),
           status: 'Pendente'
         };
@@ -536,6 +577,7 @@
           dados.telefone_2 = formData.get('telefone_2');
           dados.email_2 = formData.get('email_2');
           dados.grau_instrucao_2 = formData.get('grau_instrucao_2');
+          dados.pis_2 = formData.get('pis_2');
         }
 
         // Upload dos arquivos para o Supabase Storage - Pessoa 1
